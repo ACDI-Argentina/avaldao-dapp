@@ -1,0 +1,35 @@
+.profile-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-card.top {
+    flex-direction: column-reverse;
+    margin-bottom: 1rem;
+}
+
+.profile-card.bottom {
+    flex-direction: column;
+}
+
+.profile-card.right {
+    flex-direction: row;
+    margin-bottom: 1rem;
+}
+
+.profile-card.left {
+    flex-direction: row-reverse;
+    margin-bottom: 1rem;
+}
+
+.profile-card.top p.description{
+    margin-bottom: 0.5rem;
+}
+
+.profile-card.left p.description, .profile-card.right p.description{
+    margin-bottom: 0px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
