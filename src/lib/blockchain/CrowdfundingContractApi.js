@@ -185,7 +185,8 @@ class CrowdfundingContractApi {
      */
     getDacs() {
         return new Observable(async subscriber => {
-            try {
+            subscriber.next([]);
+            /*try {
                 const ids = await this.crowdfunding.methods.getDacIds().call();
                 const dacs = [];
                 if (ids.length > 0) {
@@ -199,7 +200,7 @@ class CrowdfundingContractApi {
                 }
             } catch (error) {
                 subscriber.error(error);
-            }
+            }*/
         });
     }
 
@@ -222,7 +223,8 @@ class CrowdfundingContractApi {
      */
     getCampaigns() {
         return new Observable(async subscriber => {
-            try {
+            subscriber.next([]);
+            /*try {
                 let ids = await this.crowdfunding.methods.getCampaignIds().call();
                 let campaigns = [];
                 for (let i = 0; i < ids.length; i++) {
@@ -233,7 +235,7 @@ class CrowdfundingContractApi {
             } catch (error) {
                 console.log('Error obtiendo Campaigns', error);
                 subscriber.error(error);
-            }
+            }*/
         });
     }
 
@@ -397,7 +399,8 @@ class CrowdfundingContractApi {
      */
     getMilestones() {
         return new Observable(async subscriber => {
-            try {
+            subscriber.next([]);
+            /*try {
                 let ids = await this.crowdfunding.methods.getMilestoneIds().call();
                 let milestones = [];
                 for (let i = 0; i < ids.length; i++) {
@@ -407,7 +410,7 @@ class CrowdfundingContractApi {
                 subscriber.next(milestones);
             } catch (error) {
                 subscriber.error(error);
-            }
+            }*/
         });
     }
 
@@ -1438,10 +1441,10 @@ class CrowdfundingContractApi {
     }
 
     updateContracts() {
-        console.log('[Crowdfunding Contract API] Se actualizan contratos.');
+        /*console.log('[Crowdfunding Contract API] Se actualizan contratos.');
         const { crowdfundingAddress, exchangeRateProviderAddress } = config;
         this.crowdfunding = new this.web3.eth.Contract(CrowdfundingAbi, crowdfundingAddress);
-        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderAddress);
+        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderAddress);*/
     }
 }
 
