@@ -23,7 +23,7 @@ import Status from './Status';
  * @attribute email         Email address of the user
  * @attribute giverId       Giver ID used for querying donations
  * @attribute name          Name of the user
- * @attribute url           Url attached to LiquidPledging admin
+ * @attribute url           
  * @attribute authenticated If the user is authenticated w/ feathers
  */
 class User extends Model {

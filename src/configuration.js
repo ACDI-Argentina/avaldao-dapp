@@ -7,9 +7,6 @@ const {
   REACT_APP_EXCHANGE_RATE_PROVIDER_ADDRESS,
   REACT_APP_TOKEN_RIF_ADDRESS,
   REACT_APP_TOKEN_DOC_ADDRESS,
-  REACT_APP_LIQUIDPLEDGING_ADDRESS,
-  REACT_APP_CAMPAIGN_FACTORY_ADDRESS,
-  REACT_APP_CAPPED_MILESTONE_FACTORY_ADDRESS,
   REACT_APP_TOKEN_ADDRESSES,
   REACT_APP_BLOCKEXPLORER,
   REACT_APP_BUGS_EMAIL = 'give4forests@acdi.org.ar',
@@ -40,9 +37,6 @@ const configurations = {
       ]
     },
     title: 'localhost',
-    liquidPledgingAddress: '0x46579394802b5e4d2C0647436BFcc71A2d9E8478',
-    lppCampaignFactoryAddress: '0xe3155F7A49897e7860476b5A625B258ebe43cA98',
-    lppCappedMilestoneFactoryAddress: '0x1b6E4a9eB8264E46784a782c87e3529E203425Ca',
     networkName: 'ganache',
     nodeId: 88,
     etherscan: 'https://explorer.testnet.rsk.co/', // this won't work, only here so we can see links during development
@@ -115,9 +109,6 @@ const configurations = {
       ]
     },
     title: 'RSK Testnet',
-    liquidPledgingAddress: '0x581A2751C29F030730c99f9435c5f34A82BF4969',
-    lppCampaignFactoryAddress: '0xcb5eea43731E1058e5c8FBc989CB2E221602Fb67',
-    lppCappedMilestoneFactoryAddress: '0x43E3fC1f59C367b34Cab072AFb2dFE8CEA1CBAFa',
     networkName: 'rsk_testnet',
     nodeId: 31,
     etherscan: 'https://explorer.testnet.rsk.co/',
@@ -190,9 +181,6 @@ const configurations = {
       ]
     },
     title: 'RSK MainNet',
-    liquidPledgingAddress: '0x86Fd7661114Ca0Cf959337CB7DAFbBE93dB248d2',
-    lppCampaignFactoryAddress: '0xB874E4B1F4DBEEBCBdB8150EA8c71c3E96FCb40E',
-    lppCappedMilestoneFactoryAddress: '0x95655dC505233d40e2c5A1d4590d142C8a721cb4',
     networkName: 'rsk_mainnet',
     nodeId: 30,
     etherscan: 'https://explorer.rsk.co/',
@@ -265,11 +253,6 @@ config.crowdfundingAddress = REACT_APP_CROWDFUNDING_ADDRESS || config.crowdfundi
 config.exchangeRateProviderAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_ADDRESS || config.exchangeRateProviderAddress;
 config.tokens.doc.address = REACT_APP_TOKEN_DOC_ADDRESS || config.tokens.doc.address;
 config.tokens.rif.address = REACT_APP_TOKEN_RIF_ADDRESS || config.tokens.rif.address;
-config.liquidPledgingAddress = REACT_APP_LIQUIDPLEDGING_ADDRESS || config.liquidPledgingAddress;
-config.campaignFactoryAddress =
-  REACT_APP_CAMPAIGN_FACTORY_ADDRESS || config.lppCampaignFactoryAddress;
-config.cappedMilestoneFactoryAddress =
-  REACT_APP_CAPPED_MILESTONE_FACTORY_ADDRESS || config.lppCappedMilestoneFactoryAddress;
 config.tokenAddresses = REACT_APP_TOKEN_ADDRESSES
   ? JSON.parse(REACT_APP_TOKEN_ADDRESSES)
   : config.tokenAddresses;
