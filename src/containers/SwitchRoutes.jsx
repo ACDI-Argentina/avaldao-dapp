@@ -18,6 +18,7 @@ import ViewCampaign from '../components/views/ViewCampaign'
 import EditMilestone from '../components/views/EditMilestone'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
+import AvalComplete from 'components/views/AvalComplete'
 
 const SwitchRoutes = ({ currentUser}) => (
     <Switch>
@@ -235,6 +236,16 @@ const SwitchRoutes = ({ currentUser}) => (
             path="/profile"
             render={props => (
                 <EditProfile
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
+            path="/aval-complete"
+            render={props => (
+                <AvalComplete
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />

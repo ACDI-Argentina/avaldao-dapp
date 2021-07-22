@@ -5,6 +5,7 @@ import currentUserReducer from './reducers/currentUserSlice.js'
 import usersReducer from './reducers/usersSlice';
 import dacsReducer from './reducers/dacsSlice.js'
 import campaignsReducer from './reducers/campaignsSlice.js'
+import avalesReducer from './reducers/avalesSlice.js'
 import milestonesReducer from './reducers/milestonesSlice.js'
 import activitiesReducer from './reducers/activitiesSlice.js'
 import donationsReducer from './reducers/donationsSlice.js'
@@ -24,6 +25,7 @@ import {
 } from './epics/milestonesEpics'
 import { fetchActivitiesByIdsEpic } from './epics/activitiesEpics'
 import { fetchCampaignsEpic, fetchCampaignEpic, saveCampaignEpic } from './epics/campaignsEpics'
+import { fetchAvalesEpic, fetchAvalEpic, saveAvalEpic } from './epics/avalesEpics'
 import { fetchUsersEpic, fetchUserByAddressEpic } from './epics/usersEpics';
 import { fetchDonationsEpic, fetchDonationsByIdsEpic, addDonationEpic, transferDonationsEpic } from './epics/donationsEpics'
 import { fetchExchangeRatesEpic } from './epics/exchangeRatesEpics'
@@ -36,8 +38,11 @@ const rootEpic = combineEpics(
   fetchDacEpic,
   saveDacEpic,
   fetchCampaignsEpic,
-  fetchCampaignEpic,
+  fetchAvalEpic,
   saveCampaignEpic,
+  fetchAvalesEpic,
+  fetchCampaignEpic,
+  saveAvalEpic,
   fetchMilestonesEpic,
   fetchMilestoneEpic,
   saveMilestoneEpic,
@@ -56,7 +61,7 @@ const rootEpic = combineEpics(
 
 const epicMiddleware = createEpicMiddleware();
 
-const middlewares = [/*loggerMiddleware,*/ epicMiddleware]
+const middlewares = [loggerMiddleware, epicMiddleware]
 const middlewareEnhancer = applyMiddleware(...middlewares)
 
 const enhancers = [middlewareEnhancer]
@@ -68,6 +73,7 @@ const rootReducer = combineReducers({
   transactions: transactionsReducer,
   dacs: dacsReducer,
   campaigns: campaignsReducer,
+  avales: avalesReducer,
   milestones: milestonesReducer,
   activities: activitiesReducer,
   donations: donationsReducer,
