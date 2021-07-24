@@ -106,7 +106,7 @@ class ViewMilestone extends Component {
           <div>
             <Header
               color="white"
-              brand={<img src={require("assets/img/logos/give4forest.png")}
+              brand={<img src={require("assets/img/logos/avaldao.png")}
               alt={t('give4forest')}
               className={classes.dappLogo}/>}
               rightLinks={<MainMenu />}
