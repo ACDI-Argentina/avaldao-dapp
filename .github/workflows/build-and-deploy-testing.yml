@@ -1,0 +1,33 @@
+name: Build and deploy dapp - testing
+
+on:
+  push:
+    branches: [master]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.23.0'
+
+      - name: Set env REACT_APP_BUILD_TS
+        run: echo "REACT_APP_BUILD_TS=$(date +'%Y-%m-%dT%H:%M:%S%z')" >> $GITHUB_ENV
+      - name: set env REACT_APP_BUILD_COMMIT
+        run: echo "REACT_APP_BUILD_COMMIT=${{ github.sha }}" >> $GITHUB_ENV
+
+      - run: npm install
+      - run: npm run build:testing
+      - name: generate version file
+        run: echo $(date +"%Y-%m-%dT%H:%M:%S%z") - ${{ github.sha }} > build/version.html
+
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          path: build/
+          remote_path: ${{ secrets.TESTING_DEPLOY_PATH }}
+          remote_host: ${{ secrets.TESTING_DEPLOY_HOST }}
+          remote_user: ${{ secrets.TESTING_DEPLOY_USER }}
+          remote_key: ${{ secrets.TESTING_DEPLOY_KEY }}
