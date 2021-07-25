@@ -1,15 +1,12 @@
-import Model from './Model';
-
 /**
  * Representa el estado de una instancia de modelo.
  */
-class Status extends Model {
+class Status {
 
   constructor({
     name = '',
     isLocal = false,
   } = {}) {
-    super();
     this._name = name;
     // Especifica si el estado es local de la Dapp.
     this._isLocal = isLocal;
@@ -30,7 +27,6 @@ class Status extends Model {
   }
 
   set name(value) {
-    this.checkType(value, ['string'], 'name');
     this._name = value;
   }
 
@@ -39,7 +35,6 @@ class Status extends Model {
   }
 
   set isLocal(value) {
-    this.checkType(value, ['undefined', 'boolean'], 'isLocal');
     this._isLocal = value;
   }
 }

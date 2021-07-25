@@ -1,20 +1,26 @@
-import Entity from './Entity';
 import StatusUtils from '../utils/StatusUtils';
+import { nanoid } from '@reduxjs/toolkit'
 
 /**
  * Modelo de Aval.
  */
-class Aval extends Entity {
+class Aval {
 
   constructor(data = {}) {
-    super(data);
     const {
+      id,
+      clientId = nanoid(),
       avaldaoAddress = '',
+      solicitanteAddress = '',
       comercianteAddress = '',
       avaladoAddress = '',
       status = Aval.SOLICITADO
     } = data;
+    this._id = id;
+    // ID utilizado solamente del lado cliente
+    this._clientId = clientId;
     this._avaldaoAddress = avaldaoAddress;
+    this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
     this._avaladoAddress = avaladoAddress;
     this._status = status;
@@ -24,29 +30,44 @@ class Aval extends Entity {
    * Obtiene un objeto plano para envíar a IPFS.
    */
   toIpfs() {
-    let entityIpfs = super.toIpfs();
-    return Object.assign(entityIpfs, {
-      avaldaoAddress: this._avaldaoAddress,
-      comercianteAddress: this._comercianteAddress,
-      avaladoAddress: this._avaldadoAddress
-    });
+    return {
+      id: this._id
+    };
   }
 
   /**
    * Obtiene un objeto plano para ser almacenado.
    */
   toStore() {
-    let entityStore = super.toStore();
-    return Object.assign(entityStore, {
+    return {
+      id: this._id,
+      clientId: this._clientId,
       avaldaoAddress: this._avaldaoAddress,
+      solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
       avaladoAddress: this._avaladoAddress,
       status: this._status.toStore()
-    });
+    };
   }
 
   static get SOLICITADO() {
     return StatusUtils.build('Solicitado', true);
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  set id(value) {
+    this._id = value;
+  }
+
+  get clientId() {
+    return this._clientId;
+  }
+
+  set clientId(value) {
+    this._clientId = value;
   }
 
   get avaldaoAddress() {
@@ -55,6 +76,14 @@ class Aval extends Entity {
 
   set avaldaoAddress(value) {
     this._avaldaoAddress = value;
+  }
+
+  get solicitanteAddress() {
+    return this._solicitanteAddress;
+  }
+
+  set solicitanteAddress(value) {
+    this._solicitanteAddress = value;
   }
 
   get comercianteAddress() {
@@ -79,6 +108,14 @@ class Aval extends Entity {
 
   set status(value) {
     this._status = value;
+  }
+
+  get txHash() {
+    return this._txHash;
+  }
+
+  set txHash(value) {
+    this._txHash = value;
   }
 }
 

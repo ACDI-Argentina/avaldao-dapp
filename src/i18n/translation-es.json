@@ -238,6 +238,22 @@
     "transactionFailuredTitleUpdateDac": "No se creó la DAC '{{dacTitle}}'",
     "transactionFailuredDescriptionUpdateDac": "Ocurrió una falla durante la edición de la DAC.",
 
+    "transactionCreatedTitleCreateAval": "Confirma tu creación del aval en la billetera",
+    "transactionCreatedSubtitleCreateAval": "Verifique los detalles aquí - su creación del aval no puede ser reembolsada.",
+    "transactionPendingTitleCreateAval": "Creando aval...",
+    "transactionConfirmedTitleCreateAval": "El aval ha sido creado",
+    "transactionConfirmedDescriptionCreateAval": "El aval ha sido creado y está listo para firmarse.",
+    "transactionFailuredTitleCreateAval": "No se creó el aval",
+    "transactionFailuredDescriptionCreateAval": "Ocurrió una falla durante la creación del aval.",
+
+    "transactionCreatedTitleUpdateAval": "Confirma tu edición del aval en la billetera",
+    "transactionCreatedSubtitleUpdateAval": "Verifique los detalles aquí - su edición del aval no puede ser reembolsada.",
+    "transactionPendingTitleUpdateAval": "Editando aval...",
+    "transactionConfirmedTitleUpdateAval": "El aval ha sido editado",
+    "transactionConfirmedDescriptionUpdateAval": "El aval ha sido editado.",
+    "transactionFailuredTitleUpdateAval": "No se editó el aval",
+    "transactionFailuredDescriptionUpdateAval": "Ocurrió una falla durante la edición del aval.",
+
     "transactionCreatedTitleCreateCampaign": "Confirma tu creación de campaña '{{campaignTitle}}' en la billetera",
     "transactionCreatedSubtitleCreateCampaign": "Verifique los detalles aquí - su creación de campaña no puede ser reembolsada.",
     "transactionPendingTitleCreateCampaign": "Creando campaña '{{campaignTitle}}'...",

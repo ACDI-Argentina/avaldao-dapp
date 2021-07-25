@@ -3,9 +3,10 @@ import BigNumber from 'bignumber.js';
 import config from '../../configuration';
 import Web3Utils from './Web3Utils'
 import web3Manager from './Web3Manager'
-import CrowdfundingUtils from './CrowdfundingUtils'
-import TransactionTracker from './TransactionTracker'
 import Aval from 'models/Aval'
+import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
+import transactionUtils from '../../redux/utils/transactionUtils'
+import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -13,20 +14,16 @@ import Aval from 'models/Aval'
 class AvaldaoContractApi {
 
     constructor() {
-        this.crowdfunding = undefined;
-        this.networkPromise = undefined;
         web3Manager.getWeb3().subscribe(web3 => {
             this.web3 = web3;
             this.updateContracts();
-            this.crowdfundingUtils = new CrowdfundingUtils(web3, config.crowdfundingAddress);
         });
-        this.transactionTracker = new TransactionTracker();
     }
 
     async canPerformRole(address, role) {
         try {
             const hashedRole = Web3Utils.toKeccak256(role);
-            const response = await this.crowdfunding.methods.canPerform(address, hashedRole, []).call();
+            const response = await this.avaldao.methods.canPerform(address, hashedRole, []).call();
             return response;
         } catch (err) {
             console.log("Fail to invoke canPerform on smart contract.", err);
@@ -61,8 +58,8 @@ class AvaldaoContractApi {
     getAval(id) {
         return new Observable(async subscriber => {
             try {
-                let campaign = await this.getAvalById(id);
-                subscriber.next(campaign);
+                let aval = await this.getAvalById(id);
+                subscriber.next(aval);
             } catch (error) {
                 subscriber.error(error);
             }
@@ -76,36 +73,25 @@ class AvaldaoContractApi {
      * @returns Aval cuyo Id coincide con el especificado.
      */
     async getAvalById(id) {
-        /*const campaingOnChain = await this.crowdfunding.methods.getCampaign(campaignId).call();
-        // Se obtiene la información de la Campaign desde IPFS.
-        const { id, infoCid, dacIds, milestoneIds, donationIds, budgetDonationIds, users, status } = campaingOnChain;
-        // Se obtiene la información de la Campaign desde IPFS.
-        const campaignOnIpfs = await campaignIpfsConnector.download(infoCid);
-        const { title, description, imageCid, beneficiaries, categories, url } = campaignOnIpfs;
-
-        return new Campaign({
-            id: parseInt(id),
-            title: title,
-            description: description,
-            imageCid: imageCid,
-            url: url,
-            dacIds: dacIds.map(e => parseInt(e)),
-            milestoneIds: milestoneIds.map(e => parseInt(e)),
-            donationIds: donationIds.map(e => parseInt(e)),
-            budgetDonationIds: budgetDonationIds.map(e => parseInt(e)),
-            managerAddress: users[0],
-            reviewerAddress: users[1],
-            beneficiaries: beneficiaries,
-            categories: categories,
-            status: this.mapCampaignStatus(parseInt(status))
-        });*/
+        const avalOnChain = await this.avaldao.methods.getAval(id).call();
+        // Se obtiene la información del aval desde la Blockchain.
+        const { infoCid, avaldao, solicitante, comerciante, avalado, status } = avalOnChain;
+        // Se obtiene la información del aval desde IPFS.
+        // TODO: aún no se almacenan datos en IPFS para el aval.
+        const avalOnIpfs = await avalIpfsConnector.download(infoCid);
 
         return new Aval({
+            id: parseInt(id),
+            avaldaoAddress: avaldao,
+            solicitanteAddress: solicitante,
+            comercianteAddress: comerciante,
+            avaladoAddress: avalado,
+            status: this.mapAvalStatus(parseInt(status))
         });
     }
 
     /**
-     * Almacena un Aval en el Smart Contarct.
+     * Almacena un Aval en el Smart Contract.
      * 
      * @param aval a almacenar.
      */
@@ -113,121 +99,129 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
-            subscriber.next(aval);
+            console.log('Guardando Aval.', aval);
+            let thisApi = this;
 
-            /*let thisApi = this;
+            const avalId = aval.id || 0; // 0 si es una aval nuevo.
+            const isNew = avalId === 0;
 
-            const dacId = 1; //preguntar a Mauri que vamos a hacer con esto, esto existe?
-            const campaignId = campaign.id || 0; //zero is for new campaigns;
-            const isNew = campaignId === 0;
+            // Se almacena en IPFS toda la información del Aval.
+            let infoCid = await avalIpfsConnector.upload(aval);
+            aval.infoCid = infoCid;
 
-            // Se almacena en IPFS toda la información de la Campaign.
-            let infoCid = await campaignIpfsConnector.upload(campaign);
-            campaign.infoCid = infoCid;
+            const clientId = aval.clientId;
 
-            const clientId = campaign.clientId;
+            const method = this.avaldao.methods.saveAval(
+                avalId,
+                aval.infoCid,
+                aval.avaldaoAddress,
+                aval.comercianteAddress,
+                aval.avaladoAddress);
 
-            const method = this.crowdfunding.methods.saveCampaign(
-                campaign.infoCid,
-                dacId,
-                campaign.reviewerAddress,
-                campaignId);
-
-            const gasEstimated = await method.estimateGas({
-                from: campaign.managerAddress,
-            });
+            const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
             const gasPrice = await this.getGasPrice();
 
             let transaction = transactionUtils.addTransaction({
-                gasEstimated: new BigNumber(gasEstimated),
+                gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
-                    key: isNew ? 'transactionCreatedTitleCreateCampaign' : 'transactionCreatedTitleUpdateCampaign',
-                    args: {
-                        campaignTitle: campaign.title
-                    }
+                    key: isNew ? 'transactionCreatedTitleCreateAval' : 'transactionCreatedTitleUpdateAval'
                 },
                 createdSubtitle: {
-                    key: isNew ? 'transactionCreatedSubtitleCreateCampaign' : 'transactionCreatedSubtitleUpdateCampaign'
+                    key: isNew ? 'transactionCreatedSubtitleCreateAval' : 'transactionCreatedSubtitleUpdateAval'
                 },
                 pendingTitle: {
-                    key: isNew ? 'transactionPendingTitleCreateCampaign' : 'transactionPendingTitleUpdateCampaign',
-                    args: {
-                        campaignTitle: campaign.title
-                    }
+                    key: isNew ? 'transactionPendingTitleCreateAval' : 'transactionPendingTitleUpdateAval'
                 },
                 confirmedTitle: {
-                    key: isNew ? 'transactionConfirmedTitleCreateCampaign' : 'transactionConfirmedTitleUpdateCampaign',
-                    args: {
-                        campaignTitle: campaign.title
-                    }
+                    key: isNew ? 'transactionConfirmedTitleCreateAval' : 'transactionConfirmedTitleUpdateAval'
                 },
                 confirmedDescription: {
-                    key: isNew ? 'transactionConfirmedDescriptionCreateCampaign' : 'transactionConfirmedDescriptionUpdateCampaign'
+                    key: isNew ? 'transactionConfirmedDescriptionCreateAval' : 'transactionConfirmedDescriptionUpdateAval'
                 },
                 failuredTitle: {
-                    key: isNew ? 'transactionFailuredTitleCreateCampaign' : 'transactionFailuredTitleUpdateCampaign',
-                    args: {
-                        campaignTitle: campaign.title
-                    }
+                    key: isNew ? 'transactionFailuredTitleCreateAval' : 'transactionFailuredTitleUpdateAval'
                 },
                 failuredDescription: {
-                    key: isNew ? 'transactionFailuredDescriptionCreateCampaign' : 'transactionFailuredDescriptionUpdateCampaign'
+                    key: isNew ? 'transactionFailuredDescriptionCreateAval' : 'transactionFailuredDescriptionUpdateAval'
                 }
             });
 
             const promiEvent = method.send({
-                from: campaign.managerAddress,
+                from: aval.solicitanteAddress,
             });
 
-            promiEvent
-                .once('transactionHash', (hash) => { // La transacción ha sido creada.
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
 
-                    transaction.submit(hash);
-                    transactionUtils.updateTransaction(transaction);
+                transaction.submit(hash);
+                transactionUtils.updateTransaction(transaction);
 
-                    campaign.txHash = hash;
-                    subscriber.next(campaign);
-                })
-                .once('confirmation', (confNumber, receipt) => {
+                aval.txHash = hash;
+                subscriber.next(aval);
 
-                    transaction.confirme();
-                    transactionUtils.updateTransaction(transaction);
+            }).once('confirmation', (confNumber, receipt) => {
 
-                    // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
-                    // TODO Aquí debería gregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                    const idFromEvent = parseInt(receipt.events['SaveCampaign'].returnValues.id);
+                transaction.confirme();
+                transactionUtils.updateTransaction(transaction);
 
-                    thisApi.getCampaignById(idFromEvent).then(campaign => {
-                        campaign.clientId = clientId;
-                        subscriber.next(campaign);
-                    });
-                })
-                .on('error', function (error) {
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                const idFromEvent = parseInt(receipt.events['SaveAval'].returnValues.id);
 
-                    transaction.fail();
-                    transactionUtils.updateTransaction(transaction);
+                thisApi.getAvalById(idFromEvent).then(aval => {
+                    aval.clientId = clientId;
+                    subscriber.next(aval);
+                });
 
-                    error.campaign = campaign;
-                    console.error(`Error procesando transacción de almacenamiento de campaign.`, error);
-                    subscriber.error(error);
-                });*/
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error(`Error procesando transacción de almacenamiento de aval.`, error);
+                subscriber.error(error);
+            });
         });
     }
 
-
-
+    async estimateGas(method, from) {
+        const estimateGas = await method.estimateGas({ from: from });
+        return new BigNumber(estimateGas);
+    }
 
     async getGasPrice() {
         const gasPrice = await this.web3.eth.getGasPrice();
         return new BigNumber(gasPrice);
     }
 
+    /**
+     * Realiza el mapping de los estados del aval en el
+     * smart contract con los estados en la dapp.
+     * 
+     * @param status del aval en el smart contract.
+     * @returns estado del aval en la dapp.
+     */
+    mapAvalStatus(status) {
+        switch (status) {
+            case 0: return Aval.SOLICITADO;
+            case 1: return Aval.RECHAZADO;
+            case 2: return Aval.ACEPTADO;
+            case 3: return Aval.COMPLETADO;
+            case 4: return Aval.VIGENTE;
+            case 5: return Aval.FINALIZADO;
+        }
+    }
+
+    async getExchangeRateByToken(tokenAddress) {
+        return await this.exchangeRateProvider.methods.getExchangeRate(tokenAddress).call();
+    }
+
     updateContracts() {
-        /*console.log('[Crowdfunding Contract API] Se actualizan contratos.');
-        const { crowdfundingAddress, exchangeRateProviderAddress } = config;
-        this.crowdfunding = new this.web3.eth.Contract(CrowdfundingAbi, crowdfundingAddress);
-        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderAddress);*/
+        const { avaldaoAddress, exchangeRateProviderAddress } = config;
+        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoAddress, exchangeRateProviderAddress);
+        this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoAddress);
+        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderAddress);
     }
 }
 

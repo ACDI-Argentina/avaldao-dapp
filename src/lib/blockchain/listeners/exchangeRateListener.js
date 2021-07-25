@@ -2,7 +2,7 @@ import exchangeRateUtils from "../../../redux/utils/exchangeRateUtils";
 import ExchangeRate from 'models/ExchangeRate';
 import BigNumber from 'bignumber.js';
 import config from 'configuration';
-import crowdfundingContractApi from '../CrowdfundingContractApi';
+import avaldaoContractApi from '../AvaldaoContractApi';
 
 window.ExchangeRate = ExchangeRate;
 window.BigNumber = BigNumber;
@@ -26,7 +26,7 @@ async function initExchangeRateListener() {
             let tokenKey = tokenKeys[i];
             try {
                 const tokenAddress = config.tokens[tokenKey].address;
-                const rate = await crowdfundingContractApi.getExchangeRateByToken(tokenAddress);
+                const rate = await avaldaoContractApi.getExchangeRateByToken(tokenAddress);
                 const exchangeRate = new ExchangeRate({
                     tokenAddress: tokenAddress,
                     rate: new BigNumber(rate),

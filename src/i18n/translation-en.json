@@ -231,6 +231,22 @@
     "transactionFailuredTitleUpdateDac": "The DAC '{{dacTitle}}' was not updated",
     "transactionFailuredDescriptionUpdateDac": "A failure occurred during DAC update.",
 
+    "transactionCreatedTitleCreateAval": "Confirm your creation of aval in the wallet",
+    "transactionCreatedSubtitleCreateAval": "Double check the details here – your creation of aval can't be refunded.",
+    "transactionPendingTitleCreateAval": "Creating aval...",
+    "transactionConfirmedTitleCreateAval": "The aval has been created",
+    "transactionConfirmedDescriptionCreateAval": "The aval has been created and is already to sign it.",
+    "transactionFailuredTitleCreateAval": "The aval was not created",
+    "transactionFailuredDescriptionCreateAVal": "A failure occurred during aval creation.",
+
+    "transactionCreatedTitleUpdateAval": "Confirm your update of aval in the wallet",
+    "transactionCreatedSubtitleUpdateAval": "Double check the details here – your update of aval can't be refunded.",
+    "transactionPendingTitleUpdateAval": "Updating aval",
+    "transactionConfirmedTitleUpdateAval": "The aval has been updated",
+    "transactionConfirmedDescriptionUpdateAval": "The aval has been updated.",
+    "transactionFailuredTitleUpdateAval": "The aval was not updated",
+    "transactionFailuredDescriptionUpdateAval": "A failure occurred during aval update.",
+
     "transactionCreatedTitleCreateCampaign": "Confirm your creation of campaign '{{campaignTitle}}' in the wallet",
     "transactionCreatedSubtitleCreateCampaign": "Double check the details here – your creation of campaign can't be refunded.",
     "transactionPendingTitleCreateCampaign": "Creating campaign '{{campaignTitle}}'...",

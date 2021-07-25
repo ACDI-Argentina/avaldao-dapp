@@ -16,7 +16,6 @@ import config from '../../configuration';
 import erc20ContractApi from './ERC20ContractApi';
 import Web3Utils from './Web3Utils';
 import web3Manager from './Web3Manager';
-import { CrowdfundingAbi, ExchangeRateProviderAbi } from '@acdi/give4forests-crowdfunding-contract';
 import CrowdfundingUtils from './CrowdfundingUtils';
 import TransactionTracker from './TransactionTracker';
 
