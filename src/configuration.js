@@ -4,8 +4,9 @@ const {
   REACT_APP_FEATHERJS_CONNECTION_URL,
   REACT_APP_NODE_CONNECTION_URL,
   REACT_APP_AVALDAO_ADDRESS,
+  REACT_APP_AVALDAO_CONTRACT_ADDRESS,
   REACT_APP_CROWDFUNDING_ADDRESS,
-  REACT_APP_EXCHANGE_RATE_PROVIDER_ADDRESS,
+  REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS,
   REACT_APP_TOKEN_RIF_ADDRESS,
   REACT_APP_TOKEN_DOC_ADDRESS,
   REACT_APP_TOKEN_ADDRESSES,
@@ -252,7 +253,8 @@ const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT]);
 // Overwrite the environment values with parameters
 config.crowdfundingAddress = REACT_APP_CROWDFUNDING_ADDRESS || config.crowdfundingAddress;
 config.avaldaoAddress = REACT_APP_AVALDAO_ADDRESS || config.avaldaoAddress;
-config.exchangeRateProviderAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_ADDRESS || config.exchangeRateProviderAddress;
+config.avaldaoContractAddress = REACT_APP_AVALDAO_CONTRACT_ADDRESS || config.avaldaoContractAddress;
+config.exchangeRateProviderContractAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS || config.exchangeRateProviderContractAddress;
 config.tokens.doc.address = REACT_APP_TOKEN_DOC_ADDRESS || config.tokens.doc.address;
 config.tokens.rif.address = REACT_APP_TOKEN_RIF_ADDRESS || config.tokens.rif.address;
 config.tokenAddresses = REACT_APP_TOKEN_ADDRESSES

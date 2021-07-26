@@ -218,10 +218,10 @@ class AvaldaoContractApi {
     }
 
     updateContracts() {
-        const { avaldaoAddress, exchangeRateProviderAddress } = config;
-        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoAddress, exchangeRateProviderAddress);
-        this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoAddress);
-        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderAddress);
+        const { avaldaoContractAddress, exchangeRateProviderContractAddress } = config;
+        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, exchangeRateProviderContractAddress);
+        this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
+        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
     }
 }
 

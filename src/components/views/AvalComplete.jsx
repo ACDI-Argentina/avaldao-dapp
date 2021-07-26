@@ -24,6 +24,7 @@ import { withTranslation } from 'react-i18next';
 import { saveAval } from '../../redux/reducers/avalesSlice'
 import { Button } from '@material-ui/core';
 import Aval from 'models/Aval';
+import config from 'configuration';
 
 /**
  * Pantalla para completar aval.
@@ -37,8 +38,6 @@ class AvalComplete extends Component {
     const aval = new Aval();
 
     this.state = {
-      avaldaoAddress: '0xb2e09ab18a1792025D8505B5722E527d5e90c8e7',
-      solicitanteAddress: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
       comercianteAddress: '',
       avaladoAddress: '',
       isLoading: false,
@@ -117,10 +116,11 @@ class AvalComplete extends Component {
     });
   }
 
-  handleSubmit(event) {    
+  handleSubmit(event) {
+    const { currentUser } = this.props;
     let aval = this.state.aval;
-    aval.avaldaoAddress = this.state.avaldaoAddress;
-    aval.solicitanteAddress = this.state.solicitanteAddress;
+    aval.avaldaoAddress = config.avaldaoAddress;
+    aval.solicitanteAddress = currentUser.address;
     aval.comercianteAddress = this.state.comercianteAddress;
     aval.avaladoAddress = this.state.avaladoAddress;
     this.setState({
