@@ -1,30 +1,23 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import classNames from "classnames";
-
-import { history } from '../../lib/helpers';
 import { registerCurrentUser, selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
 import MainMenu from 'components/MainMenu';
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
-
-import { container, title } from "assets/jss/material-kit-react.js";
+import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
 import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
-import ProfileForm from 'components/ProfileForm';
-import Loader from '../Loader';
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-
 import { saveAval } from '../../redux/reducers/avalesSlice'
 import { Button } from '@material-ui/core';
 import Aval from 'models/Aval';
 import config from 'configuration';
+import TextField from '@material-ui/core/TextField';
+import Web3Utils from 'lib/blockchain/Web3Utils';
 
 /**
  * Pantalla para completar aval.
@@ -39,7 +32,12 @@ class AvalComplete extends Component {
 
     this.state = {
       comercianteAddress: '',
+      comercianteHelperText: 'Dirección de la wallet del comerciante',
+      comercianteError: false,
       avaladoAddress: '',
+      avaladoHelperText: 'Dirección de la wallet del avalado',
+      avaldaoError: false,
+      formValid: false,
       isLoading: false,
       isSaving: false,
       formIsValid: false,
@@ -50,6 +48,7 @@ class AvalComplete extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangeComercianteAddress = this.handleChangeComercianteAddress.bind(this);
     this.handleChangeAvaladoAddress = this.handleChangeAvaladoAddress.bind(this);
+    this.setFormValid = this.setFormValid.bind(this);
   }
 
   async requestConnection(translate) {
@@ -105,14 +104,49 @@ class AvalComplete extends Component {
   }
 
   handleChangeComercianteAddress(event) {
+    let comercianteError = false;
+    let comercianteHelperText = 'Dirección de la wallet del comerciante';
+    const comercianteAddress = event.target.value;
+    if (comercianteAddress === undefined || comercianteAddress === '') {
+      comercianteHelperText = 'Requerido';
+      comercianteError = true;
+    } else if (!Web3Utils.isValidAddress(comercianteAddress)) {
+      comercianteHelperText = 'Dirección inválida';
+      comercianteError = true;
+    }
     this.setState({
-      comercianteAddress: event.target.value
+      comercianteAddress: comercianteAddress,
+      comercianteHelperText: comercianteHelperText,
+      comercianteError: comercianteError
+    }, () => {
+      this.setFormValid();
     });
   }
 
   handleChangeAvaladoAddress(event) {
+    let avaladoError = false;
+    let avaladoHelperText = 'Dirección de la wallet del avalado';
+    const avaladoAddress = event.target.value;
+    if (avaladoAddress === undefined || avaladoAddress === '') {
+      avaladoHelperText = 'Requerido';
+      avaladoError = true;
+    } else if (!Web3Utils.isValidAddress(avaladoAddress)) {
+      avaladoHelperText = 'Dirección inválida';
+      avaladoError = true;
+    }
     this.setState({
-      avaladoAddress: event.target.value
+      avaladoAddress: avaladoAddress,
+      avaladoHelperText: avaladoHelperText,
+      avaladoError: avaladoError
+    }, () => {
+      this.setFormValid();
+    });
+  }
+
+  setFormValid() {
+    const { comercianteError, avaladoError } = this.state;
+    this.setState({
+      formValid: !comercianteError && !avaladoError
     });
   }
 
@@ -134,20 +168,15 @@ class AvalComplete extends Component {
   }
 
   render() {
-    const { isLoading } = this.state;
-    const { currentUser } = this.props;
-    const { ...rest } = this.props;
-    const { classes, t } = this.props;
-
-    const imageClasses = classNames(
-      classes.imgRaised,
-      classes.imgRoundedCircle,
-      classes.imgFluid
-    );
-
+    const { comercianteHelperText,
+      comercianteError,
+      avaladoHelperText,
+      avaladoError,
+      formValid } = this.state;
+    const { classes, t, ...rest } = this.props;
 
     return (
-      <div className={classes.profilePage}>
+      <div className={classes.root}>
         <Header
           color="white"
           brand={<img src={require("assets/img/logos/give4forest.png")}
@@ -163,75 +192,68 @@ class AvalComplete extends Component {
         />
         <Parallax small image={require("assets/img/profile-default-bg.jpg")} />
 
-
-
-
-
-
         <div className={classNames(classes.main, classes.mainRaised)}>
-          <div>
-            <div className={classes.container}>
-              <GridContainer justify="center">
-                <GridItem xs={12} sm={12} md={6}>
-                  <div className={classes.profile}>
-                    <div>
-                      <img src={currentUser.avatar ? currentUser.avatar : require("assets/img/default-user-icon.png")} alt="..." className={imageClasses} />
-                    </div>
 
-                    <form onSubmit={this.handleSubmit} className={classes.form} noValidate autoComplete="off" >
-                      <Input value={this.state.comercianteAddress}
-                        onChange={this.handleChangeComercianteAddress}
-                        placeholder="Dirección del comerciante"
-                        defaultValue="Hello world"
-                        inputProps={{ 'aria-label': 'description' }} />
-                      <Input value={this.state.avaladoAddress}
-                        onChange={this.handleChangeAvaladoAddress}
-                        placeholder="Dirección del avalado"
-                        inputProps={{ 'aria-label': 'description' }} />
-                      <Input defaultValue="Disabled" disabled inputProps={{ 'aria-label': 'description' }} />
-                      <Input defaultValue="Error" error inputProps={{ 'aria-label': 'description' }} />
+          <form onSubmit={this.handleSubmit}
+            className={classes.form}
+            noValidate
+            autoComplete="off" >
 
-                      <Button variant="contained" color="primary" type="submit">
-                        Completar
-                      </Button>
-                    </form>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Typography variant="h5" component="h5">
+                  Completar aval
+                </Typography>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <TextField
+                  id="comercianteAddressTextField"
+                  value={this.state.comercianteAddress}
+                  onChange={this.handleChangeComercianteAddress}
+                  label="Dirección del comerciante"
+                  helperText={comercianteHelperText}
+                  placeholder="0x..."
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={comercianteError}
+                  required
+                  inputProps={{ maxlength: 42 }}
+                  variant="filled"
+                />
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <TextField id="avaladoAddressTextField"
+                  value={this.state.avaladoAddress}
+                  onChange={this.handleChangeAvaladoAddress}
+                  label="Dirección del avalado"
+                  helperText={avaladoHelperText}
+                  placeholder="0x..."
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  error={avaladoError}
+                  required
+                  inputProps={{ maxlength: 42 }}
+                  variant="filled"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={!formValid}>
+                  Completar
+                </Button>
+              </Grid>
+            </Grid>
 
-
-                    {isLoading && <Loader className="fixed" />}
-                    {!isLoading && (
-                      <div>
-                        {currentUser.email && <h3>Edit your profile</h3>}
-                        {!currentUser.email && <h3>Create a profile to get started</h3>}
-                        <p>
-                          <i className="fa fa-question-circle" />
-                          Trust is important to run successful Funds or Campaigns. Without trust you will
-                          likely not receive donations. Therefore, we strongly recommend that you{' '}
-                          <strong>fill out your profile </strong>
-                          when you want to start Funds or Campaigns on the B4H dapp.
-                        </p>
-                        <div className="alert alert-warning">
-                          <i className="fa fa-exclamation-triangle" />
-                          Please note that all the information entered will be stored on a publicly
-                          accessible permanent storage like blockchain. We are not able to erase or alter
-                          any of the information.{' '}
-                          <strong>
-                            Do not input anything that you do not have permision to share or you are not
-                            comfortable with being forever accessible.
-                          </strong>{' '}
-                          For more information please see our{' '}
-                          <Link to="/termsandconditions">Terms and Conditions</Link> and{' '}
-                          <Link to="/privacypolicy">Privacy Policy</Link>.
-                        </div>
-
-                        <ProfileForm user={currentUser} />
-                      </div>
-                    )}
-
-                  </div>
-                </GridItem>
-              </GridContainer>
-            </div>
-          </div>
+          </form>
         </div>
         <Footer />
       </div>
@@ -242,23 +264,15 @@ class AvalComplete extends Component {
 AvalComplete.contextType = Web3AppContext;
 
 const styles = theme => ({
+  root: {
+    overflowX: "hidden",
+  },
   form: {
     '& > *': {
       margin: theme.spacing(1),
     },
-  },
-  profilePage: {
-    overflowX: "hidden",
-  },
-  container,
-  profile: {
-    textAlign: "center",
-    "& img": {
-      maxWidth: "160px",
-      width: "100%",
-      margin: "0 auto",
-      transform: "translate3d(0, -50%, 0)"
-    }
+    padding: '2em',
+    flexGrow: 1
   },
   description: {
     margin: "1.071rem auto 0",
@@ -280,14 +294,6 @@ const styles = theme => ({
     borderRadius: "6px",
     boxShadow:
       "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
-  },
-  title: {
-    ...title,
-    display: "inline-block",
-    position: "relative",
-    marginTop: "30px",
-    minHeight: "32px",
-    textDecoration: "none"
   },
   socials: {
     marginTop: "0",
@@ -313,6 +319,11 @@ const styles = theme => ({
       maxHeight: "2em"
     }
   },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: '25ch',
+  }
 });
 
 const mapStateToProps = (state, ownProps) => {

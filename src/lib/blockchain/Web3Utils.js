@@ -49,6 +49,13 @@ class Web3Utils {
   static toKeccak256(value) {
     return utils.keccak256(value);
   }
+
+  /**
+   * Determina si un address es válido.
+   */
+  static isValidAddress(address) {
+    return utils.isAddress(address);
+  }
 }
 
 /**
