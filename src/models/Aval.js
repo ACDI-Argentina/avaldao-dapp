@@ -10,6 +10,17 @@ class Aval {
     const {
       id,
       clientId = nanoid(),
+      // ////////////////////////////////////////////////////////
+      // La siguiente información es provista cuando el aval es solicitado.
+      // Issue #10: CU: Solicitar aval
+      // En esta esta aún no está implementado el CU.
+      proyecto = 'Instalación de cisternas para productores del Gran Chaco',
+      proposito = 'Impulsar el desarrollo de los productores de la zona.',
+      causa = 'Los productores no tiene acceso al crédito y necesitan un aval.',
+      adquisicion = '10 cisternas',
+      beneficiarios = '20 productores',
+      monto = '10.000 USD',
+      // ////////////////////////////////////////////////////////
       avaldaoAddress = '',
       solicitanteAddress = '',
       comercianteAddress = '',
@@ -19,6 +30,12 @@ class Aval {
     this._id = id;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
+    this._proyecto = proyecto;
+    this._proposito = proposito;
+    this._causa = causa;
+    this._adquisicion = adquisicion;
+    this._beneficiarios = beneficiarios;
+    this._monto = monto;
     this._avaldaoAddress = avaldaoAddress;
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
@@ -31,7 +48,13 @@ class Aval {
    */
   toIpfs() {
     return {
-      id: this._id
+      id: this._id,
+      proyecto: this._proyecto,
+      proposito: this._proposito,
+      causa: this._causa,
+      adquisicion: this._adquisicion,
+      beneficiarios: this._beneficiarios,
+      monto: this._monto
     };
   }
 
@@ -42,6 +65,12 @@ class Aval {
     return {
       id: this._id,
       clientId: this._clientId,
+      proyecto: this._proyecto,
+      proposito: this._proposito,
+      causa: this._causa,
+      adquisicion: this._adquisicion,
+      beneficiarios: this._beneficiarios,
+      monto: this._monto,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -68,6 +97,54 @@ class Aval {
 
   set clientId(value) {
     this._clientId = value;
+  }
+
+  get proyecto() {
+    return this._proyecto;
+  }
+
+  set proyecto(value) {
+    this._proyecto = value;
+  }
+
+  get proposito() {
+    return this._proposito;
+  }
+
+  set proposito(value) {
+    this._proposito = value;
+  }
+
+  get causa() {
+    return this._causa;
+  }
+
+  set causa(value) {
+    this._causa = value;
+  }
+
+  get adquisicion() {
+    return this._adquisicion;
+  }
+
+  set adquisicion(value) {
+    this._adquisicion = value;
+  }
+
+  get beneficiarios() {
+    return this._beneficiarios;
+  }
+
+  set beneficiarios(value) {
+    this._beneficiarios = value;
+  }
+
+  get monto() {
+    return this._monto;
+  }
+
+  set monto(value) {
+    this._monto = value;
   }
 
   get avaldaoAddress() {

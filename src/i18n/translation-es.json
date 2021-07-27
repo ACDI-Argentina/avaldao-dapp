@@ -1,4 +1,27 @@
 {
+    "errorRequired": "Requerido",
+    "errorInvalidAddress": "Dirección inválida",
+    
+    "avalCompletarTitle": "Completar aval",
+    "avalCompletar": "Completar",
+    "avalProyecto": "Proyecto",
+    "avalProposito": "Propósito",
+    "avalCausa": "Por qué",
+    "avalAdquisicion": "Adquisición",
+    "avalBeneficiarios": "Beneficiarios",
+    "avalMonto": "Monto",
+    "avalAvaldaoAddress": "Dirección de Avaldao",
+    "avalSolicitanteAddress": "Dirección del solicitante",
+    "avalComercianteAddress": "Dirección del comerciante",
+    "avalAvaladoAddress": "Dirección del avalado",
+    "avalAvaldaoAddressHelper": "Dirección de la billetera de Avaldao",
+    "avalSolicitanteAddressHelper": "Dirección de la billetera del solicitante",
+    "avalComercianteAddressHelper": "Dirección de la billetera del comerciante",
+    "avalAvaladoAddressHelper": "Dirección de la billetera del avalado",
+    
+    
+    
+    
     "give4forest": "Give for forest",
 
     "landingPageTitle": "Crypto-fondos que nos conectan con el planeta",

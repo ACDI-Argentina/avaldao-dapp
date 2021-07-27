@@ -1,4 +1,24 @@
 {
+    "errorRequired": "Required",
+    "errorInvalidAddress": "Invalid address",
+    
+    "avalCompletarTitle": "Complete aval",
+    "avalCompletar": "Complete",
+    "avalProyecto": "Project",
+    "avalProposito": "Purpose",
+    "avalCausa": "Why",
+    "avalAdquisicion": "Acquisition",
+    "avalBeneficiarios": "Beneficiaries",
+    "avalMonto": "Amount",
+    "avalAvaldaoAddress": "Avaldao address",
+    "avalSolicitanteAddress": "Applicant address",
+    "avalComercianteAddress": "Seller address",
+    "avalAvaladoAddress": "Endorsed address",
+    "avalAvaldaoAddressHelper": "Avaldao wallet address",
+    "avalSolicitanteAddressHelper": "Applicant wallet address",
+    "avalComercianteAddressHelper": "Seller wallet address",
+    "avalAvaladoAddressHelper": "Endorsed wallet address",
+
     "give4forest": "Give for forest",
 
     "landingPageTitle": "Crypto-funds that connect us with the planet",

@@ -18,6 +18,8 @@ import Aval from 'models/Aval';
 import config from 'configuration';
 import TextField from '@material-ui/core/TextField';
 import Web3Utils from 'lib/blockchain/Web3Utils';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 /**
  * Pantalla para completar aval.
@@ -28,14 +30,16 @@ class AvalComplete extends Component {
   constructor(props) {
     super(props);
 
+    const { t } = props;
+
     const aval = new Aval();
 
     this.state = {
       comercianteAddress: '',
-      comercianteHelperText: 'Dirección de la wallet del comerciante',
+      comercianteHelperText: t("avalComercianteAddressHelper"),
       comercianteError: false,
       avaladoAddress: '',
-      avaladoHelperText: 'Dirección de la wallet del avalado',
+      avaladoHelperText: t("avalAvaladoAddressHelper"),
       avaldaoError: false,
       formValid: false,
       isLoading: false,
@@ -74,14 +78,14 @@ class AvalComplete extends Component {
   }
 
   async componentDidMount() {
-    const { history, currentUser, t: translate } = this.props;
+    const { history, currentUser, t } = this.props;
     const { loginAccount } = this.context;
     const { authenticateIfPossible } = this.context.modals.methods;
 
     const goHome = () => history.push('/');
 
     if (!currentUser || !currentUser.address) {
-      const confirmation = await this.requestConnection(translate);
+      const confirmation = await this.requestConnection(t);
       if (confirmation) {
         const connected = await loginAccount();
         if (!connected) {
@@ -104,14 +108,15 @@ class AvalComplete extends Component {
   }
 
   handleChangeComercianteAddress(event) {
+    const { t } = this.props;
     let comercianteError = false;
-    let comercianteHelperText = 'Dirección de la wallet del comerciante';
+    let comercianteHelperText = t('avalComercianteAddressHelper');
     const comercianteAddress = event.target.value;
     if (comercianteAddress === undefined || comercianteAddress === '') {
-      comercianteHelperText = 'Requerido';
+      comercianteHelperText = t('errorRequired');
       comercianteError = true;
     } else if (!Web3Utils.isValidAddress(comercianteAddress)) {
-      comercianteHelperText = 'Dirección inválida';
+      comercianteHelperText = t('errorInvalidAddress');
       comercianteError = true;
     }
     this.setState({
@@ -124,14 +129,15 @@ class AvalComplete extends Component {
   }
 
   handleChangeAvaladoAddress(event) {
+    const { t } = this.props;
     let avaladoError = false;
-    let avaladoHelperText = 'Dirección de la wallet del avalado';
+    let avaladoHelperText = t('avalAvaladoAddressHelper');
     const avaladoAddress = event.target.value;
     if (avaladoAddress === undefined || avaladoAddress === '') {
-      avaladoHelperText = 'Requerido';
+      avaladoHelperText = t('errorRequired');
       avaladoError = true;
     } else if (!Web3Utils.isValidAddress(avaladoAddress)) {
-      avaladoHelperText = 'Dirección inválida';
+      avaladoHelperText = t('errorInvalidAddress');
       avaladoError = true;
     }
     this.setState({
@@ -168,7 +174,8 @@ class AvalComplete extends Component {
   }
 
   render() {
-    const { comercianteHelperText,
+    const { aval,
+      comercianteHelperText,
       comercianteError,
       avaladoHelperText,
       avaladoError,
@@ -202,15 +209,93 @@ class AvalComplete extends Component {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
-                  Completar aval
+                  {t('avalCompletarTitle')}
                 </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="proyectoTextField"
+                  value={aval.proyecto}
+                  label={t('avalProyecto')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <TextField
+                  id="propositoTextField"
+                  value={aval.proposito}
+                  label={t('avalProposito')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <TextField
+                  id="causaTextField"
+                  value={aval.causa}
+                  label={t('avalCausa')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item sm={12} md={4}>
+                <TextField
+                  id="adquisicionTextField"
+                  value={aval.adquisicion}
+                  label={t('avalAdquisicion')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item sm={12} md={4}>
+                <TextField
+                  id="beneficiariosTextField"
+                  value={aval.beneficiarios}
+                  label={t('avalBeneficiarios')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item sm={12} md={4}>
+                <TextField
+                  id="montoTextField"
+                  value={aval.monto}
+                  label={t('avalMonto')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
               </Grid>
               <Grid item sm={12} md={6}>
                 <TextField
                   id="comercianteAddressTextField"
                   value={this.state.comercianteAddress}
                   onChange={this.handleChangeComercianteAddress}
-                  label="Dirección del comerciante"
+                  label={t('avalComercianteAddress')}
                   helperText={comercianteHelperText}
                   placeholder="0x..."
                   fullWidth
@@ -222,13 +307,20 @@ class AvalComplete extends Component {
                   required
                   inputProps={{ maxlength: 42 }}
                   variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountBalanceWalletIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item sm={12} md={6}>
                 <TextField id="avaladoAddressTextField"
                   value={this.state.avaladoAddress}
                   onChange={this.handleChangeAvaladoAddress}
-                  label="Dirección del avalado"
+                  label={t('avalAvaladoAddress')}
                   helperText={avaladoHelperText}
                   placeholder="0x..."
                   fullWidth
@@ -240,6 +332,13 @@ class AvalComplete extends Component {
                   required
                   inputProps={{ maxlength: 42 }}
                   variant="filled"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountBalanceWalletIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -248,7 +347,7 @@ class AvalComplete extends Component {
                   color="primary"
                   type="submit"
                   disabled={!formValid}>
-                  Completar
+                  {t('avalCompletar')}
                 </Button>
               </Grid>
             </Grid>

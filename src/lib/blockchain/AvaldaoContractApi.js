@@ -75,13 +75,29 @@ class AvaldaoContractApi {
     async getAvalById(id) {
         const avalOnChain = await this.avaldao.methods.getAval(id).call();
         // Se obtiene la información del aval desde la Blockchain.
-        const { infoCid, avaldao, solicitante, comerciante, avalado, status } = avalOnChain;
+        const { infoCid,
+            avaldao,
+            solicitante,
+            comerciante,
+            avalado,
+            status } = avalOnChain;
         // Se obtiene la información del aval desde IPFS.
-        // TODO: aún no se almacenan datos en IPFS para el aval.
-        const avalOnIpfs = await avalIpfsConnector.download(infoCid);
+        const avalOffChain = await avalIpfsConnector.download(infoCid);
+        const { proyecto,
+            proposito,
+            causa,
+            adquisicion,
+            beneficiarios,
+            monto } = avalOffChain;
 
         return new Aval({
             id: parseInt(id),
+            proyecto: proyecto,
+            proposito: proposito,
+            causa: causa,
+            adquisicion: adquisicion,
+            beneficiarios: beneficiarios,
+            monto: monto,
             avaldaoAddress: avaldao,
             solicitanteAddress: solicitante,
             comercianteAddress: comerciante,
@@ -99,7 +115,6 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
-            console.log('Guardando Aval.', aval);
             let thisApi = this;
 
             const avalId = aval.id || 0; // 0 si es una aval nuevo.
