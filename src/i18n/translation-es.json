@@ -2,6 +2,7 @@
     "errorRequired": "Requerido",
     "errorInvalidAddress": "Dirección inválida",
     
+    "avalesTitle": "Avales", 
     "avalCompletarTitle": "Completar aval",
     "avalCompletar": "Completar",
     "avalProyecto": "Proyecto",

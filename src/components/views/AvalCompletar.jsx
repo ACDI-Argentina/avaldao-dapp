@@ -12,7 +12,7 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import { saveAval } from '../../redux/reducers/avalesSlice'
+import { saveAval, selectAvalByClientId } from '../../redux/reducers/avalesSlice'
 import { Button } from '@material-ui/core';
 import Aval from 'models/Aval';
 import config from 'configuration';
@@ -20,19 +20,18 @@ import TextField from '@material-ui/core/TextField';
 import Web3Utils from 'lib/blockchain/Web3Utils';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { history } from 'lib/helpers';
 
 /**
  * Pantalla para completar aval.
  * 
  */
-class AvalComplete extends Component {
+class AvalCompletar extends Component {
 
   constructor(props) {
     super(props);
 
-    const { t } = props;
-
-    const aval = new Aval();
+    const { aval, t } = props;
 
     this.state = {
       comercianteAddress: '',
@@ -45,7 +44,7 @@ class AvalComplete extends Component {
       isLoading: false,
       isSaving: false,
       formIsValid: false,
-      aval: aval,
+      aval: new Aval(aval),
       isBlocking: false
     };
 
@@ -168,7 +167,7 @@ class AvalComplete extends Component {
       aval: aval
     }, () => {
       this.props.saveAval(this.state.aval);
-      //history.push(`/`);
+      history.push(`/avales`);
     });
     event.preventDefault();
   }
@@ -360,7 +359,7 @@ class AvalComplete extends Component {
   }
 }
 
-AvalComplete.contextType = Web3AppContext;
+AvalCompletar.contextType = Web3AppContext;
 
 const styles = theme => ({
   root: {
@@ -426,12 +425,14 @@ const styles = theme => ({
 });
 
 const mapStateToProps = (state, ownProps) => {
+  const avalClientId = parseInt(ownProps.match.params.clientId);
   return {
+    aval: selectAvalByClientId(state, avalClientId),
     currentUser: selectCurrentUser(state)
   };
 }
 const mapDispatchToProps = { registerCurrentUser, saveAval }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(AvalComplete)))
+  withTranslation()(AvalCompletar)))
 );

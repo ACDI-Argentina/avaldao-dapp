@@ -18,7 +18,8 @@ import ViewCampaign from '../components/views/ViewCampaign'
 import EditMilestone from '../components/views/EditMilestone'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
-import AvalComplete from 'components/views/AvalComplete'
+import AvalCompletar from 'components/views/AvalCompletar'
+import Avales from 'components/views/Avales'
 
 const SwitchRoutes = ({ currentUser}) => (
     <Switch>
@@ -187,17 +188,6 @@ const SwitchRoutes = ({ currentUser}) => (
                 />
             )}
         />
-        {/*<Route
-            exact
-            path="/delegations"
-            render={props => (
-                <Delegations
-                    key={currentUser ? currentUser.id : 0}
-                    currentUser={currentUser}
-                    {...props}
-                />
-            )}
-        />*/}
         <Route
             exact
             path="/my-dacs"
@@ -243,9 +233,19 @@ const SwitchRoutes = ({ currentUser}) => (
         />
         <Route
             exact
-            path="/aval-complete"
+            path="/avales"
             render={props => (
-                <AvalComplete
+                <Avales
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
+            path="/aval-completar/:clientId"
+            render={props => (
+                <AvalCompletar
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />

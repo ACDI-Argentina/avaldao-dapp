@@ -3,7 +3,54 @@ import Aval from 'models/Aval';
 
 export const avalesSlice = createSlice({
   name: 'avales',
-  initialState: [],
+  // ////////////////////////////////////////////////////////
+  // La siguiente información es provista cuando el aval es solicitado.
+  // Issue #10: CU: Solicitar aval
+  // En esta esta aún no está implementado el CU.
+  initialState: [
+    {
+      /*id: 1,*/
+      clientId: 1,
+      proyecto: '1. Instalación de cisternas para productores del Gran Chaco',
+      proposito: 'Impulsar el desarrollo de los productores de la zona.',
+      causa: 'Los productores no tiene acceso al crédito y necesitan un aval.',
+      adquisicion: '10 cisternas',
+      beneficiarios: '20 productores',
+      monto: '10.000 USD',
+      status: {
+        name: 'Aceptado',
+        isLocal: false
+      }
+    },
+    {
+      /*id: 2,*/
+      clientId: 2,
+      proyecto: '2. Instalación de cisternas para productores del Gran Chaco',
+      proposito: 'Impulsar el desarrollo de los productores de la zona.',
+      causa: 'Los productores no tiene acceso al crédito y necesitan un aval.',
+      adquisicion: '10 cisternas',
+      beneficiarios: '20 productores',
+      monto: '10.000 USD',
+      status: {
+        name: 'Completado',
+        isLocal: false
+      }
+    },
+    {
+      /*id: 3,*/
+      clientId: 3,
+      proyecto: '3. Instalación de cisternas para productores del Gran Chaco',
+      proposito: 'Impulsar el desarrollo de los productores de la zona.',
+      causa: 'Los productores no tiene acceso al crédito y necesitan un aval.',
+      adquisicion: '10 cisternas',
+      beneficiarios: '20 productores',
+      monto: '10.000 USD',
+      status: {
+        name: 'Aceptado',
+        isLocal: false
+      }
+    }
+  ],
   reducers: {
     fetchAvales: (state, action) => {
       // Solo se obtiene el estado actual.
@@ -23,7 +70,7 @@ export const avalesSlice = createSlice({
     },
     saveAval: (state, action) => {
       const aval = action.payload;
-      aval.status = Aval.SOLICITADO;
+      aval.status = Aval.COMPLETANDO;
       const avalStore = aval.toStore();
       const index = state.findIndex(a => a.clientId === avalStore.clientId);
       if (index != -1) {
@@ -69,6 +116,13 @@ export const selectAvales = state => {
 }
 export const selectAval = (state, id) => {
   let avalStore = state.avales.find(a => a.id === id);
+  if (avalStore) {
+    return new Aval(avalStore);
+  }
+  return undefined;
+}
+export const selectAvalByClientId = (state, clientId) => {
+  let avalStore = state.avales.find(a => a.clientId === clientId);
   if (avalStore) {
     return new Aval(avalStore);
   }

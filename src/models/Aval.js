@@ -10,22 +10,17 @@ class Aval {
     const {
       id,
       clientId = nanoid(),
-      // ////////////////////////////////////////////////////////
-      // La siguiente información es provista cuando el aval es solicitado.
-      // Issue #10: CU: Solicitar aval
-      // En esta esta aún no está implementado el CU.
-      proyecto = 'Instalación de cisternas para productores del Gran Chaco',
-      proposito = 'Impulsar el desarrollo de los productores de la zona.',
-      causa = 'Los productores no tiene acceso al crédito y necesitan un aval.',
-      adquisicion = '10 cisternas',
-      beneficiarios = '20 productores',
-      monto = '10.000 USD',
-      // ////////////////////////////////////////////////////////
+      proyecto = '',
+      proposito = '',
+      causa = '',
+      adquisicion = '',
+      beneficiarios = '',
+      monto = '',
       avaldaoAddress = '',
       solicitanteAddress = '',
       comercianteAddress = '',
       avaladoAddress = '',
-      status = Aval.SOLICITADO
+      status = Aval.ACEPTADO
     } = data;
     this._id = id;
     // ID utilizado solamente del lado cliente
@@ -80,7 +75,38 @@ class Aval {
   }
 
   static get SOLICITADO() {
-    return StatusUtils.build('Solicitado', true);
+    return StatusUtils.build('Solicitado', false);
+  }
+
+  static get RECHAZADO() {
+    return StatusUtils.build('Rechazado', false);
+  }
+
+  static get ACEPTADO() {
+    return StatusUtils.build('Aceptado', false);
+  }
+
+  static get COMPLETANDO() {
+    return StatusUtils.build('Completando', true);
+  }
+
+  static get COMPLETADO() {
+    return StatusUtils.build('Completado', false);
+  }
+
+  static get VIGENTE() {
+    return StatusUtils.build('Vigente', false);
+  }
+
+  static get FINALIZADO() {
+    return StatusUtils.build('Finalizado', false);
+  }
+
+  /**
+   * Determina si el Aval puede ser completado o no.
+   */
+  allowCompletar() {
+    return this.status.name === Aval.ACEPTADO.name;
   }
 
   get id() {
