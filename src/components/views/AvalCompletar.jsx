@@ -183,6 +183,10 @@ class AvalCompletar extends Component {
     event.preventDefault();
   }
 
+  cancel() {
+    history.push(`/avales`);
+  }
+
   render() {
     const { aval,
       comercianteHelperText,
@@ -356,8 +360,14 @@ class AvalCompletar extends Component {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  disabled={!formValid}>
+                  disabled={!formValid}
+                  className={classes.button}>
                   {t('avalCompletar')}
+                </Button>
+                <Button
+                  onClick={this.cancel}
+                  className={classes.button}>
+                  {t('avalCancelar')}
                 </Button>
               </Grid>
             </Grid>
@@ -432,7 +442,10 @@ const styles = theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: '25ch',
-  }
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
 });
 
 const mapStateToProps = (state, ownProps) => {
