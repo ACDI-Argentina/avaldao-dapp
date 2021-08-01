@@ -149,9 +149,20 @@ class AvalCompletar extends Component {
   }
 
   setFormValid() {
-    const { comercianteError, avaladoError } = this.state;
+    const { comercianteAddress, avaladoAddress } = this.state;
+    let formValid = true;
+    if (comercianteAddress === undefined || comercianteAddress === '') {
+      formValid = false;
+    } else if (!Web3Utils.isValidAddress(comercianteAddress)) {
+      formValid = false;
+    }
+    if (avaladoAddress === undefined || avaladoAddress === '') {
+      formValid = false;
+    } else if (!Web3Utils.isValidAddress(avaladoAddress)) {
+      formValid = false;
+    }
     this.setState({
-      formValid: !comercianteError && !avaladoError
+      formValid: formValid
     });
   }
 
