@@ -238,6 +238,67 @@ class AvaldaoContractApi {
         this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
         this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
     }
+
+
+
+    sign(signer, aval) {
+
+        const typedData = {
+            types: {
+                EIP712Domain: [
+                    { name: 'name', type: 'string' },
+                    { name: 'version', type: 'string' },
+                    { name: 'chainId', type: 'uint256' },
+                    { name: 'verifyingContract', type: 'address' },
+                    { name: 'salt', type: 'bytes32' }
+                ],
+                Aval: [
+                    { name: 'id', type: 'uint256' },
+                    { name: 'infoCid', type: 'string' },
+                    { name: 'avaldao', type: 'address' },
+                    { name: 'solicitante', type: 'address' },
+                    { name: 'comerciante', type: 'address' },
+                    { name: 'avalado', type: 'address' }
+                ]
+            },
+            primaryType: 'Aval',
+            domain: {
+                name: 'Avaldao',
+                version: '1',
+                chainId: 1,
+                verifyingContract: '0x05A55E87d40572ea0F9e9D37079FB9cA11bdCc67',
+                salt: '0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558'
+            },
+            message: {
+                id: 1,
+                infoCid: 'Qmd4PvCKbFbbB8krxajCSeHdLXQamdt7yFxFxzTbedwiYM',
+                avaldao: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643',
+                solicitante: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643',
+                comerciante: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643',
+                avalado: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643'
+            }
+        };
+
+        const data = JSON.stringify(typedData);
+
+        this.web3.currentProvider.sendAsync(
+            {
+                method: "eth_signTypedData_v3",
+                params: [signer, data],
+                from: signer
+            },
+            function(err, result) {
+                if (err) {
+                    return console.error(err);
+                }
+                const signature = result.result.substring(2);
+                const r = "0x" + signature.substring(0, 64);
+                const s = "0x" + signature.substring(64, 128);
+                const v = parseInt(signature.substring(128, 130), 16);
+                // The signature is now comprised of r, s, and v.
+                }
+            );
+    }
 }
 
 export default new AvaldaoContractApi();
