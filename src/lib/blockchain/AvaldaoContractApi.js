@@ -267,7 +267,7 @@ class AvaldaoContractApi {
                         { name: 'chainId', type: 'uint256' },
                         { name: 'verifyingContract', type: 'address' }
                     ],
-                    Aval2: [
+                    AvalSignable: [
                         { name: 'id', type: 'uint256' },
                         { name: 'infoCid', type: 'string' },
                         { name: 'avaldao', type: 'address' },
@@ -276,7 +276,7 @@ class AvaldaoContractApi {
                         { name: 'avalado', type: 'address' }
                     ]
                 },
-                primaryType: 'Aval2',
+                primaryType: 'AvalSignable',
                 domain: {
                     name: 'Avaldao',
                     version: '1',
@@ -373,7 +373,7 @@ class AvaldaoContractApi {
 
                         // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
                         // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                        const idFromEvent = parseInt(receipt.events['SaveAval'].returnValues.id);
+                        const idFromEvent = parseInt(receipt.events['SignAval'].returnValues.id);
 
                         thisApi.getAvalById(idFromEvent).then(aval => {
                             aval.clientId = clientId;
