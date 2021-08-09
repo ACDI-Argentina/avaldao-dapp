@@ -7,6 +7,7 @@ import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionUtils from '../../redux/utils/transactionUtils'
 import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
+import { version } from 'react-dom';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -92,6 +93,7 @@ class AvaldaoContractApi {
 
         return new Aval({
             id: parseInt(id),
+            infoCid: infoCid,
             proyecto: proyecto,
             proposito: proposito,
             causa: causa,
@@ -241,63 +243,157 @@ class AvaldaoContractApi {
 
 
 
+    /**
+     * https://docs.metamask.io/guide/signing-data.html#sign-typed-data-v4
+     * https://medium.com/metamask/eip712-is-coming-what-to-expect-and-how-to-use-it-bb92fd1a7a26
+     * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md
+     * 
+     * @param {*} signer 
+     * @param {*} aval 
+     */
     sign(signer, aval) {
 
-        const typedData = {
-            types: {
-                EIP712Domain: [
-                    { name: 'name', type: 'string' },
-                    { name: 'version', type: 'string' },
-                    { name: 'chainId', type: 'uint256' },
-                    { name: 'verifyingContract', type: 'address' },
-                    { name: 'salt', type: 'bytes32' }
-                ],
-                Aval: [
-                    { name: 'id', type: 'uint256' },
-                    { name: 'infoCid', type: 'string' },
-                    { name: 'avaldao', type: 'address' },
-                    { name: 'solicitante', type: 'address' },
-                    { name: 'comerciante', type: 'address' },
-                    { name: 'avalado', type: 'address' }
-                ]
-            },
-            primaryType: 'Aval',
-            domain: {
-                name: 'Avaldao',
-                version: '1',
-                chainId: 1,
-                verifyingContract: '0x05A55E87d40572ea0F9e9D37079FB9cA11bdCc67',
-                salt: '0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558'
-            },
-            message: {
-                id: 1,
-                infoCid: 'Qmd4PvCKbFbbB8krxajCSeHdLXQamdt7yFxFxzTbedwiYM',
-                avaldao: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643',
-                solicitante: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643',
-                comerciante: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643',
-                avalado: '0xeFb80DB9E2d943A492Bd988f4c619495cA815643'
-            }
-        };
+        return new Observable(async subscriber => {
 
-        const data = JSON.stringify(typedData);
+            let thisApi = this;
+            const clientId = aval.clientId;
+            let isNew = true;
 
-        this.web3.currentProvider.sendAsync(
-            {
-                method: "eth_signTypedData_v3",
-                params: [signer, data],
-                from: signer
-            },
-            function(err, result) {
-                if (err) {
-                    return console.error(err);
+            const typedData = {
+                types: {
+                    EIP712Domain: [
+                        { name: 'name', type: 'string' },
+                        { name: 'version', type: 'string' },
+                        { name: 'chainId', type: 'uint256' },
+                        { name: 'verifyingContract', type: 'address' }
+                    ],
+                    Aval2: [
+                        { name: 'id', type: 'uint256' },
+                        { name: 'infoCid', type: 'string' },
+                        { name: 'avaldao', type: 'address' },
+                        { name: 'solicitante', type: 'address' },
+                        { name: 'comerciante', type: 'address' },
+                        { name: 'avalado', type: 'address' }
+                    ]
+                },
+                primaryType: 'Aval2',
+                domain: {
+                    name: 'Avaldao',
+                    version: '1',
+                    chainId: 33,
+                    verifyingContract: '0x05A55E87d40572ea0F9e9D37079FB9cA11bdCc67'
+                },
+                message: {
+                    id: aval.id,
+                    infoCid: aval.infoCid,
+                    avaldao: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
+                    solicitante: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
+                    comerciante: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
+                    avalado: '0xee4b388fb98420811C9e04AE8378330C05A2735a'
                 }
-                const signature = result.result.substring(2);
-                const r = "0x" + signature.substring(0, 64);
-                const s = "0x" + signature.substring(64, 128);
-                const v = parseInt(signature.substring(128, 130), 16);
-                // The signature is now comprised of r, s, and v.
-                }
-            );
+            };
+
+            const data = JSON.stringify(typedData);
+
+            this.web3.currentProvider.request(
+                {
+                    method: "eth_signTypedData_v4",
+                    params: [signer, data],
+                    from: signer
+                }).then(async result => {
+
+                    console.log('Result', result);
+                    const signature = result.substring(2);
+                    console.log('Signature', signature);
+                    const r = "0x" + signature.substring(0, 64);
+                    const s = "0x" + signature.substring(64, 128);
+                    const v = parseInt(signature.substring(128, 130), 16);
+                    // The signature is now comprised of r, s, and v.
+
+                    console.log('Signature R', r);
+                    console.log('Signature S', s);
+                    console.log('Signature V', v);
+
+                    //
+
+                    const signV = [v, v, v, v];
+                    const signR = [r, r, r, r];
+                    const signS = [s, s, s, s];
+                    const method = this.avaldao.methods.signAval(
+                        aval.id,
+                        signV,
+                        signR,
+                        signS);
+
+                    const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
+                    const gasPrice = await this.getGasPrice();
+                    
+                    let transaction = transactionUtils.addTransaction({
+                        gasEstimated: gasEstimated,
+                        gasPrice: gasPrice,
+                        createdTitle: {
+                            key: isNew ? 'transactionCreatedTitleCreateAval' : 'transactionCreatedTitleUpdateAval'
+                        },
+                        createdSubtitle: {
+                            key: isNew ? 'transactionCreatedSubtitleCreateAval' : 'transactionCreatedSubtitleUpdateAval'
+                        },
+                        pendingTitle: {
+                            key: isNew ? 'transactionPendingTitleCreateAval' : 'transactionPendingTitleUpdateAval'
+                        },
+                        confirmedTitle: {
+                            key: isNew ? 'transactionConfirmedTitleCreateAval' : 'transactionConfirmedTitleUpdateAval'
+                        },
+                        confirmedDescription: {
+                            key: isNew ? 'transactionConfirmedDescriptionCreateAval' : 'transactionConfirmedDescriptionUpdateAval'
+                        },
+                        failuredTitle: {
+                            key: isNew ? 'transactionFailuredTitleCreateAval' : 'transactionFailuredTitleUpdateAval'
+                        },
+                        failuredDescription: {
+                            key: isNew ? 'transactionFailuredDescriptionCreateAval' : 'transactionFailuredDescriptionUpdateAval'
+                        }
+                    });
+
+                    const promiEvent = method.send({
+                        from: signer
+                    });
+
+                    promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                        transaction.submit(hash);
+                        transactionUtils.updateTransaction(transaction);
+
+                        aval.txHash = hash;
+                        subscriber.next(aval);
+
+                    }).once('confirmation', (confNumber, receipt) => {
+
+                        transaction.confirme();
+                        transactionUtils.updateTransaction(transaction);
+
+                        // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                        // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                        const idFromEvent = parseInt(receipt.events['SaveAval'].returnValues.id);
+
+                        thisApi.getAvalById(idFromEvent).then(aval => {
+                            aval.clientId = clientId;
+                            subscriber.next(aval);
+                        });
+
+                    }).on('error', function (error) {
+
+                        transaction.fail();
+                        transactionUtils.updateTransaction(transaction);
+
+                        error.aval = aval;
+                        console.error(`Error procesando transacción de firmado de aval.`, error);
+                        subscriber.error(error);
+                    });
+
+                }).catch(error => {
+                    console.error(error);
+                });
+        });
     }
 }
 

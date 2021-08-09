@@ -10,6 +10,7 @@ class Aval {
     const {
       id,
       clientId = nanoid(),
+      infoCid = '',
       proyecto = '',
       proposito = '',
       causa = '',
@@ -25,6 +26,7 @@ class Aval {
     this._id = id;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
+    this._infoCid = infoCid;
     this._proyecto = proyecto;
     this._proposito = proposito;
     this._causa = causa;
@@ -60,6 +62,7 @@ class Aval {
     return {
       id: this._id,
       clientId: this._clientId,
+      infoCid: this._infoCid,
       proyecto: this._proyecto,
       proposito: this._proposito,
       causa: this._causa,
@@ -109,6 +112,13 @@ class Aval {
     return this.status.name === Aval.ACEPTADO.name;
   }
 
+  /**
+   * Determina si el Aval puede ser firmado o no.
+   */
+   allowFirmar() {
+    return this.status.name === Aval.COMPLETADO.name;
+  }
+
   get id() {
     return this._id;
   }
@@ -123,6 +133,14 @@ class Aval {
 
   set clientId(value) {
     this._clientId = value;
+  }
+
+  get infoCid() {
+    return this._infoCid;
+  }
+
+  set infoCid(value) {
+    this._infoCid = value;
   }
 
   get proyecto() {

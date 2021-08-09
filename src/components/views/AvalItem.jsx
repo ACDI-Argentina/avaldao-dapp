@@ -8,10 +8,13 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import StatusIndicator from 'components/StatusIndicator';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Tooltip from '@material-ui/core/Tooltip';
 import { history } from 'lib/helpers';
+import AvaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
+import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 
 /**
  * Item de un Aval
@@ -24,11 +27,19 @@ class AvalItem extends Component {
     this.state = {
     };
     this.goCompletar = this.goCompletar.bind(this);
+    this.firmar = this.firmar.bind(this);
   }
 
   goCompletar() {
     const { aval } = this.props;
     history.push(`/aval-completar/${aval.clientId}`);
+  }
+
+  firmar() {
+    const { currentUser, aval } = this.props;
+    AvaldaoContractApi.sign(currentUser.address, aval).subscribe(aval => {
+      console.log('Firmado', aval);
+    });
   }
 
   render() {
@@ -59,6 +70,16 @@ class AvalItem extends Component {
                 <AssignmentTurnedInIcon />
               </IconButton>
             </Tooltip>
+            <Tooltip title={t('avalFirmarTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="firmar"
+                color="primary"
+                onClick={this.firmar}
+                disabled={!aval.allowFirmar()}>
+                <VpnKeyIcon />
+              </IconButton>
+            </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
         <Divider variant="inset" component="li" />
@@ -76,7 +97,7 @@ const styles = theme => ({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-
+    currentUser: selectCurrentUser(state)
   };
 }
 const mapDispatchToProps = {

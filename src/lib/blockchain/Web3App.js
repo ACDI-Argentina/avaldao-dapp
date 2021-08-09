@@ -453,7 +453,6 @@ class Web3App extends React.Component {
       // verify our identity
       if (response.code === 401 && response.data.startsWith('Challenge =')) {
         const msg = response.data.replace('Challenge =', '').trim();
-        console.log('Mensaje', msg);
         this.openSignatureRequestModal();
         // we have to wrap in a timeout b/c if you close the chrome window MetaMask opens, the promise never resolves
         const signOrTimeout = () =>
