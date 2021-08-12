@@ -449,7 +449,7 @@ const styles = theme => ({
 });
 
 const mapStateToProps = (state, ownProps) => {
-  const avalClientId = parseInt(ownProps.match.params.clientId);
+  const avalClientId = ownProps.match.params.clientId;
   return {
     aval: selectAvalByClientId(state, avalClientId),
     currentUser: selectCurrentUser(state)

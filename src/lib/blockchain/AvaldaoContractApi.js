@@ -104,7 +104,7 @@ class AvaldaoContractApi {
             solicitanteAddress: solicitante,
             comercianteAddress: comerciante,
             avaladoAddress: avalado,
-            status: this.mapAvalStatus(parseInt(status))
+            status: Aval.mapAvalStatus(parseInt(status))
         });
     }
 
@@ -119,7 +119,9 @@ class AvaldaoContractApi {
 
             let thisApi = this;
 
-            const avalId = aval.id || 0; // 0 si es una aval nuevo.
+            //const avalId = aval.id || 0; // 0 si es una aval nuevo.
+            // TODO Corregir al completar el circuito de solicitud y completar.
+            const avalId = 0; // 0 si es una aval nuevo.
             const isNew = avalId === 0;
 
             // Se almacena en IPFS toda la información del Aval.
@@ -210,24 +212,6 @@ class AvaldaoContractApi {
     async getGasPrice() {
         const gasPrice = await this.web3.eth.getGasPrice();
         return new BigNumber(gasPrice);
-    }
-
-    /**
-     * Realiza el mapping de los estados del aval en el
-     * smart contract con los estados en la dapp.
-     * 
-     * @param status del aval en el smart contract.
-     * @returns estado del aval en la dapp.
-     */
-    mapAvalStatus(status) {
-        switch (status) {
-            case 0: return Aval.SOLICITADO;
-            case 1: return Aval.RECHAZADO;
-            case 2: return Aval.ACEPTADO;
-            case 3: return Aval.COMPLETADO;
-            case 4: return Aval.VIGENTE;
-            case 5: return Aval.FINALIZADO;
-        }
     }
 
     async getExchangeRateByToken(tokenAddress) {

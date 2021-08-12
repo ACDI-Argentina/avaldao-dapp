@@ -8,8 +8,8 @@ export const avalesSlice = createSlice({
   // Issue #10: CU: Solicitar aval
   // En esta esta aún no está implementado el CU.
   initialState: [
+    /*
     {
-      /*id: 1,*/
       clientId: 1,
       proyecto: '1. Instalación de cisternas para productores del Gran Chaco',
       proposito: 'Impulsar el desarrollo de los productores de la zona.',
@@ -23,7 +23,6 @@ export const avalesSlice = createSlice({
       }
     },
     {
-      /*id: 2,*/
       clientId: 2,
       proyecto: '2. Instalación de cisternas para productores del Gran Chaco',
       proposito: 'Impulsar el desarrollo de los productores de la zona.',
@@ -37,7 +36,6 @@ export const avalesSlice = createSlice({
       }
     },
     {
-      /*id: 3,*/
       clientId: 3,
       proyecto: '3. Instalación de cisternas para productores del Gran Chaco',
       proposito: 'Impulsar el desarrollo de los productores de la zona.',
@@ -50,6 +48,7 @@ export const avalesSlice = createSlice({
         isLocal: false
       }
     }
+    */
   ],
   reducers: {
     fetchAvales: (state, action) => {
@@ -59,7 +58,7 @@ export const avalesSlice = createSlice({
       // Solo se obtiene el estado actual.
     },
     resetAvales: (state, action) => {
-      // Se resguardan las Avals Pendientes.
+      // Se resguardan las Avales Pendientes.
       //var pendings = state.filter(c => c.status.name === Aval.PENDING.name);
       state.splice(0, state.length);
       for (let i = 0; i < action.payload.length; i++) {
@@ -103,9 +102,9 @@ export const avalesSlice = createSlice({
   },
 });
 
-export const { fetchAvals,
+export const { fetchAvales,
   fetchAval,
-  resetAvals,
+  resetAvales,
   saveAval,
   updateAvalByClientId } = avalesSlice.actions;
 

@@ -77,6 +77,24 @@ class Aval {
     };
   }
 
+  /**
+     * Realiza el mapping de los estados del aval en el
+     * smart contract con los estados en la dapp.
+     * 
+     * @param status del aval en el smart contract.
+     * @returns estado del aval en la dapp.
+     */
+  static mapAvalStatus(status) {
+    switch (status) {
+      case 0: return Aval.SOLICITADO;
+      case 1: return Aval.RECHAZADO;
+      case 2: return Aval.ACEPTADO;
+      case 3: return Aval.COMPLETADO;
+      case 4: return Aval.VIGENTE;
+      case 5: return Aval.FINALIZADO;
+    }
+  }
+
   static get SOLICITADO() {
     return StatusUtils.build('Solicitado', false);
   }
@@ -115,7 +133,7 @@ class Aval {
   /**
    * Determina si el Aval puede ser firmado o no.
    */
-   allowFirmar() {
+  allowFirmar() {
     return this.status.name === Aval.COMPLETADO.name;
   }
 

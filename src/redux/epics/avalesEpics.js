@@ -1,6 +1,7 @@
 import { ofType } from 'redux-observable';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators'
+import avalService from 'services/AvalService';
 import avaldaoContractApi from '../../lib/blockchain/AvaldaoContractApi';
 
 /**
@@ -12,7 +13,7 @@ import avaldaoContractApi from '../../lib/blockchain/AvaldaoContractApi';
  */
 export const fetchAvalesEpic = action$ => action$.pipe(
   ofType('avales/fetchAvales'),
-  mergeMap(action => avaldaoContractApi.getAvales()),
+  mergeMap(action => avalService.getAvales()),
   map(avales => ({
     type: 'avales/resetAvales',
     payload: avales

@@ -97,10 +97,6 @@ class Avales extends Component {
       });
   }
 
-  goAvalCompletar(aval) {
-    history.push(`/aval-completar/${aval.clientId}`);
-  }
-
   render() {
 
     const { avales, classes, t, ...rest } = this.props;
