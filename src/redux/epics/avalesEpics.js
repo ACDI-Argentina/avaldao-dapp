@@ -29,16 +29,9 @@ export const fetchAvalEpic = action$ => action$.pipe(
   }))
 )
 
-/**
- * Epic que reacciona a la acción de almacenamiento de Aval local,
- * almacena el Aval en el smart contract y envía la acción de
- * actualizar el aval local.
- * 
- * @param action$ de Redux.
- */
-export const saveAvalEpic = action$ => action$.pipe(
-  ofType('avales/saveAval'),
-  mergeMap(action => avaldaoContractApi.saveAval(action.payload)),
+export const completarAvalEpic = action$ => action$.pipe(
+  ofType('avales/completarAval'),
+  mergeMap(action => avalService.completarAval(action.payload)),
   map(aval => ({
     type: 'avales/updateAvalByClientId',
     payload: aval

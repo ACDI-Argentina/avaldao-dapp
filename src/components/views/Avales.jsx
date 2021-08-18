@@ -11,20 +11,9 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import { saveAval, selectAvales } from '../../redux/reducers/avalesSlice'
-import Aval from 'models/Aval';
+import { selectAvales } from '../../redux/reducers/avalesSlice'
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import StatusIndicator from 'components/StatusIndicator';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import IconButton from '@material-ui/core/IconButton';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Tooltip from '@material-ui/core/Tooltip';
-import { history } from 'lib/helpers';
 import AvalItem from './AvalItem';
-//import { history } from '../lib/helpers'
 
 /**
  * Pantalla con el listado de avales.
@@ -34,9 +23,6 @@ class Avales extends Component {
 
   constructor(props) {
     super(props);
-
-    const { t } = props;
-
     this.state = {
       isLoading: false,
       isSaving: false,
@@ -221,7 +207,7 @@ const mapStateToProps = (state, ownProps) => {
     currentUser: selectCurrentUser(state)
   };
 }
-const mapDispatchToProps = { registerCurrentUser, saveAval }
+const mapDispatchToProps = { registerCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
   withTranslation()(Avales)))

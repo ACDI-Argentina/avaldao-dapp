@@ -1,6 +1,7 @@
 import Aval from 'models/Aval';
 import { Observable } from 'rxjs'
 import { feathersClient } from '../lib/feathersClient';
+import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
 
 class AvalService {
 
@@ -19,21 +20,7 @@ class AvalService {
                     let avales = [];
                     for (let i = 0; i < response.total; i++) {
                         let avalData = response.data[i];
-                        let aval = new Aval({
-                            id: parseInt(avalData.id),
-                            infoCid: avalData.infoCid,
-                            proyecto: avalData.proyecto,
-                            proposito: avalData.proposito,
-                            causa: avalData.causa,
-                            adquisicion: avalData.adquisicion,
-                            beneficiarios: avalData.beneficiarios,
-                            monto: avalData.monto,
-                            avaldaoAddress: avalData.avaldaoAddress,
-                            solicitanteAddress: avalData.solicitanteAddress,
-                            comercianteAddress: avalData.comercianteAddress,
-                            avaladoAddress: avalData.avaladoAddress,
-                            status: Aval.mapAvalStatus(parseInt(avalData.status))
-                        });
+                        let aval = this.feathersAvalToAval(avalData);
                         avales.push(aval);
                     }
                     subscriber.next(avales);
@@ -41,6 +28,65 @@ class AvalService {
                     console.error("[AvalService] Error obteniendo avales.", error);
                     subscriber.next([]);
                 });
+        });
+    }
+
+    /**
+     * Completa un aval.
+     * 
+     * @param aval a completar
+     * @returns observable 
+     */
+    completarAval(aval) {
+
+        const clientId = aval.clientId;
+
+        return new Observable(async subscriber => {
+
+            feathersClient.service('avales').patch(
+                aval.feathersId,
+                {
+                    comercianteAddress: aval.comercianteAddress,
+                    avaladoAddress: aval.avaladoAddress
+                }).
+                then(avalData => {
+                    //let aval = this.feathersAvalToAval(avalData);
+                    //aval.clientId = clientId;
+                    console.log('[AvalService] Aval completado en Feathers.', aval);
+                    avaldaoContractApi.saveAval(aval).subscribe(aval => {
+                        aval.clientId = clientId;
+                        subscriber.next(aval);
+                    }, error => {
+                        console.error("[AvalService] Error completando aval en Blockchain.", error);
+                        subscriber.error(error);
+                    });
+                }).catch(error => {
+                    console.error("[AvalService] Error completando aval en Feathers.", error);
+                    subscriber.error(error);
+                });
+        });
+    }
+
+    feathersAvalToAval(avalData) {
+        return new Aval({
+            id: parseInt(avalData.id),
+            feathersId: avalData._id,
+            infoCid: avalData.infoCid,
+            proyecto: avalData.proyecto,
+            proposito: avalData.proposito,
+            causa: avalData.causa,
+            adquisicion: avalData.adquisicion,
+            beneficiarios: avalData.beneficiarios,
+            monto: avalData.monto,
+            avaldaoAddress: avalData.avaldaoAddress,
+            solicitanteAddress: avalData.solicitanteAddress,
+            comercianteAddress: avalData.comercianteAddress,
+            avaladoAddress: avalData.avaladoAddress,
+            avaldaoSignature: avalData.avaldaoSignature,
+            solicitanteSignature: avalData.solicitanteSignature,
+            comercianteSignature: avalData.comercianteSignature,
+            avaladoSignature: avalData.avaladoSignature,
+            status: Aval.mapAvalStatus(parseInt(avalData.status))
         });
     }
 }

@@ -15,6 +15,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { history } from 'lib/helpers';
 import AvaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
+import ProfileSignature from './ProfileSignature';
 
 /**
  * Item de un Aval
@@ -44,7 +45,7 @@ class AvalItem extends Component {
 
   render() {
 
-    const { aval, classes, t } = this.props;
+    const { currentUser, aval, classes, t } = this.props;
 
     return (
       <React.Fragment>
@@ -56,6 +57,29 @@ class AvalItem extends Component {
                 {aval.causa}
                 <br></br>
                 <StatusIndicator status={aval.status}></StatusIndicator>
+
+                <ProfileSignature
+                  title={"Avaldao"}
+                  address={aval.avaldaoAddress}
+                  signature={aval.avaldaoSignature}
+                />
+                <ProfileSignature
+                  title={"Solicitante"}
+                  address={aval.solicitanteAddress}
+                  signature={aval.solicitanteSignature}
+                />
+
+                <ProfileSignature
+                  title={"Comerciante"}
+                  address={aval.comercianteAddress}
+                  signature={aval.comercianteSignature}
+                />
+
+                <ProfileSignature
+                  title={"Avalado"}
+                  address={aval.avaladoAddress}
+                  signature={aval.avaladoSignature}
+                />
               </React.Fragment>
             }
           />
@@ -76,7 +100,7 @@ class AvalItem extends Component {
                 aria-label="firmar"
                 color="primary"
                 onClick={this.firmar}
-                disabled={!aval.allowFirmar()}>
+                disabled={!aval.allowFirmar(currentUser.address)}>
                 <VpnKeyIcon />
               </IconButton>
             </Tooltip>

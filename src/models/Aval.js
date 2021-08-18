@@ -1,5 +1,6 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
+import { FINANCIAL_INCLUSION_CATEGORY } from 'constants/Categories';
 
 /**
  * Modelo de Aval.
@@ -9,6 +10,7 @@ class Aval {
   constructor(data = {}) {
     const {
       id,
+      feathersId,
       clientId = nanoid(),
       infoCid = '',
       proyecto = '',
@@ -21,9 +23,14 @@ class Aval {
       solicitanteAddress = '',
       comercianteAddress = '',
       avaladoAddress = '',
+      avaldaoSignature = '',
+      solicitanteSignature = '',
+      comercianteSignature = '',
+      avaladoSignature = '',
       status = Aval.ACEPTADO
     } = data;
     this._id = id;
+    this._feathersId = feathersId;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
     this._infoCid = infoCid;
@@ -37,6 +44,10 @@ class Aval {
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
     this._avaladoAddress = avaladoAddress;
+    this._avaldaoSignature = avaldaoSignature;
+    this._solicitanteSignature = solicitanteSignature;
+    this._comercianteSignature = comercianteSignature;
+    this._avaladoSignature = avaladoSignature;
     this._status = status;
   }
 
@@ -61,6 +72,7 @@ class Aval {
   toStore() {
     return {
       id: this._id,
+      feathersId: this._feathersId,
       clientId: this._clientId,
       infoCid: this._infoCid,
       proyecto: this._proyecto,
@@ -73,6 +85,10 @@ class Aval {
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
       avaladoAddress: this._avaladoAddress,
+      avaldaoSignature: this._avaldaoSignature,
+      solicitanteSignature: this._solicitanteSignature,
+      comercianteSignature: this._comercianteSignature,
+      avaladoSignature: this._avaladoSignature,
       status: this._status.toStore()
     };
   }
@@ -131,10 +147,34 @@ class Aval {
   }
 
   /**
-   * Determina si el Aval puede ser firmado o no.
+   * Determina si el Aval puede ser firmado o no por el usuario con el address especificado.
    */
-  allowFirmar() {
-    return this.status.name === Aval.COMPLETADO.name;
+  allowFirmar(signerAddress) {
+    if (this.status.name !== Aval.COMPLETADO.name) {
+      // Solo un aval Completado puede ser firmado.
+      return false;
+    }
+    if (signerAddress === this.solicitanteAddress) {
+      // El firmante es el Solicitante.
+      return this.solicitanteSignature == undefined;
+    }
+    if (signerAddress === this.comercianteAddress) {
+      // El firmante es el Comerciante.
+      return this.comercianteSignature == undefined;
+    }
+    if (signerAddress === this.avaladoAddress) {
+      // El firmante es el Avalado.
+      return this.avaladoSignature == undefined;
+    }
+    if (signerAddress === this.avaldaoAddress) {
+      // El firmante es Avaldao.
+      // Avaldao solo puede firmar una vez que el Solictante, Comerciante y Avalado hayan firmado.
+      return this.avaldaoSignature == undefined &&
+        this.solicitanteSignature != undefined &&
+        this.comercianteSignature != undefined &&
+        this.avaladoSignature != undefined;
+    }
+    return false;
   }
 
   get id() {
@@ -143,6 +183,14 @@ class Aval {
 
   set id(value) {
     this._id = value;
+  }
+
+  get feathersId() {
+    return this._feathersId;
+  }
+
+  set feathersId(value) {
+    this._feathersId = value;
   }
 
   get clientId() {
@@ -239,6 +287,38 @@ class Aval {
 
   set avaladoAddress(value) {
     this._avaladoAddress = value;
+  }
+
+  get avaldaoSignature() {
+    return this._avaldaoSignature;
+  }
+
+  set avaldaoSignature(value) {
+    this._avaldaoSignature = value;
+  }
+
+  get solicitanteSignature() {
+    return this._solicitanteSignature;
+  }
+
+  set solicitanteSignature(value) {
+    this._solicitanteSignature = value;
+  }
+
+  get comercianteSignature() {
+    return this._comercianteSignature;
+  }
+
+  set comercianteSignature(value) {
+    this._comercianteSignature = value;
+  }
+
+  get avaladoSignature() {
+    return this._avaladoSignature;
+  }
+
+  set avaladoSignature(value) {
+    this._avaladoSignature = value;
   }
 
   get status() {

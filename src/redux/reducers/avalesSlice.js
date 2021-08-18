@@ -67,15 +67,13 @@ export const avalesSlice = createSlice({
       }
       //pendings.forEach(c => state.push(c));
     },
-    saveAval: (state, action) => {
-      const aval = action.payload;
+    completarAval: (state, action) => {
+      let aval = action.payload;
       aval.status = Aval.COMPLETANDO;
       const avalStore = aval.toStore();
-      const index = state.findIndex(a => a.clientId === avalStore.clientId);
+      let index = state.findIndex(a => a.clientId === avalStore.clientId);
       if (index != -1) {
         state[index] = avalStore;
-      } else {
-        state.push(avalStore);
       }
     },
     updateAvalByClientId: (state, action) => {
@@ -105,7 +103,7 @@ export const avalesSlice = createSlice({
 export const { fetchAvales,
   fetchAval,
   resetAvales,
-  saveAval,
+  completarAval,
   updateAvalByClientId } = avalesSlice.actions;
 
 export const selectAvales = state => {

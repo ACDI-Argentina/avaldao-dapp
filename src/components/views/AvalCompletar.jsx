@@ -12,7 +12,7 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import { saveAval, selectAvalByClientId } from '../../redux/reducers/avalesSlice'
+import { completarAval, selectAvalByClientId } from '../../redux/reducers/avalesSlice'
 import { Button } from '@material-ui/core';
 import Aval from 'models/Aval';
 import config from 'configuration';
@@ -177,7 +177,7 @@ class AvalCompletar extends Component {
       isSaving: true,
       aval: aval
     }, () => {
-      this.props.saveAval(this.state.aval);
+      this.props.completarAval(this.state.aval);
       history.push(`/avales`);
     });
     event.preventDefault();
@@ -455,7 +455,7 @@ const mapStateToProps = (state, ownProps) => {
     currentUser: selectCurrentUser(state)
   };
 }
-const mapDispatchToProps = { registerCurrentUser, saveAval }
+const mapDispatchToProps = { registerCurrentUser, completarAval }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
   withTranslation()(AvalCompletar)))
