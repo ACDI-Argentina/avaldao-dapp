@@ -1,21 +1,22 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { Web3AppContext } from 'lib/blockchain/Web3App';
-import { withTranslation } from 'react-i18next';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import StatusIndicator from 'components/StatusIndicator';
-import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import IconButton from '@material-ui/core/IconButton';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Tooltip from '@material-ui/core/Tooltip';
-import { history } from 'lib/helpers';
-import AvaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
-import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
-import ProfileSignature from './ProfileSignature';
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import { connect } from 'react-redux'
+import { Web3AppContext } from 'lib/blockchain/Web3App'
+import { withTranslation } from 'react-i18next'
+import ListItem from '@material-ui/core/ListItem'
+import Divider from '@material-ui/core/Divider'
+import ListItemText from '@material-ui/core/ListItemText'
+import StatusIndicator from 'components/StatusIndicator'
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import IconButton from '@material-ui/core/IconButton'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
+import Tooltip from '@material-ui/core/Tooltip'
+import { history } from 'lib/helpers'
+import AvaldaoContractApi from 'lib/blockchain/AvaldaoContractApi'
+import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
+import ProfileSignature from './ProfileSignature'
+import { firmarAval } from '../../redux/reducers/avalesSlice'
 
 /**
  * Item de un Aval
@@ -37,10 +38,14 @@ class AvalItem extends Component {
   }
 
   firmar() {
-    const { currentUser, aval } = this.props;
-    AvaldaoContractApi.sign(currentUser.address, aval).subscribe(aval => {
+    const { currentUser, aval, firmarAval } = this.props;
+    /*AvaldaoContractApi.sign(currentUser.address, aval).subscribe(aval => {
       console.log('Firmado', aval);
-    });
+    });*/
+    firmarAval({
+      aval: aval,
+      signerAddress: currentUser.address
+    })
   }
 
   render() {
@@ -125,7 +130,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 }
 const mapDispatchToProps = {
-
+  firmarAval
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(

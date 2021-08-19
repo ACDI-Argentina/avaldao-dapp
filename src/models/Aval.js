@@ -1,6 +1,5 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
-import { FINANCIAL_INCLUSION_CATEGORY } from 'constants/Categories';
 
 /**
  * Modelo de Aval.
@@ -23,11 +22,11 @@ class Aval {
       solicitanteAddress = '',
       comercianteAddress = '',
       avaladoAddress = '',
-      avaldaoSignature = '',
-      solicitanteSignature = '',
-      comercianteSignature = '',
-      avaladoSignature = '',
-      status = Aval.ACEPTADO
+      avaldaoSignature = undefined,
+      solicitanteSignature = undefined,
+      comercianteSignature = undefined,
+      avaladoSignature = undefined,
+      status = Aval.ACEPTADO.toStore()
     } = data;
     this._id = id;
     this._feathersId = feathersId;
@@ -48,7 +47,7 @@ class Aval {
     this._solicitanteSignature = solicitanteSignature;
     this._comercianteSignature = comercianteSignature;
     this._avaladoSignature = avaladoSignature;
-    this._status = status;
+    this._status = StatusUtils.build(status.name, status.isLocal);;
   }
 
   /**
@@ -57,6 +56,7 @@ class Aval {
   toIpfs() {
     return {
       id: this._id,
+      feathersId: this._feathersId,
       proyecto: this._proyecto,
       proposito: this._proposito,
       causa: this._causa,
@@ -70,6 +70,7 @@ class Aval {
    * Obtiene un objeto plano para ser almacenado.
    */
   toStore() {
+    console.log('Problema', this._status);
     return {
       id: this._id,
       feathersId: this._feathersId,
@@ -148,6 +149,7 @@ class Aval {
 
   /**
    * Determina si el Aval puede ser firmado o no por el usuario con el address especificado.
+   * @param signerAddress dirección del usuario firmante.
    */
   allowFirmar(signerAddress) {
     if (this.status.name !== Aval.COMPLETADO.name) {
@@ -175,6 +177,37 @@ class Aval {
         this.avaladoSignature != undefined;
     }
     return false;
+  }
+
+  /**
+   * Actualiza la firma del usuario firmante
+   * @param signerAddress dirección del usuario firmante.
+   * @param signature firma del usuario.
+   */
+  updateSignature(signerAddress, signature) {
+    if (signerAddress === this.avaldaoAddress) {
+      // Firma del usuario Avaldao
+      this.avaldaoSignature = signature;
+    } else if (signerAddress === this.solicitanteAddress) {
+      // Firma del usuario Solictante
+      this.solicitanteSignature = signature;
+    } else if (signerAddress === this.comercianteAddress) {
+      // Firma del usuario Comerciante
+      this.comercianteSignature = signature;
+    } else if (signerAddress === this.avaladoAddress) {
+      // Firma del usuario Avalado
+      this.avaladoSignature = signature;
+    }
+  }
+
+  /**
+   * Determina si están las firmas de todos los usuarios.
+   */
+  isSignaturesComplete() {
+    return this.avaldaoSignature != undefined &&
+      this.solicitanteAddress != undefined &&
+      this.comercianteAddress != undefined &&
+      this.avaladoAddress != undefined;
   }
 
   get id() {

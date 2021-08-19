@@ -84,7 +84,9 @@ class AvaldaoContractApi {
             status } = avalOnChain;
         // Se obtiene la información del aval desde IPFS.
         const avalOffChain = await avalIpfsConnector.download(infoCid);
-        const { proyecto,
+        const {
+            feathersId,
+            proyecto,
             proposito,
             causa,
             adquisicion,
@@ -93,6 +95,7 @@ class AvaldaoContractApi {
 
         return new Aval({
             id: parseInt(id),
+            feathersId: feathersId,
             infoCid: infoCid,
             proyecto: proyecto,
             proposito: proposito,
@@ -204,43 +207,208 @@ class AvaldaoContractApi {
         });
     }
 
-    async estimateGas(method, from) {
-        const estimateGas = await method.estimateGas({ from: from });
-        return new BigNumber(estimateGas);
-    }
-
-    async getGasPrice() {
-        const gasPrice = await this.web3.eth.getGasPrice();
-        return new BigNumber(gasPrice);
-    }
-
-    async getExchangeRateByToken(tokenAddress) {
-        return await this.exchangeRateProvider.methods.getExchangeRate(tokenAddress).call();
-    }
-
-    updateContracts() {
-        const { avaldaoContractAddress, exchangeRateProviderContractAddress } = config;
-        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, exchangeRateProviderContractAddress);
-        this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
-        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
-    }
-
-
-
     /**
+     * Firma un aval fuera de la blockchian.
+     * 
      * https://docs.metamask.io/guide/signing-data.html#sign-typed-data-v4
      * https://medium.com/metamask/eip712-is-coming-what-to-expect-and-how-to-use-it-bb92fd1a7a26
      * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md
      * 
-     * @param {*} signer 
-     * @param {*} aval 
+     * @param aval a firmar
+     * @param signerAddress dirección del usuario firmante
      */
-    sign(signer, aval) {
+    signAvalOffChain(aval, signerAddress) {
+
+        return new Observable(async subscriber => {
+
+            const typedData = {
+                types: {
+                    EIP712Domain: [
+                        { name: 'name', type: 'string' },
+                        { name: 'version', type: 'string' },
+                        { name: 'chainId', type: 'uint256' },
+                        { name: 'verifyingContract', type: 'address' }
+                    ],
+                    AvalSignable: [
+                        { name: 'id', type: 'uint256' },
+                        { name: 'infoCid', type: 'string' },
+                        { name: 'avaldao', type: 'address' },
+                        { name: 'solicitante', type: 'address' },
+                        { name: 'comerciante', type: 'address' },
+                        { name: 'avalado', type: 'address' }
+                    ]
+                },
+                primaryType: 'AvalSignable',
+                domain: {
+                    name: 'Avaldao',
+                    version: config.version,
+                    chainId: config.network.requiredId,
+                    verifyingContract: config.avaldaoAddress
+                },
+                message: {
+                    id: aval.id,
+                    infoCid: aval.infoCid,
+                    avaldao: aval.avaldaoAddress,
+                    solicitante: aval.solicitanteAddress,
+                    comerciante: aval.comercianteAddress,
+                    avalado: aval.avaladoAddress
+                }
+            };
+
+            const data = JSON.stringify(typedData);
+
+            this.web3.currentProvider.request(
+                {
+                    method: "eth_signTypedData_v4",
+                    params: [signerAddress, data],
+                    from: signerAddress
+                }).then(async result => {
+
+                    console.log('[AvaldaoContractApi] Firma de aval off chain.', result);
+
+                    aval.updateSignature(signerAddress, result);
+
+                    subscriber.next(aval);
+
+                    if (aval.isSignaturesComplete()) {
+                        // Todos los usuarios han firmado el aval.
+                        this.signAvalOnChain(aval).subscribe(
+                            aval => {
+                                subscriber.next(aval);
+                            },
+                            error => {
+                                console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
+                                subscriber.error(error);
+                            });
+                    } else {
+                        // Faltan firmas para concretar la firma on chain.
+                    }
+
+                }).catch(error => {
+                    console.error('[AvaldaoContractApi] Error firmando aval off chain.', error);
+                    subscriber.error(error);
+                });
+        });
+    }
+
+    /**
+     * Firma un aval en la blockchain.
+     * 
+     * https://docs.metamask.io/guide/signing-data.html#sign-typed-data-v4
+     * https://medium.com/metamask/eip712-is-coming-what-to-expect-and-how-to-use-it-bb92fd1a7a26
+     * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md
+     * 
+     * @param aval a firmar
+     * @param signerAddress dirección del usuario firmante
+     */
+    signAvalOnChain(aval, signerAddress) {
+
+        const thisApi = this;
+        const clientId = aval.clientId;
+
+        return new Observable(async subscriber => {
+
+            const solictanteSignatureR = "0x" + aval.solictanteSignature.substring(2).substring(0, 64);
+            const solictanteSignatureS = "0x" + aval.solictanteSignature.substring(2).substring(64, 128);
+            const solictanteSignatureV = parseInt(aval.solictanteSignature.substring(2).substring(128, 130), 16);
+
+            const comercianteSignatureR = "0x" + aval.comercianteSignature.substring(2).substring(0, 64);
+            const comercianteSignatureS = "0x" + aval.comercianteSignature.substring(2).substring(64, 128);
+            const comercianteSignatureV = parseInt(aval.comercianteSignature.substring(2).substring(128, 130), 16);
+
+            const avaladoSignatureR = "0x" + aval.avaladoSignature.substring(2).substring(0, 64);
+            const avaladoSignatureS = "0x" + aval.avaladoSignature.substring(2).substring(64, 128);
+            const avaladoSignatureV = parseInt(aval.avaladoSignature.substring(2).substring(128, 130), 16);
+
+            const avaldaoSignatureR = "0x" + aval.avaldaoSignature.substring(2).substring(0, 64);
+            const avaldaoSignatureS = "0x" + aval.avaldaoSignature.substring(2).substring(64, 128);
+            const avaldaoSignatureV = parseInt(aval.avaldaoSignature.substring(2).substring(128, 130), 16);
+
+            const signatureV = [solictanteSignatureV, comercianteSignatureV, avaladoSignatureV, avaldaoSignatureV];
+            const signatureR = [solictanteSignatureR, comercianteSignatureR, avaladoSignatureR, avaldaoSignatureR];
+            const signatureS = [solictanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
+
+            const method = this.avaldao.methods.signAval(
+                aval.id,
+                signatureV,
+                signatureR,
+                signatureS);
+
+            const gasEstimated = await this.estimateGas(method, signerAddress);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleSignAval'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleSignAval'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleSignAval'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleSignAval'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionSignAval'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleSignAval'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionSignAval'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: signerAddress
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionUtils.updateTransaction(transaction);
+
+                aval.txHash = hash;
+                subscriber.next(aval);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                const idFromEvent = parseInt(receipt.events['SignAval'].returnValues.id);
+
+                thisApi.getAvalById(idFromEvent).then(aval => {
+                    aval.clientId = clientId;
+                    subscriber.next(aval);
+                });
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
+                subscriber.error(error);
+            });
+        });
+    }
+
+    /*
+    signAval(aval, signerAddress) {
+
+        const clientId = aval.clientId;
 
         return new Observable(async subscriber => {
 
             let thisApi = this;
-            const clientId = aval.clientId;
             let isNew = true;
 
             const typedData = {
@@ -282,8 +450,8 @@ class AvaldaoContractApi {
             this.web3.currentProvider.request(
                 {
                     method: "eth_signTypedData_v4",
-                    params: [signer, data],
-                    from: signer
+                    params: [signerAddress, data],
+                    from: signerAddress
                 }).then(async result => {
 
                     console.log('Result', result);
@@ -311,7 +479,7 @@ class AvaldaoContractApi {
 
                     const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
                     const gasPrice = await this.getGasPrice();
-                    
+
                     let transaction = transactionUtils.addTransaction({
                         gasEstimated: gasEstimated,
                         gasPrice: gasPrice,
@@ -378,6 +546,28 @@ class AvaldaoContractApi {
                     console.error(error);
                 });
         });
+    }
+    */
+
+    async estimateGas(method, from) {
+        const estimateGas = await method.estimateGas({ from: from });
+        return new BigNumber(estimateGas);
+    }
+
+    async getGasPrice() {
+        const gasPrice = await this.web3.eth.getGasPrice();
+        return new BigNumber(gasPrice);
+    }
+
+    async getExchangeRateByToken(tokenAddress) {
+        return await this.exchangeRateProvider.methods.getExchangeRate(tokenAddress).call();
+    }
+
+    updateContracts() {
+        const { avaldaoContractAddress, exchangeRateProviderContractAddress } = config;
+        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, exchangeRateProviderContractAddress);
+        this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
+        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
     }
 }
 

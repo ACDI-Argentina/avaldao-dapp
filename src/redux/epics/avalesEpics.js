@@ -41,3 +41,19 @@ export const completarAvalEpic = action$ => action$.pipe(
     payload: error.aval
   }))
 )
+
+export const firmarAvalEpic = action$ => action$.pipe(
+  ofType('avales/firmarAval'),
+  mergeMap(action => avalService.firmarAval(
+    action.payload.aval,
+    action.payload.signerAddress
+  )),
+  map(aval => ({
+    type: 'avales/updateAvalByClientId',
+    payload: aval
+  })),
+  catchError(error => of({
+    type: 'avales/deleteAvalByClientId',
+    payload: error.aval
+  }))
+)

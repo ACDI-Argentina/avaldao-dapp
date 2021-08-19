@@ -67,6 +67,38 @@ class AvalService {
         });
     }
 
+    /**
+     * Firma un aval.
+     * 
+     * @param aval a firmar
+     * @param signer dirección del usuario firmante
+     * @returns observable 
+     */
+    firmarAval(aval, signerAddress) {
+
+        return new Observable(async subscriber => {
+
+            avaldaoContractApi.signAvalOffChain(aval, signerAddress).subscribe(aval => {
+
+                feathersClient.service('avales').patch(
+                    aval.feathersId,
+                    {
+                        solicitanteSignature: aval.solicitanteSignature,
+                        comercianteSignature: aval.comercianteSignature,
+                        avaladoSignature: aval.avaladoSignature,
+                        avaldaoSignature: aval.avaldaoSignature
+                    }).
+                    then(avalData => {
+                        console.log('[AvalService] Se almacenaron las firmas en Feathers.', aval);
+                        subscriber.next(aval);
+                    }).catch(error => {
+                        console.error("[AvalService] Error almacenando las firmas en Feathers.", error);
+                        subscriber.error(error);
+                    });
+            });
+        });
+    }
+
     feathersAvalToAval(avalData) {
         return new Aval({
             id: parseInt(avalData.id),

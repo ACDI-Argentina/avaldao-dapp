@@ -280,6 +280,14 @@
     "transactionFailuredTitleUpdateAval": "No se editó el aval",
     "transactionFailuredDescriptionUpdateAval": "Ocurrió una falla durante la edición del aval.",
 
+    "transactionCreatedTitleSignAval": "Confirma tu firma del aval en la billetera",
+    "transactionCreatedSubtitleSignAval": "Verifique los detalles aquí - su firma del aval no puede ser reembolsada.",
+    "transactionPendingTitleSignAval": "Firmando aval...",
+    "transactionConfirmedTitleSignAval": "El aval ha sido firmado",
+    "transactionConfirmedDescriptionSignAval": "El aval ha sido firmado.",
+    "transactionFailuredTitleSignAval": "No se firmó el aval",
+    "transactionFailuredDescriptionSignAval": "Ocurrió una falla durante la firma del aval.",
+
     "transactionCreatedTitleCreateCampaign": "Confirma tu creación de campaña '{{campaignTitle}}' en la billetera",
     "transactionCreatedSubtitleCreateCampaign": "Verifique los detalles aquí - su creación de campaña no puede ser reembolsada.",
     "transactionPendingTitleCreateCampaign": "Creando campaña '{{campaignTitle}}'...",

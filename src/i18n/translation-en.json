@@ -260,7 +260,7 @@
     "transactionConfirmedTitleCreateAval": "The aval has been created",
     "transactionConfirmedDescriptionCreateAval": "The aval has been created and is already to sign it.",
     "transactionFailuredTitleCreateAval": "The aval was not created",
-    "transactionFailuredDescriptionCreateAVal": "A failure occurred during aval creation.",
+    "transactionFailuredDescriptionCreateAval": "A failure occurred during aval creation.",
 
     "transactionCreatedTitleUpdateAval": "Confirm your update of aval in the wallet",
     "transactionCreatedSubtitleUpdateAval": "Double check the details here – your update of aval can't be refunded.",
@@ -269,6 +269,14 @@
     "transactionConfirmedDescriptionUpdateAval": "The aval has been updated.",
     "transactionFailuredTitleUpdateAval": "The aval was not updated",
     "transactionFailuredDescriptionUpdateAval": "A failure occurred during aval update.",
+
+    "transactionCreatedTitleSignAval": "Confirm your sign of aval in the wallet",
+    "transactionCreatedSubtitleSignAval": "Double check the details here – your sign of aval can't be refunded.",
+    "transactionPendingTitleSignAval": "Signing aval...",
+    "transactionConfirmedTitleSignAval": "The aval has been signed",
+    "transactionConfirmedDescriptionSignAval": "The aval has been signed.",
+    "transactionFailuredTitleSignAval": "The aval was not signed",
+    "transactionFailuredDescriptionSignAval": "A failure occurred during aval signing.",
 
     "transactionCreatedTitleCreateCampaign": "Confirm your creation of campaign '{{campaignTitle}}' in the wallet",
     "transactionCreatedSubtitleCreateCampaign": "Double check the details here – your creation of campaign can't be refunded.",

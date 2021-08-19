@@ -76,6 +76,9 @@ export const avalesSlice = createSlice({
         state[index] = avalStore;
       }
     },
+    firmarAval: (state, action) => {
+      
+    },
     updateAvalByClientId: (state, action) => {
       let avalStore = action.payload.toStore();
       let index = state.findIndex(a => a.clientId === avalStore.clientId);
@@ -104,6 +107,7 @@ export const { fetchAvales,
   fetchAval,
   resetAvales,
   completarAval,
+  firmarAval,
   updateAvalByClientId } = avalesSlice.actions;
 
 export const selectAvales = state => {
