@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
+import { green, grey } from '@material-ui/core/colors';
 
 class ProfileSignature extends Component {
 
@@ -29,8 +30,10 @@ class ProfileSignature extends Component {
         //const name = user.name;
         const name = "Mauricio";
         let signatureText = "Sin firma";
-        if(signature) {
+        let signatureColor = grey[300];
+        if (signature) {
             signatureText = signature;
+            signatureColor = green[400];
         }
         if (!user) {
             return (
@@ -41,7 +44,7 @@ class ProfileSignature extends Component {
             <ListItem>
                 <ListItemIcon>
                     <Tooltip title={signatureText}>
-                        <VpnKeyIcon />
+                        <VpnKeyIcon style={{ color: signatureColor }} />
                     </Tooltip>
                 </ListItemIcon>
                 <ListItemText

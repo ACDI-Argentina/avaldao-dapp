@@ -8,6 +8,7 @@ import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionUtils from '../../redux/utils/transactionUtils'
 import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
 import { version } from 'react-dom';
+import { toChecksumAddress } from './Web3Utils';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -243,15 +244,15 @@ class AvaldaoContractApi {
                     name: 'Avaldao',
                     version: config.version,
                     chainId: config.network.requiredId,
-                    verifyingContract: config.avaldaoAddress
+                    verifyingContract: config.avaldaoContractAddress
                 },
                 message: {
                     id: aval.id,
                     infoCid: aval.infoCid,
-                    avaldao: aval.avaldaoAddress,
-                    solicitante: aval.solicitanteAddress,
-                    comerciante: aval.comercianteAddress,
-                    avalado: aval.avaladoAddress
+                    avaldao: toChecksumAddress(aval.avaldaoAddress),
+                    solicitante: toChecksumAddress(aval.solicitanteAddress),
+                    comerciante: toChecksumAddress(aval.comercianteAddress),
+                    avalado: toChecksumAddress(aval.avaladoAddress)
                 }
             };
 
@@ -270,9 +271,9 @@ class AvaldaoContractApi {
 
                     subscriber.next(aval);
 
-                    if (aval.isSignaturesComplete()) {
+                    if (aval.isSignaturesComplete() === true) {
                         // Todos los usuarios han firmado el aval.
-                        this.signAvalOnChain(aval).subscribe(
+                        this.signAvalOnChain(aval, signerAddress).subscribe(
                             aval => {
                                 subscriber.next(aval);
                             },
@@ -308,9 +309,9 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
-            const solictanteSignatureR = "0x" + aval.solictanteSignature.substring(2).substring(0, 64);
-            const solictanteSignatureS = "0x" + aval.solictanteSignature.substring(2).substring(64, 128);
-            const solictanteSignatureV = parseInt(aval.solictanteSignature.substring(2).substring(128, 130), 16);
+            const solicitanteSignatureR = "0x" + aval.solicitanteSignature.substring(2).substring(0, 64);
+            const solicitanteSignatureS = "0x" + aval.solicitanteSignature.substring(2).substring(64, 128);
+            const solicitanteSignatureV = parseInt(aval.solicitanteSignature.substring(2).substring(128, 130), 16);
 
             const comercianteSignatureR = "0x" + aval.comercianteSignature.substring(2).substring(0, 64);
             const comercianteSignatureS = "0x" + aval.comercianteSignature.substring(2).substring(64, 128);
@@ -324,9 +325,9 @@ class AvaldaoContractApi {
             const avaldaoSignatureS = "0x" + aval.avaldaoSignature.substring(2).substring(64, 128);
             const avaldaoSignatureV = parseInt(aval.avaldaoSignature.substring(2).substring(128, 130), 16);
 
-            const signatureV = [solictanteSignatureV, comercianteSignatureV, avaladoSignatureV, avaldaoSignatureV];
-            const signatureR = [solictanteSignatureR, comercianteSignatureR, avaladoSignatureR, avaldaoSignatureR];
-            const signatureS = [solictanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
+            const signatureV = [solicitanteSignatureV, comercianteSignatureV, avaladoSignatureV, avaldaoSignatureV];
+            const signatureR = [solicitanteSignatureR, comercianteSignatureR, avaladoSignatureR, avaldaoSignatureR];
+            const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
 
             const method = this.avaldao.methods.signAval(
                 aval.id,

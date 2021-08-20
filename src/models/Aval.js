@@ -1,5 +1,6 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
+import Web3Utils from 'lib/blockchain/Web3Utils';
 
 /**
  * Modelo de Aval.
@@ -70,7 +71,6 @@ class Aval {
    * Obtiene un objeto plano para ser almacenado.
    */
   toStore() {
-    console.log('Problema', this._status);
     return {
       id: this._id,
       feathersId: this._feathersId,
@@ -156,19 +156,19 @@ class Aval {
       // Solo un aval Completado puede ser firmado.
       return false;
     }
-    if (signerAddress === this.solicitanteAddress) {
+    if (Web3Utils.addressEquals(signerAddress, this.solicitanteAddress)) {
       // El firmante es el Solicitante.
       return this.solicitanteSignature == undefined;
     }
-    if (signerAddress === this.comercianteAddress) {
+    if (Web3Utils.addressEquals(signerAddress, this.comercianteAddress)) {
       // El firmante es el Comerciante.
       return this.comercianteSignature == undefined;
     }
-    if (signerAddress === this.avaladoAddress) {
+    if (Web3Utils.addressEquals(signerAddress, this.avaladoAddress)) {
       // El firmante es el Avalado.
       return this.avaladoSignature == undefined;
     }
-    if (signerAddress === this.avaldaoAddress) {
+    if (Web3Utils.addressEquals(signerAddress, this.avaldaoAddress)) {
       // El firmante es Avaldao.
       // Avaldao solo puede firmar una vez que el Solictante, Comerciante y Avalado hayan firmado.
       return this.avaldaoSignature == undefined &&
@@ -185,16 +185,16 @@ class Aval {
    * @param signature firma del usuario.
    */
   updateSignature(signerAddress, signature) {
-    if (signerAddress === this.avaldaoAddress) {
+    if (Web3Utils.addressEquals(signerAddress, this.avaldaoAddress)) {
       // Firma del usuario Avaldao
       this.avaldaoSignature = signature;
-    } else if (signerAddress === this.solicitanteAddress) {
+    } else if (Web3Utils.addressEquals(signerAddress, this.solicitanteAddress)) {
       // Firma del usuario Solictante
       this.solicitanteSignature = signature;
-    } else if (signerAddress === this.comercianteAddress) {
+    } else if (Web3Utils.addressEquals(signerAddress, this.comercianteAddress)) {
       // Firma del usuario Comerciante
       this.comercianteSignature = signature;
-    } else if (signerAddress === this.avaladoAddress) {
+    } else if (Web3Utils.addressEquals(signerAddress, this.avaladoAddress)) {
       // Firma del usuario Avalado
       this.avaladoSignature = signature;
     }
@@ -204,10 +204,10 @@ class Aval {
    * Determina si están las firmas de todos los usuarios.
    */
   isSignaturesComplete() {
-    return this.avaldaoSignature != undefined &&
-      this.solicitanteAddress != undefined &&
-      this.comercianteAddress != undefined &&
-      this.avaladoAddress != undefined;
+    return this.avaldaoSignature !== undefined &&
+      this.solicitanteSignature !== undefined &&
+      this.comercianteSignature !== undefined &&
+      this.avaladoSignature !== undefined;
   }
 
   get id() {

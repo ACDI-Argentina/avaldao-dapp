@@ -50,8 +50,6 @@ class AvalService {
                     avaladoAddress: aval.avaladoAddress
                 }).
                 then(avalData => {
-                    //let aval = this.feathersAvalToAval(avalData);
-                    //aval.clientId = clientId;
                     console.log('[AvalService] Aval completado en Feathers.', aval);
                     avaldaoContractApi.saveAval(aval).subscribe(aval => {
                         aval.clientId = clientId;
