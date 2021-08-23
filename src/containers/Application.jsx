@@ -31,7 +31,7 @@ import '../lib/validators';
 import { connect } from 'react-redux'
 import { fetchDacs } from '../redux/reducers/dacsSlice'
 import { fetchCampaigns } from '../redux/reducers/campaignsSlice'
-import { fetchAvales } from '../redux/reducers/avalesSlice'
+import { fetchAvalesOnChain, fetchAvalesOffChain } from '../redux/reducers/avalesSlice'
 import { fetchMilestones } from '../redux/reducers/milestonesSlice'
 import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { fetchUsers } from '../redux/reducers/usersSlice';
@@ -86,7 +86,8 @@ class Application extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAvales();
+    this.props.fetchAvalesOnChain();
+    this.props.fetchAvalesOffChain();
     this.props.fetchUsers();
     this.props.fetchExchangeRates();
     initExchangeRateListener();
@@ -188,7 +189,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = {
-  fetchAvales,
+  fetchAvalesOnChain,
+  fetchAvalesOffChain,
   fetchDacs,
   fetchCampaigns,
   fetchMilestones,

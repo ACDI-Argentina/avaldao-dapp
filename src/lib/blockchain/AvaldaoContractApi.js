@@ -7,7 +7,6 @@ import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionUtils from '../../redux/utils/transactionUtils'
 import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
-import { version } from 'react-dom';
 import { toChecksumAddress } from './Web3Utils';
 
 /**
@@ -38,19 +37,18 @@ class AvaldaoContractApi {
      */
     getAvales() {
         return new Observable(async subscriber => {
-            subscriber.next([]);
-            /*try {
-                let ids = await this.crowdfunding.methods.getCampaignIds().call();
-                let campaigns = [];
+            try {
+                let ids = await this.avaldao.methods.getAvalIds().call();
+                let avales = [];
                 for (let i = 0; i < ids.length; i++) {
-                    let campaign = await this.getCampaignById(ids[i]);
-                    campaigns.push(campaign);
+                    let aval = await this.getAvalById(ids[i]);
+                    avales.push(aval);
                 }
-                subscriber.next(campaigns);
+                subscriber.next(avales);
             } catch (error) {
-                console.log('Error obtiendo Campaigns', error);
+                console.log('[Avaldao Contract API] Error obteniendo Avales.', error);
                 subscriber.error(error);
-            }*/
+            }
         });
     }
 
@@ -95,7 +93,7 @@ class AvaldaoContractApi {
             monto } = avalOffChain;
 
         return new Aval({
-            id: parseInt(id),
+            blockchainId: parseInt(id),
             feathersId: feathersId,
             infoCid: infoCid,
             proyecto: proyecto,
@@ -123,7 +121,7 @@ class AvaldaoContractApi {
 
             let thisApi = this;
 
-            //const avalId = aval.id || 0; // 0 si es una aval nuevo.
+            //const avalId = aval.blockchainId || 0; // 0 si es una aval nuevo.
             // TODO Corregir al completar el circuito de solicitud y completar.
             const avalId = 0; // 0 si es una aval nuevo.
             const isNew = avalId === 0;
@@ -247,7 +245,7 @@ class AvaldaoContractApi {
                     verifyingContract: config.avaldaoContractAddress
                 },
                 message: {
-                    id: aval.id,
+                    id: aval.blockchainId,
                     infoCid: aval.infoCid,
                     avaldao: toChecksumAddress(aval.avaldaoAddress),
                     solicitante: toChecksumAddress(aval.solicitanteAddress),
@@ -330,7 +328,7 @@ class AvaldaoContractApi {
             const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
 
             const method = this.avaldao.methods.signAval(
-                aval.id,
+                aval.blockchainId,
                 signatureV,
                 signatureR,
                 signatureS);
@@ -401,154 +399,6 @@ class AvaldaoContractApi {
             });
         });
     }
-
-    /*
-    signAval(aval, signerAddress) {
-
-        const clientId = aval.clientId;
-
-        return new Observable(async subscriber => {
-
-            let thisApi = this;
-            let isNew = true;
-
-            const typedData = {
-                types: {
-                    EIP712Domain: [
-                        { name: 'name', type: 'string' },
-                        { name: 'version', type: 'string' },
-                        { name: 'chainId', type: 'uint256' },
-                        { name: 'verifyingContract', type: 'address' }
-                    ],
-                    AvalSignable: [
-                        { name: 'id', type: 'uint256' },
-                        { name: 'infoCid', type: 'string' },
-                        { name: 'avaldao', type: 'address' },
-                        { name: 'solicitante', type: 'address' },
-                        { name: 'comerciante', type: 'address' },
-                        { name: 'avalado', type: 'address' }
-                    ]
-                },
-                primaryType: 'AvalSignable',
-                domain: {
-                    name: 'Avaldao',
-                    version: '1',
-                    chainId: 33,
-                    verifyingContract: '0x05A55E87d40572ea0F9e9D37079FB9cA11bdCc67'
-                },
-                message: {
-                    id: aval.id,
-                    infoCid: aval.infoCid,
-                    avaldao: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
-                    solicitante: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
-                    comerciante: '0xee4b388fb98420811C9e04AE8378330C05A2735a',
-                    avalado: '0xee4b388fb98420811C9e04AE8378330C05A2735a'
-                }
-            };
-
-            const data = JSON.stringify(typedData);
-
-            this.web3.currentProvider.request(
-                {
-                    method: "eth_signTypedData_v4",
-                    params: [signerAddress, data],
-                    from: signerAddress
-                }).then(async result => {
-
-                    console.log('Result', result);
-                    const signature = result.substring(2);
-                    console.log('Signature', signature);
-                    const r = "0x" + signature.substring(0, 64);
-                    const s = "0x" + signature.substring(64, 128);
-                    const v = parseInt(signature.substring(128, 130), 16);
-                    // The signature is now comprised of r, s, and v.
-
-                    console.log('Signature R', r);
-                    console.log('Signature S', s);
-                    console.log('Signature V', v);
-
-                    //
-
-                    const signV = [v, v, v, v];
-                    const signR = [r, r, r, r];
-                    const signS = [s, s, s, s];
-                    const method = this.avaldao.methods.signAval(
-                        aval.id,
-                        signV,
-                        signR,
-                        signS);
-
-                    const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
-                    const gasPrice = await this.getGasPrice();
-
-                    let transaction = transactionUtils.addTransaction({
-                        gasEstimated: gasEstimated,
-                        gasPrice: gasPrice,
-                        createdTitle: {
-                            key: isNew ? 'transactionCreatedTitleCreateAval' : 'transactionCreatedTitleUpdateAval'
-                        },
-                        createdSubtitle: {
-                            key: isNew ? 'transactionCreatedSubtitleCreateAval' : 'transactionCreatedSubtitleUpdateAval'
-                        },
-                        pendingTitle: {
-                            key: isNew ? 'transactionPendingTitleCreateAval' : 'transactionPendingTitleUpdateAval'
-                        },
-                        confirmedTitle: {
-                            key: isNew ? 'transactionConfirmedTitleCreateAval' : 'transactionConfirmedTitleUpdateAval'
-                        },
-                        confirmedDescription: {
-                            key: isNew ? 'transactionConfirmedDescriptionCreateAval' : 'transactionConfirmedDescriptionUpdateAval'
-                        },
-                        failuredTitle: {
-                            key: isNew ? 'transactionFailuredTitleCreateAval' : 'transactionFailuredTitleUpdateAval'
-                        },
-                        failuredDescription: {
-                            key: isNew ? 'transactionFailuredDescriptionCreateAval' : 'transactionFailuredDescriptionUpdateAval'
-                        }
-                    });
-
-                    const promiEvent = method.send({
-                        from: signer
-                    });
-
-                    promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
-
-                        transaction.submit(hash);
-                        transactionUtils.updateTransaction(transaction);
-
-                        aval.txHash = hash;
-                        subscriber.next(aval);
-
-                    }).once('confirmation', (confNumber, receipt) => {
-
-                        transaction.confirme();
-                        transactionUtils.updateTransaction(transaction);
-
-                        // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
-                        // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                        const idFromEvent = parseInt(receipt.events['SignAval'].returnValues.id);
-
-                        thisApi.getAvalById(idFromEvent).then(aval => {
-                            aval.clientId = clientId;
-                            subscriber.next(aval);
-                        });
-
-                    }).on('error', function (error) {
-
-                        transaction.fail();
-                        transactionUtils.updateTransaction(transaction);
-
-                        error.aval = aval;
-                        console.error(`Error procesando transacción de firmado de aval.`, error);
-                        subscriber.error(error);
-                    });
-
-                }).catch(error => {
-                    console.error(error);
-                });
-        });
-    }
-    */
 
     async estimateGas(method, from) {
         const estimateGas = await method.estimateGas({ from: from });

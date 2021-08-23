@@ -8,12 +8,13 @@ class StatusUtils {
   /**
    * Construye un objeto de estado.
    *
+   * @param id id del estado
    * @param name nombre del estado
    * @param isLocal indica si el estado es local de la Dapp.
    * @returns objeto status
    */
-  static build(name, isLocal = false) {
-    return new Status({ name, isLocal });
+  static build(id = undefined, name, isLocal = false) {
+    return new Status({ id, name, isLocal });
   }
 }
 

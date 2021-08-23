@@ -51,7 +51,10 @@ export const avalesSlice = createSlice({
     */
   ],
   reducers: {
-    fetchAvales: (state, action) => {
+    fetchAvalesOnChain: (state, action) => {
+      // Solo se obtiene el estado actual.
+    },
+    fetchAvalesOffChain: (state, action) => {
       // Solo se obtiene el estado actual.
     },
     fetchAval: (state, action) => {
@@ -67,6 +70,17 @@ export const avalesSlice = createSlice({
       }
       //pendings.forEach(c => state.push(c));
     },
+    mergeAvales: (state, action) => {
+      for (let i = 0; i < action.payload.length; i++) {
+        let avalStore = action.payload[i].toStore();
+        let index = state.findIndex(a => a.feathersId === avalStore.feathersId);
+        if (index != -1) {
+          state[index] = avalStore;
+        } else {
+          state.push(avalStore);
+        }
+      }
+    },
     completarAval: (state, action) => {
       let aval = action.payload;
       aval.status = Aval.COMPLETANDO;
@@ -77,7 +91,7 @@ export const avalesSlice = createSlice({
       }
     },
     firmarAval: (state, action) => {
-      
+
     },
     updateAvalByClientId: (state, action) => {
       let avalStore = action.payload.toStore();
@@ -103,7 +117,9 @@ export const avalesSlice = createSlice({
   },
 });
 
-export const { fetchAvales,
+export const {
+  fetchAvalesOnChain,
+  fetchAvalesOffChain,
   fetchAval,
   resetAvales,
   completarAval,

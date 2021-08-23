@@ -120,17 +120,18 @@ class UserService {
    * @param afterSave   Callback to be triggered after the user is saved in feathers
    */
   save(user) {
-    console.log("[User service] saving .... ",user)
+    
     return new Observable(async subscriber => {
       
       try {
 
-        await this._updateAvatar(user);
+        //await this._updateAvatar(user);
 
-        await _uploadUserToIPFS(user);
+        //await _uploadUserToIPFS(user);
 
-        await feathersClient.service('/users').patch(user.address, user.toFeathers());
-        //user.isRegistered = true;
+        //await feathersClient.service('/users').patch(user.address, user.toFeathers());
+        await feathersClient.service('/users').create(user.toFeathers());
+     
         user.registered = true;
         
         subscriber.next(user);

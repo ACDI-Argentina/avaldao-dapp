@@ -9,7 +9,7 @@ class Aval {
 
   constructor(data = {}) {
     const {
-      id,
+      blockchainId,
       feathersId,
       clientId = nanoid(),
       infoCid = '',
@@ -29,7 +29,7 @@ class Aval {
       avaladoSignature = undefined,
       status = Aval.ACEPTADO.toStore()
     } = data;
-    this._id = id;
+    this._blockchainId = blockchainId;
     this._feathersId = feathersId;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
@@ -48,7 +48,7 @@ class Aval {
     this._solicitanteSignature = solicitanteSignature;
     this._comercianteSignature = comercianteSignature;
     this._avaladoSignature = avaladoSignature;
-    this._status = StatusUtils.build(status.name, status.isLocal);;
+    this._status = StatusUtils.build(status.id, status.name, status.isLocal);;
   }
 
   /**
@@ -56,7 +56,7 @@ class Aval {
    */
   toIpfs() {
     return {
-      id: this._id,
+      blockchainId: this._blockchainId,
       feathersId: this._feathersId,
       proyecto: this._proyecto,
       proposito: this._proposito,
@@ -72,7 +72,7 @@ class Aval {
    */
   toStore() {
     return {
-      id: this._id,
+      blockchainId: this.blockchainId,
       feathersId: this._feathersId,
       clientId: this._clientId,
       infoCid: this._infoCid,
@@ -113,31 +113,31 @@ class Aval {
   }
 
   static get SOLICITADO() {
-    return StatusUtils.build('Solicitado', false);
+    return StatusUtils.build(0, 'Solicitado', false);
   }
 
   static get RECHAZADO() {
-    return StatusUtils.build('Rechazado', false);
+    return StatusUtils.build(1, 'Rechazado', false);
   }
 
   static get ACEPTADO() {
-    return StatusUtils.build('Aceptado', false);
+    return StatusUtils.build(2, 'Aceptado', false);
   }
 
   static get COMPLETANDO() {
-    return StatusUtils.build('Completando', true);
+    return StatusUtils.build(undefined, 'Completando', true);
   }
 
   static get COMPLETADO() {
-    return StatusUtils.build('Completado', false);
+    return StatusUtils.build(3, 'Completado', false);
   }
 
   static get VIGENTE() {
-    return StatusUtils.build('Vigente', false);
+    return StatusUtils.build(4, 'Vigente', false);
   }
 
   static get FINALIZADO() {
-    return StatusUtils.build('Finalizado', false);
+    return StatusUtils.build(5, 'Finalizado', false);
   }
 
   /**
@@ -210,12 +210,12 @@ class Aval {
       this.avaladoSignature !== undefined;
   }
 
-  get id() {
-    return this._id;
+  get blockchainId() {
+    return this._blockchainId;
   }
 
-  set id(value) {
-    this._id = value;
+  set blockchainId(value) {
+    this._blockchainId = value;
   }
 
   get feathersId() {

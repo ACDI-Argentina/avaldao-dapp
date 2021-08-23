@@ -64,27 +64,18 @@ class User extends Model {
 
   toIpfs() {
     return {
-      name: this._name,
-      email: this._email,
-      url: this._url,
-      avatar: cleanIpfsPath(this._avatar),
-      version: 1,
+      avatar: cleanIpfsPath(this._avatar)
     };
   }
 
-  toFeathers(txHash) {
-    const user = {
+  toFeathers() {
+    return {
+      address: this._address,
       name: this._name,
       email: this._email,
       url: this._url,
-      avatar: cleanIpfsPath(this._avatar),
-    };
-    if (this._giverId === undefined && txHash) {
-      // set to 0 so we don't attempt to create multiple givers in lp for the same user
-      user._giverId = 0;
-      user._txHash = txHash;
+      avatar: cleanIpfsPath(this._avatar)
     }
-    return user;
   }
 
   /**

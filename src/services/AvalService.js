@@ -10,12 +10,70 @@ class AvalService {
     }
 
     /**
-     * Obtiene todos los Avales desde Feathers.
+     * Obtiene todos los Avales on chain.
      */
-    getAvales() {
+    getAvalesOnChain() {
+        return new Observable(async subscriber => {
+            avaldaoContractApi.getAvales().subscribe(
+                async avales => {
+                    for (let i = 0; i < avales.length; i++) {
+                        let aval = avales[i];
+                        try {
+                            let avalData = await feathersClient.service('avales').get(
+                                aval.feathersId,
+                                {
+                                    query: {
+                                        $select: [
+                                            'blockchainId',
+                                            'status',
+                                            'avaldaoSignature',
+                                            'solicitanteSignature',
+                                            'comercianteSignature',
+                                            'avaladoSignature'
+                                        ]
+                                    }
+                                });
+
+                            // Se obtienen las firmas desde Feathers
+                            aval.avaldaoSignature = avalData.avaldaoSignature;
+                            aval.solicitanteSignature = avalData.solicitanteSignature;
+                            aval.comercianteSignature = avalData.comercianteSignature;
+                            aval.avaladoSignature = avalData.avaladoSignature;
+
+                            // Para mantener la consistencia de los datos,
+                            // se sincronizan los datos en este punto si se requiere.
+                            if (aval.blockchainId != avalData.blockchainId ||
+                                aval.status.id != avalData.status) {
+
+                                this.syncAval(aval).subscribe();
+                            }
+
+                        } catch (error) {
+                            console.error("[AvalService] Error obteniendo aval off chain.", aval, error);
+                            subscriber.error(error);
+                            return;
+                        }
+                    }
+                    subscriber.next(avales);
+                },
+                error => {
+                    console.error("[AvalService] Error obteniendo avales on chain.", error);
+                    subscriber.error(error);
+                });
+        });
+    }
+
+    /**
+     * Obtiene todos los Avales Off Chain.
+     */
+    getAvalesOffChain() {
         return new Observable(async subscriber => {
             feathersClient.service('avales')
-                .find()
+                .find({
+                    query: {
+                        blockchainId: undefined
+                    }
+                })
                 .then(response => {
                     let avales = [];
                     for (let i = 0; i < response.total; i++) {
@@ -25,7 +83,7 @@ class AvalService {
                     }
                     subscriber.next(avales);
                 }).catch(error => {
-                    console.error("[AvalService] Error obteniendo avales.", error);
+                    console.error("[AvalService] Error obteniendo avales off chain.", error);
                     subscriber.next([]);
                 });
         });
@@ -51,15 +109,45 @@ class AvalService {
                 }).
                 then(avalData => {
                     console.log('[AvalService] Aval completado en Feathers.', aval);
-                    avaldaoContractApi.saveAval(aval).subscribe(aval => {
-                        aval.clientId = clientId;
-                        subscriber.next(aval);
-                    }, error => {
-                        console.error("[AvalService] Error completando aval en Blockchain.", error);
-                        subscriber.error(error);
-                    });
+                    avaldaoContractApi.saveAval(aval).subscribe(
+                        aval => {
+                            aval.clientId = clientId;
+                            if (aval.blockchainId) {
+                                this.syncAval(aval).subscribe();
+                            }
+                            subscriber.next(aval);
+                        }, error => {
+                            console.error("[AvalService] Error completando aval en Blockchain.", error);
+                            subscriber.error(error);
+                        });
                 }).catch(error => {
                     console.error("[AvalService] Error completando aval en Feathers.", error);
+                    subscriber.error(error);
+                });
+        });
+    }
+
+    /**
+     * Sincroniza el Aval de la Blockchain en Feathers.
+     * 
+     * @param aval a sincronizar en Feathers.
+     * @returns observable 
+     */
+    syncAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            feathersClient.service('avales').patch(
+                aval.feathersId,
+                {
+                    blockchainId: aval.blockchainId,
+                    status: aval.status.id
+                }).
+                then(avalData => {
+                    console.log('[AvalService] Aval sincronizado en Feathers.', aval);
+                    subscriber.next(aval);
+                }).catch(error => {
+                    console.error("[AvalService] Error sincronizando aval en Feathers.", error);
                     subscriber.error(error);
                 });
         });
@@ -99,8 +187,8 @@ class AvalService {
 
     feathersAvalToAval(avalData) {
         return new Aval({
-            id: parseInt(avalData.id),
             feathersId: avalData._id,
+            blockchainId: parseInt(avalData.blockchainId),
             infoCid: avalData.infoCid,
             proyecto: avalData.proyecto,
             proposito: avalData.proposito,

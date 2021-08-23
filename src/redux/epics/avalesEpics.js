@@ -11,11 +11,20 @@ import avaldaoContractApi from '../../lib/blockchain/AvaldaoContractApi';
  * 
  * @param action$ de Redux.
  */
-export const fetchAvalesEpic = action$ => action$.pipe(
-  ofType('avales/fetchAvales'),
-  mergeMap(action => avalService.getAvales()),
+export const fetchAvalesOnChainEpic = action$ => action$.pipe(
+  ofType('avales/fetchAvalesOnChain'),
+  mergeMap(action => avalService.getAvalesOnChain()),
   map(avales => ({
-    type: 'avales/resetAvales',
+    type: 'avales/mergeAvales',
+    payload: avales
+  }))
+)
+
+export const fetchAvalesOffChainEpic = action$ => action$.pipe(
+  ofType('avales/fetchAvalesOffChain'),
+  mergeMap(action => avalService.getAvalesOffChain()),
+  map(avales => ({
+    type: 'avales/mergeAvales',
     payload: avales
   }))
 )
