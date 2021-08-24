@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 import User from '../models/User';
 import { ALL_ROLES } from '../constants/Role';
 import messageUtils from '../redux/utils/messageUtils'
+import userIpfsConnector from '../ipfs/UserIpfsConnector'
 
 class UserService {
 
@@ -74,17 +75,35 @@ class UserService {
    * @param address del usuario.
    */
   loadUserByAddress(address) {
+
     return new Observable(async subscriber => {
+
       try {
-        const userdata = await feathersClient.service('/users').get(address);
-        // El usuario se encuentra registrado.
-        userdata.registered = true;
-        subscriber.next(new User({ ...userdata }));
+
+        const userData = await feathersClient.service('/users').get(address);
+        const userIpfs = await userIpfsConnector.download(userData.infoCid);
+
+        const user = new User({
+          address: address,
+          name: userData.name,
+          email: userData.email,
+          avatar: userIpfs.avatar,
+          url: userData.url,
+          registered: true
+        });
+
+        subscriber.next(user);
+
       } catch (e) {
-        
+
         if (e.name === 'NotFound') {
+
           // El usuario no está registrado.
-          subscriber.next(new User({ address: address }));
+          const user = new User({
+            address: address
+          });
+          subscriber.next(user);
+
         } else {
           console.error(`Error obteniendo usuario por address ${address}.`, e);
           subscriber.error(e);
@@ -112,39 +131,41 @@ class UserService {
   }
 
   /**
-   * Save new user profile to the blockchain or update existing one in feathers
-   * Al usuario lo está guardando en mongodb con feathers, no en la blockchain!
-   * Lo bueno con ipfs es que podriamos guardar mas datos
-   *
-   * @param user        User object to be saved
-   * @param afterSave   Callback to be triggered after the user is saved in feathers
+   * Almacena el usuario.
+   * 
+   * @param user usuario a guardar.
    */
   save(user) {
-    
+
     return new Observable(async subscriber => {
-      
+
       try {
 
-        //await this._updateAvatar(user);
+        // Se almacena en IPFS toda la información del Usuario.
+        let infoCid = await userIpfsConnector.upload(user);
+        user.infoCid = infoCid;
 
-        //await _uploadUserToIPFS(user);
+        if (user.registered === false) {
+          // Nuevo usuario
+          await feathersClient.service('users').create(user.toFeathers());
+        } else {
+          // Actualización de usuario
+          await feathersClient.service('users').update(user.address, user.toFeathers());
+        }
 
-        //await feathersClient.service('/users').patch(user.address, user.toFeathers());
-        await feathersClient.service('/users').create(user.toFeathers());
-     
         user.registered = true;
-        
         subscriber.next(user);
         messageUtils.addMessageSuccess({
           title: 'Felicitaciones!',
           text: `Su perfil ha sido registrado`
         });
 
-      } catch (err) {
-        subscriber.error(err);
+      } catch (error) {
+        console.error('[User Service] Error almacenando usuario.', error);
+        subscriber.error(error);
         messageUtils.addMessageError({
-          text: `Se produjo un error registrando su perfil. Por favor, refresque la página e inténtelo nuevamente.`,
-          error: err
+          text: `Se produjo un error registrando su perfil.`,
+          error: error
         });
       }
     });
@@ -176,14 +197,6 @@ async function authenticateFeathers(user) {
     }
   }
   return authenticated;
-}
-
-async function _uploadUserToIPFS(user) {
-  try {
-    user.profileHash = await ipfsService.upload(user.toIpfs());
-  } catch (err) {
-    ErrorPopup('Failed to upload profile to ipfs');
-  }
 }
 
 async function getRoles(address) {

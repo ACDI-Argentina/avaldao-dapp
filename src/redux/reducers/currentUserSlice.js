@@ -34,6 +34,7 @@ export const currentUserSlice = createSlice({
       }
       let currentUserStore = action.payload.toStore();
       state.address = currentUserStore.address;
+      state.infoCid = currentUserStore.infoCid;
       state.authenticated = currentUserStore.authenticated;
       state.avatar = currentUserStore.avatar;
       state.email = currentUserStore.email;

@@ -13,7 +13,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // setup wallet connect for mobile wallet support
     options: {
-    rpc: {
+      rpc: {
         30: 'https://public-node.rsk.co',
         31: 'https://public-node.testnet.rsk.co',
         33: config.network.nodeUrl,
@@ -63,7 +63,7 @@ class Web3Manager {
       this.accountAddressSubject = new BehaviorSubject(null);
     } else {
       this.accountAddressSubject.next(null);
-    }    
+    }
     console.log('[Setup Web3] Conectado por HTTP Provider.', provider);
     console.log('[Setup Web3] Web3.', web3);
     return web3;
@@ -109,11 +109,11 @@ class Web3Manager {
 
     const providerInfo = getProviderInfo(provider);
     web3.wallet = new Wallet({
-      name: providerInfo.name, 
+      name: providerInfo.name,
       logo: providerInfo.logo,
       networkId: walletNetworkId
     });
-          
+
     web3.walletBrowserRequired = walletBrowserRequired;
 
     this.web3Subject.next(web3);
@@ -158,23 +158,23 @@ class Web3Manager {
   }
 
 
-  async connect(before,after){
+  async connect(before, after) {
     const provider = await web3Modal.connect();
 
     let web3;
 
-    if(provider instanceof WalletConnectProvider){
+    if (provider instanceof WalletConnectProvider) {
       web3 = this.setWalletConnectProvider(provider);
-    } else{
+    } else {
       before(); // ejecutar solo si es una funcion
-      web3 = await this.connectWeb3ByWalletBrowser(provider); 
+      web3 = await this.connectWeb3ByWalletBrowser(provider);
       after(); //
     }
 
-    if(web3.providerName === "Http"){
+    if (web3.providerName === "Http") {
       web3.isFallbackProvider = true;
     }
-  
+
     return web3;
   }
 
@@ -258,7 +258,7 @@ class Web3Manager {
    * 
    * @returns accountAddress 
    */
-   getAccountAddress() {
+  getAccountAddress() {
     return this.accountAddressSubject.asObservable();
   }
 }

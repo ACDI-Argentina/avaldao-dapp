@@ -65,6 +65,7 @@ const ProfileForm = ({
   const onSubmit = async (model) => {
     setIsSaving(true);
     const userInstance = new User(model);
+    userInstance.registered = localUser.registered;
     if (!userInstance.address){
       setIsSaving(false); //TODO: Agregar algun mensaje de error indicando que no esta autenticado
     } else {

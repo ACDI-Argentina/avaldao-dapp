@@ -21,7 +21,6 @@ import Status from './Status';
  * @attribute avatar        URL to user avatar
  * @attribute commitTime
  * @attribute email         Email address of the user
- * @attribute giverId       Giver ID used for querying donations
  * @attribute name          Name of the user
  * @attribute url           
  * @attribute authenticated If the user is authenticated w/ feathers
@@ -33,10 +32,10 @@ class User extends Model {
 
     const {
       address = null,
+      infoCid = '',
       name = '',
       avatar = '',
       email = '',
-      giverId,
       url = '',
       roles = [],
       balance = new BigNumber(0),
@@ -48,10 +47,10 @@ class User extends Model {
 
     if (data) {
       this._address = address;
+      this._infoCid = infoCid;
       this._name = name;
       this._avatar = avatar;
       this._email = email;
-      this._giverId = giverId;
       this._url = url;
       this._roles = roles;
       this._balance = balance;
@@ -74,7 +73,8 @@ class User extends Model {
       name: this._name,
       email: this._email,
       url: this._url,
-      avatar: cleanIpfsPath(this._avatar)
+      infoCid: this._infoCid
+      //avatar: cleanIpfsPath(this._avatar)
     }
   }
 
@@ -84,6 +84,7 @@ class User extends Model {
   toStore() {
     return {
       address: this._address,
+      infoCid: this._infoCid,
       name: this._name,
       email: this._email,
       url: this._url,
@@ -121,17 +122,20 @@ class User extends Model {
     return 'giver';
   }
 
-  get id() {
-    return this._address;
-  }
-
   get address() {
     return this._address;
   }
 
   set address(value) {
-    this.checkType(value, ['undefined', 'string'], 'address');
     this._address = value;
+  }
+
+  get infoCid() {
+    return this._infoCid;
+  }
+
+  set infoCid(value) {
+    this._infoCid = value;
   }
 
   get avatar() {
@@ -155,15 +159,6 @@ class User extends Model {
   set email(value) {
     this.checkType(value, ['undefined', 'string'], 'email');
     this._email = value;
-  }
-
-  get giverId() {
-    return this._giverId;
-  }
-
-  set giverId(value) {
-    this.checkType(value, ['undefined', 'number'], 'giverId');
-    this._giverId = value;
   }
 
   get name() {
@@ -207,7 +202,6 @@ class User extends Model {
   }
 
   set registered(value) {
-    this.checkType(value, ['boolean'], 'registered');
     this._registered = value;
   }
   get roles() {
