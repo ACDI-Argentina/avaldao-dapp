@@ -14,20 +14,17 @@ const ProfileForm = ({
   user,
   showSubmit = true,
   showCompact = false,
-  requireFullProfile = false,
   onFinishEdition,
 }) => {
 
-  const [localUser, setLocalUser] = useState(user); 
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [url, setUrl] = useState(user.url);
+  const [avatar, setAvatar] = useState(user.avatar);
   const [canSubmit, setCanSubmit] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isPristine, setIsPristine] = useState(true);
-  const [image, setImage] = useState(user.avatar);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    user.newAvatar = image;
-  }, [image]);
 
   useEffect(() => {
     if (isSaving && user.isRegistered) {
@@ -43,30 +40,18 @@ const ProfileForm = ({
 
   const columnWidth = showCompact ? 6 : 12;
 
-  const requiredFields = {};
-  requiredFields['name'] = true;
-
-  if (requireFullProfile) {
-    requiredFields['email'] = true;
-    requiredFields['url'] = true;
-    requiredFields['avatar'] = !user.avatar;
-  }
-
-  const mapInputs = (inputs) => {
-    return {
-      address: localUser.address,
-      name: inputs.name,
-      email: inputs.email,
-      url: inputs.url,
-      avatar: image,
-    };
-  };
-
   const onSubmit = async (model) => {
     setIsSaving(true);
-    const userInstance = new User(model);
-    userInstance.registered = localUser.registered;
-    if (!userInstance.address){
+    const userInstance = new User({
+      address: user.address,
+      registered: user.registered,
+      name: name,
+      email: email,
+      url: url,
+      avatar: avatar      
+    });
+
+    if (!userInstance.address) {
       setIsSaving(false); //TODO: Agregar algun mensaje de error indicando que no esta autenticado
     } else {
       dispatch(registerCurrentUser(userInstance));
@@ -78,7 +63,6 @@ const ProfileForm = ({
       onSubmit={onSubmit}
       onValid={() => setCanSubmit(true)}
       onInvalid={() => setCanSubmit(false)}
-      mapping={(inputs) => mapInputs(inputs)}
       onChange={(currentValues, isChanged) => setIsPristine(!isChanged)}
       layout="vertical"
     >
@@ -92,11 +76,12 @@ const ProfileForm = ({
                 id="name-input"
                 label="Your name"
                 type="text"
-                value={localUser.name}
+                value={name}
+                onChange={setName}
                 placeholder="John Doe."
                 validations="minLength:3"
                 validationErrors={{ minLength: 'Please enter your name' }}
-                required={requiredFields['name']}
+                required={true}
                 autoFocus
               />
             </div>
@@ -108,11 +93,11 @@ const ProfileForm = ({
                 name="email"
                 autoComplete="email"
                 label="Email"
-                value={localUser.email}
+                value={email}
                 placeholder="email@example.com"
                 validations="isEmail"
                 help="Please enter your email address."
-                required={requiredFields['email']}
+                required={true}
                 validationErrors={{ isEmail: "Oops, that's not a valid email address." }}
               />
             </div>
@@ -122,10 +107,10 @@ const ProfileForm = ({
 
       <FormsyImageUploader
         name="avatar"
-        setImage={setImage}
-        avatar={image || localUser.avatar}
+        setImage={setAvatar}
+        avatar={avatar}
         aspectRatio={1}
-        isRequired={requiredFields['avatar']}
+        isRequired={true}
       />
 
       <div className="form-group">
@@ -133,10 +118,10 @@ const ProfileForm = ({
           name="url"
           label="Your Profile"
           type="text"
-          value={localUser.url}
+          value={url}
           placeholder="Your profile url"
           help="Provide a link to some more info about you, this will help to build trust. You could add your linkedin profile, Twitter account or a relevant website."
-          required={requiredFields['url']}
+          required={true}
           validations="isUrl"
           validationErrors={{
             isUrl: 'Please enter a valid url',

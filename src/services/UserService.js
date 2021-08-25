@@ -24,32 +24,24 @@ class UserService {
 
     return new Observable(async subscriber => {
 
-      try {
+      let address = currentUser.address;
 
-        let address = currentUser.address;
+      if (address) {
 
-        if (address) {
+        try {
 
-          feathersClient.service('/users').get(address).then(data => {
-            const { name, email, avatar, url } = data;
-            currentUser.registered = true;
-            currentUser.name = name;
-            currentUser.email = email;
-            currentUser.avatar = avatar;
-            currentUser.url = url;
-            subscriber.next(currentUser);
-          }).catch(err => {
-            console.log('Error obteniendo datos del usuario desde Feathers:', err.message);
-            if (err.code === 404) {
-              currentUser.registered = false;
-              currentUser.name = undefined;
-              currentUser.email = undefined;
-              currentUser.avatar = undefined;
-              currentUser.url = undefined;
-              subscriber.next(currentUser);
-              return;
-            }
-          });
+          const userData = await feathersClient.service('/users').get(address);
+          // Se obtiene la información del usuario desde IPFS.
+          const userIpfs = await userIpfsConnector.download(userData.infoCid);
+
+          currentUser.registered = true;
+          currentUser.name = userData.name;
+          currentUser.email = userData.email;
+          currentUser.url = userData.url;
+          currentUser.infoCid = userData.infoCid;
+          currentUser.avatarCid = userIpfs.avatarCid;
+          currentUser.avatar = userIpfs.avatar;
+          subscriber.next(currentUser);
 
           // Se cargan los roles del usuario desde el smart constract
           getRoles(address).then(roles => {
@@ -61,10 +53,21 @@ class UserService {
             currentUser.authenticated = authenticated;
             subscriber.next(currentUser);
           });
+
+        } catch (error) {
+          console.error('Error obteniendo datos del usuario desde Feathers.', error);
+          if (error.code === 404) {
+            currentUser.registered = false;
+            currentUser.name = undefined;
+            currentUser.email = undefined;
+            currentUser.url = undefined;
+            currentUser.infoCid = undefined;
+            currentUser.avatarCid = undefined;
+            currentUser.avatar = undefined;
+            subscriber.next(currentUser);
+            return;
+          }
         }
-      } catch (err) {
-        console.error('Error obteniendo datos del usuario.', err);
-        subscriber.error(err);
       }
     });
   }
@@ -87,7 +90,7 @@ class UserService {
           address: address,
           name: userData.name,
           email: userData.email,
-          avatar: userIpfs.avatar,
+          avatarCid: userIpfs.avatarCid,
           url: userData.url,
           registered: true
         });
@@ -169,14 +172,6 @@ class UserService {
         });
       }
     });
-  }
-
-  async _updateAvatar(user) {
-    if (user._newAvatar) {
-      const avatarUrl = await ipfsService.upload(user._newAvatar);
-      user.avatar = ipfsService.resolveUrl(avatarUrl);
-      delete user._newAvatar;
-    }
   }
 }
 

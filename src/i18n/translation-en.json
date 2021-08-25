@@ -2,6 +2,14 @@
     "errorRequired": "Required",
     "errorInvalidAddress": "Invalid address",
     
+    "cancel": "Cancel",
+    "save": "Save",
+
+    "userTitle": "User",
+    "userName": "Name",
+    "userEmail": "E-Mail",
+    "userUrl": "URL",
+
     "avalesTitle": "Avales",    
     "avalCompletarTitle": "Complete aval",
     "avalFirmarTitle": "Sign aval",

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classNames from "classnames";
-import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
+import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -12,45 +12,46 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import { completarAval, selectAvalByClientId } from '../../redux/reducers/avalesSlice'
 import { Button } from '@material-ui/core';
-import Aval from 'models/Aval';
-import config from 'configuration';
+import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
-import Web3Utils from 'lib/blockchain/Web3Utils';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import { history } from 'lib/helpers';
 
 /**
- * Pantalla para completar aval.
+ * Formulario de perfil de usuario.
  * 
  */
-class AvalCompletar extends Component {
+class ProfileForm2 extends Component {
 
   constructor(props) {
     super(props);
 
-    const { aval, t } = props;
+    const { currentUser, t } = props;
 
     this.state = {
-      comercianteAddress: '',
-      comercianteHelperText: t("avalComercianteAddressHelper"),
-      comercianteError: false,
-      avaladoAddress: '',
-      avaladoHelperText: t("avalAvaladoAddressHelper"),
-      avaldaoError: false,
+      name: currentUser.name,
+      email: currentUser.email,
+      url: currentUser.url,
+      avatar: currentUser.avatar,
+      user: new User(currentUser),
+
+      nameHelperText: '',
+      nameError: false,
+      email: '',
+      emailHelperText: '',
+      url: '',
+      urlHelperText: '',
       formValid: false,
       isLoading: false,
       isSaving: false,
       formIsValid: false,
-      aval: new Aval(aval),
       isBlocking: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChangeComercianteAddress = this.handleChangeComercianteAddress.bind(this);
-    this.handleChangeAvaladoAddress = this.handleChangeAvaladoAddress.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this);
+    this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    this.handleChangeUrl = this.handleChangeUrl.bind(this);
     this.setFormValid = this.setFormValid.bind(this);
   }
 
@@ -106,59 +107,70 @@ class AvalCompletar extends Component {
       });
   }
 
-  handleChangeComercianteAddress(event) {
+  handleChangeName(event) {
     const { t } = this.props;
-    let comercianteError = false;
-    let comercianteHelperText = t('avalComercianteAddressHelper');
-    const comercianteAddress = event.target.value;
-    if (comercianteAddress === undefined || comercianteAddress === '') {
-      comercianteHelperText = t('errorRequired');
-      comercianteError = true;
-    } else if (!Web3Utils.isValidAddress(comercianteAddress)) {
-      comercianteHelperText = t('errorInvalidAddress');
-      comercianteError = true;
+    let nameError = false;
+    let nameHelperText = '';
+    const name = event.target.value;
+    if (name === undefined || name === '') {
+      nameHelperText = t('errorRequired');
+      nameError = true;
     }
     this.setState({
-      comercianteAddress: comercianteAddress,
-      comercianteHelperText: comercianteHelperText,
-      comercianteError: comercianteError
+      name: name,
+      nameHelperText: nameHelperText,
+      nameError: nameError
     }, () => {
       this.setFormValid();
     });
   }
 
-  handleChangeAvaladoAddress(event) {
+  handleChangeEmail(event) {
     const { t } = this.props;
-    let avaladoError = false;
-    let avaladoHelperText = t('avalAvaladoAddressHelper');
-    const avaladoAddress = event.target.value;
-    if (avaladoAddress === undefined || avaladoAddress === '') {
-      avaladoHelperText = t('errorRequired');
-      avaladoError = true;
-    } else if (!Web3Utils.isValidAddress(avaladoAddress)) {
-      avaladoHelperText = t('errorInvalidAddress');
-      avaladoError = true;
+    let emailError = false;
+    let emailHelperText = '';
+    const email = event.target.value;
+    if (email === undefined || email === '') {
+      emailHelperText = t('errorRequired');
+      emailError = true;
     }
     this.setState({
-      avaladoAddress: avaladoAddress,
-      avaladoHelperText: avaladoHelperText,
-      avaladoError: avaladoError
+      email: email,
+      emailHelperText: emailHelperText,
+      emailError: emailError
+    }, () => {
+      this.setFormValid();
+    });
+  }
+
+  handleChangeUrl(event) {
+    const { t } = this.props;
+    let urlError = false;
+    let urlHelperText = '';
+    const url = event.target.value;
+    if (url === undefined || url === '') {
+      urlHelperText = t('errorRequired');
+      urlError = true;
+    }
+    this.setState({
+      url: url,
+      urlHelperText: urlHelperText,
+      urlError: urlError
     }, () => {
       this.setFormValid();
     });
   }
 
   setFormValid() {
-    const { comercianteAddress, avaladoAddress } = this.state;
+    const { name, email, url } = this.state;
     let formValid = true;
-    if (comercianteAddress === undefined || comercianteAddress === '') {
-      formValid = false;
-    } else if (!Web3Utils.isValidAddress(comercianteAddress)) {
+    if (name === undefined || name === '') {
       formValid = false;
     }
-    if (avaladoAddress === undefined || avaladoAddress === '') {
+    if (email === undefined || email === '') {
       formValid = false;
-    } else if (!Web3Utils.isValidAddress(avaladoAddress)) {
+    }
+    if (url === undefined || url === '') {
       formValid = false;
     }
     this.setState({
@@ -168,31 +180,32 @@ class AvalCompletar extends Component {
 
   handleSubmit(event) {
     const { currentUser } = this.props;
-    let aval = this.state.aval;
-    aval.avaldaoAddress = config.avaldaoAddress;
-    aval.solicitanteAddress = currentUser.address;
-    aval.comercianteAddress = this.state.comercianteAddress;
-    aval.avaladoAddress = this.state.avaladoAddress;
+    let user = this.state.user;
+    user.name = this.state.name;
+    user.email = this.state.email;
+    user.url = this.state.url;
     this.setState({
       isSaving: true,
-      aval: aval
+      user: user
     }, () => {
-      this.props.completarAval(this.state.aval);
-      history.push(`/avales`);
+      this.props.registerCurrentUser(this.state.user);
+      history.push(`/`);
     });
     event.preventDefault();
   }
 
   cancel() {
-    history.push(`/avales`);
+    history.push(`/`);
   }
 
   render() {
-    const { aval,
-      comercianteHelperText,
-      comercianteError,
-      avaladoHelperText,
-      avaladoError,
+    const { user,
+      nameHelperText,
+      nameError,
+      emailHelperText,
+      emailError,
+      urlHelperText,
+      urlError,
       formValid } = this.state;
     const { classes, t, ...rest } = this.props;
 
@@ -223,136 +236,77 @@ class AvalCompletar extends Component {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
-                  {t('avalCompletarTitle')}
+                  {t('userTitle')}
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  id="proyectoTextField"
-                  value={aval.proyecto}
-                  label={t('avalProyecto')}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  disabled
-                />
+
+              </Grid>
+              <Grid item sm={12} md={6}>
+
+              </Grid>
+              <Grid item sm={12} md={6}>
+
+              </Grid>
+              <Grid item sm={12} md={4}>
+
+              </Grid>
+              <Grid item sm={12} md={4}>
+
+              </Grid>
+              <Grid item sm={12} md={4}>
+
               </Grid>
               <Grid item sm={12} md={6}>
                 <TextField
-                  id="propositoTextField"
-                  value={aval.proposito}
-                  label={t('avalProposito')}
+                  id="nameTextField"
+                  value={this.state.name}
+                  onChange={this.handleChangeName}
+                  label={t('userName')}
+                  helperText={nameHelperText}
                   fullWidth
                   margin="normal"
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
-                />
-              </Grid>
-              <Grid item sm={12} md={6}>
-                <TextField
-                  id="causaTextField"
-                  value={aval.causa}
-                  label={t('avalCausa')}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  disabled
-                />
-              </Grid>
-              <Grid item sm={12} md={4}>
-                <TextField
-                  id="adquisicionTextField"
-                  value={aval.adquisicion}
-                  label={t('avalAdquisicion')}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  disabled
-                />
-              </Grid>
-              <Grid item sm={12} md={4}>
-                <TextField
-                  id="beneficiariosTextField"
-                  value={aval.beneficiarios}
-                  label={t('avalBeneficiarios')}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  disabled
-                />
-              </Grid>
-              <Grid item sm={12} md={4}>
-                <TextField
-                  id="montoTextField"
-                  value={aval.monto}
-                  label={t('avalMonto')}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  disabled
-                />
-              </Grid>
-              <Grid item sm={12} md={6}>
-                <TextField
-                  id="comercianteAddressTextField"
-                  value={this.state.comercianteAddress}
-                  onChange={this.handleChangeComercianteAddress}
-                  label={t('avalComercianteAddress')}
-                  helperText={comercianteHelperText}
-                  placeholder="0x..."
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={comercianteError}
+                  error={nameError}
                   required
                   inputProps={{ maxlength: 42 }}
                   variant="filled"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountBalanceWalletIcon />
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </Grid>
               <Grid item sm={12} md={6}>
-                <TextField id="avaladoAddressTextField"
-                  value={this.state.avaladoAddress}
-                  onChange={this.handleChangeAvaladoAddress}
-                  label={t('avalAvaladoAddress')}
-                  helperText={avaladoHelperText}
-                  placeholder="0x..."
+                <TextField id="emailTextField"
+                  value={this.state.email}
+                  onChange={this.handleChangeEmail}
+                  label={t('userEmail')}
+                  helperText={emailHelperText}
                   fullWidth
                   margin="normal"
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  error={avaladoError}
+                  error={emailError}
                   required
                   inputProps={{ maxlength: 42 }}
                   variant="filled"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountBalanceWalletIcon />
-                      </InputAdornment>
-                    ),
+                />
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <TextField id="urlTextField"
+                  value={this.state.url}
+                  onChange={this.handleChangeUrl}
+                  label={t('userUrl')}
+                  helperText={urlHelperText}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
                   }}
+                  error={urlError}
+                  required
+                  inputProps={{ maxlength: 42 }}
+                  variant="filled"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -362,12 +316,12 @@ class AvalCompletar extends Component {
                   type="submit"
                   disabled={!formValid}
                   className={classes.button}>
-                  {t('avalCompletar')}
+                  {t('save')}
                 </Button>
                 <Button
                   onClick={this.cancel}
                   className={classes.button}>
-                  {t('avalCancelar')}
+                  {t('cancel')}
                 </Button>
               </Grid>
             </Grid>
@@ -380,7 +334,7 @@ class AvalCompletar extends Component {
   }
 }
 
-AvalCompletar.contextType = Web3AppContext;
+ProfileForm2.contextType = Web3AppContext;
 
 const styles = theme => ({
   root: {
@@ -449,14 +403,12 @@ const styles = theme => ({
 });
 
 const mapStateToProps = (state, ownProps) => {
-  const avalClientId = ownProps.match.params.clientId;
   return {
-    aval: selectAvalByClientId(state, avalClientId),
     currentUser: selectCurrentUser(state)
   };
 }
-const mapDispatchToProps = { completarAval }
+const mapDispatchToProps = { registerCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(AvalCompletar)))
+  withTranslation()(ProfileForm2)))
 );

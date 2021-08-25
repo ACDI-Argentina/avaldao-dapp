@@ -20,6 +20,7 @@ import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
 import AvalCompletar from 'components/views/AvalCompletar'
 import Avales from 'components/views/Avales'
+import ProfileForm2 from 'components/ProfileForm2'
 
 const SwitchRoutes = ({ currentUser}) => (
     <Switch>
@@ -229,6 +230,13 @@ const SwitchRoutes = ({ currentUser}) => (
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
+            )}
+        />
+        <Route
+            exact
+            path="/profile2"
+            render={props => (
+                <ProfileForm2 />
             )}
         />
         <Route

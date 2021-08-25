@@ -74,6 +74,16 @@ class IpfsService {
     });
     return response.data;
   }
+
+  async download(path) {
+    const { ipfsGateway } = config;
+    if (!isIPFS.path(path)) throw new Error(`${path} is not a valid ipfs path`);
+    const response = await axios({
+      method: 'get',
+      url: url.resolve(ipfsGateway, path)
+    });
+    return response.data;
+  }
 }
 
 export default new IpfsService();

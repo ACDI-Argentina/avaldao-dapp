@@ -2,6 +2,14 @@
     "errorRequired": "Requerido",
     "errorInvalidAddress": "Dirección inválida",
     
+    "cancel": "Cancelar",
+    "save": "Guardar",
+
+    "userTitle": "Usuario",
+    "userName": "Nombre",
+    "userEmail": "E-Mail",
+    "userUrl": "URL",
+
     "avalesTitle": "Avales", 
     "avalCompletarTitle": "Completar aval",
     "avalFirmarTitle": "Firmar aval",

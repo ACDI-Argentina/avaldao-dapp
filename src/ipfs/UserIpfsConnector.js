@@ -13,6 +13,12 @@ class UserIpfsConnector {
    * @return CID del usuario en IPFS
    */
   async upload(user) {
+
+    if (user.avatar) {
+      // Se almacena en IPFS el avatar del usuario.
+      let avatarCid = await ipfsService.upload(user.avatar);
+      user.avatarCid = avatarCid;
+    }
     // Se almacena en IPFS toda la información del usuario.
     let infoCid = await ipfsService.upload(user.toIpfs());
     return infoCid;
@@ -25,7 +31,12 @@ class UserIpfsConnector {
    * @return información del usuario en IPFS.
    */
   async download(infoCid) {
-    return await ipfsService.downloadJson(infoCid);
+    const userIpfs = await ipfsService.downloadJson(infoCid);
+    const avatar = await ipfsService.download(userIpfs.avatarCid);
+    return {
+      avatarCid: userIpfs.avatarCid,
+      avatar: avatar
+    }
   }
 }
 

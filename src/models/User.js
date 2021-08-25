@@ -33,6 +33,7 @@ class User extends Model {
     const {
       address = null,
       infoCid = '',
+      avatarCid = '',
       name = '',
       avatar = '',
       email = '',
@@ -48,6 +49,7 @@ class User extends Model {
     if (data) {
       this._address = address;
       this._infoCid = infoCid;
+      this._avatarCid = avatarCid;
       this._name = name;
       this._avatar = avatar;
       this._email = email;
@@ -63,7 +65,7 @@ class User extends Model {
 
   toIpfs() {
     return {
-      avatar: cleanIpfsPath(this._avatar)
+      avatarCid: cleanIpfsPath(this._avatarCid)
     };
   }
 
@@ -74,7 +76,6 @@ class User extends Model {
       email: this._email,
       url: this._url,
       infoCid: this._infoCid
-      //avatar: cleanIpfsPath(this._avatar)
     }
   }
 
@@ -85,10 +86,11 @@ class User extends Model {
     return {
       address: this._address,
       infoCid: this._infoCid,
+      avatarCid: this._avatarCid,
+      avatar: this._avatar,
       name: this._name,
       email: this._email,
       url: this._url,
-      avatar: this._avatar,
       roles: this._roles,
       balance: this._balance,
       tokenBalances: this._tokenBalances,
@@ -138,18 +140,20 @@ class User extends Model {
     this._infoCid = value;
   }
 
+  get avatarCid() {
+    return this._avatarCid;
+  }
+
+  set avatarCid(value) {
+    this._avatarCid = value;
+  }
+
   get avatar() {
     return this._avatar;
   }
 
   set avatar(value) {
-    this.checkType(value, ['undefined', 'string'], 'avatar');
     this._avatar = value;
-  }
-
-  set newAvatar(value) {
-    this.checkType(value, ['string'], 'newAvatar');
-    this._newAvatar = value;
   }
 
   get email() {
@@ -157,7 +161,6 @@ class User extends Model {
   }
 
   set email(value) {
-    this.checkType(value, ['undefined', 'string'], 'email');
     this._email = value;
   }
 
@@ -166,7 +169,6 @@ class User extends Model {
   }
 
   set name(value) {
-    this.checkType(value, ['undefined', 'string'], 'name');
     this._name = value;
   }
 
@@ -175,7 +177,6 @@ class User extends Model {
   }
 
   set url(value) {
-    this.checkType(value, ['undefined', 'string'], 'url');
     this._url = value;
   }
 
@@ -184,7 +185,6 @@ class User extends Model {
   }
 
   set updatedAt(value) {
-    this.checkType(value, ['undefined', 'string'], 'updatedAt');
     this._updatedAt = value;
   }
 
@@ -193,7 +193,6 @@ class User extends Model {
   }
 
   set authenticated(value) {
-    this.checkType(value, ['boolean'], 'authenticated');
     this._authenticated = value;
   }
 
@@ -217,7 +216,6 @@ class User extends Model {
   }
 
   set balance(value) {
-    this.checkInstanceOf(value, BigNumber, 'balance');
     this._balance = value;
   }
 
@@ -229,17 +227,17 @@ class User extends Model {
     this._tokenBalances = value;
   }
 
-  hasRole(role){
+  hasRole(role) {
     return this.roles.includes(role);
   }
 
-  hasAnyRoles(roles){ //roles should be an array
+  hasAnyRoles(roles) { //roles should be an array
     let found = false;
 
     for (const wanted of roles) {
       found = this.roles.includes(wanted);
       if (found) break;
-    } 
+    }
 
     return found;
   }
@@ -272,12 +270,11 @@ class User extends Model {
     return this.roles.includes(RECIPIENT_ROLE);
   }
 
-
-  hasCompleteProfile(){
+  hasCompleteProfile() {
     let hasCompleteProfile = true;
     const requiredProperties = ["address", "name", "email", "url", "avatar"];
 
-    for(const prop of requiredProperties){
+    for (const prop of requiredProperties) {
       if (this[prop] == undefined || this[prop].trim() == "") {
         hasCompleteProfile = false;
         break;
@@ -286,9 +283,6 @@ class User extends Model {
 
     return hasCompleteProfile;
   }
-
-
-
 }
 
 export default User;

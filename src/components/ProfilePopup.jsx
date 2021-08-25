@@ -67,7 +67,7 @@ class ProfilePopup extends Component {
 
   render() {
     const { open } = this.state;
-    const { currentUser, classes, t, requireFullProfile = false } = this.props;
+    const { currentUser, classes, t } = this.props;
 
     return (
       <div>
@@ -100,7 +100,6 @@ class ProfilePopup extends Component {
               <ProfileForm
                 user={currentUser}
                 showCompact={true}
-                requireFullProfile={requireFullProfile}
                 onFinishEdition={() => {
                   //TODO: HANDLE result
                   this.setState({open:false})
