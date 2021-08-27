@@ -11,6 +11,7 @@ import {
 } from '../constants/Role';
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
+import ipfsService from '../ipfs/IpfsService';
 
 /**
  * Modelo de User en Dapp.
@@ -33,7 +34,9 @@ class User extends Model {
     const {
       address = null,
       infoCid = '',
-      avatarCid = '',
+      // https://gateway.pinata.cloud/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR
+      //avatarCid = '/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR',
+      avatarCid = '/ipfs/QmVedKPUTUcNpj6iUWyuEh9yVstBpNjMaL41KmMWF2bAuA',
       name = '',
       avatar = '',
       email = '',
@@ -154,6 +157,13 @@ class User extends Model {
 
   set avatar(value) {
     this._avatar = value;
+  }
+
+  /**
+   * Obtiene la URL completa del avatar.
+   */
+   get avatarCidUrl() {
+    return ipfsService.resolveUrl(this._avatarCid)
   }
 
   get email() {

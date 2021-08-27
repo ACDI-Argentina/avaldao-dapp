@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { registerCurrentUser, selectCurrentUser } from '../../redux/reducers/currentUserSlice';
+import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
@@ -207,7 +207,7 @@ const mapStateToProps = (state, ownProps) => {
     currentUser: selectCurrentUser(state)
   };
 }
-const mapDispatchToProps = { registerCurrentUser }
+const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
   withTranslation()(Avales)))

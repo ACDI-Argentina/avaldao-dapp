@@ -1,6 +1,8 @@
 {
     "errorRequired": "Required",
     "errorInvalidAddress": "Invalid address",
+    "errorInvalidEmail": "Invalid E-Mail",
+    "errorInvalidUrl": "Invalid URL",
     
     "cancel": "Cancel",
     "save": "Save",

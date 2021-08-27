@@ -1,7 +1,9 @@
 {
     "errorRequired": "Requerido",
     "errorInvalidAddress": "Dirección inválida",
-    
+    "errorInvalidEmail": "E-Mail inválido",
+    "errorInvalidUrl": "URL inválida",
+
     "cancel": "Cancelar",
     "save": "Guardar",
 

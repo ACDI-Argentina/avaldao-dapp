@@ -16,6 +16,9 @@ import { Button } from '@material-ui/core';
 import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
 import { history } from 'lib/helpers';
+import Avatar from 'react-avatar-edit'
+import ImageUtils from 'lib/blockchain/ImageUtils';
+import validatorUtils from 'lib/blockchain/ValidatorUtils';
 
 /**
  * Formulario de perfil de usuario.
@@ -27,19 +30,19 @@ class ProfileForm2 extends Component {
     super(props);
 
     const { currentUser, t } = props;
-
+    const src = 'avatar.jpg'
     this.state = {
       name: currentUser.name,
       email: currentUser.email,
       url: currentUser.url,
-      avatar: currentUser.avatar,
+      avatar: null,
+      avatarRadius: null,
+      avatarPreview: null,
       user: new User(currentUser),
 
       nameHelperText: '',
       nameError: false,
-      email: '',
       emailHelperText: '',
-      url: '',
       urlHelperText: '',
       formValid: false,
       isLoading: false,
@@ -52,7 +55,12 @@ class ProfileForm2 extends Component {
     this.handleChangeName = this.handleChangeName.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangeUrl = this.handleChangeUrl.bind(this);
+    this.handleChangeAvatar = this.handleChangeAvatar.bind(this);
     this.setFormValid = this.setFormValid.bind(this);
+
+    this.onCrop = this.onCrop.bind(this)
+    this.onClose = this.onClose.bind(this)
+    this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this)
   }
 
   async requestConnection(translate) {
@@ -105,6 +113,24 @@ class ProfileForm2 extends Component {
           this.setState({ isLoading: false });
         }
       });
+
+    const thisComponent = this;
+    ImageUtils.toDataURL(currentUser.avatarCidUrl, function (avatarBase64) {
+      let image = new Image();
+      image.onload = function () {
+        let avatarRadius = image.naturalWidth / 2;
+        if (image.naturalWidth > image.naturalHeight) {
+          avatarRadius = image.naturalHeight / 2;
+        }
+        thisComponent.setState({
+          avatar: avatarBase64,
+          avatarRadius: avatarRadius
+        });
+      };
+      image.src = avatarBase64;
+    });
+
+    this.setFormValid();
   }
 
   handleChangeName(event) {
@@ -133,6 +159,9 @@ class ProfileForm2 extends Component {
     if (email === undefined || email === '') {
       emailHelperText = t('errorRequired');
       emailError = true;
+    } else if (!validatorUtils.isValidEmail(email)) {
+      emailHelperText = t('errorInvalidEmail');
+      emailError = true;
     }
     this.setState({
       email: email,
@@ -151,6 +180,9 @@ class ProfileForm2 extends Component {
     if (url === undefined || url === '') {
       urlHelperText = t('errorRequired');
       urlError = true;
+    } else if (!validatorUtils.isValidUrl(url)) {
+      urlHelperText = t('errorInvalidUrl');
+      urlError = true;
     }
     this.setState({
       url: url,
@@ -161,6 +193,31 @@ class ProfileForm2 extends Component {
     });
   }
 
+  handleChangeAvatar(avatar) {
+    this.setState({
+      avatar: avatar
+    }, () => {
+      this.setFormValid();
+    });
+  }
+
+  onClose() {
+    this.setState({ avatarPreview: null })
+  }
+
+  onCrop(avatarPreview) {
+    if (avatarPreview) {
+      this.setState({ avatarPreview })
+    }
+  }
+
+  onBeforeFileLoad(elem) {
+    if (elem.target.files[0].size > 71680) {
+      //alert("File is too big!");
+      //elem.target.value = "";
+    };
+  }
+
   setFormValid() {
     const { name, email, url } = this.state;
     let formValid = true;
@@ -169,8 +226,12 @@ class ProfileForm2 extends Component {
     }
     if (email === undefined || email === '') {
       formValid = false;
+    } else if (!validatorUtils.isValidEmail(email)) {
+      formValid = false;
     }
     if (url === undefined || url === '') {
+      formValid = false;
+    } else if (!validatorUtils.isValidUrl(url)) {
       formValid = false;
     }
     this.setState({
@@ -181,9 +242,11 @@ class ProfileForm2 extends Component {
   handleSubmit(event) {
     const { currentUser } = this.props;
     let user = this.state.user;
+    user.address = currentUser.address;
     user.name = this.state.name;
     user.email = this.state.email;
     user.url = this.state.url;
+    user.avatar = this.state.avatarPreview;
     this.setState({
       isSaving: true,
       user: user
@@ -239,24 +302,6 @@ class ProfileForm2 extends Component {
                   {t('userTitle')}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
-
-              </Grid>
-              <Grid item sm={12} md={6}>
-
-              </Grid>
-              <Grid item sm={12} md={6}>
-
-              </Grid>
-              <Grid item sm={12} md={4}>
-
-              </Grid>
-              <Grid item sm={12} md={4}>
-
-              </Grid>
-              <Grid item sm={12} md={4}>
-
-              </Grid>
               <Grid item sm={12} md={6}>
                 <TextField
                   id="nameTextField"
@@ -308,6 +353,19 @@ class ProfileForm2 extends Component {
                   inputProps={{ maxlength: 42 }}
                   variant="filled"
                 />
+              </Grid>
+              <Grid item sm={12} md={6}>
+                {this.state.avatar && (<Avatar
+                  label={"Elige una foto de perfil"}
+
+                  onCrop={this.onCrop}
+                  onClose={this.onClose}
+                  onBeforeFileLoad={this.onBeforeFileLoad}
+                  src={this.state.avatar}
+                  cropRadius={this.state.avatarRadius}
+                />)}
+                {/*this.state.avatarPreview && (<img src={this.state.avatarPreview} alt="Preview" />)*/}
+
               </Grid>
               <Grid item xs={12}>
                 <Button

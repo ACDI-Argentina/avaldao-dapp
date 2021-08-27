@@ -151,17 +151,20 @@ class UserService {
         if (user.registered === false) {
           // Nuevo usuario
           await feathersClient.service('users').create(user.toFeathers());
+          user.registered = true;
+          messageUtils.addMessageSuccess({
+            title: 'Bienvenido!',
+            text: `Su perfil ha sido registrado`
+          });
         } else {
           // Actualización de usuario
           await feathersClient.service('users').update(user.address, user.toFeathers());
+          messageUtils.addMessageSuccess({
+            text: `Su perfil ha sido actualizado`
+          });
         }
-
-        user.registered = true;
+        
         subscriber.next(user);
-        messageUtils.addMessageSuccess({
-          title: 'Felicitaciones!',
-          text: `Su perfil ha sido registrado`
-        });
 
       } catch (error) {
         console.error('[User Service] Error almacenando usuario.', error);

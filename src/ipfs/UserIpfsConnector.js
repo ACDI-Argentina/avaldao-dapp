@@ -32,10 +32,9 @@ class UserIpfsConnector {
    */
   async download(infoCid) {
     const userIpfs = await ipfsService.downloadJson(infoCid);
-    const avatar = await ipfsService.download(userIpfs.avatarCid);
+    //const avatar = ipfsService.resolveUrl(userIpfs.avatarCid);
     return {
-      avatarCid: userIpfs.avatarCid,
-      avatar: avatar
+      avatarCid: userIpfs.avatarCid
     }
   }
 }
