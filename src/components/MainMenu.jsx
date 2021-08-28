@@ -54,7 +54,7 @@ class MainMenu extends Component {
 
     const profileText = registered ? labels.profile : labels.signup;
     const profileLink = (
-      <NavLink className={classes.dropdownLink} to="/profile2">
+      <NavLink className={classes.dropdownLink} to="/profile">
         {profileText}
       </NavLink>
     );

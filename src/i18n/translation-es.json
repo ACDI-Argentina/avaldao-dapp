@@ -7,10 +7,12 @@
     "cancel": "Cancelar",
     "save": "Guardar",
 
-    "userTitle": "Usuario",
+    "userProfileTitle": "Perfil de usuario",
     "userName": "Nombre",
     "userEmail": "E-Mail",
     "userUrl": "URL",
+    "userAvatar": "Foto de perfil",
+    "userAvatarChoose": "Elige una foto de perfil",
 
     "avalesTitle": "Avales", 
     "avalCompletarTitle": "Completar aval",

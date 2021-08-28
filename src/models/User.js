@@ -12,6 +12,7 @@ import {
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
 import ipfsService from '../ipfs/IpfsService';
+import { toChecksumAddress } from 'lib/blockchain/Web3Utils';
 
 /**
  * Modelo de User en Dapp.
@@ -35,8 +36,7 @@ class User extends Model {
       address = null,
       infoCid = '',
       // https://gateway.pinata.cloud/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR
-      //avatarCid = '/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR',
-      avatarCid = '/ipfs/QmVedKPUTUcNpj6iUWyuEh9yVstBpNjMaL41KmMWF2bAuA',
+      avatarCid = '/ipfs/QmWCaq985NJjPnXhyDPQ4FPob8XNybncQqkQUZatySkY7E',
       name = '',
       avatar = '',
       email = '',
@@ -50,7 +50,7 @@ class User extends Model {
     } = data;
 
     if (data) {
-      this._address = address;
+      this._address = toChecksumAddress(address);
       this._infoCid = infoCid;
       this._avatarCid = avatarCid;
       this._name = name;
@@ -132,7 +132,7 @@ class User extends Model {
   }
 
   set address(value) {
-    this._address = value;
+    this._address = toChecksumAddress(value);
   }
 
   get infoCid() {

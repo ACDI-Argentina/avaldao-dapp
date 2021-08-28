@@ -24,22 +24,28 @@ import validatorUtils from 'lib/blockchain/ValidatorUtils';
  * Formulario de perfil de usuario.
  * 
  */
-class ProfileForm2 extends Component {
+class UserProfile extends Component {
 
   constructor(props) {
     super(props);
 
     const { currentUser, t } = props;
     const src = 'avatar.jpg'
+
+    const avatarImg = new Image();
+    avatarImg.src = currentUser.avatarCidUrl;
+
+
     this.state = {
       name: currentUser.name,
       email: currentUser.email,
       url: currentUser.url,
       avatar: null,
-      avatarRadius: null,
       avatarPreview: null,
       user: new User(currentUser),
-
+      avatarImg: avatarImg,
+      avatarImgWidth: 300,
+      avatarCropRadius: 150,
       nameHelperText: '',
       nameError: false,
       emailHelperText: '',
@@ -113,22 +119,6 @@ class ProfileForm2 extends Component {
           this.setState({ isLoading: false });
         }
       });
-
-    const thisComponent = this;
-    ImageUtils.toDataURL(currentUser.avatarCidUrl, function (avatarBase64) {
-      let image = new Image();
-      image.onload = function () {
-        let avatarRadius = image.naturalWidth / 2;
-        if (image.naturalWidth > image.naturalHeight) {
-          avatarRadius = image.naturalHeight / 2;
-        }
-        thisComponent.setState({
-          avatar: avatarBase64,
-          avatarRadius: avatarRadius
-        });
-      };
-      image.src = avatarBase64;
-    });
 
     this.setFormValid();
   }
@@ -216,6 +206,10 @@ class ProfileForm2 extends Component {
       //alert("File is too big!");
       //elem.target.value = "";
     };
+
+    this.setState({
+      avatarCropRadius: undefined
+    })
   }
 
   setFormValid() {
@@ -269,8 +263,11 @@ class ProfileForm2 extends Component {
       emailError,
       urlHelperText,
       urlError,
-      formValid } = this.state;
-    const { classes, t, ...rest } = this.props;
+      formValid,
+      avatarImg,
+      avatarImgWidth,
+      avatarCropRadius } = this.state;
+    const { currentUser, classes, t, ...rest } = this.props;
 
     return (
       <div className={classes.root}>
@@ -299,73 +296,77 @@ class ProfileForm2 extends Component {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
-                  {t('userTitle')}
+                  {t('userProfileTitle')}
                 </Typography>
               </Grid>
-              <Grid item sm={12} md={6}>
-                <TextField
-                  id="nameTextField"
-                  value={this.state.name}
-                  onChange={this.handleChangeName}
-                  label={t('userName')}
-                  helperText={nameHelperText}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={nameError}
-                  required
-                  inputProps={{ maxlength: 42 }}
-                  variant="filled"
-                />
-              </Grid>
-              <Grid item sm={12} md={6}>
-                <TextField id="emailTextField"
-                  value={this.state.email}
-                  onChange={this.handleChangeEmail}
-                  label={t('userEmail')}
-                  helperText={emailHelperText}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={emailError}
-                  required
-                  inputProps={{ maxlength: 42 }}
-                  variant="filled"
-                />
-              </Grid>
-              <Grid item sm={12} md={6}>
-                <TextField id="urlTextField"
-                  value={this.state.url}
-                  onChange={this.handleChangeUrl}
-                  label={t('userUrl')}
-                  helperText={urlHelperText}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={urlError}
-                  required
-                  inputProps={{ maxlength: 42 }}
-                  variant="filled"
-                />
-              </Grid>
-              <Grid item sm={12} md={6}>
-                {this.state.avatar && (<Avatar
-                  label={"Elige una foto de perfil"}
-
+              <Grid item sm={12} md={4} >
+                <Typography variant="h6" component="h6">
+                  {t('userAvatar')}
+                </Typography>
+                {<Avatar
+                  img={avatarImg}
+                  label={t('userAvatarChoose')}
+                  width={avatarImgWidth}
+                  imageWidth={avatarImgWidth}
+                  cropRadius={avatarCropRadius}
                   onCrop={this.onCrop}
                   onClose={this.onClose}
                   onBeforeFileLoad={this.onBeforeFileLoad}
-                  src={this.state.avatar}
-                  cropRadius={this.state.avatarRadius}
-                />)}
-                {/*this.state.avatarPreview && (<img src={this.state.avatarPreview} alt="Preview" />)*/}
-
+                />}
+              </Grid>
+              <Grid container spacing={3} sm={12} md={8}>
+                <Grid item sm={12} md={12}>
+                  <TextField
+                    id="nameTextField"
+                    value={this.state.name}
+                    onChange={this.handleChangeName}
+                    label={t('userName')}
+                    helperText={nameHelperText}
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={nameError}
+                    required
+                    inputProps={{ maxlength: 42 }}
+                    variant="filled"
+                  />
+                </Grid>
+                <Grid item sm={12} md={12}>
+                  <TextField id="emailTextField"
+                    value={this.state.email}
+                    onChange={this.handleChangeEmail}
+                    label={t('userEmail')}
+                    helperText={emailHelperText}
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={emailError}
+                    required
+                    inputProps={{ maxlength: 42 }}
+                    variant="filled"
+                  />
+                </Grid>
+                <Grid item sm={12} md={12}>
+                  <TextField id="urlTextField"
+                    value={this.state.url}
+                    onChange={this.handleChangeUrl}
+                    label={t('userUrl')}
+                    helperText={urlHelperText}
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={urlError}
+                    required
+                    inputProps={{ maxlength: 42 }}
+                    variant="filled"
+                  />
+                </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Button
@@ -392,7 +393,7 @@ class ProfileForm2 extends Component {
   }
 }
 
-ProfileForm2.contextType = Web3AppContext;
+UserProfile.contextType = Web3AppContext;
 
 const styles = theme => ({
   root: {
@@ -468,5 +469,5 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = { registerCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(ProfileForm2)))
+  withTranslation()(UserProfile)))
 );
