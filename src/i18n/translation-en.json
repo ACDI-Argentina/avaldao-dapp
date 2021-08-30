@@ -13,6 +13,14 @@
     "userUrl": "URL",
     "userAvatar": "Profile photo",
     "userAvatarChoose": "Choose a profile photo",
+    "userUnknown": "Unknown user",
+
+    "noSignature": "No signature",
+
+    "avaldao": "Avaldao",
+    "solicitante": "Applicant",
+    "comerciante": "Seller",
+    "avalado": "Endorsed",
 
     "avalesTitle": "Avales",    
     "avalCompletarTitle": "Complete aval",

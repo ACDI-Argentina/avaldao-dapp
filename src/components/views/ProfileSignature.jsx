@@ -26,20 +26,24 @@ class ProfileSignature extends Component {
     }
 
     render() {
-        const { user, title, signature, classes } = this.props;
-        //const name = user.name;
-        const name = "Mauricio";
-        let signatureText = "Sin firma";
+        const { address, user, title, signature, classes, t } = this.props;
+
+        if (!address || !user) {
+            return null;
+        }
+
+        let name = t('userUnknown');
+        if (user.name) {
+            name = user.name;
+        }
+
+        let signatureText = t('noSignature');;
         let signatureColor = grey[300];
         if (signature) {
             signatureText = signature;
             signatureColor = green[400];
         }
-        if (!user) {
-            return (
-                <div></div>
-            )
-        }
+
         return (
             <ListItem>
                 <ListItemIcon>

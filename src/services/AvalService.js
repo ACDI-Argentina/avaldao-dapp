@@ -75,6 +75,8 @@ class AvalService {
                     }
                 })
                 .then(response => {
+
+                    console.log('Avales response', response);
                     let avales = [];
                     for (let i = 0; i < response.total; i++) {
                         let avalData = response.data[i];

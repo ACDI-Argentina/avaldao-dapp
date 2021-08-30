@@ -22,7 +22,6 @@ class UserService {
    */
   loadCurrentUser(currentUser) {
 
-    console.log('Obtenidndo usuario', currentUser);
     return new Observable(async subscriber => {
 
       let address = currentUser.address;

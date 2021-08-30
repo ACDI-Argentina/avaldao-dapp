@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
 import { history } from 'lib/helpers'
-import AvaldaoContractApi from 'lib/blockchain/AvaldaoContractApi'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import ProfileSignature from './ProfileSignature'
 import { firmarAval } from '../../redux/reducers/avalesSlice'
@@ -38,7 +37,7 @@ class AvalItem extends Component {
   }
 
   firmar() {
-    const { currentUser, aval, firmarAval } = this.props;
+    const { currentUser, aval, firmarAval, t } = this.props;
     /*AvaldaoContractApi.sign(currentUser.address, aval).subscribe(aval => {
       console.log('Firmado', aval);
     });*/
@@ -64,24 +63,24 @@ class AvalItem extends Component {
                 <StatusIndicator status={aval.status}></StatusIndicator>
 
                 <ProfileSignature
-                  title={"Avaldao"}
+                  title={t("avaldao")}
                   address={aval.avaldaoAddress}
                   signature={aval.avaldaoSignature}
                 />
                 <ProfileSignature
-                  title={"Solicitante"}
+                  title={t("solicitante")}
                   address={aval.solicitanteAddress}
                   signature={aval.solicitanteSignature}
                 />
 
                 <ProfileSignature
-                  title={"Comerciante"}
+                  title={t("comerciante")}
                   address={aval.comercianteAddress}
                   signature={aval.comercianteSignature}
                 />
 
                 <ProfileSignature
-                  title={"Avalado"}
+                  title={t("avalado")}
                   address={aval.avaladoAddress}
                   signature={aval.avaladoSignature}
                 />

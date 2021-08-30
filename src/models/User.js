@@ -37,10 +37,10 @@ class User extends Model {
       infoCid = '',
       // https://gateway.pinata.cloud/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR
       avatarCid = '/ipfs/QmWCaq985NJjPnXhyDPQ4FPob8XNybncQqkQUZatySkY7E',
-      name = '',
       avatar = '',
-      email = '',
-      url = '',
+      name,      
+      email,
+      url,
       roles = [],
       balance = new BigNumber(0),
       tokenBalances = new Map(),

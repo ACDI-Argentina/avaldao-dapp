@@ -1,6 +1,7 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
 import Web3Utils from 'lib/blockchain/Web3Utils';
+import { toChecksumAddress } from 'lib/blockchain/Web3Utils';
 
 /**
  * Modelo de Aval.
@@ -19,14 +20,14 @@ class Aval {
       adquisicion = '',
       beneficiarios = '',
       monto = '',
-      avaldaoAddress = '',
-      solicitanteAddress = '',
-      comercianteAddress = '',
-      avaladoAddress = '',
-      avaldaoSignature = undefined,
-      solicitanteSignature = undefined,
-      comercianteSignature = undefined,
-      avaladoSignature = undefined,
+      avaldaoAddress,
+      solicitanteAddress,
+      comercianteAddress,
+      avaladoAddress,
+      avaldaoSignature,
+      solicitanteSignature,
+      comercianteSignature,
+      avaladoSignature,
       status = Aval.ACEPTADO.toStore()
     } = data;
     this._blockchainId = blockchainId;
@@ -40,10 +41,10 @@ class Aval {
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
     this._monto = monto;
-    this._avaldaoAddress = avaldaoAddress;
-    this._solicitanteAddress = solicitanteAddress;
-    this._comercianteAddress = comercianteAddress;
-    this._avaladoAddress = avaladoAddress;
+    this._avaldaoAddress = toChecksumAddress(avaldaoAddress);
+    this._solicitanteAddress = toChecksumAddress(solicitanteAddress);
+    this._comercianteAddress = toChecksumAddress(comercianteAddress);
+    this._avaladoAddress = toChecksumAddress(avaladoAddress);
     this._avaldaoSignature = avaldaoSignature;
     this._solicitanteSignature = solicitanteSignature;
     this._comercianteSignature = comercianteSignature;
@@ -295,7 +296,7 @@ class Aval {
   }
 
   set avaldaoAddress(value) {
-    this._avaldaoAddress = value;
+    this._avaldaoAddress = toChecksumAddress(value);
   }
 
   get solicitanteAddress() {
@@ -303,7 +304,7 @@ class Aval {
   }
 
   set solicitanteAddress(value) {
-    this._solicitanteAddress = value;
+    this._solicitanteAddress = toChecksumAddress(value);
   }
 
   get comercianteAddress() {
@@ -311,7 +312,7 @@ class Aval {
   }
 
   set comercianteAddress(value) {
-    this._comercianteAddress = value;
+    this._comercianteAddress = toChecksumAddress(value);
   }
 
   get avaladoAddress() {
@@ -319,7 +320,7 @@ class Aval {
   }
 
   set avaladoAddress(value) {
-    this._avaladoAddress = value;
+    this._avaladoAddress = toChecksumAddress(value);
   }
 
   get avaldaoSignature() {
