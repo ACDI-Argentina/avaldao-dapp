@@ -4,18 +4,20 @@ import { map, mergeMap, catchError } from 'rxjs/operators'
 import avalService from 'services/AvalService';
 import avaldaoContractApi from '../../lib/blockchain/AvaldaoContractApi';
 
-/**
- * Epic que reacciona a la acción de obtención de avales locales,
- * busca las avales en el smart contract y envía la acción de
- * resetear los avales locales.
- * 
- * @param action$ de Redux.
- */
 export const fetchAvalesOnChainEpic = action$ => action$.pipe(
   ofType('avales/fetchAvalesOnChain'),
   mergeMap(action => avalService.getAvalesOnChain()),
   map(avales => ({
     type: 'avales/mergeAvales',
+    payload: avales
+  }))
+)
+
+export const fetchAvalByBlockchainIdEpic = action$ => action$.pipe(
+  ofType('avales/fetchAvalByBlockchainId'),
+  mergeMap(action => avalService.getAvalByBlockchainId(action.payload))),
+  map(avales => ({
+    type: 'avales/updateAvalByBlockchainId',
     payload: avales
   }))
 )
@@ -26,15 +28,6 @@ export const fetchAvalesOffChainEpic = action$ => action$.pipe(
   map(avales => ({
     type: 'avales/mergeAvales',
     payload: avales
-  }))
-)
-
-export const fetchAvalEpic = action$ => action$.pipe(
-  ofType('avales/fetchAval'),
-  mergeMap(action => avaldaoContractApi.getAval(action.payload)),
-  map(aval => ({
-    type: 'avales/updateAval',
-    payload: aval
   }))
 )
 

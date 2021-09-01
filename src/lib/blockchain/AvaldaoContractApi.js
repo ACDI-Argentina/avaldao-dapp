@@ -7,7 +7,7 @@ import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionUtils from '../../redux/utils/transactionUtils'
 import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
-import { toChecksumAddress } from './Web3Utils';
+import feathers from '@feathersjs/feathers';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -247,10 +247,10 @@ class AvaldaoContractApi {
                 message: {
                     id: aval.blockchainId,
                     infoCid: aval.infoCid,
-                    avaldao: toChecksumAddress(aval.avaldaoAddress),
-                    solicitante: toChecksumAddress(aval.solicitanteAddress),
-                    comerciante: toChecksumAddress(aval.comercianteAddress),
-                    avalado: toChecksumAddress(aval.avaladoAddress)
+                    avaldao: aval.avaldaoAddress,
+                    solicitante: aval.solicitanteAddress,
+                    comerciante: aval.comercianteAddress,
+                    avalado: aval.avaladoAddress
                 }
             };
 
@@ -382,6 +382,10 @@ class AvaldaoContractApi {
                 // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
                 // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
                 const idFromEvent = parseInt(receipt.events['SignAval'].returnValues.id);
+
+                    quede acá!!
+                    Hay que cambiar esto para que busque el aval 
+                    compelto, desde la blockchain hasta feathers.
 
                 thisApi.getAvalById(idFromEvent).then(aval => {
                     aval.clientId = clientId;

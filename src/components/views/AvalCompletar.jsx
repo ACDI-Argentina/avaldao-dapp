@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import classNames from "classnames";
-import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
-import { withStyles } from '@material-ui/core/styles';
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import Parallax from "components/Parallax/Parallax.js";
-import MainMenu from 'components/MainMenu';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
-import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
-import { connect } from 'react-redux';
-import { Web3AppContext } from 'lib/blockchain/Web3App';
-import { withTranslation } from 'react-i18next';
+import React, { Component } from 'react'
+import classNames from "classnames"
+import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
+import { withStyles } from '@material-ui/core/styles'
+import Header from "components/Header/Header.js"
+import Footer from "components/Footer/Footer.js"
+import Parallax from "components/Parallax/Parallax.js"
+import MainMenu from 'components/MainMenu'
+import Grid from '@material-ui/core/Grid'
+import { Typography } from '@material-ui/core'
+import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js"
+import { connect } from 'react-redux'
+import { Web3AppContext } from 'lib/blockchain/Web3App'
+import { withTranslation } from 'react-i18next'
 import { completarAval, selectAvalByClientId } from '../../redux/reducers/avalesSlice'
-import { Button } from '@material-ui/core';
-import Aval from 'models/Aval';
-import config from 'configuration';
-import TextField from '@material-ui/core/TextField';
-import Web3Utils from 'lib/blockchain/Web3Utils';
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { history } from 'lib/helpers';
+import { Button } from '@material-ui/core'
+import Aval from 'models/Aval'
+import config from 'configuration'
+import TextField from '@material-ui/core/TextField'
+import Web3Utils from 'lib/blockchain/Web3Utils'
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import { history } from 'lib/helpers'
 
 /**
  * Pantalla para completar aval.

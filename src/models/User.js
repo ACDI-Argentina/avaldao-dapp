@@ -12,7 +12,6 @@ import {
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
 import ipfsService from '../ipfs/IpfsService';
-import { toChecksumAddress } from 'lib/blockchain/Web3Utils';
 
 /**
  * Modelo de User en Dapp.
@@ -44,13 +43,13 @@ class User extends Model {
       roles = [],
       balance = new BigNumber(0),
       tokenBalances = new Map(),
+      registered = false,
       authenticated = false,
-      registered = false, //exists on mongodb?
       status = User.UNREGISTERED.toStore()
     } = data;
 
     if (data) {
-      this._address = toChecksumAddress(address);
+      this._address = address;
       this._infoCid = infoCid;
       this._avatarCid = avatarCid;
       this._name = name;
@@ -60,8 +59,8 @@ class User extends Model {
       this._roles = roles;
       this._balance = balance;
       this._tokenBalances = tokenBalances;
-      this._authenticated = authenticated;
       this._registered = registered;
+      this._authenticated = authenticated;
       this._status = StatusUtils.build(status.name, status.isLocal);
     }
   }
@@ -132,7 +131,7 @@ class User extends Model {
   }
 
   set address(value) {
-    this._address = toChecksumAddress(value);
+    this._address = value;
   }
 
   get infoCid() {

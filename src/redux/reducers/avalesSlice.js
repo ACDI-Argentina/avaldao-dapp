@@ -3,52 +3,8 @@ import Aval from 'models/Aval';
 
 export const avalesSlice = createSlice({
   name: 'avales',
-  // ////////////////////////////////////////////////////////
-  // La siguiente información es provista cuando el aval es solicitado.
-  // Issue #10: CU: Solicitar aval
-  // En esta esta aún no está implementado el CU.
   initialState: [
-    /*
-    {
-      clientId: 1,
-      proyecto: '1. Instalación de cisternas para productores del Gran Chaco',
-      proposito: 'Impulsar el desarrollo de los productores de la zona.',
-      causa: 'Los productores no tiene acceso al crédito y necesitan un aval.',
-      adquisicion: '10 cisternas',
-      beneficiarios: '20 productores',
-      monto: '10.000 USD',
-      status: {
-        name: 'Aceptado',
-        isLocal: false
-      }
-    },
-    {
-      clientId: 2,
-      proyecto: '2. Instalación de cisternas para productores del Gran Chaco',
-      proposito: 'Impulsar el desarrollo de los productores de la zona.',
-      causa: 'Los productores no tiene acceso al crédito y necesitan un aval.',
-      adquisicion: '10 cisternas',
-      beneficiarios: '20 productores',
-      monto: '10.000 USD',
-      status: {
-        name: 'Completado',
-        isLocal: false
-      }
-    },
-    {
-      clientId: 3,
-      proyecto: '3. Instalación de cisternas para productores del Gran Chaco',
-      proposito: 'Impulsar el desarrollo de los productores de la zona.',
-      causa: 'Los productores no tiene acceso al crédito y necesitan un aval.',
-      adquisicion: '10 cisternas',
-      beneficiarios: '20 productores',
-      monto: '10.000 USD',
-      status: {
-        name: 'Aceptado',
-        isLocal: false
-      }
-    }
-    */
+
   ],
   reducers: {
     fetchAvalesOnChain: (state, action) => {
@@ -107,11 +63,16 @@ export const avalesSlice = createSlice({
         state.splice(index, 1);
       }
     },
-    updateAval: (state, action) => {
+    fetchAvalByBlockchainId: (state, action) => {
+      // Solo se obtiene el estado actual.
+    },
+    updateAvalByBlockchainId: (state, action) => {
       let avalStore = action.payload.toStore();
-      let index = state.findIndex(a => a.id === avalStore.id);
+      let index = state.findIndex(a => a.blockchainId === avalStore.blockchainId);
       if (index != -1) {
         state[index] = avalStore;
+      } else {
+        state.push(avalStore);
       }
     },
   },
@@ -124,19 +85,14 @@ export const {
   resetAvales,
   completarAval,
   firmarAval,
-  updateAvalByClientId } = avalesSlice.actions;
+  updateAvalByClientId,
+  fetchAvalByBlockchainId,
+  updateAvalByBlockchainId } = avalesSlice.actions;
 
 export const selectAvales = state => {
   return state.avales.map(function (avalStore) {
     return new Aval(avalStore);
   });
-}
-export const selectAval = (state, id) => {
-  let avalStore = state.avales.find(a => a.id === id);
-  if (avalStore) {
-    return new Aval(avalStore);
-  }
-  return undefined;
 }
 export const selectAvalByClientId = (state, clientId) => {
   let avalStore = state.avales.find(a => a.clientId === clientId);
@@ -144,11 +100,6 @@ export const selectAvalByClientId = (state, clientId) => {
     return new Aval(avalStore);
   }
   return undefined;
-}
-export const selectAvalesByIds = (state, ids) => {
-  return state.avales.filter(a => ids.includes(a.id)).map(function (avalStore) {
-    return new Aval(avalStore);
-  });
 }
 
 export default avalesSlice.reducer;

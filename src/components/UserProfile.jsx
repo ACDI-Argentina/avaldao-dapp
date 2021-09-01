@@ -69,6 +69,12 @@ class UserProfile extends Component {
     this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this)
   }
 
+  componentDidMount() {
+    if (this.props.address) {
+        this.props.fetchUserByAddress(this.props.address);
+    }
+}
+
   async requestConnection(translate) {
 
     const labels = {

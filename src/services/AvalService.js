@@ -16,45 +16,15 @@ class AvalService {
         return new Observable(async subscriber => {
             avaldaoContractApi.getAvales().subscribe(
                 async avales => {
-                    for (let i = 0; i < avales.length; i++) {
-                        let aval = avales[i];
-                        try {
-                            let avalData = await feathersClient.service('avales').get(
-                                aval.feathersId,
-                                {
-                                    query: {
-                                        $select: [
-                                            'blockchainId',
-                                            'status',
-                                            'avaldaoSignature',
-                                            'solicitanteSignature',
-                                            'comercianteSignature',
-                                            'avaladoSignature'
-                                        ]
-                                    }
-                                });
-
-                            // Se obtienen las firmas desde Feathers
-                            aval.avaldaoSignature = avalData.avaldaoSignature;
-                            aval.solicitanteSignature = avalData.solicitanteSignature;
-                            aval.comercianteSignature = avalData.comercianteSignature;
-                            aval.avaladoSignature = avalData.avaladoSignature;
-
-                            // Para mantener la consistencia de los datos,
-                            // se sincronizan los datos en este punto si se requiere.
-                            if (aval.blockchainId != avalData.blockchainId ||
-                                aval.status.id != avalData.status) {
-
-                                this.syncAval(aval).subscribe();
-                            }
-
-                        } catch (error) {
-                            console.error("[AvalService] Error obteniendo aval off chain.", aval, error);
-                            subscriber.error(error);
-                            return;
+                    try {
+                        for (let i = 0; i < avales.length; i++) {
+                            await this.syncLocalAvalWithOffChainData(avales[i]);
                         }
+                        subscriber.next(avales);
+                    } catch (error) {
+                        console.error("[AvalService] Error sincronizando avales locales con datos off chain.", error);
+                        subscriber.error(error);
                     }
-                    subscriber.next(avales);
                 },
                 error => {
                     console.error("[AvalService] Error obteniendo avales on chain.", error);
@@ -75,18 +45,104 @@ class AvalService {
                     }
                 })
                 .then(response => {
-
-                    console.log('Avales response', response);
                     let avales = [];
                     for (let i = 0; i < response.total; i++) {
                         let avalData = response.data[i];
-                        let aval = this.feathersAvalToAval(avalData);
+                        let aval = this.offChainAvalToAval(avalData);
                         avales.push(aval);
                     }
                     subscriber.next(avales);
                 }).catch(error => {
                     console.error("[AvalService] Error obteniendo avales off chain.", error);
                     subscriber.next([]);
+                });
+        });
+    }
+
+    /**
+     * Obtiene un aval a partir de su Blockchain Id
+     * @param blockchainId id del aval en la blockchain.
+     */
+    getAvalByBlockchainId(blockchainId) {
+        return new Observable(async subscriber => {
+            avaldaoContractApi.getAval(blockchainId).subscribe(
+                async aval => {
+                    await this.syncLocalAvalWithOffChainData(aval);
+                    subscriber.next(aval);
+                },
+                error => {
+                    console.log('[AvalService] Error obteniendo aval on chain.', error);
+                    subscriber.error(error);
+                });
+        });
+    }
+
+    /**
+     * Sincroniza el aval local con los datos off chain.
+     * 
+     * @param aval aval local.
+     */
+    async syncLocalAvalWithOffChainData(aval) {
+
+        try {
+
+            let avalData = await feathersClient.service('avales').get(
+                aval.feathersId,
+                {
+                    query: {
+                        $select: [
+                            'blockchainId',
+                            'status',
+                            'avaldaoSignature',
+                            'solicitanteSignature',
+                            'comercianteSignature',
+                            'avaladoSignature'
+                        ]
+                    }
+                });
+
+            // Se obtienen las firmas desde Feathers
+            aval.avaldaoSignature = avalData.avaldaoSignature;
+            aval.solicitanteSignature = avalData.solicitanteSignature;
+            aval.comercianteSignature = avalData.comercianteSignature;
+            aval.avaladoSignature = avalData.avaladoSignature;
+
+            // Para mantener la consistencia de los datos,
+            // se sincronizan los datos en este punto si se requiere.
+            if (aval.blockchainId != avalData.blockchainId ||
+                aval.status.id != avalData.status) {
+
+                this.syncOffChainAvalWithOnChainData(aval).subscribe();
+            }
+
+        } catch (e) {
+            console.error('[AvalService] Error sincronizando aval local con datos off chain.', e);
+            throw e;
+        }
+    }
+
+    /**
+     * Sincroniza el Aval de la Blockchain en Feathers.
+     * 
+     * @param aval a sincronizar en Feathers.
+     * @returns observable 
+     */
+    syncOffChainAvalWithOnChainData(aval) {
+
+        return new Observable(async subscriber => {
+
+            feathersClient.service('avales').patch(
+                aval.feathersId,
+                {
+                    blockchainId: aval.blockchainId,
+                    status: aval.status.id
+                }).
+                then(avalData => {
+                    console.log('[AvalService] Aval sincronizado en Feathers.', aval);
+                    subscriber.next(aval);
+                }).catch(error => {
+                    console.error("[AvalService] Error sincronizando aval en Feathers.", error);
+                    subscriber.error(error);
                 });
         });
     }
@@ -108,48 +164,22 @@ class AvalService {
                 {
                     comercianteAddress: aval.comercianteAddress,
                     avaladoAddress: aval.avaladoAddress
-                }).
-                then(avalData => {
+                }).then(avalData => {
                     console.log('[AvalService] Aval completado en Feathers.', aval);
                     avaldaoContractApi.saveAval(aval).subscribe(
                         aval => {
                             aval.clientId = clientId;
                             if (aval.blockchainId) {
-                                this.syncAval(aval).subscribe();
+                                this.syncOffChainAvalWithOnChainData(aval).subscribe();
                             }
                             subscriber.next(aval);
-                        }, error => {
-                            console.error("[AvalService] Error completando aval en Blockchain.", error);
+                        },
+                        error => {
+                            console.error("[AvalService] Error completando aval on chain.", error);
                             subscriber.error(error);
                         });
                 }).catch(error => {
-                    console.error("[AvalService] Error completando aval en Feathers.", error);
-                    subscriber.error(error);
-                });
-        });
-    }
-
-    /**
-     * Sincroniza el Aval de la Blockchain en Feathers.
-     * 
-     * @param aval a sincronizar en Feathers.
-     * @returns observable 
-     */
-    syncAval(aval) {
-
-        return new Observable(async subscriber => {
-
-            feathersClient.service('avales').patch(
-                aval.feathersId,
-                {
-                    blockchainId: aval.blockchainId,
-                    status: aval.status.id
-                }).
-                then(avalData => {
-                    console.log('[AvalService] Aval sincronizado en Feathers.', aval);
-                    subscriber.next(aval);
-                }).catch(error => {
-                    console.error("[AvalService] Error sincronizando aval en Feathers.", error);
+                    console.error("[AvalService] Error completando aval off chain.", error);
                     subscriber.error(error);
                 });
         });
@@ -175,19 +205,18 @@ class AvalService {
                         comercianteSignature: aval.comercianteSignature,
                         avaladoSignature: aval.avaladoSignature,
                         avaldaoSignature: aval.avaldaoSignature
-                    }).
-                    then(avalData => {
-                        console.log('[AvalService] Se almacenaron las firmas en Feathers.', aval);
+                    }).then(avalData => {
+                        console.log('[AvalService] Se almacenaron las firmas off chain.', aval);
                         subscriber.next(aval);
                     }).catch(error => {
-                        console.error("[AvalService] Error almacenando las firmas en Feathers.", error);
+                        console.error("[AvalService] Error almacenando las firmas off chain.", error);
                         subscriber.error(error);
                     });
             });
         });
     }
 
-    feathersAvalToAval(avalData) {
+    offChainAvalToAval(avalData) {
         return new Aval({
             feathersId: avalData._id,
             blockchainId: parseInt(avalData.blockchainId),

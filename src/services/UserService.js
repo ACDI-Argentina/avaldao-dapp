@@ -31,16 +31,30 @@ class UserService {
         try {
 
           const userData = await feathersClient.service('/users').get(address);
-          // Se obtiene la información del usuario desde IPFS.
-          const userIpfs = await userIpfsConnector.download(userData.infoCid);
 
-          currentUser.registered = true;
-          currentUser.name = userData.name;
-          currentUser.email = userData.email;
-          currentUser.url = userData.url;
-          currentUser.infoCid = userData.infoCid;
-          currentUser.avatarCid = userIpfs.avatarCid;
-          currentUser.avatar = userIpfs.avatar;
+          let registered = true;
+          let name = userData.name;
+          let email = userData.email;
+          let url = userData.url;
+          let infoCid = userData.infoCid;
+          let avatarCid;
+          let avatar;
+
+          if (infoCid) {
+            // Se obtiene la información del usuario desde IPFS.
+            const userIpfs = await userIpfsConnector.download(infoCid);
+            avatarCid = userIpfs.avatarCid;
+            avatar = userIpfs.avatar;
+          }
+
+          currentUser.registered = registered;
+          currentUser.name = name;
+          currentUser.email = email;
+          currentUser.url = url;
+          currentUser.infoCid = infoCid;
+          currentUser.avatarCid = avatarCid;
+          currentUser.avatar = avatar;
+
           subscriber.next(currentUser);
 
           // Se cargan los roles del usuario desde el smart constract
@@ -55,7 +69,7 @@ class UserService {
           });
 
         } catch (error) {
-          console.error('Error obteniendo datos del usuario desde Feathers.', error);
+          console.error('[UserService] Error obteniendo datos del usuario desde Feathers.', error);
           if (error.code === 404) {
             currentUser.registered = false;
             currentUser.name = undefined;
@@ -64,9 +78,8 @@ class UserService {
             currentUser.infoCid = undefined;
             currentUser.avatarCid = undefined;
             currentUser.avatar = undefined;
-            subscriber.next(currentUser);
-            return;
           }
+          subscriber.next(currentUser);
         }
       }
     });
@@ -84,15 +97,31 @@ class UserService {
       try {
 
         const userData = await feathersClient.service('/users').get(address);
-        const userIpfs = await userIpfsConnector.download(userData.infoCid);
+
+        let registered = true;
+        let name = userData.name;
+        let email = userData.email;
+        let url = userData.url;
+        let infoCid = userData.infoCid;
+        let avatarCid;
+        let avatar;
+
+        if (infoCid) {
+          // Se obtiene la información del usuario desde IPFS.
+          const userIpfs = await userIpfsConnector.download(infoCid);
+          avatarCid = userIpfs.avatarCid;
+          avatar = userIpfs.avatar;
+        }
 
         const user = new User({
+          registered: registered,
           address: address,
-          name: userData.name,
-          email: userData.email,
-          avatarCid: userIpfs.avatarCid,
-          url: userData.url,
-          registered: true
+          name: name,
+          email: email,
+          url: url,
+          infoCid: infoCid,
+          avatarCid: avatarCid,
+          avatar: avatar
         });
 
         subscriber.next(user);
@@ -163,7 +192,7 @@ class UserService {
             text: `Su perfil ha sido actualizado`
           });
         }
-        
+
         subscriber.next(user);
 
       } catch (error) {
@@ -182,7 +211,7 @@ async function authenticateFeathers(user) {
   let authenticated = false;
   if (user) {
     const token = await feathersClient.passport.getJWT();
-
+    
     if (token) {
       const { userId } = await feathersClient.passport.verifyJWT(token);
 

@@ -1,7 +1,6 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
 import Web3Utils from 'lib/blockchain/Web3Utils';
-import { toChecksumAddress } from 'lib/blockchain/Web3Utils';
 
 /**
  * Modelo de Aval.
@@ -41,10 +40,10 @@ class Aval {
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
     this._monto = monto;
-    this._avaldaoAddress = toChecksumAddress(avaldaoAddress);
-    this._solicitanteAddress = toChecksumAddress(solicitanteAddress);
-    this._comercianteAddress = toChecksumAddress(comercianteAddress);
-    this._avaladoAddress = toChecksumAddress(avaladoAddress);
+    this._avaldaoAddress = avaldaoAddress;
+    this._solicitanteAddress = solicitanteAddress;
+    this._comercianteAddress = comercianteAddress;
+    this._avaladoAddress = avaladoAddress;
     this._avaldaoSignature = avaldaoSignature;
     this._solicitanteSignature = solicitanteSignature;
     this._comercianteSignature = comercianteSignature;
@@ -143,33 +142,54 @@ class Aval {
 
   /**
    * Determina si el Aval puede ser completado o no.
+   * @param user usuario que completa el aval.
    */
-  allowCompletar() {
-    return this.status.name === Aval.ACEPTADO.name;
+  allowCompletar(user) {
+    if (this.status.name !== Aval.ACEPTADO.name) {
+      // Solo un aval Aceptado puede ser firmado.
+      return false;
+    }
+    if (!user.registered) {
+      // El usuario no está autenticado.
+      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
+      // https://github.com/ACDI-Argentina/avaldao/issues/21
+      return false;
+    }
+    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+      // Solo el Solicitante puede completar el aval
+      return true;
+    }
+    return false;
   }
 
   /**
    * Determina si el Aval puede ser firmado o no por el usuario con el address especificado.
-   * @param signerAddress dirección del usuario firmante.
+   * @param user usuario firmante.
    */
-  allowFirmar(signerAddress) {
+  allowFirmar(user) {
     if (this.status.name !== Aval.COMPLETADO.name) {
       // Solo un aval Completado puede ser firmado.
       return false;
     }
-    if (Web3Utils.addressEquals(signerAddress, this.solicitanteAddress)) {
+    if (!user.registered) {
+      // El usuario no está autenticado.
+      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
+      // https://github.com/ACDI-Argentina/avaldao/issues/21
+      return false;
+    }
+    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // El firmante es el Solicitante.
       return this.solicitanteSignature == undefined;
     }
-    if (Web3Utils.addressEquals(signerAddress, this.comercianteAddress)) {
+    if (Web3Utils.addressEquals(user.address, this.comercianteAddress)) {
       // El firmante es el Comerciante.
       return this.comercianteSignature == undefined;
     }
-    if (Web3Utils.addressEquals(signerAddress, this.avaladoAddress)) {
+    if (Web3Utils.addressEquals(user.address, this.avaladoAddress)) {
       // El firmante es el Avalado.
       return this.avaladoSignature == undefined;
     }
-    if (Web3Utils.addressEquals(signerAddress, this.avaldaoAddress)) {
+    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // El firmante es Avaldao.
       // Avaldao solo puede firmar una vez que el Solictante, Comerciante y Avalado hayan firmado.
       return this.avaldaoSignature == undefined &&
@@ -296,7 +316,7 @@ class Aval {
   }
 
   set avaldaoAddress(value) {
-    this._avaldaoAddress = toChecksumAddress(value);
+    this._avaldaoAddress = value;
   }
 
   get solicitanteAddress() {
@@ -304,7 +324,7 @@ class Aval {
   }
 
   set solicitanteAddress(value) {
-    this._solicitanteAddress = toChecksumAddress(value);
+    this._solicitanteAddress = value;
   }
 
   get comercianteAddress() {
@@ -312,7 +332,7 @@ class Aval {
   }
 
   set comercianteAddress(value) {
-    this._comercianteAddress = toChecksumAddress(value);
+    this._comercianteAddress = value;
   }
 
   get avaladoAddress() {
@@ -320,7 +340,7 @@ class Aval {
   }
 
   set avaladoAddress(value) {
-    this._avaladoAddress = toChecksumAddress(value);
+    this._avaladoAddress = value;
   }
 
   get avaldaoSignature() {

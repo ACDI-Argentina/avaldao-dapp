@@ -5,6 +5,7 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
+import Grid from '@material-ui/core/Grid'
 import ListItemText from '@material-ui/core/ListItemText'
 import StatusIndicator from 'components/StatusIndicator'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
@@ -62,28 +63,41 @@ class AvalItem extends Component {
                 <br></br>
                 <StatusIndicator status={aval.status}></StatusIndicator>
 
-                <ProfileSignature
-                  title={t("avaldao")}
-                  address={aval.avaldaoAddress}
-                  signature={aval.avaldaoSignature}
-                />
-                <ProfileSignature
-                  title={t("solicitante")}
-                  address={aval.solicitanteAddress}
-                  signature={aval.solicitanteSignature}
-                />
+                <Grid container sm={10} spacing={3}>
 
-                <ProfileSignature
-                  title={t("comerciante")}
-                  address={aval.comercianteAddress}
-                  signature={aval.comercianteSignature}
-                />
+                  <Grid item sm={12} md={3}>
+                    <ProfileSignature
+                      title={t("avaldao")}
+                      address={aval.avaldaoAddress}
+                      signature={aval.avaldaoSignature}
+                    />
+                  </Grid>
 
-                <ProfileSignature
-                  title={t("avalado")}
-                  address={aval.avaladoAddress}
-                  signature={aval.avaladoSignature}
-                />
+                  <Grid item sm={12} md={3}>
+                    <ProfileSignature
+                      title={t("solicitante")}
+                      address={aval.solicitanteAddress}
+                      signature={aval.solicitanteSignature}
+                    />
+                  </Grid>
+
+                  <Grid item sm={12} md={3}>
+                    <ProfileSignature
+                      title={t("comerciante")}
+                      address={aval.comercianteAddress}
+                      signature={aval.comercianteSignature}
+                    />
+                  </Grid>
+
+                  <Grid item sm={12} md={3}>
+                    <ProfileSignature
+                      title={t("avalado")}
+                      address={aval.avaladoAddress}
+                      signature={aval.avaladoSignature}
+                    />
+                  </Grid>
+                </Grid>
+
               </React.Fragment>
             }
           />
@@ -94,7 +108,7 @@ class AvalItem extends Component {
                 aria-label="completar"
                 color="primary"
                 onClick={this.goCompletar}
-                disabled={!aval.allowCompletar()}>
+                disabled={!aval.allowCompletar(currentUser)}>
                 <AssignmentTurnedInIcon />
               </IconButton>
             </Tooltip>
@@ -104,7 +118,7 @@ class AvalItem extends Component {
                 aria-label="firmar"
                 color="primary"
                 onClick={this.firmar}
-                disabled={!aval.allowFirmar(currentUser.address)}>
+                disabled={!aval.allowFirmar(currentUser)}>
                 <VpnKeyIcon />
               </IconButton>
             </Tooltip>
