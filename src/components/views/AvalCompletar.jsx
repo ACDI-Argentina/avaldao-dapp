@@ -12,7 +12,7 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js"
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
-import { completarAval, selectAvalByClientId } from '../../redux/reducers/avalesSlice'
+import { completarAval, selectAvalById } from '../../redux/reducers/avalesSlice'
 import { Button } from '@material-ui/core'
 import Aval from 'models/Aval'
 import config from 'configuration'
@@ -449,9 +449,9 @@ const styles = theme => ({
 });
 
 const mapStateToProps = (state, ownProps) => {
-  const avalClientId = ownProps.match.params.clientId;
+  const avalId = ownProps.match.params.id;
   return {
-    aval: selectAvalByClientId(state, avalClientId),
+    aval: selectAvalById(state, avalId),
     currentUser: selectCurrentUser(state)
   };
 }

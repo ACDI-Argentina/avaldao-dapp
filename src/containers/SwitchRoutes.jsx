@@ -251,7 +251,7 @@ const SwitchRoutes = ({ currentUser}) => (
         />
         <Route
             exact
-            path="/aval-completar/:clientId"
+            path="/aval-completar/:id"
             render={props => (
                 <AvalCompletar
                     key={currentUser ? currentUser.id : 0}

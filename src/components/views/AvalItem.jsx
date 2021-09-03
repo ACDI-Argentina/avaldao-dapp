@@ -34,7 +34,7 @@ class AvalItem extends Component {
 
   goCompletar() {
     const { aval } = this.props;
-    history.push(`/aval-completar/${aval.clientId}`);
+    history.push(`/aval-completar/${aval.id}`);
   }
 
   firmar() {

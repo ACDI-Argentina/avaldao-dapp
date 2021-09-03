@@ -188,8 +188,10 @@ class Aval {
     if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // El firmante es Avaldao.
       // Avaldao solo puede firmar una vez que el Solictante, Comerciante y Avalado hayan firmado.
-      return this.avaldaoSignature == undefined &&
-        this.solicitanteSignature != undefined &&
+      // En este punto el aval está Completo. 
+      // Puede darse la situación donde Avaldao ya haya firmado y falta ejecutar la firma en la blockchain,
+      // por lo que no se consulta por la firma de Avaldao.
+      return this.solicitanteSignature != undefined &&
         this.comercianteSignature != undefined &&
         this.avaladoSignature != undefined;
     }

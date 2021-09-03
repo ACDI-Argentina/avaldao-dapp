@@ -208,8 +208,24 @@ class AvalService {
                         avaladoSignature: aval.avaladoSignature,
                         avaldaoSignature: aval.avaldaoSignature
                     }).then(avalData => {
+
                         console.log('[AvalService] Se almacenaron las firmas off chain.', aval);
                         subscriber.next(aval);
+
+                        if (aval.isSignaturesComplete() === true) {
+                            // Todos los usuarios han firmado el aval.
+                            avaldaoContractApi.signAvalOnChain(aval, signerAddress).subscribe(
+                                aval => {
+                                    subscriber.next(aval);
+                                },
+                                error => {
+                                    console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
+                                    subscriber.error(error);
+                                });
+                        } else {
+                            // Faltan firmas para concretar la firma on chain.
+                        }
+
                     }).catch(error => {
                         console.error("[AvalService] Error almacenando las firmas off chain.", error);
                         subscriber.error(error);

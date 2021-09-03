@@ -256,27 +256,9 @@ class AvaldaoContractApi {
                     params: [signerAddress, data],
                     from: signerAddress
                 }).then(async result => {
-
                     console.log('[AvaldaoContractApi] Firma de aval off chain.', result);
-
                     aval.updateSignature(signerAddress, result);
-
                     subscriber.next(aval);
-
-                    if (aval.isSignaturesComplete() === true) {
-                        // Todos los usuarios han firmado el aval.
-                        this.signAvalOnChain(aval, signerAddress).subscribe(
-                            aval => {
-                                subscriber.next(aval);
-                            },
-                            error => {
-                                console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
-                                subscriber.error(error);
-                            });
-                    } else {
-                        // Faltan firmas para concretar la firma on chain.
-                    }
-
                 }).catch(error => {
                     console.error('[AvaldaoContractApi] Error firmando aval off chain.', error);
                     subscriber.error(error);

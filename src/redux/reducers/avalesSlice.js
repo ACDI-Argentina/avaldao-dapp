@@ -41,20 +41,13 @@ export const avalesSlice = createSlice({
       let aval = action.payload;
       aval.status = Aval.COMPLETANDO;
       const avalStore = aval.toStore();
-      let index = state.findIndex(a => a.clientId === avalStore.clientId);
+      let index = state.findIndex(a => a.id === avalStore.id);
       if (index != -1) {
         state[index] = avalStore;
       }
     },
     firmarAval: (state, action) => {
 
-    },
-    updateAvalByClientId: (state, action) => {
-      let avalStore = action.payload.toStore();
-      let index = state.findIndex(a => a.clientId === avalStore.clientId);
-      if (index != -1) {
-        state[index] = avalStore;
-      }
     },
     fetchAvalById: (state, action) => {
       // Solo se obtiene el estado actual.
@@ -78,7 +71,6 @@ export const {
   resetAvales,
   completarAval,
   firmarAval,
-  updateAvalByClientId,
   fetchAvalById,
   updateAvalById } = avalesSlice.actions;
 
@@ -87,8 +79,8 @@ export const selectAvales = state => {
     return new Aval(avalStore);
   });
 }
-export const selectAvalByClientId = (state, clientId) => {
-  let avalStore = state.avales.find(a => a.clientId === clientId);
+export const selectAvalById = (state, id) => {
+  let avalStore = state.avales.find(a => a.id === id);
   if (avalStore) {
     return new Aval(avalStore);
   }

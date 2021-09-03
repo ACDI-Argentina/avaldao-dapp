@@ -237,9 +237,11 @@ class Web3Manager {
       // Event accountsChanged
       provider.on("accountsChanged", (accounts) => {
         console.log('[Web3] Provider event: accountsChanged.', accounts);
-        if (accounts.length > 0) {
+        /*if (accounts.length > 0) {
           this.accountAddressSubject.next(accounts[0]);
-        }
+        }*/
+        // Al modificarse la cuenta, se desconocta el usuario actual.
+        this.disconnect();
       });
     }
   }
