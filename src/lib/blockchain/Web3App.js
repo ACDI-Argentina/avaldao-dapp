@@ -3,6 +3,7 @@ import ConnectionModalUtil from "./ConnectionModalsUtil";
 import config from '../../configuration';
 import BigNumber from 'bignumber.js';
 import { feathersClient } from '../feathersClient';
+import { feathersUsersClient } from '../feathersUsersClient';
 import Web3Utils from "./Web3Utils";
 import { history } from '../helpers';
 import { utils } from 'web3';
@@ -425,8 +426,10 @@ class Web3App extends React.Component {
     if (currentUser && currentUser.address && currentUser.authenticated) {
       return true;
     }
-    currentUser.authenticated = await this.authenticate(currentUser.address);
-    return currentUser.authenticated;
+    if(currentUser.address){
+      currentUser.authenticated = await this.authenticate(currentUser.address);
+      return currentUser.authenticated;
+    }
   };
 
   authenticate = async (address, redirectOnFail = true) => {
@@ -441,8 +444,10 @@ class Web3App extends React.Component {
       if (Web3Utils.addressEquals(address, payload.userId)) {
         await feathersClient.authenticate(); // authenticate the socket connection
         return true;
+      } else {
+        await feathersClient.logout();
+        await feathersUsersClient.logout();
       }
-      await feathersClient.logout();
     }
 
     try {

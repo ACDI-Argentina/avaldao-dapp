@@ -1,4 +1,4 @@
-import { feathersClient } from '../lib/feathersClient';
+import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
 import ErrorPopup from '../components/ErrorPopup';
 import ipfsService from '../ipfs/IpfsService';
 import crowdfundingContractApi from '../lib/blockchain/CrowdfundingContractApi';
