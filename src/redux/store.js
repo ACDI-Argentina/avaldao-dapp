@@ -25,7 +25,7 @@ import {
 } from './epics/milestonesEpics'
 import { fetchActivitiesByIdsEpic } from './epics/activitiesEpics'
 import { fetchCampaignsEpic, fetchCampaignEpic, saveCampaignEpic } from './epics/campaignsEpics'
-import { fetchAvalesOnChainEpic, fetchAvalesOffChainEpic, fetchAvalByBlockchainIdEpic, completarAvalEpic, firmarAvalEpic } from './epics/avalesEpics'
+import { fetchAvalesOnChainEpic, fetchAvalesOffChainEpic, fetchAvalByIdEpic, completarAvalEpic, firmarAvalEpic } from './epics/avalesEpics'
 import { fetchUsersEpic, fetchUserByAddressEpic } from './epics/usersEpics';
 import { fetchDonationsEpic, fetchDonationsByIdsEpic, addDonationEpic, transferDonationsEpic } from './epics/donationsEpics'
 import { fetchExchangeRatesEpic } from './epics/exchangeRatesEpics'
@@ -38,7 +38,7 @@ const rootEpic = combineEpics(
   fetchDacEpic,
   saveDacEpic,
   fetchCampaignsEpic,
-  fetchAvalByBlockchainIdEpic,
+  fetchAvalByIdEpic,
   saveCampaignEpic,
   fetchAvalesOnChainEpic,
   fetchAvalesOffChainEpic,

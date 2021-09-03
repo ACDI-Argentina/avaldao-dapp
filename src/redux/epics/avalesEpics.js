@@ -13,11 +13,11 @@ export const fetchAvalesOnChainEpic = action$ => action$.pipe(
   }))
 )
 
-export const fetchAvalByBlockchainIdEpic = action$ => action$.pipe(
-  ofType('avales/fetchAvalByBlockchainId'),
-  mergeMap(action => avalService.getAvalByBlockchainId(action.payload))),
+export const fetchAvalByIdEpic = action$ => action$.pipe(
+  ofType('avales/fetchAvalById'),
+  mergeMap(action => avalService.getAvalById(action.payload)),
   map(avales => ({
-    type: 'avales/updateAvalByBlockchainId',
+    type: 'avales/updateAvalById',
     payload: avales
   }))
 )
@@ -35,12 +35,8 @@ export const completarAvalEpic = action$ => action$.pipe(
   ofType('avales/completarAval'),
   mergeMap(action => avalService.completarAval(action.payload)),
   map(aval => ({
-    type: 'avales/updateAvalByClientId',
+    type: 'avales/updateAvalById',
     payload: aval
-  })),
-  catchError(error => of({
-    type: 'avales/deleteAvalByClientId',
-    payload: error.aval
   }))
 )
 
@@ -51,11 +47,7 @@ export const firmarAvalEpic = action$ => action$.pipe(
     action.payload.signerAddress
   )),
   map(aval => ({
-    type: 'avales/updateAvalByClientId',
+    type: 'avales/updateAvalById',
     payload: aval
-  })),
-  catchError(error => of({
-    type: 'avales/deleteAvalByClientId',
-    payload: error.aval
   }))
 )

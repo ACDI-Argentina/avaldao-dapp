@@ -9,8 +9,7 @@ class Aval {
 
   constructor(data = {}) {
     const {
-      blockchainId,
-      feathersId,
+      id,
       clientId = nanoid(),
       infoCid = '',
       proyecto = '',
@@ -29,8 +28,7 @@ class Aval {
       avaladoSignature,
       status = Aval.ACEPTADO.toStore()
     } = data;
-    this._blockchainId = blockchainId;
-    this._feathersId = feathersId;
+    this._id = id;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
     this._infoCid = infoCid;
@@ -56,8 +54,7 @@ class Aval {
    */
   toIpfs() {
     return {
-      blockchainId: this._blockchainId,
-      feathersId: this._feathersId,
+      id: this._id,
       proyecto: this._proyecto,
       proposito: this._proposito,
       causa: this._causa,
@@ -72,8 +69,7 @@ class Aval {
    */
   toStore() {
     return {
-      blockchainId: this.blockchainId,
-      feathersId: this._feathersId,
+      id: this._id,
       clientId: this._clientId,
       infoCid: this._infoCid,
       proyecto: this._proyecto,
@@ -231,20 +227,12 @@ class Aval {
       this.avaladoSignature !== undefined;
   }
 
-  get blockchainId() {
-    return this._blockchainId;
+  get id() {
+    return this._id;
   }
 
-  set blockchainId(value) {
-    this._blockchainId = value;
-  }
-
-  get feathersId() {
-    return this._feathersId;
-  }
-
-  set feathersId(value) {
-    this._feathersId = value;
+  set id(value) {
+    this._id = value;
   }
 
   get clientId() {

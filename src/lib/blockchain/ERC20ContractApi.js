@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { Observable } from 'rxjs'
-import transactionUtils from '../../redux/utils/transactionUtils'
+import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
 import web3Manager from './Web3Manager';
 import { ERC20Abi } from '@acdi/avaldao-contract';
 import TransactionTracker from './TransactionTracker';
@@ -48,7 +48,7 @@ class ERC20ContractApi {
 
             const gasPrice = await this.getGasPrice();
 
-            let transaction = transactionUtils.addTransaction({
+            let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: new BigNumber(gasEstimated),
                 gasPrice: gasPrice,
                 createdTitle: {
@@ -77,7 +77,7 @@ class ERC20ContractApi {
             const onTransactionHash =  async (hash) => { // La transacción ha sido creada.
                     
                 transaction.submit(hash);
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
 
                 if(this.web3.providerName == "WalletConnect"){
@@ -99,12 +99,12 @@ class ERC20ContractApi {
 
             const onConfirmation = (confNumber, receipt) => {
                 transaction.confirme();
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
                 subscriber.next(true);
             }
             const onError = function (error) {
                 transaction.fail();
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
                 subscriber.next(false);
             }
 

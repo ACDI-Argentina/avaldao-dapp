@@ -6,7 +6,7 @@ import { addTransaction, updateTransaction } from '../reducers/transactionsSlice
  * Clase utilitaria para el manejo de transacciones
  * a través de Redux.
  */
-class TransactionUtils {
+class TransactionStoreUtils {
 
   constructor() { }
 
@@ -53,4 +53,4 @@ class TransactionUtils {
   }
 }
 
-export default new TransactionUtils();
+export default new TransactionStoreUtils();

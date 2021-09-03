@@ -5,9 +5,10 @@ import Web3Utils from './Web3Utils'
 import web3Manager from './Web3Manager'
 import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
-import transactionUtils from '../../redux/utils/transactionUtils'
+import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
 import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
 import feathers from '@feathersjs/feathers';
+import avalStoreUtils from 'redux/utils/avalStoreUtils';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -84,7 +85,6 @@ class AvaldaoContractApi {
         // Se obtiene la información del aval desde IPFS.
         const avalOffChain = await avalIpfsConnector.download(infoCid);
         const {
-            feathersId,
             proyecto,
             proposito,
             causa,
@@ -93,8 +93,7 @@ class AvaldaoContractApi {
             monto } = avalOffChain;
 
         return new Aval({
-            blockchainId: parseInt(id),
-            feathersId: feathersId,
+            id: id,
             infoCid: infoCid,
             proyecto: proyecto,
             proposito: proposito,
@@ -111,29 +110,26 @@ class AvaldaoContractApi {
     }
 
     /**
-     * Almacena un Aval en el Smart Contract.
-     * 
-     * @param aval a almacenar.
+     * Completa el aval, almacenándolo en la blockchain.
+     *  
+     * @param aval a completar y almacenar.
      */
-    saveAval(aval) {
+    completarAval(aval) {
 
         return new Observable(async subscriber => {
 
-            let thisApi = this;
-
-            //const avalId = aval.blockchainId || 0; // 0 si es una aval nuevo.
-            // TODO Corregir al completar el circuito de solicitud y completar.
-            const avalId = 0; // 0 si es una aval nuevo.
-            const isNew = avalId === 0;
-
-            // Se almacena en IPFS toda la información del Aval.
-            let infoCid = await avalIpfsConnector.upload(aval);
-            aval.infoCid = infoCid;
-
-            const clientId = aval.clientId;
+            try {
+                // Se almacena en IPFS toda la información del Aval.
+                let infoCid = await avalIpfsConnector.upload(aval);
+                aval.infoCid = infoCid;
+            } catch (e) {
+                console.error('[AvaldaoContractApi] Error subiendo aval a IPFS.', e);
+                subscriber.error(e);
+                return;
+            }
 
             const method = this.avaldao.methods.saveAval(
-                avalId,
+                aval.id,
                 aval.infoCid,
                 aval.avaldaoAddress,
                 aval.comercianteAddress,
@@ -142,29 +138,29 @@ class AvaldaoContractApi {
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
             const gasPrice = await this.getGasPrice();
 
-            let transaction = transactionUtils.addTransaction({
+            let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
-                    key: isNew ? 'transactionCreatedTitleCreateAval' : 'transactionCreatedTitleUpdateAval'
+                    key: 'transactionCreatedTitleCompletarAval'
                 },
                 createdSubtitle: {
-                    key: isNew ? 'transactionCreatedSubtitleCreateAval' : 'transactionCreatedSubtitleUpdateAval'
+                    key: 'transactionCreatedSubtitleCompletarAval'
                 },
                 pendingTitle: {
-                    key: isNew ? 'transactionPendingTitleCreateAval' : 'transactionPendingTitleUpdateAval'
+                    key: 'transactionPendingTitleCompletarAval'
                 },
                 confirmedTitle: {
-                    key: isNew ? 'transactionConfirmedTitleCreateAval' : 'transactionConfirmedTitleUpdateAval'
+                    key: 'transactionConfirmedTitleCompletarAval'
                 },
                 confirmedDescription: {
-                    key: isNew ? 'transactionConfirmedDescriptionCreateAval' : 'transactionConfirmedDescriptionUpdateAval'
+                    key:  'transactionConfirmedDescriptionCompletarAval'
                 },
                 failuredTitle: {
-                    key: isNew ? 'transactionFailuredTitleCreateAval' : 'transactionFailuredTitleUpdateAval'
+                    key: 'transactionFailuredTitleCompletarAval'
                 },
                 failuredDescription: {
-                    key: isNew ? 'transactionFailuredDescriptionCreateAval' : 'transactionFailuredDescriptionUpdateAval'
+                    key: 'transactionFailuredDescriptionCompletarAval'
                 }
             });
 
@@ -175,7 +171,7 @@ class AvaldaoContractApi {
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
 
                 transaction.submit(hash);
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
                 aval.txHash = hash;
                 subscriber.next(aval);
@@ -183,24 +179,22 @@ class AvaldaoContractApi {
             }).once('confirmation', (confNumber, receipt) => {
 
                 transaction.confirme();
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
                 // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
                 // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                const idFromEvent = parseInt(receipt.events['SaveAval'].returnValues.id);
+                const avalIdEvent = receipt.events['SaveAval'].returnValues.id;
 
-                thisApi.getAvalById(idFromEvent).then(aval => {
-                    aval.clientId = clientId;
-                    subscriber.next(aval);
-                });
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(avalIdEvent);
 
             }).on('error', function (error) {
 
                 transaction.fail();
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
                 error.aval = aval;
-                console.error(`Error procesando transacción de almacenamiento de aval.`, error);
+                console.error(`Error procesando transacción para completar aval.`, error);
                 subscriber.error(error);
             });
         });
@@ -229,7 +223,7 @@ class AvaldaoContractApi {
                         { name: 'verifyingContract', type: 'address' }
                     ],
                     AvalSignable: [
-                        { name: 'id', type: 'uint256' },
+                        { name: 'id', type: 'string' },
                         { name: 'infoCid', type: 'string' },
                         { name: 'avaldao', type: 'address' },
                         { name: 'solicitante', type: 'address' },
@@ -245,7 +239,7 @@ class AvaldaoContractApi {
                     verifyingContract: config.avaldaoContractAddress
                 },
                 message: {
-                    id: aval.blockchainId,
+                    id: aval.id,
                     infoCid: aval.infoCid,
                     avaldao: aval.avaldaoAddress,
                     solicitante: aval.solicitanteAddress,
@@ -302,9 +296,6 @@ class AvaldaoContractApi {
      */
     signAvalOnChain(aval, signerAddress) {
 
-        const thisApi = this;
-        const clientId = aval.clientId;
-
         return new Observable(async subscriber => {
 
             const solicitanteSignatureR = "0x" + aval.solicitanteSignature.substring(2).substring(0, 64);
@@ -328,7 +319,7 @@ class AvaldaoContractApi {
             const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
 
             const method = this.avaldao.methods.signAval(
-                aval.blockchainId,
+                aval.id,
                 signatureV,
                 signatureR,
                 signatureS);
@@ -336,7 +327,7 @@ class AvaldaoContractApi {
             const gasEstimated = await this.estimateGas(method, signerAddress);
             const gasPrice = await this.getGasPrice();
 
-            let transaction = transactionUtils.addTransaction({
+            let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
@@ -369,7 +360,7 @@ class AvaldaoContractApi {
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
 
                 transaction.submit(hash);
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
                 aval.txHash = hash;
                 subscriber.next(aval);
@@ -377,25 +368,19 @@ class AvaldaoContractApi {
             }).once('confirmation', (confNumber, receipt) => {
 
                 transaction.confirme();
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
                 // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
                 // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                const idFromEvent = parseInt(receipt.events['SignAval'].returnValues.id);
+                const avalIdEvent = receipt.events['SignAval'].returnValues.id;
 
-                    quede acá!!
-                    Hay que cambiar esto para que busque el aval 
-                    compelto, desde la blockchain hasta feathers.
-
-                thisApi.getAvalById(idFromEvent).then(aval => {
-                    aval.clientId = clientId;
-                    subscriber.next(aval);
-                });
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(avalIdEvent);
 
             }).on('error', function (error) {
 
                 transaction.fail();
-                transactionUtils.updateTransaction(transaction);
+                transactionStoreUtils.updateTransaction(transaction);
 
                 error.aval = aval;
                 console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);

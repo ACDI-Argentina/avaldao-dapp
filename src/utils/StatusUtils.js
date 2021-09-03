@@ -13,7 +13,7 @@ class StatusUtils {
    * @param isLocal indica si el estado es local de la Dapp.
    * @returns objeto status
    */
-  static build(id = undefined, name, isLocal = false) {
+  static build(id, name, isLocal = false) {
     return new Status({ id, name, isLocal });
   }
 }

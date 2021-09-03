@@ -1,5 +1,5 @@
 import { store } from '../store';
-import { fetchAvalByBlockchainId } from '../reducers/avalesSlice';
+import { fetchAvalById } from '../reducers/avalesSlice';
 
 /**
  * Clase utilitaria para el manejo de avales a través de Redux.
@@ -11,11 +11,11 @@ class AvalStoreUtils {
   /**
    * Obtiene un aval desde el store de Redux.
    * 
-   * @param blockchainId id del aval en la blockchain
+   * @param id id del aval
    */
-  fetchAvalByBlockchainId(blockchainId) {
+  fetchAvalById(id) {
 
-    store.dispatch(fetchAvalByBlockchainId(blockchainId));
+    store.dispatch(fetchAvalById(id));
   }
 }
 

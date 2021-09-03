@@ -36,7 +36,7 @@ class Transaction extends Model {
     this._confirmedDescription = confirmedDescription;
     this._failuredTitle = failuredTitle;
     this._failuredDescription = failuredDescription;
-    this._status = StatusUtils.build(status.name, status.isLocal);
+    this._status = StatusUtils.build(status.id, status.name, status.isLocal);
   }
 
   /**
@@ -75,19 +75,19 @@ class Transaction extends Model {
   }
 
   static get CREATED() {
-    return StatusUtils.build('Created', true);
+    return StatusUtils.build(1, 'Created', true);
   }
 
   static get PENDING() {
-    return StatusUtils.build('Pending', true);
+    return StatusUtils.build(2, 'Pending', true);
   }
 
   static get CONFIRMED() {
-    return StatusUtils.build('Confirmed');
+    return StatusUtils.build(3, 'Confirmed');
   }
 
   static get FAILURED() {
-    return StatusUtils.build('Failured');
+    return StatusUtils.build(4, 'Failured');
   }
 
   get isCreated() {

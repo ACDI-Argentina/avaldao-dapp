@@ -29,7 +29,7 @@ export const avalesSlice = createSlice({
     mergeAvales: (state, action) => {
       for (let i = 0; i < action.payload.length; i++) {
         let avalStore = action.payload[i].toStore();
-        let index = state.findIndex(a => a.feathersId === avalStore.feathersId);
+        let index = state.findIndex(a => a.id === avalStore.id);
         if (index != -1) {
           state[index] = avalStore;
         } else {
@@ -56,19 +56,12 @@ export const avalesSlice = createSlice({
         state[index] = avalStore;
       }
     },
-    deleteAvalByClientId: (state, action) => {
-      let avalStore = action.payload.toStore();
-      let index = state.findIndex(a => a.clientId === avalStore.clientId);
-      if (index != -1) {
-        state.splice(index, 1);
-      }
-    },
-    fetchAvalByBlockchainId: (state, action) => {
+    fetchAvalById: (state, action) => {
       // Solo se obtiene el estado actual.
     },
-    updateAvalByBlockchainId: (state, action) => {
+    updateAvalById: (state, action) => {
       let avalStore = action.payload.toStore();
-      let index = state.findIndex(a => a.blockchainId === avalStore.blockchainId);
+      let index = state.findIndex(a => a.id === avalStore.id);
       if (index != -1) {
         state[index] = avalStore;
       } else {
@@ -86,8 +79,8 @@ export const {
   completarAval,
   firmarAval,
   updateAvalByClientId,
-  fetchAvalByBlockchainId,
-  updateAvalByBlockchainId } = avalesSlice.actions;
+  fetchAvalById,
+  updateAvalById } = avalesSlice.actions;
 
 export const selectAvales = state => {
   return state.avales.map(function (avalStore) {

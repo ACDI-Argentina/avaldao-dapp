@@ -4,7 +4,7 @@
 class Status {
 
   constructor({
-    id= undefined,
+    id,
     name = '',
     isLocal = false,
   } = {}) {

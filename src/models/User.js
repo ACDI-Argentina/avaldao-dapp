@@ -61,7 +61,7 @@ class User extends Model {
       this._tokenBalances = tokenBalances;
       this._registered = registered;
       this._authenticated = authenticated;
-      this._status = StatusUtils.build(status.name, status.isLocal);
+      this._status = StatusUtils.build(status.id, status.name, status.isLocal);
     }
   }
 
@@ -103,15 +103,15 @@ class User extends Model {
   }
 
   static get UNREGISTERED() {
-    return StatusUtils.build('Unregistered');
+    return StatusUtils.build(1, 'Unregistered');
   }
 
   static get REGISTERED() {
-    return StatusUtils.build('Registered');
+    return StatusUtils.build(2, 'Registered');
   }
 
   static get REGISTERING() {
-    return StatusUtils.build('Registering', true);
+    return StatusUtils.build(3, 'Registering', true);
   }
 
   /**
