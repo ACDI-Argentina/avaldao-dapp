@@ -4,6 +4,7 @@ import auth from '@feathersjs/authentication-client';
 import localforage from 'localforage';
 import io from 'socket.io-client';
 import config from '../configuration';
+import { feathersClient } from './feathersClient';
 
 const socket = io(config.feathersUsersConnection);
 
@@ -17,5 +18,11 @@ const client = feathers();
 client.configure(socketio(socket, feathersSocketOptions));
 client.configure(auth({ storage: localforage }));
 
-export const feathersUsersClient = client; //client.service("users").find();
+client.on('authenticated', auth => {
+    console.log(`feathers users clients authenticated!`)
+    console.log(auth);
+    feathersClient.authenticate();
+  }); 
+
+export const feathersUsersClient = client; 
 window.feathersUsersClient = feathersUsersClient;

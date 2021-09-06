@@ -6,7 +6,7 @@ import rest from '@feathersjs/rest-client';
 import localforage from 'localforage';
 import rx from 'feathers-reactive';
 import config from '../configuration';
-import { feathersUsersClient } from './feathersUsersClient';
+
 
 const restClient = rest(config.feathersConnection);
 const fetch = require('node-fetch');
@@ -41,7 +41,6 @@ export const feathersClient = feathers()
   )
   .on('authenticated', auth => {
     feathersRest.passport.setJWT(auth);
-    feathersUsersClient.authenticate();
   }); // set token on feathersRest whenever it is changed
 
 feathersClient.service('uploads').timeout = 10000;

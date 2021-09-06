@@ -438,20 +438,20 @@ class Web3App extends React.Component {
       strategy: 'web3',
       address,
     };
-    const accessToken = await feathersClient.passport.getJWT();
+    const accessToken = await feathersUsersClient.passport.getJWT();
     if (accessToken) {
-      const payload = await feathersClient.passport.verifyJWT(accessToken);
+      const payload = await feathersUsersClient.passport.verifyJWT(accessToken);
       if (Web3Utils.addressEquals(address, payload.userId)) {
-        await feathersClient.authenticate(); // authenticate the socket connection
+        await feathersUsersClient.authenticate(); // authenticate the socket connection
         return true;
       } else {
-        await feathersClient.logout();
         await feathersUsersClient.logout();
+        await feathersClient.logout();
       }
     }
 
     try {
-      await feathersClient.authenticate(authData);
+      await feathersUsersClient.authenticate(authData);
       return true;
     } catch (response) {
       // normal flow will issue a 401 with a challenge message we need to sign and send to
@@ -472,7 +472,7 @@ class Web3App extends React.Component {
             try {
               const signature = await web3.eth.personal.sign(msg, address);
               authData.signature = signature;
-              await feathersClient.authenticate(authData);
+              await feathersUsersClient.authenticate(authData);
               //React.swal.close();
               this.closeSignatureRequestModal();
               clearTimeout(timeOut);
