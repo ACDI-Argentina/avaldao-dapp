@@ -222,7 +222,7 @@ class Aval {
   /**
    * Determina si están las firmas de todos los usuarios.
    */
-  isSignaturesComplete() {
+  areSignaturesComplete() {
     return this.avaldaoSignature !== undefined &&
       this.solicitanteSignature !== undefined &&
       this.comercianteSignature !== undefined &&

@@ -265,7 +265,12 @@ const SwitchRoutes = ({ currentUser}) => (
             render={props => <Profile {...props} />}
         />
 
-        <Route path="/" render={props => <LandingPage {...props} />} />
+        {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
+        <Route path="/"
+            render={props => <Avales
+                key={currentUser ? currentUser.id : 0}
+                {...props}
+            />} />
 
         {/*<Route
             exact
