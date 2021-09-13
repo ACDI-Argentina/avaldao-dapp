@@ -17,7 +17,6 @@ import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
 import { history } from 'lib/helpers';
 import Avatar from 'react-avatar-edit'
-import ImageUtils from 'lib/blockchain/ImageUtils';
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
 
 /**
@@ -299,28 +298,27 @@ class UserProfile extends Component {
             noValidate
             autoComplete="off" >
 
-            <Grid container spacing={3}>
+            <Grid container spacing={2} style={{margin: "0px"}}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
                   {t('userProfileTitle')}
                 </Typography>
               </Grid>
-              <Grid item sm={12} md={4} >
-                <Typography variant="h6" component="h6">
-                  {t('userAvatar')}
-                </Typography>
-                {<Avatar
-                  img={avatarImg}
-                  label={t('userAvatarChoose')}
-                  width={avatarImgWidth}
-                  imageWidth={avatarImgWidth}
-                  cropRadius={avatarCropRadius}
-                  onCrop={this.onCrop}
-                  onClose={this.onClose}
-                  onBeforeFileLoad={this.onBeforeFileLoad}
-                />}
+              <Grid item sm={12} md={5} spacing={0}>
+                <div className={classes.avatarContainer}> 
+                  {<Avatar
+                    img={avatarImg}
+                    label={t('userAvatarChoose')}
+                    width={avatarImgWidth}
+                    imageWidth={avatarImgWidth}
+                    cropRadius={avatarCropRadius}
+                    onCrop={this.onCrop}
+                    onClose={this.onClose}
+                    onBeforeFileLoad={this.onBeforeFileLoad}
+                  />}
+                </div>
               </Grid>
-              <Grid container spacing={3} sm={12} md={8}>
+              <Grid container spacing={3} sm={12} md={7}>
                 <Grid item sm={12} md={12}>
                   <TextField
                     id="nameTextField"
@@ -336,7 +334,6 @@ class UserProfile extends Component {
                     error={nameError}
                     required
                     inputProps={{ maxlength: 42 }}
-                    variant="filled"
                   />
                 </Grid>
                 <Grid item sm={12} md={12}>
@@ -353,7 +350,6 @@ class UserProfile extends Component {
                     error={emailError}
                     required
                     inputProps={{ maxlength: 42 }}
-                    variant="filled"
                   />
                 </Grid>
                 <Grid item sm={12} md={12}>
@@ -370,7 +366,6 @@ class UserProfile extends Component {
                     error={urlError}
                     required
                     inputProps={{ maxlength: 42 }}
-                    variant="filled"
                   />
                 </Grid>
               </Grid>
@@ -428,10 +423,13 @@ const styles = theme => ({
     zIndex: "3"
   },
   mainRaised: {
-    margin: "-60px 30px 0px",
+    margin: "-60px 80px 0px",
     borderRadius: "6px",
     boxShadow:
-      "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
+      "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
+    "@media (max-width: 900px)": {
+      margin: "-60px 20px 0px",
+    }
   },
   socials: {
     marginTop: "0",
@@ -465,6 +463,12 @@ const styles = theme => ({
   button: {
     margin: theme.spacing(1),
   },
+  avatarContainer: {
+    "@media (max-width: 950px)": {
+      width: "100%",
+      marginLeft: "calc((100% - 300px) / 2)"
+    }
+  }
 });
 
 const mapStateToProps = (state, ownProps) => {

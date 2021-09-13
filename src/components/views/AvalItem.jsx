@@ -63,7 +63,7 @@ class AvalItem extends Component {
                 <br></br>
                 <StatusIndicator status={aval.status}></StatusIndicator>
 
-                <Grid container sm={10} spacing={3}>
+                <Grid container alignItems="center" style={{marginTop: "0.5em"}} sm={10} spacing={3}>
 
                   <Grid item sm={12} md={3}>
                     <ProfileSignature
@@ -124,7 +124,7 @@ class AvalItem extends Component {
             </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider component="li" />
       </React.Fragment>
     );
   }

@@ -46,7 +46,7 @@ class ProfileSignature extends Component {
 
         return (
             <ListItem>
-                <ListItemIcon>
+                <ListItemIcon style={{ minWidth: "unset", marginRight: "1em" }}>
                     <Tooltip title={signatureText}>
                         <VpnKeyIcon style={{ color: signatureColor }} />
                     </Tooltip>
