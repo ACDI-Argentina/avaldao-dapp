@@ -212,7 +212,7 @@ class AvalService {
                         console.log('[AvalService] Se almacenaron las firmas off chain.', aval);
                         subscriber.next(aval);
 
-                        if (aval.isSignaturesComplete() === true) {
+                        if (aval.areSignaturesComplete() === true) {
                             // Todos los usuarios han firmado el aval.
                             avaldaoContractApi.signAvalOnChain(aval, signerAddress).subscribe(
                                 aval => {

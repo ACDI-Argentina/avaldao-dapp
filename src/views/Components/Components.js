@@ -57,7 +57,7 @@ export default function Components(props) {
           <GridContainer>
             <GridItem>
               <div className={classes.brand}>
-                <h1 className={classes.title}>Give4Forest</h1>
+                <h1 className={classes.title}>Avaldao</h1>
                 <h3 className={classes.subtitle}>
                   Introducción...
                 </h3>
