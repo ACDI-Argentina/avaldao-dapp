@@ -18,11 +18,15 @@ const client = feathers();
 client.configure(socketio(socket, feathersSocketOptions));
 client.configure(auth({ storage: localforage }));
 
-client.on('authenticated', auth => {
+client.on('authenticated', async auth => {
     console.log(`feathers users clients authenticated!`)
-    console.log(auth);
-    feathersClient.authenticate();
-  }); 
+    try{
+        console.log(auth);
+        await feathersClient.authenticate(auth);
+    } catch(err){
+        console.log(err);
+    }
+}); 
 
 export const feathersUsersClient = client; 
 window.feathersUsersClient = feathersUsersClient;
