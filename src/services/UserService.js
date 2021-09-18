@@ -1,9 +1,6 @@
 import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
-import ErrorPopup from '../components/ErrorPopup';
-import ipfsService from '../ipfs/IpfsService';
 import crowdfundingContractApi from '../lib/blockchain/CrowdfundingContractApi';
 import { Observable } from 'rxjs';
-import BigNumber from 'bignumber.js';
 import User from '../models/User';
 import { ALL_ROLES } from '../constants/Role';
 import messageUtils from '../redux/utils/messageUtils'
@@ -172,10 +169,15 @@ class UserService {
     return new Observable(async subscriber => {
 
       try {
+        console.log(`[UserService] save user:`)
+        console.log(user)
 
         // Se almacena en IPFS toda la información del Usuario.
-        let infoCid = await userIpfsConnector.upload(user);
+        let infoCid = await userIpfsConnector.upload(user); 
         user.infoCid = infoCid;
+
+        console.log(infoCid)
+        
 
         if (user.registered === false) {
           // Nuevo usuario

@@ -18,6 +18,7 @@ class UserIpfsConnector {
       // Se almacena en IPFS el avatar del usuario.
       let avatarCid = await ipfsService.upload(user.avatar);
       user.avatarCid = avatarCid;
+      console.log(avatarCid)
     }
     // Se almacena en IPFS toda la información del usuario.
     let infoCid = await ipfsService.upload(user.toIpfs());

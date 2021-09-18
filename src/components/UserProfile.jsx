@@ -16,8 +16,12 @@ import { Button } from '@material-ui/core';
 import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
 import { history } from 'lib/helpers';
-import Avatar from 'react-avatar-edit'
+
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
+import Avatar from './Avatar/Avatar';
+//import Avatar from "react-avatar-edit";
+import { marginBottom } from 'styled-system';
+
 
 /**
  * Formulario de perfil de usuario.
@@ -70,9 +74,9 @@ class UserProfile extends Component {
 
   componentDidMount() {
     if (this.props.address) {
-        this.props.fetchUserByAddress(this.props.address);
+      this.props.fetchUserByAddress(this.props.address);
     }
-}
+  }
 
   async requestConnection(translate) {
 
@@ -102,29 +106,29 @@ class UserProfile extends Component {
     const { authenticateIfPossible } = this.context.modals.methods;
 
     const goHome = () => history.push('/');
-
-    if (!currentUser || !currentUser.address) {
-      const confirmation = await this.requestConnection(t);
-      if (confirmation) {
-        const connected = await loginAccount();
-        if (!connected) {
-          return goHome();
+    
+        if (!currentUser || !currentUser.address) {
+          const confirmation = await this.requestConnection(t);
+          if (confirmation) {
+            const connected = await loginAccount();
+            if (!connected) {
+              return goHome();
+            }
+          } else {
+            return goHome();
+          }
         }
-      } else {
-        return goHome();
-      }
-    }
-
-    authenticateIfPossible(this.props.currentUser)
-      .then(() => this.setState({ isLoading: false }))
-      .catch(err => {
-        if (err === 'noBalance') {
-          history.goBack();
-        } else {
-          this.setState({ isLoading: false });
-        }
-      });
-
+    
+        authenticateIfPossible(this.props.currentUser)
+          .then(() => this.setState({ isLoading: false }))
+          .catch(err => {
+            if (err === 'noBalance') {
+              history.goBack();
+            } else {
+              this.setState({ isLoading: false });
+            }
+          });
+     
     this.setFormValid();
   }
 
@@ -239,6 +243,9 @@ class UserProfile extends Component {
   }
 
   handleSubmit(event) {
+    event.preventDefault();
+
+
     const { currentUser } = this.props;
     let user = this.state.user;
     user.address = currentUser.address;
@@ -246,14 +253,13 @@ class UserProfile extends Component {
     user.email = this.state.email;
     user.url = this.state.url;
     user.avatar = this.state.avatarPreview;
-    this.setState({
-      isSaving: true,
-      user: user
-    }, () => {
+    
+    this.setState({isSaving: true,user: user}, () => {
+      
       this.props.registerCurrentUser(this.state.user);
-      history.push(`/`);
+      //history.push(`/`);
     });
-    event.preventDefault();
+    
   }
 
   cancel() {
@@ -271,7 +277,8 @@ class UserProfile extends Component {
       formValid,
       avatarImg,
       avatarImgWidth,
-      avatarCropRadius } = this.state;
+      avatarCropRadius
+    } = this.state;
     const { currentUser, classes, t, ...rest } = this.props;
 
     return (
@@ -298,15 +305,15 @@ class UserProfile extends Component {
             noValidate
             autoComplete="off" >
 
-            <Grid container spacing={2} style={{margin: "0px"}}>
+            <Grid container spacing={2} style={{ margin: "0px" }}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
                   {t('userProfileTitle')}
                 </Typography>
               </Grid>
-              <Grid item sm={12} md={5} spacing={0}>
-                <div className={classes.avatarContainer}> 
-                  {<Avatar
+              <Grid item xs={12} md={5} spacing={0}>
+                <div className={classes.avatarContainer}>
+                  {/*      {<Avatar
                     img={avatarImg}
                     label={t('userAvatarChoose')}
                     width={avatarImgWidth}
@@ -315,7 +322,16 @@ class UserProfile extends Component {
                     onCrop={this.onCrop}
                     onClose={this.onClose}
                     onBeforeFileLoad={this.onBeforeFileLoad}
-                  />}
+                  />}  */}
+
+                  <Avatar
+                    imageSrc={"https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"}
+                    onCropped={(cropped) => {
+                      this.setState({ avatarPreview:cropped })
+                      this.setFormValid();
+                    }}
+                  />
+
                 </div>
               </Grid>
               <Grid container spacing={3} sm={12} md={7}>
@@ -333,7 +349,7 @@ class UserProfile extends Component {
                     }}
                     error={nameError}
                     required
-                    inputProps={{ maxlength: 42 }}
+                    inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
                 <Grid item sm={12} md={12}>
@@ -349,7 +365,7 @@ class UserProfile extends Component {
                     }}
                     error={emailError}
                     required
-                    inputProps={{ maxlength: 42 }}
+                    inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
                 <Grid item sm={12} md={12}>
@@ -365,7 +381,7 @@ class UserProfile extends Component {
                     }}
                     error={urlError}
                     required
-                    inputProps={{ maxlength: 42 }}
+                    inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
               </Grid>
@@ -464,9 +480,13 @@ const styles = theme => ({
     margin: theme.spacing(1),
   },
   avatarContainer: {
+    width: "100%",
+    height: "100%",
+    minHeight: "325px",
+
     "@media (max-width: 950px)": {
-      width: "100%",
-      marginLeft: "calc((100% - 300px) / 2)"
+      display: "flex",
+      justifyContent: "center",
     }
   }
 });
