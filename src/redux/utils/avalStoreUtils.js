@@ -6,8 +6,6 @@ import { fetchAvalById } from '../reducers/avalesSlice';
  */
 class AvalStoreUtils {
 
-  constructor() { }
-
   /**
    * Obtiene un aval desde el store de Redux.
    * 

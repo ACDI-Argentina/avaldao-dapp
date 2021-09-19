@@ -2,12 +2,9 @@ import Aval from 'models/Aval';
 import { Observable } from 'rxjs'
 import { feathersClient } from '../lib/feathersClient';
 import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
+import BigNumber from 'bignumber.js';
 
 class AvalService {
-
-    constructor() {
-
-    }
 
     /**
      * Obtiene todos los Avales on chain.
@@ -111,8 +108,8 @@ class AvalService {
 
             // Para mantener la consistencia de los datos,
             // se sincronizan los datos en este punto si se requiere.
-            if (/*aval.blockchainId != avalData.blockchainId ||*/
-                aval.status.id != avalData.status) {
+            if (/*aval.blockchainId !== avalData.blockchainId ||*/
+                aval.status.id !== avalData.status) {
 
                 this.syncOffChainAvalWithOnChainData(aval).subscribe();
             }
@@ -243,7 +240,8 @@ class AvalService {
             causa: avalData.causa,
             adquisicion: avalData.adquisicion,
             beneficiarios: avalData.beneficiarios,
-            monto: avalData.monto,
+            monto: new BigNumber(avalData.monto),
+            cuotasCantidad: avalData.cuotasCantidad,
             avaldaoAddress: avalData.avaldaoAddress,
             solicitanteAddress: avalData.solicitanteAddress,
             comercianteAddress: avalData.comercianteAddress,

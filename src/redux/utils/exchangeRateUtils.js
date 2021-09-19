@@ -6,7 +6,6 @@ import { updateExchangeRate } from '../reducers/exchangeRatesSlice';
  */
 class ExchangeRateUtils {
 
-  constructor() { }
   /**
    * @param data datos del exchange rate. should be an instance of ExchangeRate
    */

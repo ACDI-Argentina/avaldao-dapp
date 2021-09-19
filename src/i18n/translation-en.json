@@ -33,6 +33,7 @@
     "avalAdquisicion": "Acquisition",
     "avalBeneficiarios": "Beneficiaries",
     "avalMonto": "Amount",
+    "avalCuotasCantidad": "Dues",
     "avalAvaldaoAddress": "Avaldao address",
     "avalSolicitanteAddress": "Applicant address",
     "avalComercianteAddress": "Seller address",
@@ -41,6 +42,7 @@
     "avalSolicitanteAddressHelper": "Applicant wallet address",
     "avalComercianteAddressHelper": "Seller wallet address",
     "avalAvaladoAddressHelper": "Endorsed wallet address",
+    "avalFondosInsuficientes": "Insufficient funds for the guarantee. {{diff}} more required.",
 
     "give4forest": "Give for forest",
 

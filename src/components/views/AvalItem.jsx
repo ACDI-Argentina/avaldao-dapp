@@ -5,6 +5,7 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
+import Alert from '@material-ui/lab/Alert';
 import Grid from '@material-ui/core/Grid'
 import ListItemText from '@material-ui/core/ListItemText'
 import StatusIndicator from 'components/StatusIndicator'
@@ -17,6 +18,10 @@ import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import ProfileSignature from './ProfileSignature'
 import { firmarAval } from '../../redux/reducers/avalesSlice'
+import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi'
+import BigNumber from 'bignumber.js';
+import FiatAmount from 'components/FiatAmount'
+import FiatUtils from 'utils/FiatUtils'
 
 /**
  * Item de un Aval
@@ -27,9 +32,17 @@ class AvalItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      availableFiatFund: new BigNumber(0)
     };
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
+  }
+
+  async componentDidMount() {
+    const availableFiatFund = await avaldaoContractApi.getAvailableFiatFund();
+    this.setState({
+      availableFiatFund: availableFiatFund
+    });
   }
 
   goCompletar() {
@@ -39,9 +52,6 @@ class AvalItem extends Component {
 
   firmar() {
     const { currentUser, aval, firmarAval, t } = this.props;
-    /*AvaldaoContractApi.sign(currentUser.address, aval).subscribe(aval => {
-      console.log('Firmado', aval);
-    });*/
     firmarAval({
       aval: aval,
       signerAddress: currentUser.address
@@ -51,6 +61,20 @@ class AvalItem extends Component {
   render() {
 
     const { currentUser, aval, classes, t } = this.props;
+    const { availableFiatFund } = this.state;
+
+    let allowFirmar = aval.allowFirmar(currentUser);
+    let alertMessage = null;
+    if (availableFiatFund.isLessThan(aval.monto)) {
+      const diff = aval.monto.minus(availableFiatFund);
+      alertMessage = t('avalFondosInsuficientes', {
+        diff: FiatUtils.format(diff)
+      });
+      if(aval.isAvaldao(currentUser)) {
+        // Cuando el usuario es Avaldao, no puede firmar si no hay fondos suficientes.
+        allowFirmar = false;
+      }
+    }
 
     return (
       <React.Fragment>
@@ -61,9 +85,11 @@ class AvalItem extends Component {
               <React.Fragment>
                 {aval.causa}
                 <br></br>
+                <FiatAmount amount={aval.monto}/>
+                <br></br>
                 <StatusIndicator status={aval.status}></StatusIndicator>
 
-                <Grid container alignItems="center" style={{marginTop: "0.5em"}} sm={10} spacing={3}>
+                <Grid container alignItems="center" style={{ marginTop: "0.5em" }} sm={10} spacing={3}>
 
                   <Grid item sm={12} md={3}>
                     <ProfileSignature
@@ -98,6 +124,10 @@ class AvalItem extends Component {
                   </Grid>
                 </Grid>
 
+                {(alertMessage &&
+                  <Alert severity="warning">{alertMessage}</Alert>
+                )}
+
               </React.Fragment>
             }
           />
@@ -118,7 +148,7 @@ class AvalItem extends Component {
                 aria-label="firmar"
                 color="primary"
                 onClick={this.firmar}
-                disabled={!aval.allowFirmar(currentUser)}>
+                disabled={!allowFirmar}>
                 <VpnKeyIcon />
               </IconButton>
             </Tooltip>

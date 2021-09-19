@@ -33,6 +33,7 @@
     "avalAdquisicion": "Adquisición",
     "avalBeneficiarios": "Beneficiarios",
     "avalMonto": "Monto",
+    "avalCuotasCantidad": "Cuotas",
     "avalAvaldaoAddress": "Dirección de Avaldao",
     "avalSolicitanteAddress": "Dirección del solicitante",
     "avalComercianteAddress": "Dirección del comerciante",
@@ -41,7 +42,7 @@
     "avalSolicitanteAddressHelper": "Dirección de la billetera del solicitante",
     "avalComercianteAddressHelper": "Dirección de la billetera del comerciante",
     "avalAvaladoAddressHelper": "Dirección de la billetera del avalado",
-    
+    "avalFondosInsuficientes": "Fondos insuficientes para el aval. Se requiren {{diff}} más.",
     
     
     
@@ -293,7 +294,7 @@
     "transactionFailuredDescriptionCompletarAval": "Ocurrió una falla completando de aval.",
 
     "transactionCreatedTitleSignAval": "Confirma tu firma del aval en la billetera",
-    "transactionCreatedSubtitleSignAval": "Verifique los detalles aquí - su firma del aval no puede ser reembolsada.",
+    "transactionCreatedSubtitleSignAval": "Verifique los detalles aquí - su firma del aval no puede ser reembolsado.",
     "transactionPendingTitleSignAval": "Firmando aval...",
     "transactionConfirmedTitleSignAval": "El aval ha sido firmado",
     "transactionConfirmedDescriptionSignAval": "El aval ha sido firmado.",

@@ -110,6 +110,21 @@ class AvaldaoContractApi {
     }
 
     /**
+     * Obtiene el monto disponible en moneda FIAT del fondo de garantía.
+     * 
+     * @returns monto disponible de garantía. 
+     */
+    async getAvailableFiatFund() {
+        let availableFiatFund = 0;
+        try {
+            availableFiatFund = await this.avaldao.methods.getAvailableFiatFund().call();
+        } catch (err) {
+            console.error("[AvaldaoContractApi] Fallo al consultar fondos de garantía.", err);
+        }
+        return new BigNumber(availableFiatFund);
+    }
+
+    /**
      * Completa el aval, almacenándolo en la blockchain.
      *  
      * @param aval a completar y almacenar.
@@ -133,7 +148,9 @@ class AvaldaoContractApi {
                 aval.infoCid,
                 aval.avaldaoAddress,
                 aval.comercianteAddress,
-                aval.avaladoAddress);
+                aval.avaladoAddress,
+                aval.monto,
+                aval.cuotasCantidad);
 
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
             const gasPrice = await this.getGasPrice();
@@ -154,7 +171,7 @@ class AvaldaoContractApi {
                     key: 'transactionConfirmedTitleCompletarAval'
                 },
                 confirmedDescription: {
-                    key:  'transactionConfirmedDescriptionCompletarAval'
+                    key: 'transactionConfirmedDescriptionCompletarAval'
                 },
                 failuredTitle: {
                     key: 'transactionFailuredTitleCompletarAval'

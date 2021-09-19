@@ -1,6 +1,7 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
 import Web3Utils from 'lib/blockchain/Web3Utils';
+import BigNumber from 'bignumber.js';
 
 /**
  * Modelo de Aval.
@@ -17,7 +18,8 @@ class Aval {
       causa = '',
       adquisicion = '',
       beneficiarios = '',
-      monto = '',
+      monto = new BigNumber(0),
+      cuotasCantidad = 1,
       avaldaoAddress,
       solicitanteAddress,
       comercianteAddress,
@@ -37,7 +39,8 @@ class Aval {
     this._causa = causa;
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
-    this._monto = monto;
+    this._monto = new BigNumber(monto);
+    this._cuotasCantidad = cuotasCantidad;
     this._avaldaoAddress = avaldaoAddress;
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
@@ -60,7 +63,8 @@ class Aval {
       causa: this._causa,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
-      monto: this._monto
+      monto: this._monto,
+      cuotasCantidad: this._cuotasCantidad
     };
   }
 
@@ -78,6 +82,7 @@ class Aval {
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
       monto: this._monto,
+      cuotasCantidad: this._cuotasCantidad,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -199,6 +204,17 @@ class Aval {
   }
 
   /**
+   * Determina si el usuario es Avalado del Aval.
+   * @param user usuario a determinar si es Avaldao.
+   */
+  isAvaldao(user) {
+    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Actualiza la firma del usuario firmante
    * @param signerAddress dirección del usuario firmante.
    * @param signature firma del usuario.
@@ -299,6 +315,14 @@ class Aval {
 
   set monto(value) {
     this._monto = value;
+  }
+
+  get cuotasCantidad() {
+    return this._cuotasCantidad;
+  }
+
+  set cuotasCantidad(value) {
+    this._cuotasCantidad = value;
   }
 
   get avaldaoAddress() {
