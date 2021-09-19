@@ -28,6 +28,10 @@ const Avatar = ({ imageSrc, onCropped }) => {
   const [zoom, setZoom] = useState(1);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
 
+  useEffect(() => {
+    setImage(imageSrc);
+  },[imageSrc])
+
   const onCropComplete = async (croppedArea, croppedAreaPixels) => {
     const croppedImage = await getCroppedImg(
       image,
@@ -45,6 +49,7 @@ const Avatar = ({ imageSrc, onCropped }) => {
       <CropContainer>
         <ImageSelector onImageSelected={setImage} />
         <Cropper
+          zoomSpeed={0.1}
           image={image}
           crop={crop}
           zoom={zoom}
