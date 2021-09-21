@@ -19,9 +19,7 @@ client.configure(socketio(socket, feathersSocketOptions));
 client.configure(auth({ storage: localforage }));
 
 client.on('authenticated', async auth => {
-    console.log(`feathers users clients authenticated!`)
     try{
-        console.log(auth);
         await feathersClient.authenticate(auth);
     } catch(err){
         console.log(err);
