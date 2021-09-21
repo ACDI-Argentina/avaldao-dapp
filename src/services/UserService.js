@@ -30,10 +30,8 @@ class UserService {
           const userData = await feathersClient.service('/users').get(address);
 
           let registered = true;
-          let name = userData.name;
-          let email = userData.email;
-          let url = userData.url;
-          let infoCid = userData.infoCid;
+          const { name, email, url, infoCid } = userData;
+          
           let avatarCid;
           let avatar;
 
@@ -52,13 +50,14 @@ class UserService {
           currentUser.avatarCid = avatarCid;
           currentUser.avatar = avatar;
 
+          console.log(`Loaded current user:`, currentUser)
           subscriber.next(currentUser);
 
           // Se cargan los roles del usuario desde el smart constract
-          getRoles(address).then(roles => {
+           getRoles(address).then(roles => {
             currentUser.roles = roles;
             subscriber.next(currentUser);
-          });
+          }); 
 
           authenticateFeathers(currentUser).then(authenticated => {
             currentUser.authenticated = authenticated;
@@ -169,17 +168,12 @@ class UserService {
     return new Observable(async subscriber => {
 
       try {
-        console.log(`[UserService] save user:`)
-        console.log(user)
-
         // Se almacena en IPFS toda la información del Usuario.
         let infoCid = await userIpfsConnector.upload(user); 
-        user.infoCid = infoCid;
-
-        console.log(infoCid)
-        
+        user.infoCid = infoCid;       
 
         if (user.registered === false) {
+          console.log(`create new user`)
           // Nuevo usuario
           await feathersClient.service('users').create(user.toFeathers());
           user.registered = true;
@@ -188,6 +182,7 @@ class UserService {
             text: `Su perfil ha sido registrado`
           });
         } else {
+          console.log(`update user`)
           // Actualización de usuario
           await feathersClient.service('users').update(user.address, user.toFeathers());
           messageUtils.addMessageSuccess({
