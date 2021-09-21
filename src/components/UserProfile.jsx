@@ -20,7 +20,6 @@ import { history } from 'lib/helpers';
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
 import Avatar from './Avatar/Avatar';
 //import Avatar from "react-avatar-edit";
-import { marginBottom } from 'styled-system';
 
 
 /**
@@ -33,12 +32,7 @@ class UserProfile extends Component {
     super(props);
 
     const { currentUser, t } = props;
-    const src = 'avatar.jpg'
-
-    const avatarImg = new Image();
-    avatarImg.src = currentUser.avatarCidUrl;
-
-
+        
     this.state = {
       name: currentUser.name,
       email: currentUser.email,
@@ -46,9 +40,8 @@ class UserProfile extends Component {
       avatar: null,
       avatarPreview: null,
       user: new User(currentUser),
-      avatarImg: avatarImg,
-      avatarImgWidth: 300,
-      avatarCropRadius: 150,
+      avatarImg: currentUser.avatarCidUrl,
+            
       nameHelperText: '',
       nameError: false,
       emailHelperText: '',
@@ -72,11 +65,48 @@ class UserProfile extends Component {
     this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this)
   }
 
-  componentDidMount() {
+  /* componentDidMount() {
     if (this.props.address) {
       this.props.fetchUserByAddress(this.props.address);
     }
+  } */
+
+   //Tener en cuenta que esto despues puede ir y buscar un rol o un balance, pero no por eso van a cambiar 
+  //los datos personales del usuario
+  async componentDidUpdate(prevProps, prevState) {
+    const userHasChanged = prevProps.currentUser !== this.props.currentUser;
+    const userHasAddress = this.props.currentUser?.address != undefined;
+    
+    if (userHasChanged) {
+      console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
+
+      const { name, email, url } = this.props.currentUser; 
+      window.user = this.props.currentUser;
+      const avatarCidUrl = this.props.currentUser?.avatarCidUrl;
+
+      const state = {};
+      if(name){
+        state.name = name;
+      }
+      if(email){
+        state.email = email;
+      }
+      if(url){
+        state.url = url;
+      }
+      if(avatarCidUrl){
+        console.log(`Avatar cid: ${avatarCidUrl}`);
+        //Generar una url usando el ipfs s
+        state.avatarImg = avatarCidUrl;
+        
+        
+      }
+
+      this.setState({...state, user: new User(this.props.currentUser)}) 
+    }
+
   }
+
 
   async requestConnection(translate) {
 
@@ -276,8 +306,6 @@ class UserProfile extends Component {
       urlError,
       formValid,
       avatarImg,
-      avatarImgWidth,
-      avatarCropRadius
     } = this.state;
     const { currentUser, classes, t, ...rest } = this.props;
 
@@ -322,10 +350,12 @@ class UserProfile extends Component {
                     onCrop={this.onCrop}
                     onClose={this.onClose}
                     onBeforeFileLoad={this.onBeforeFileLoad}
-                  />}  */}
+                  />}  
+                  "https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
+                  */}
 
                   <Avatar
-                    imageSrc={"https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"}
+                    imageSrc={avatarImg}
                     onCropped={(cropped) => {
                       this.setState({ avatarPreview:cropped })
                       this.setFormValid();
