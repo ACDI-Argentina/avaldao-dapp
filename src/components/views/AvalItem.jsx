@@ -32,16 +32,16 @@ class AvalItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      availableFiatFund: new BigNumber(0)
+      availableFundFiat: new BigNumber(0)
     };
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
   }
 
   async componentDidMount() {
-    const availableFiatFund = await avaldaoContractApi.getAvailableFiatFund();
+    const availableFundFiat = await avaldaoContractApi.getAvailableFundFiat();
     this.setState({
-      availableFiatFund: availableFiatFund
+      availableFundFiat: availableFundFiat
     });
   }
 
@@ -61,12 +61,12 @@ class AvalItem extends Component {
   render() {
 
     const { currentUser, aval, classes, t } = this.props;
-    const { availableFiatFund } = this.state;
+    const { availableFundFiat } = this.state;
 
     let allowFirmar = aval.allowFirmar(currentUser);
     let alertMessage = null;
-    if (availableFiatFund.isLessThan(aval.monto)) {
-      const diff = aval.monto.minus(availableFiatFund);
+    if (availableFundFiat.isLessThan(aval.monto)) {
+      const diff = aval.monto.minus(availableFundFiat);
       alertMessage = t('avalFondosInsuficientes', {
         diff: FiatUtils.format(diff)
       });

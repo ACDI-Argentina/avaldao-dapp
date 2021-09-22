@@ -114,14 +114,14 @@ class AvaldaoContractApi {
      * 
      * @returns monto disponible de garantía. 
      */
-    async getAvailableFiatFund() {
-        let availableFiatFund = 0;
+    async getAvailableFundFiat() {
+        let availableFundFiat = 0;
         try {
-            availableFiatFund = await this.avaldao.methods.getAvailableFiatFund().call();
+            availableFundFiat = await this.avaldao.methods.getAvailableFundFiat().call();
         } catch (err) {
             console.error("[AvaldaoContractApi] Fallo al consultar fondos de garantía.", err);
         }
-        return new BigNumber(availableFiatFund);
+        return new BigNumber(availableFundFiat);
     }
 
     /**
