@@ -74,7 +74,6 @@ class UserProfile extends Component {
   } */
 
 
-
   clearForm() {
     this.setState({
       name: "",
@@ -107,7 +106,8 @@ class UserProfile extends Component {
 
   }
 
-  async componentDidMount() {
+  async componentDidMount() {//Did mount, que pasa si el usuario no esta autenticado? no le va a pedir que se autentique?
+    console.log(`[UserProfile] componentDidMount`)
     const { history, currentUser, t } = this.props;
     const { loginAccount } = this.context;
     const { authenticateIfPossible } = this.context.modals.methods;
@@ -362,6 +362,8 @@ class UserProfile extends Component {
         <Parallax small image={require("assets/img/profile-default-bg.jpg")} />
 
         <div className={classNames(classes.main, classes.mainRaised)}>
+          <div>User registered: {this.state.registered? `true`:`false`}</div>
+          <div>User authenticated: {this.state.user.authenticated? `true`:`false`}</div>
 
           <form onSubmit={this.handleSubmit}
             className={classes.form}

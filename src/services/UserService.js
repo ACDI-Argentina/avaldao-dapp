@@ -60,7 +60,7 @@ class UserService {
           });  */
 
           authenticateFeathers(currentUser).then(authenticated => {
-            currentUser.authenticated = authenticated;
+            currentUser.authenticated = authenticated; //Muta el objeto y es accesible desde toda la aplicacion xq lo propaga con el store
             subscriber.next(currentUser);
           });
 
