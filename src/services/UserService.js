@@ -54,10 +54,10 @@ class UserService {
           subscriber.next(currentUser);
 
           // Se cargan los roles del usuario desde el smart constract
-           getRoles(address).then(roles => {
+       /*     getRoles(address).then(roles => {
             currentUser.roles = roles;
             subscriber.next(currentUser);
-          }); 
+          });  */
 
           authenticateFeathers(currentUser).then(authenticated => {
             currentUser.authenticated = authenticated;
@@ -65,7 +65,7 @@ class UserService {
           });
 
         } catch (error) {
-          console.error('[UserService] Error obteniendo datos del usuario desde Feathers.', error);
+          console.error('[UserService] Error obteniendo datos del usuario desde Feathers.', error.message);
           if (error.code === 404) {
             currentUser.registered = false;
             currentUser.name = undefined;
@@ -147,9 +147,10 @@ class UserService {
    * al mismo tiempo y cuando crezca la cantidad habrá problemas de performance.
    */
   loadUsersWithRoles() {
+    console.log(`[UserService] loadUsersWithRoles`)
     return new Observable(async subscriber => {
       const usersByGroups = [];
-      const { data: users } = await feathersClient.service("users").find();
+      const { data: users } = {data: []}// await feathersClient.service("users").find();
       for (const user of users) {
         const roles = await getRoles(user.address);
         usersByGroups.push(new User({ ...user, roles }));
@@ -173,16 +174,14 @@ class UserService {
         user.infoCid = infoCid;       
 
         if (user.registered === false) {
-          console.log(`create new user`)
           // Nuevo usuario
-          await feathersClient.service('users').create(user.toFeathers());
+          await feathersClient.service('users').update(user.address, user.toFeathers());
           user.registered = true;
           messageUtils.addMessageSuccess({
             title: 'Bienvenido!',
             text: `Su perfil ha sido registrado`
           });
         } else {
-          console.log(`update user`)
           // Actualización de usuario
           await feathersClient.service('users').update(user.address, user.toFeathers());
           messageUtils.addMessageSuccess({

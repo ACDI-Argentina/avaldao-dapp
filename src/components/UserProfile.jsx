@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from "classnames";
 import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
@@ -32,7 +33,7 @@ class UserProfile extends Component {
     super(props);
 
     const { currentUser, t } = props;
-        
+
     this.state = {
       name: currentUser.name,
       email: currentUser.email,
@@ -41,7 +42,8 @@ class UserProfile extends Component {
       avatarPreview: null,
       user: new User(currentUser),
       avatarImg: currentUser.avatarCidUrl,
-            
+
+      registered: false,
       nameHelperText: '',
       nameError: false,
       emailHelperText: '',
@@ -71,40 +73,15 @@ class UserProfile extends Component {
     }
   } */
 
-   //Tener en cuenta que esto despues puede ir y buscar un rol o un balance, pero no por eso van a cambiar 
-  //los datos personales del usuario
-  async componentDidUpdate(prevProps, prevState) {
-    const userHasChanged = prevProps.currentUser !== this.props.currentUser;
-    const userHasAddress = this.props.currentUser?.address != undefined;
-    
-    if (userHasChanged) {
-      console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
 
-      const { name, email, url } = this.props.currentUser; 
-      window.user = this.props.currentUser;
-      const avatarCidUrl = this.props.currentUser?.avatarCidUrl;
 
-      const state = {};
-      if(name){
-        state.name = name;
-      }
-      if(email){
-        state.email = email;
-      }
-      if(url){
-        state.url = url;
-      }
-      if(avatarCidUrl){
-        console.log(`Avatar cid: ${avatarCidUrl}`);
-        //Generar una url usando el ipfs s
-        state.avatarImg = avatarCidUrl;
-        
-        
-      }
-
-      this.setState({...state, user: new User(this.props.currentUser)}) 
-    }
-
+  clearForm() {
+    this.setState({
+      name: "",
+      email: "",
+      url: "",
+      user: new User(this.props.currentUser)
+    })
   }
 
 
@@ -136,30 +113,76 @@ class UserProfile extends Component {
     const { authenticateIfPossible } = this.context.modals.methods;
 
     const goHome = () => history.push('/');
-    
-        if (!currentUser || !currentUser.address) {
-          const confirmation = await this.requestConnection(t);
-          if (confirmation) {
-            const connected = await loginAccount();
-            if (!connected) {
-              return goHome();
-            }
-          } else {
-            return goHome();
-          }
+
+    if (!currentUser || !currentUser.address) {
+      const confirmation = await this.requestConnection(t);
+      if (confirmation) {
+        const connected = await loginAccount();
+        if (!connected) {
+          return goHome();
         }
-    
-        authenticateIfPossible(this.props.currentUser)
-          .then(() => this.setState({ isLoading: false }))
-          .catch(err => {
-            if (err === 'noBalance') {
-              history.goBack();
-            } else {
-              this.setState({ isLoading: false });
-            }
-          });
-     
+      } else {
+        return goHome();
+      }
+    }
+
+    authenticateIfPossible(this.props.currentUser)
+      .then(() => this.setState({ isLoading: false }))
+      .catch(err => {
+        if (err === 'noBalance') {
+          history.goBack();
+        } else {
+          this.setState({ isLoading: false });
+        }
+      });
+
     this.setFormValid();
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const userHasUpdated = prevProps.currentUser !== this.props.currentUser;
+
+    const prevAddress = prevProps.currentUser && prevProps.currentUser.address;
+    const nextAddress = this.props.currentUser && this.props.currentUser.address;
+
+    const userHasChanged = prevAddress && nextAddress && (prevAddress !== nextAddress);
+    const userHasDisconnected = this.props.currentUser.address === null && prevProps.currentUser.address != undefined;
+    
+    const statusHasChanged = this.props.currentUser.status !== prevProps.currentUser.status;
+    if (statusHasChanged) {
+      const isRegistering = this.props.currentUser?.status?.name === "Registering";
+      this.setState({ isSaving: isRegistering });
+    }
+
+
+    if (userHasDisconnected || userHasChanged) {
+      this.clearForm();
+    }
+
+
+    if (userHasUpdated) {
+      console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
+
+      const { name, email, url, registered } = this.props.currentUser;
+      const avatarCidUrl = this.props.currentUser?.avatarCidUrl;
+
+      const state = {};
+      if (name) {
+        state.name = name;
+      }
+      if (email) {
+        state.email = email;
+      }
+      if (url) {
+        state.url = url;
+      }
+      if (avatarCidUrl) {
+        state.avatarImg = avatarCidUrl;
+      }
+
+      this.setState({ ...state, registered, user: new User(this.props.currentUser) })
+    }
+
   }
 
   handleChangeName(event) {
@@ -272,9 +295,10 @@ class UserProfile extends Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  async handleSubmit(event) {
+    const { authenticateIfPossible } = this.context.modals.methods;
 
+    event.preventDefault();
 
     const { currentUser } = this.props;
     let user = this.state.user;
@@ -283,13 +307,23 @@ class UserProfile extends Component {
     user.email = this.state.email;
     user.url = this.state.url;
     user.avatar = this.state.avatarPreview;
-    
-    this.setState({isSaving: true,user: user}, () => {
-      
+
+    if (!currentUser.authenticated) {
+      const result = await authenticateIfPossible(this.props.currentUser);
+
+      if (!result) {
+        console.log("User not authenticated!"); //Throw error?
+        return;
+      }
+    }
+
+    this.setState({ isSaving: true, user: user }, () => {
+      console.log(`[UserProfile] handleSubmit`, user)
+
       this.props.registerCurrentUser(this.state.user);
       //history.push(`/`);
     });
-    
+
   }
 
   cancel() {
@@ -306,6 +340,7 @@ class UserProfile extends Component {
       urlError,
       formValid,
       avatarImg,
+      isSaving
     } = this.state;
     const { currentUser, classes, t, ...rest } = this.props;
 
@@ -357,15 +392,15 @@ class UserProfile extends Component {
                   <Avatar
                     imageSrc={avatarImg}
                     onCropped={(cropped) => {
-                      this.setState({ avatarPreview:cropped })
+                      this.setState({ avatarPreview: cropped })
                       this.setFormValid();
                     }}
                   />
 
                 </div>
               </Grid>
-              <Grid container spacing={3} sm={12} md={7}>
-                <Grid item sm={12} md={12}>
+              <Grid container spacing={3} xs={12} md={7}>
+                <Grid item xs={12} md={12}>
                   <TextField
                     id="nameTextField"
                     value={this.state.name}
@@ -382,7 +417,7 @@ class UserProfile extends Component {
                     inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
-                <Grid item sm={12} md={12}>
+                <Grid item xs={12} md={12}>
                   <TextField id="emailTextField"
                     value={this.state.email}
                     onChange={this.handleChangeEmail}
@@ -398,7 +433,7 @@ class UserProfile extends Component {
                     inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
-                <Grid item sm={12} md={12}>
+                <Grid item xs={12} md={12}>
                   <TextField id="urlTextField"
                     value={this.state.url}
                     onChange={this.handleChangeUrl}
@@ -415,20 +450,48 @@ class UserProfile extends Component {
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={!formValid}
-                  className={classes.button}>
-                  {t('save')}
-                </Button>
-                <Button
-                  onClick={this.cancel}
-                  className={classes.button}>
-                  {t('cancel')}
-                </Button>
+              <Grid 
+                container 
+                xs={12} 
+                md={4} 
+                justifyContent={"center"} 
+              >
+                <div style={{paddingTop: "25px", display: "flex", alignItems: "center" }}>
+                  <div style={{position:'relative'}}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={!formValid || isSaving}
+                      className={classes.button}>
+                      {t('save')}
+                    </Button>
+                    {isSaving && (
+                      <div style={{
+                          position:'absolute', 
+                          right:"0px",
+                          top: "0px",
+                          bottom: "0px", 
+                          left: "0px", 
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}>
+                        <CircularProgress 
+                          color={"primary"}
+                          size={"20px"}
+                          thickness={5}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <Button
+                    onClick={this.cancel}
+                    className={classes.button}>
+                    {t('cancel')}
+                  </Button>
+                </div>
               </Grid>
             </Grid>
 

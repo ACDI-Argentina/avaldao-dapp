@@ -423,6 +423,7 @@ class Web3App extends React.Component {
   }
 
   authenticateIfPossible = async (currentUser) => {
+    console.log(`[Web3App] authenticateIfPossible ${JSON.stringify(currentUser)}`)
     if (currentUser && currentUser.address && currentUser.authenticated) {
       return true;
     }
@@ -440,11 +441,14 @@ class Web3App extends React.Component {
     };
     const accessToken = await feathersUsersClient.passport.getJWT();
     if (accessToken) {
+      console.log(`[Web3App] authenticate ${address} using access token ${accessToken}`)
       const payload = await feathersUsersClient.passport.verifyJWT(accessToken);
       if (Web3Utils.addressEquals(address, payload.userId)) {
         await feathersUsersClient.authenticate(); // authenticate the socket connection
+        console.log(`[Web3App authenticated re using jwt`);
         return true;
       } else {
+        console.log(`[Web3App] web3 address doesn't match - logout`);
         await feathersUsersClient.logout();
         await feathersClient.logout();
       }
@@ -480,7 +484,7 @@ class Web3App extends React.Component {
             } catch (e) {
               console.error('Error firmando mensaje de autenticación', e);
               clearTimeout(timeOut);
-              history.goBack();
+              history.goBack(); 
               resolve(false);
             }
           });

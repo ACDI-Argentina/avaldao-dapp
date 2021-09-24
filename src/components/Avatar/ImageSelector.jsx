@@ -3,16 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import { faCamera } from '@fortawesome/free-solid-svg-icons'
-const SEditButton = styled.div`
-  position: absolute;
-  top:10px;
-  right:10px;
-  z-index:10;
-  background-color:white;
-  padding:0.25em 0.375em;
-  border-radius:50%;
-  cursor:pointer;
-`
+import { SEditButton } from './styled';
 
 const ImageSelector = ({ onImageSelected }) => {
   const inputRef = useRef();
@@ -21,7 +12,7 @@ const ImageSelector = ({ onImageSelected }) => {
       <SEditButton 
         title="Subir una nueva foto"
         onClick={() => { inputRef.current.click() }}>
-        <FontAwesomeIcon fixedWidth={true} icon={faCamera} />
+          <FontAwesomeIcon fixedWidth={true} icon={faCamera} />
       </SEditButton>
       <input
         ref={inputRef}

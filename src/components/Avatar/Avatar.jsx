@@ -5,16 +5,23 @@ import Slider from '@material-ui/core/Slider'
 import ImageSelector from './ImageSelector';
 import getCroppedImg from './cropImage';
 import { useEffect } from 'react';
+import { Absolute } from './styled';
+import { IconButton } from './buttons';
+import { faCheck, faPencilAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 
-const CropWrapper = styled.div`
+const AvatarWrapper = styled.div`
   position:relative;
   height:100%;
   width:75%;
   box-sizing:border-box;
-  
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0px;
+
 `
-const CropContainer = styled.div`
+const AvatarContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -22,7 +29,23 @@ const CropContainer = styled.div`
   bottom: 0px;
 `
 
+const AvatarImage = styled.img`
+  border-radius: 50%;
+  width: 325px;
+  height: 325px;
+`
+const ImageWrapper = styled.div`
+
+`
+const ImageContainer = styled.div`
+  position:relative;
+  width: 325px;
+  height: 325px;
+`
+
+
 const Avatar = ({ imageSrc, onCropped }) => {
+  const [editing, setEditing] = useState(false);
   const [image, setImage] = useState(imageSrc);
   const [croppedImage, setCroppedImage] = useState(imageSrc); /* Cropped image as base64 */
   const [zoom, setZoom] = useState(1);
@@ -30,7 +53,7 @@ const Avatar = ({ imageSrc, onCropped }) => {
 
   useEffect(() => {
     setImage(imageSrc);
-  },[imageSrc])
+  }, [imageSrc])
 
   const onCropComplete = async (croppedArea, croppedAreaPixels) => {
     const croppedImage = await getCroppedImg(
@@ -38,33 +61,74 @@ const Avatar = ({ imageSrc, onCropped }) => {
       croppedAreaPixels,
     );
     setCroppedImage(croppedImage);
+    typeof onCropped === "function" && onCropped(croppedImage);
+
   }
 
-  useEffect(() => {
-    typeof onCropped === "function" && onCropped(croppedImage);
-  },[croppedImage])
 
   return (
-    <CropWrapper>
-      <CropContainer>
-        <ImageSelector onImageSelected={setImage} />
-        <Cropper
-          zoomSpeed={0.1}
-          image={image}
-          crop={crop}
-          zoom={zoom}
-          aspect={1}
-          cropShape="round"
-          showGrid={false}
-          onCropChange={setCrop}
-          onCropComplete={onCropComplete}
-          onZoomChange={setZoom}
-          style={{
-            containerStyle: { backgroundColor: "#656565" }
-          }}
-        />
-      </CropContainer>
-    </CropWrapper>
+    <AvatarWrapper>
+      {editing ? (
+        <AvatarContainer>
+          <ImageSelector onImageSelected={setImage} />
+          <Absolute top="55px" right="10px">
+            <IconButton
+              icon={faCheck}
+              title="Ok"
+              onClick={() => {
+                setImage(croppedImage);
+                setEditing(false);
+              }}
+            />
+          </Absolute>
+          <Absolute top="100px" right="10px">
+            <IconButton
+              icon={faTimes}
+              title="Cancelar"
+              onClick={() => setEditing(false)}
+            />
+          </Absolute>
+          <Cropper
+            zoomSpeed={0.1}
+            image={image}
+            crop={crop}
+            zoom={zoom}
+            aspect={1}
+            cropShape="round"
+            showGrid={false}
+            onCropChange={setCrop}
+            onCropComplete={onCropComplete}
+            onZoomChange={setZoom}
+            style={{
+              containerStyle: { backgroundColor: "#656565" }
+            }}
+          />
+        </AvatarContainer>
+      ) : (
+        <ImageWrapper>
+          <ImageContainer>
+            <AvatarImage src={image} />
+            <Absolute right="8%" bottom="8%">
+              <IconButton
+                style={{
+                  container:{
+                    backgroundColor:"#737373",
+                    boxShadow: "1px 1px 10px 1px #737373"
+                  },
+                  icon:{
+                    color:"#EEEEEE"
+                  }
+                }}
+                icon={faPencilAlt}
+                title="Editar"
+                onClick={() => setEditing(true)}
+              />
+            </Absolute>
+          </ImageContainer>
+
+        </ImageWrapper>
+      )}
+    </AvatarWrapper>
 
   )
 }

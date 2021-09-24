@@ -86,10 +86,10 @@ class Application extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAvalesOnChain();
-    this.props.fetchAvalesOffChain();
+    //this.props.fetchAvalesOnChain();
+    //this.props.fetchAvalesOffChain();
     this.props.fetchUsers();
-    this.props.fetchExchangeRates();
+    //this.props.fetchExchangeRates();
     initExchangeRateListener();
   }
 
