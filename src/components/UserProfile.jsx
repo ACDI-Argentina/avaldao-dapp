@@ -62,17 +62,7 @@ class UserProfile extends Component {
     this.handleChangeAvatar = this.handleChangeAvatar.bind(this);
     this.setFormValid = this.setFormValid.bind(this);
 
-    this.onCrop = this.onCrop.bind(this)
-    this.onClose = this.onClose.bind(this)
-    this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this)
   }
-
-  /* componentDidMount() {
-    if (this.props.address) {
-      this.props.fetchUserByAddress(this.props.address);
-    }
-  } */
-
 
   clearForm() {
     this.setState({
@@ -106,8 +96,7 @@ class UserProfile extends Component {
 
   }
 
-  async componentDidMount() {//Did mount, que pasa si el usuario no esta autenticado? no le va a pedir que se autentique?
-    console.log(`[UserProfile] componentDidMount`)
+  async componentDidMount() {
     const { history, currentUser, t } = this.props;
     const { loginAccount } = this.context;
     const { authenticateIfPossible } = this.context.modals.methods;
@@ -147,18 +136,26 @@ class UserProfile extends Component {
 
     const userHasChanged = prevAddress && nextAddress && (prevAddress !== nextAddress);
     const userHasDisconnected = this.props.currentUser.address === null && prevProps.currentUser.address != undefined;
-    
+
+    if (userHasDisconnected || userHasChanged) {
+      this.clearForm();
+    }
+
     const statusHasChanged = this.props.currentUser.status !== prevProps.currentUser.status;
     if (statusHasChanged) {
       const isRegistering = this.props.currentUser?.status?.name === "Registering";
       this.setState({ isSaving: isRegistering });
     }
 
+    const wasSaving = prevProps.currentUser?.status?.name === "Registering";
+    const isRegistered = this.props.currentUser?.status?.name === "Registered";
 
-    if (userHasDisconnected || userHasChanged) {
-      this.clearForm();
+    if(wasSaving && isRegistered){
+      setTimeout(() => history.push("/"), 1000);
     }
 
+
+    
 
     if (userHasUpdated) {
       console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
@@ -253,27 +250,6 @@ class UserProfile extends Component {
     });
   }
 
-  onClose() {
-    this.setState({ avatarPreview: null })
-  }
-
-  onCrop(avatarPreview) {
-    if (avatarPreview) {
-      this.setState({ avatarPreview })
-    }
-  }
-
-  onBeforeFileLoad(elem) {
-    if (elem.target.files[0].size > 71680) {
-      //alert("File is too big!");
-      //elem.target.value = "";
-    };
-
-    this.setState({
-      avatarCropRadius: undefined
-    })
-  }
-
   setFormValid() {
     const { name, email, url } = this.state;
     let formValid = true;
@@ -302,7 +278,9 @@ class UserProfile extends Component {
 
     const { currentUser } = this.props;
     let user = this.state.user;
+
     user.address = currentUser.address;
+
     user.name = this.state.name;
     user.email = this.state.email;
     user.url = this.state.url;
@@ -331,7 +309,8 @@ class UserProfile extends Component {
   }
 
   render() {
-    const { user,
+    const {
+      user,
       nameHelperText,
       nameError,
       emailHelperText,
@@ -376,33 +355,24 @@ class UserProfile extends Component {
                   {t('userProfileTitle')}
                 </Typography>
               </Grid>
-              <Grid item xs={12} md={5} spacing={0}>
+              <Grid item xs={12} md={5}>  
                 <div className={classes.avatarContainer}>
-                  {/*      {<Avatar
-                    img={avatarImg}
-                    label={t('userAvatarChoose')}
-                    width={avatarImgWidth}
-                    imageWidth={avatarImgWidth}
-                    cropRadius={avatarCropRadius}
-                    onCrop={this.onCrop}
-                    onClose={this.onClose}
-                    onBeforeFileLoad={this.onBeforeFileLoad}
-                  />}  
-                  "https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
-                  */}
-
                   <Avatar
                     imageSrc={avatarImg}
                     onCropped={(cropped) => {
+                      console.log(`SET AVATAR PREVIEW`)
                       this.setState({ avatarPreview: cropped })
                       this.setFormValid();
+                    }}
+                    labels={{
+                      choose:t('userAvatarChoose')
                     }}
                   />
 
                 </div>
               </Grid>
-              <Grid container spacing={3} xs={12} md={7}>
-                <Grid item xs={12} md={12}>
+              <Grid container item spacing={3} xs={12} md={7}>
+                <Grid item xs={12}>
                   <TextField
                     id="nameTextField"
                     value={this.state.name}
@@ -419,7 +389,7 @@ class UserProfile extends Component {
                     inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12}>
                   <TextField id="emailTextField"
                     value={this.state.email}
                     onChange={this.handleChangeEmail}
@@ -435,7 +405,7 @@ class UserProfile extends Component {
                     inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12}>
                   <TextField id="urlTextField"
                     value={this.state.url}
                     onChange={this.handleChangeUrl}
@@ -452,8 +422,10 @@ class UserProfile extends Component {
                   />
                 </Grid>
               </Grid>
+
               <Grid
                 container
+                item
                 xs={12}
                 md={4}
                 justifyContent={"center"}
