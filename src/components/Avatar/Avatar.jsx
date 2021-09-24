@@ -55,6 +55,13 @@ const Avatar = ({ imageSrc, onCropped }) => {
     setImage(imageSrc);
   }, [imageSrc])
 
+  
+  useEffect(() => {
+    /* Reset zoom and crop when image changes */
+      setZoom(1);
+      setCrop({ x: 0, y: 0 });
+  }, [image])
+
   const onCropComplete = async (croppedArea, croppedAreaPixels) => {
     const croppedImage = await getCroppedImg(
       image,
@@ -62,7 +69,6 @@ const Avatar = ({ imageSrc, onCropped }) => {
     );
     setCroppedImage(croppedImage);
     typeof onCropped === "function" && onCropped(croppedImage);
-
   }
 
 
