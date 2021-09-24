@@ -423,7 +423,6 @@ class Web3App extends React.Component {
   }
 
   authenticateIfPossible = async (currentUser) => {
-    console.log(`[Web3App] authenticateIfPossible ${JSON.stringify(currentUser)}`)
     if (currentUser && currentUser.address && currentUser.authenticated) {
       return true;
     }
