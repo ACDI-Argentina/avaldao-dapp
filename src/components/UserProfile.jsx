@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from "classnames";
 import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
@@ -20,7 +20,7 @@ import { history } from 'lib/helpers';
 
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
 import Avatar from './Avatar/Avatar';
-//import Avatar from "react-avatar-edit";
+import LoadingOverlay from './Loading/LoadingOverlay';
 
 
 /**
@@ -452,42 +452,23 @@ class UserProfile extends Component {
                   />
                 </Grid>
               </Grid>
-              <Grid 
-                container 
-                xs={12} 
-                md={4} 
-                justifyContent={"center"} 
+              <Grid
+                container
+                xs={12}
+                md={4}
+                justifyContent={"center"}
               >
-                <div style={{paddingTop: "25px", display: "flex", alignItems: "center" }}>
-                  <div style={{position:'relative'}}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                      disabled={!formValid || isSaving}
-                      className={classes.button}>
-                      {t('save')}
-                    </Button>
-                    {isSaving && (
-                      <div style={{
-                          position:'absolute', 
-                          right:"0px",
-                          top: "0px",
-                          bottom: "0px", 
-                          left: "0px", 
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center"
-                        }}>
-                        <CircularProgress 
-                          color={"primary"}
-                          size={"20px"}
-                          thickness={5}
-                        />
-                      </div>
-                    )}
-                  </div>
+                <div style={{ paddingTop: "25px", display: "flex", alignItems: "center" }}>
+                    <LoadingOverlay loading={isSaving}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={!formValid || isSaving}
+                        className={classes.button}>
+                        {t('save')}
+                      </Button>
+                    </LoadingOverlay>
                   <Button
                     onClick={this.cancel}
                     className={classes.button}>
