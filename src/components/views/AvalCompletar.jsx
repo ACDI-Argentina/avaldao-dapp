@@ -179,13 +179,13 @@ class AvalCompletar extends Component {
       aval: aval
     }, () => {
       this.props.completarAval(this.state.aval);
-      history.push(`/avales`);
+      history.push(`/`);
     });
     event.preventDefault();
   }
 
   cancel() {
-    history.push(`/avales`);
+    history.push(`/`);
   }
 
   render() {
