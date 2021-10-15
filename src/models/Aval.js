@@ -12,6 +12,7 @@ class Aval {
     const {
       id,
       clientId = nanoid(),
+      address,
       infoCid = '',
       proyecto = '',
       proposito = '',
@@ -20,10 +21,10 @@ class Aval {
       beneficiarios = '',
       monto = new BigNumber(0),
       cuotasCantidad = 1,
-      avaldaoAddress,
       solicitanteAddress,
       comercianteAddress,
       avaladoAddress,
+      avaldaoAddress,
       avaldaoSignature,
       solicitanteSignature,
       comercianteSignature,
@@ -33,6 +34,7 @@ class Aval {
     this._id = id;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
+    this._address = address;
     this._infoCid = infoCid;
     this._proyecto = proyecto;
     this._proposito = proposito;
@@ -41,14 +43,14 @@ class Aval {
     this._beneficiarios = beneficiarios;
     this._monto = new BigNumber(monto);
     this._cuotasCantidad = cuotasCantidad;
-    this._avaldaoAddress = avaldaoAddress;
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
     this._avaladoAddress = avaladoAddress;
-    this._avaldaoSignature = avaldaoSignature;
+    this._avaldaoAddress = avaldaoAddress;
     this._solicitanteSignature = solicitanteSignature;
     this._comercianteSignature = comercianteSignature;
     this._avaladoSignature = avaladoSignature;
+    this._avaldaoSignature = avaldaoSignature;
     this._status = StatusUtils.build(status.id, status.name, status.isLocal);;
   }
 
@@ -75,6 +77,7 @@ class Aval {
     return {
       id: this._id,
       clientId: this._clientId,
+      address: this._address,
       infoCid: this._infoCid,
       proyecto: this._proyecto,
       proposito: this._proposito,
@@ -259,6 +262,14 @@ class Aval {
 
   set clientId(value) {
     this._clientId = value;
+  }
+
+  get address() {
+    return this._address;
+  }
+
+  set address(value) {
+    this._address = value;
   }
 
   get infoCid() {

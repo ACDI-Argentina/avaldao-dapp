@@ -6,9 +6,10 @@ import web3Manager from './Web3Manager'
 import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
-import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
+import { AvaldaoAbi, AvalAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
 import feathers from '@feathersjs/feathers';
 import avalStoreUtils from 'redux/utils/avalStoreUtils';
+import { utils } from 'web3';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -74,38 +75,45 @@ class AvaldaoContractApi {
      * @returns Aval cuyo Id coincide con el especificado.
      */
     async getAvalById(id) {
-        const avalOnChain = await this.avaldao.methods.getAval(id).call();
+
         // Se obtiene la información del aval desde la Blockchain.
-        const { infoCid,
-            avaldao,
-            solicitante,
-            comerciante,
-            avalado,
-            status } = avalOnChain;
+        const avalAddress = await this.avaldao.methods.getAvalAddress(id).call();
+        const aval = new this.web3.eth.Contract(AvalAbi, avalAddress);
+        const avalOnChain = {
+            id: id,
+            infoCid: await aval.methods.infoCid().call(),
+            avaldao: await aval.methods.avaldao().call(),
+            solicitante: await aval.methods.solicitante().call(),
+            comerciante: await aval.methods.comerciante().call(),
+            avalado: await aval.methods.avalado().call(),
+            montoFiat: await aval.methods.montoFiat().call(),
+            cuotasCantidad: await aval.methods.cuotasCantidad().call(),
+            cuotas: [],
+            status: await aval.methods.status().call()
+        };
+        for (let cuotaNumero = 1; cuotaNumero <= avalOnChain.cuotasCantidad; cuotaNumero++) {
+            const cuota = await aval.methods.getCuotaByNumero(cuotaNumero);
+            avalOnChain.cuotas.push(cuota);
+        }
+
         // Se obtiene la información del aval desde IPFS.
-        const avalOffChain = await avalIpfsConnector.download(infoCid);
-        const {
-            proyecto,
-            proposito,
-            causa,
-            adquisicion,
-            beneficiarios,
-            monto } = avalOffChain;
+        const avalOffChain = await avalIpfsConnector.download(avalOnChain.infoCid);
 
         return new Aval({
             id: id,
-            infoCid: infoCid,
-            proyecto: proyecto,
-            proposito: proposito,
-            causa: causa,
-            adquisicion: adquisicion,
-            beneficiarios: beneficiarios,
-            monto: monto,
-            avaldaoAddress: avaldao,
-            solicitanteAddress: solicitante,
-            comercianteAddress: comerciante,
-            avaladoAddress: avalado,
-            status: Aval.mapAvalStatus(parseInt(status))
+            address: avalAddress,
+            infoCid: avalOnChain.infoCid,
+            proyecto: avalOffChain.proyecto,
+            proposito: avalOffChain.proposito,
+            causa: avalOffChain.causa,
+            adquisicion: avalOffChain.adquisicion,
+            beneficiarios: avalOffChain.beneficiarios,
+            monto: avalOnChain.montoFiat,
+            solicitanteAddress: avalOnChain.solicitante,
+            comercianteAddress: avalOnChain.comerciante,
+            avaladoAddress: avalOnChain.avalado,
+            avaldaoAddress: avalOnChain.avaldao,
+            status: Aval.mapAvalStatus(parseInt(avalOnChain.status))
         });
     }
 
@@ -143,14 +151,74 @@ class AvaldaoContractApi {
                 return;
             }
 
+            const users = [aval.solicitanteAddress,
+            aval.comercianteAddress,
+            aval.avaladoAddress,
+            aval.avaldaoAddress];
+
+            // Cuota 1: Vencimiento Thursday, July 1, 2021 12:00:00 AM / Desbloqueo Saturday, July 10, 2021 12:00:00 AM
+            const cuota1 = {
+                numero: 1,
+                montoFiat: 1000,
+                timestampVencimiento: 1625097600,
+                timestampDesbloqueo: 1625875200
+            };
+
+            // Cuota 2: Vencimiento Sunday, August 1, 2021 12:00:00 AM / Desbloqueo Tuesday, August 10, 2021 12:00:00 AM
+            const cuota2 = {
+                numero: 2,
+                montoFiat: 1000,
+                timestampVencimiento: 1627776000,
+                timestampDesbloqueo: 1628553600
+            };
+
+            // Cuota 3: Wednesday, September 1, 2021 12:00:00 AM / Desbloqueo Friday, September 10, 2021 12:00:00 AM
+            const cuota3 = {
+                numero: 3,
+                montoFiat: 1000,
+                timestampVencimiento: 1630454400,
+                timestampDesbloqueo: 1631232000
+            };
+
+            // Cuota 4: Vencimiento Friday, October 1, 2021 12:00:00 AM / Desbloqueo Sunday, October 10, 2021 12:00:00 AM
+            const cuota4 = {
+                numero: 4,
+                montoFiat: 1000,
+                timestampVencimiento: 1633046400,
+                timestampDesbloqueo: 1633824000
+            };
+
+            // Cuota 5: Vencimiento Monday, November 1, 2021 12:00:00 AM / Desbloqueo Wednesday, November 10, 2021 12:00:00 AM
+            const cuota5 = {
+                numero: 5,
+                montoFiat: 1000,
+                timestampVencimiento: 1635724800,
+                timestampDesbloqueo: 1636502400
+            };
+
+            // Cuota 6: Vencimiento Wednesday, December 1, 2021 12:00:00 AM / Desbloqueo Friday, December 10, 2021 12:00:00 AM
+            const cuota6 = {
+                numero: 6,
+                montoFiat: 1000,
+                timestampVencimiento: 1638316800,
+                timestampDesbloqueo: 1639094400
+            };
+
+            const cuotas = [cuota1, cuota2, cuota3, cuota4, cuota5, cuota6];
+
+            const timestampCuotas = [];
+            for (let i = 0; i < cuotas.length; i++) {
+                const cuota = cuotas[i];
+                timestampCuotas.push(utils.numberToHex(cuota.timestampVencimiento));
+                timestampCuotas.push(utils.numberToHex(cuota.timestampDesbloqueo));
+            }
+
             const method = this.avaldao.methods.saveAval(
                 aval.id,
                 aval.infoCid,
-                aval.avaldaoAddress,
-                aval.comercianteAddress,
-                aval.avaladoAddress,
+                users,
                 aval.monto,
-                aval.cuotasCantidad);
+                timestampCuotas);
 
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
             const gasPrice = await this.getGasPrice();
