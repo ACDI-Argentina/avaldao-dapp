@@ -2,6 +2,7 @@ import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
 import Web3Utils from 'lib/blockchain/Web3Utils';
 import BigNumber from 'bignumber.js';
+import Cuota from './Cuota';
 
 /**
  * Modelo de Aval.
@@ -21,6 +22,7 @@ class Aval {
       beneficiarios = '',
       monto = new BigNumber(0),
       cuotasCantidad = 1,
+      cuotas = [],
       solicitanteAddress,
       comercianteAddress,
       avaladoAddress,
@@ -43,6 +45,10 @@ class Aval {
     this._beneficiarios = beneficiarios;
     this._monto = new BigNumber(monto);
     this._cuotasCantidad = cuotasCantidad;
+    this._cuotas = [];
+    cuotas.forEach(cuota => {
+      this._cuotas.push(new Cuota(cuota));
+    });
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
     this._avaladoAddress = avaladoAddress;
@@ -51,7 +57,7 @@ class Aval {
     this._comercianteSignature = comercianteSignature;
     this._avaladoSignature = avaladoSignature;
     this._avaldaoSignature = avaldaoSignature;
-    this._status = StatusUtils.build(status.id, status.name, status.isLocal);;
+    this._status = StatusUtils.build(status.id, status.name, status.isLocal);
   }
 
   /**
@@ -74,6 +80,10 @@ class Aval {
    * Obtiene un objeto plano para ser almacenado.
    */
   toStore() {
+    const cuotas = [];
+    this._cuotas.forEach(cuota => {
+      cuotas.push(cuota.toStore());
+    });
     return {
       id: this._id,
       clientId: this._clientId,
@@ -86,6 +96,7 @@ class Aval {
       beneficiarios: this._beneficiarios,
       monto: this._monto,
       cuotasCantidad: this._cuotasCantidad,
+      cuotas: cuotas,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -99,12 +110,12 @@ class Aval {
   }
 
   /**
-     * Realiza el mapping de los estados del aval en el
-     * smart contract con los estados en la dapp.
-     * 
-     * @param status del aval en el smart contract.
-     * @returns estado del aval en la dapp.
-     */
+   * Realiza el mapping de los estados del aval en el
+   * smart contract con los estados en la dapp.
+   * 
+   * @param status del aval en el smart contract.
+   * @returns estado del aval en la dapp.
+   */
   static mapAvalStatus(status) {
     switch (status) {
       case 0: return Aval.SOLICITADO;
@@ -334,6 +345,14 @@ class Aval {
 
   set cuotasCantidad(value) {
     this._cuotasCantidad = value;
+  }
+
+  get cuotas() {
+    return this._cuotas;
+  }
+
+  set cuotas(value) {
+    this._cuotas = value;
   }
 
   get avaldaoAddress() {

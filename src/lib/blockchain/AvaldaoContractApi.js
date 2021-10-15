@@ -7,9 +7,9 @@ import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
 import { AvaldaoAbi, AvalAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
-import feathers from '@feathersjs/feathers';
 import avalStoreUtils from 'redux/utils/avalStoreUtils';
 import { utils } from 'web3';
+import Cuota from 'models/Cuota';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -92,7 +92,14 @@ class AvaldaoContractApi {
             status: await aval.methods.status().call()
         };
         for (let cuotaNumero = 1; cuotaNumero <= avalOnChain.cuotasCantidad; cuotaNumero++) {
-            const cuota = await aval.methods.getCuotaByNumero(cuotaNumero);
+            const cuotaOnChain = await aval.methods.getCuotaByNumero(cuotaNumero).call();
+            const cuota = {
+                numero: parseInt(cuotaOnChain.numero),
+                monto: parseInt(cuotaOnChain.montoFiat),
+                timestampVencimiento: parseInt(cuotaOnChain.timestampVencimiento),
+                timestampDesbloqueo: parseInt(cuotaOnChain.timestampDesbloqueo),
+                status: Cuota.mapCuotaStatus(parseInt(cuotaOnChain.status))
+            };
             avalOnChain.cuotas.push(cuota);
         }
 
@@ -109,6 +116,8 @@ class AvaldaoContractApi {
             adquisicion: avalOffChain.adquisicion,
             beneficiarios: avalOffChain.beneficiarios,
             monto: avalOnChain.montoFiat,
+            cuotasCantidad: avalOnChain.cuotasCantidad,
+            cuotas: avalOnChain.cuotas,
             solicitanteAddress: avalOnChain.solicitante,
             comercianteAddress: avalOnChain.comerciante,
             avaladoAddress: avalOnChain.avalado,
