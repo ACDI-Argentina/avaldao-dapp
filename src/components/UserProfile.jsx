@@ -360,7 +360,6 @@ class UserProfile extends Component {
                   <Avatar
                     imageSrc={avatarImg}
                     onCropped={(cropped) => {
-                      console.log(`SET AVATAR PREVIEW`)
                       this.setState({ avatarPreview: cropped })
                       this.setFormValid();
                     }}

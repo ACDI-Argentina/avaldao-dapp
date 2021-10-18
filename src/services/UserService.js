@@ -28,6 +28,7 @@ class UserService {
         try {
 
           const userData = await feathersClient.service('/users').get(address);
+          console.log(userData)
 
           let registered = true;
           const { name, email, url, infoCid } = userData;
