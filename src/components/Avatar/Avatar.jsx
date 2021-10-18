@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Cropper from 'react-easy-crop';
-import Slider from '@material-ui/core/Slider'
+
 import ImageSelector from './ImageSelector';
 import getCroppedImg from './cropImage';
 import { useEffect } from 'react';
@@ -19,6 +19,7 @@ const AvatarWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: 15px 0px;
+  min-height: 340px;
 
 `
 const AvatarContainer = styled.div`
@@ -27,6 +28,8 @@ const AvatarContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0px;
+  width: 340px;
+  height: 340px;
 `
 
 const AvatarImage = styled.img`
@@ -44,31 +47,42 @@ const ImageContainer = styled.div`
 `
 
 
-const Avatar = ({ imageSrc, onCropped }) => {
+const Avatar = ({ imageSrc, onCropped, onEditingChange }) => {
   const [editing, setEditing] = useState(false);
+
+  const [fullImage, setFullImage] = useState(imageSrc);
+
   const [image, setImage] = useState(imageSrc);
-  const [croppedImage, setCroppedImage] = useState(imageSrc); /* Cropped image as base64 */
+  const [croppedPreview, setCroppedPreview] = useState(imageSrc); /* Cropped image preview as base64 */
+
   const [zoom, setZoom] = useState(1);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setImage(imageSrc);
+    setFullImage(imageSrc);
   }, [imageSrc])
 
-  
   useEffect(() => {
-    /* Reset zoom and crop when image changes */
-      setZoom(1);
-      setCrop({ x: 0, y: 0 });
-  }, [image])
+    typeof onEditingChange === "function" && onEditingChange(editing)
+  }, [editing])
+
+  useEffect(() => {/* Reset zoom and crop when image changes */
+    setZoom(1);
+    setCrop({ x: 0, y: 0 });
+  }, [fullImage])
+
 
   const onCropComplete = async (croppedArea, croppedAreaPixels) => {
+    if (!croppedAreaPixels.width || !croppedAreaPixels.height) {
+
+      return;
+    }
     const croppedImage = await getCroppedImg(
-      image,
+      fullImage,
       croppedAreaPixels,
     );
-    setCroppedImage(croppedImage);
-    typeof onCropped === "function" && onCropped(croppedImage);
+    setCroppedPreview(croppedImage); //Rename to crop preview
   }
 
 
@@ -76,14 +90,19 @@ const Avatar = ({ imageSrc, onCropped }) => {
     <AvatarWrapper>
       {editing ? (
         <AvatarContainer>
-          <ImageSelector onImageSelected={setImage} />
+          <ImageSelector
+            onImageSelected={newImage => {
+              setImage(newImage);
+              setFullImage(newImage);
+            }} />
           <Absolute top="55px" right="10px">
             <IconButton
               icon={faCheck}
               title="Ok"
               onClick={() => {
-                setImage(croppedImage);
+                setImage(croppedPreview);
                 setEditing(false);
+                typeof onCropped === "function" && onCropped(croppedPreview);
               }}
             />
           </Absolute>
@@ -91,12 +110,16 @@ const Avatar = ({ imageSrc, onCropped }) => {
             <IconButton
               icon={faTimes}
               title="Cancelar"
-              onClick={() => setEditing(false)}
+              onClick={() => {
+                setEditing(false);
+                typeof onCropped === "function" && onCropped(undefined);
+              }}
             />
           </Absolute>
+
           <Cropper
             zoomSpeed={0.1}
-            image={image}
+            image={fullImage}
             crop={crop}
             zoom={zoom}
             aspect={1}
@@ -117,12 +140,12 @@ const Avatar = ({ imageSrc, onCropped }) => {
             <Absolute right="8%" bottom="8%">
               <IconButton
                 style={{
-                  container:{
-                    backgroundColor:"#737373",
+                  container: {
+                    backgroundColor: "#737373",
                     boxShadow: "1px 1px 10px 1px #737373"
                   },
-                  icon:{
-                    color:"#EEEEEE"
+                  icon: {
+                    color: "#EEEEEE"
                   }
                 }}
                 icon={faPencilAlt}
@@ -135,7 +158,6 @@ const Avatar = ({ imageSrc, onCropped }) => {
         </ImageWrapper>
       )}
     </AvatarWrapper>
-
   )
 }
 
