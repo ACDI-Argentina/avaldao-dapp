@@ -341,9 +341,6 @@ class UserProfile extends Component {
         <Parallax small image={require("assets/img/profile-default-bg.jpg")} />
 
         <div className={classNames(classes.main, classes.mainRaised)}>
-          <div>User registered: {this.state.registered? `true`:`false`}</div>
-          <div>User authenticated: {this.state.user.authenticated? `true`:`false`}</div>
-
           <form onSubmit={this.handleSubmit}
             className={classes.form}
             noValidate
