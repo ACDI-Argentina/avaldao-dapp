@@ -120,6 +120,7 @@
     "build": "npm run build-css && react-app-rewired build",
     "start:hybrid": "env-cmd -f envs/hybrid.env npm-run-all -p watch-css start-js",
     "start:localhost": "env-cmd -f envs/localhost.env npm-run-all -p watch-css start-js",
+    "start:testing": "env-cmd -f -f envs/testing.env npm-run-all -p watch-css start-js",
     "build:localhost": "NODE_OPTIONS='--max-old-space-size=8192' env-cmd -f envs/localhost.env npm run build",
     "build:testing": "CI=false NODE_OPTIONS='--max-old-space-size=8192' env-cmd -f envs/testing.env npm run build",
     "build:production": "CI=false NODE_OPTIONS='--max-old-space-size=8192' env-cmd -f envs/production.env npm run build",
