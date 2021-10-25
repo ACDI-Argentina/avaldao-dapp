@@ -32,7 +32,7 @@ async function initExchangeRateListener() {
                     rate: new BigNumber(rate),
                     date: Date.now()
                 });
-                console.log('Actualización de Exchange Rate.', exchangeRate);
+                //console.log('Actualización de Exchange Rate.', exchangeRate);
                 exchangeRateUtils.updateExchangeRate(exchangeRate);
             } catch (e) {
                 console.error(`Error actualizando exchange rate de token ${tokenKey}.`, e);
