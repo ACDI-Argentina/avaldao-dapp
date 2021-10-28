@@ -231,6 +231,25 @@ class AvalService {
         });
     }
 
+    /**
+     * Desbloquea los fondos de un aval.
+     * 
+     * @param aval a desbloquear
+     * @param signer dirección del usuario firmante
+     * @returns observable 
+     */
+    desbloquearAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            avaldaoContractApi.desbloquearAval(aval).subscribe(aval => {
+
+                console.log('[AvalService] Se desbloquearon los fondos del aval.', aval);
+                subscriber.next(aval);
+            });
+        });
+    }
+
     offChainAvalToAval(avalData) {
         return new Aval({
             id: avalData._id,

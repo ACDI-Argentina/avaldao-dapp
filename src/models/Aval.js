@@ -178,6 +178,28 @@ class Aval {
   }
 
   /**
+   * Determina si los fondos del Aval pueden ser desbloqueados o no.
+   * @param user usuario que desbloquea los fondos del aval.
+   */
+  allowDesbloquear(user) {
+    if (this.status.name !== Aval.VIGENTE.name) {
+      // Solo un aval Vigente puede ser desbloqueado.
+      return false;
+    }
+    if (!user.registered) {
+      // El usuario no está autenticado.
+      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
+      // https://github.com/ACDI-Argentina/avaldao/issues/21
+      return false;
+    }
+    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+      // Solo el Solicitante puede desbloquear fondos el aval
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Determina si el Aval puede ser firmado o no por el usuario con el address especificado.
    * @param user usuario firmante.
    */
