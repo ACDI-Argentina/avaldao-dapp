@@ -25,6 +25,7 @@
     "avalesTitle": "Avales", 
     "avalCompletarTitle": "Completar aval",
     "avalFirmarTitle": "Firmar aval",
+    "avalDesbloquearTitle": "Desbloquear fondos de aval",
     "avalCompletar": "Completar",
     "avalCancelar": "Cancelar",
     "avalProyecto": "Proyecto",
@@ -292,6 +293,14 @@
     "transactionConfirmedDescriptionCompletarAval": "El aval ha sido completado y está listo para firmarse.",
     "transactionFailuredTitleCompletarAval": "No se completó el aval",
     "transactionFailuredDescriptionCompletarAval": "Ocurrió una falla completando de aval.",
+
+    "transactionCreatedTitleDesbloquearAval": "Confirma que desbloquea los fundos de cuota del aval en la billetera",
+    "transactionCreatedSubtitleDesbloquearAval": "Verifique los detalles aquí - el desbloqueo de los fondos de cuota del aval no puede ser reembolsado.",
+    "transactionPendingTitleDesbloquearAval": "Desbloqueando fondos de cuota de aval...",
+    "transactionConfirmedTitleDesbloquearAval": "Los fondos de cuota del aval han sido desbloqueados",
+    "transactionConfirmedDescriptionDesbloquearAval": "Los fondos de cuota del aval han sido desbloqueados.",
+    "transactionFailuredTitleDesbloquearAval": "No se desbloqueron los fondos de cuota del aval",
+    "transactionFailuredDescriptionDesbloquearAval": "Ocurrió una falla desbloqueando los fondos de cuota del aval.",
 
     "transactionCreatedTitleSignAval": "Confirma tu firma del aval en la billetera",
     "transactionCreatedSubtitleSignAval": "Verifique los detalles aquí - su firma del aval no puede ser reembolsado.",

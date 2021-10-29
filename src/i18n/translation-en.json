@@ -25,6 +25,7 @@
     "avalesTitle": "Avales",    
     "avalCompletarTitle": "Complete aval",
     "avalFirmarTitle": "Sign aval",
+    "avalDesbloquearTitle": "Unlock funds of aval",
     "avalCompletar": "Complete",
     "avalCancelar": "Cancel",
     "avalProyecto": "Project",
@@ -283,6 +284,14 @@
     "transactionConfirmedDescriptionCompletarAval": "The aval has been completed and is already to sign it.",
     "transactionFailuredTitleCompletarAval": "The aval was not completed",
     "transactionFailuredDescriptionCompletarAval": "A failure occurred during aval completion.",
+
+    "transactionCreatedTitleDesbloquearAval": "Confirm unlock aval's share funds in the wallet",
+    "transactionCreatedSubtitleDesbloquearAval": "Double check the details here – the unlock aval's share funds can't be refunded.",
+    "transactionPendingTitleDesbloquearAval": "Unlocking aval's share funds...",
+    "transactionConfirmedTitleDesbloquearAval": "The aval's share funds has been unlocked",
+    "transactionConfirmedDescriptionDesbloquearAval": "The aval's share funds has been unlocked.",
+    "transactionFailuredTitleDesbloquearAval": "The aval's share funds was not unlocked",
+    "transactionFailuredDescriptionDesbloquearAval": "A failure occurred during aval's share funds unlocking.",
 
     "transactionCreatedTitleSignAval": "Confirm your sign of aval in the wallet",
     "transactionCreatedSubtitleSignAval": "Double check the details here – your sign of aval can't be refunded.",

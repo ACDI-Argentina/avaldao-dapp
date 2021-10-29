@@ -317,7 +317,7 @@ class AvaldaoContractApi {
                         { name: 'verifyingContract', type: 'address' }
                     ],
                     AvalSignable: [
-                        { name: 'id', type: 'string' },
+                        { name: 'aval', type: 'address' },
                         { name: 'infoCid', type: 'string' },
                         { name: 'avaldao', type: 'address' },
                         { name: 'solicitante', type: 'address' },
@@ -333,7 +333,7 @@ class AvaldaoContractApi {
                     verifyingContract: config.avaldaoContractAddress
                 },
                 message: {
-                    id: aval.id,
+                    aval: aval.address,
                     infoCid: aval.infoCid,
                     avaldao: aval.avaldaoAddress,
                     solicitante: aval.solicitanteAddress,
@@ -395,7 +395,7 @@ class AvaldaoContractApi {
             const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
 
             const method = this.avaldao.methods.signAval(
-                aval.id,
+                aval.address,
                 signatureV,
                 signatureR,
                 signatureS);
@@ -460,6 +460,99 @@ class AvaldaoContractApi {
 
                 error.aval = aval;
                 console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
+                subscriber.error(error);
+            });
+        });
+    }
+
+    /**
+     * Desbloquea los fondos de un aval.
+     * 
+     * @param aval a desbloquear
+     */
+    desbloquearAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            try {
+                // Se almacena en IPFS toda la información del Aval.
+                let infoCid = await avalIpfsConnector.upload(aval);
+                aval.infoCid = infoCid;
+            } catch (e) {
+                console.error('[AvaldaoContractApi] Error subiendo aval a IPFS.', e);
+                subscriber.error(e);
+                return;
+            }
+
+            const users = [aval.solicitanteAddress,
+            aval.comercianteAddress,
+            aval.avaladoAddress,
+            aval.avaldaoAddress];
+
+            
+            const method = this.avaldao.methods.unlockFundManual(
+                aval.address);
+
+            const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionStoreUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleDesbloquearAval'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleDesbloquearAval'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleDesbloquearAval'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleDesbloquearAval'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionDesbloquearAval'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleDesbloquearAval'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionDesbloquearAval'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: aval.solicitanteAddress,
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionStoreUtils.updateTransaction(transaction);
+
+                aval.txHash = hash;
+                subscriber.next(aval);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                //const numeroCuota = receipt.events['AvalCuotaUnlock'].returnValues.numeroCuota;
+
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(aval.id);
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error(`Error procesando transacción para desbloquear fondos de aval.`, error);
                 subscriber.error(error);
             });
         });
