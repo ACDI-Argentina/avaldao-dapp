@@ -317,7 +317,7 @@ class AvaldaoContractApi {
                         { name: 'verifyingContract', type: 'address' }
                     ],
                     AvalSignable: [
-                        { name: 'id', type: 'string' },
+                        { name: 'aval', type: 'address' },
                         { name: 'infoCid', type: 'string' },
                         { name: 'avaldao', type: 'address' },
                         { name: 'solicitante', type: 'address' },
@@ -333,7 +333,7 @@ class AvaldaoContractApi {
                     verifyingContract: config.avaldaoContractAddress
                 },
                 message: {
-                    id: aval.id,
+                    aval: aval.address,
                     infoCid: aval.infoCid,
                     avaldao: aval.avaldaoAddress,
                     solicitante: aval.solicitanteAddress,
