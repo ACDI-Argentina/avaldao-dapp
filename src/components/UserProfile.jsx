@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classNames from "classnames";
 import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
+
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
@@ -16,8 +17,11 @@ import { Button } from '@material-ui/core';
 import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
 import { history } from 'lib/helpers';
-import Avatar from 'react-avatar-edit'
+
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
+import Avatar from './Avatar/Avatar';
+import LoadingOverlay from './Loading/LoadingOverlay';
+
 
 /**
  * Formulario de perfil de usuario.
@@ -29,11 +33,6 @@ class UserProfile extends Component {
     super(props);
 
     const { currentUser, t } = props;
-    const src = 'avatar.jpg'
-
-    const avatarImg = new Image();
-    avatarImg.src = currentUser.avatarCidUrl;
-
 
     this.state = {
       name: currentUser.name,
@@ -42,9 +41,9 @@ class UserProfile extends Component {
       avatar: null,
       avatarPreview: null,
       user: new User(currentUser),
-      avatarImg: avatarImg,
-      avatarImgWidth: 300,
-      avatarCropRadius: 150,
+      avatarImg: currentUser.avatarCidUrl,
+
+      registered: false,
       nameHelperText: '',
       nameError: false,
       emailHelperText: '',
@@ -63,16 +62,17 @@ class UserProfile extends Component {
     this.handleChangeAvatar = this.handleChangeAvatar.bind(this);
     this.setFormValid = this.setFormValid.bind(this);
 
-    this.onCrop = this.onCrop.bind(this)
-    this.onClose = this.onClose.bind(this)
-    this.onBeforeFileLoad = this.onBeforeFileLoad.bind(this)
   }
 
-  componentDidMount() {
-    if (this.props.address) {
-        this.props.fetchUserByAddress(this.props.address);
-    }
-}
+  clearForm() {
+    this.setState({
+      name: "",
+      email: "",
+      url: "",
+      user: new User(this.props.currentUser)
+    })
+  }
+
 
   async requestConnection(translate) {
 
@@ -126,6 +126,60 @@ class UserProfile extends Component {
       });
 
     this.setFormValid();
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const userHasUpdated = prevProps.currentUser !== this.props.currentUser;
+
+    const prevAddress = prevProps.currentUser && prevProps.currentUser.address;
+    const nextAddress = this.props.currentUser && this.props.currentUser.address;
+
+    const userHasChanged = prevAddress && nextAddress && (prevAddress !== nextAddress);
+    const userHasDisconnected = this.props.currentUser.address === null && prevProps.currentUser.address != undefined;
+
+    if (userHasDisconnected || userHasChanged) {
+      this.clearForm();
+    }
+
+    const statusHasChanged = this.props.currentUser.status !== prevProps.currentUser.status;
+    if (statusHasChanged) {
+      const isRegistering = this.props.currentUser?.status?.name === "Registering";
+      this.setState({ isSaving: isRegistering });
+    }
+
+    const wasSaving = prevProps.currentUser?.status?.name === "Registering";
+    const isRegistered = this.props.currentUser?.status?.name === "Registered";
+
+    if(wasSaving && isRegistered){
+      setTimeout(() => history.push("/"), 1000);
+    }
+
+
+    
+
+    if (userHasUpdated) {
+      console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
+
+      const { name, email, url, registered } = this.props.currentUser;
+      const avatarCidUrl = this.props.currentUser?.avatarCidUrl;
+
+      const state = {};
+      if (name) {
+        state.name = name;
+      }
+      if (email) {
+        state.email = email;
+      }
+      if (url) {
+        state.url = url;
+      }
+      if (avatarCidUrl) {
+        state.avatarImg = avatarCidUrl;
+      }
+
+      this.setState({ ...state, registered, user: new User(this.props.currentUser) })
+    }
+
   }
 
   handleChangeName(event) {
@@ -196,27 +250,6 @@ class UserProfile extends Component {
     });
   }
 
-  onClose() {
-    this.setState({ avatarPreview: null })
-  }
-
-  onCrop(avatarPreview) {
-    if (avatarPreview) {
-      this.setState({ avatarPreview })
-    }
-  }
-
-  onBeforeFileLoad(elem) {
-    if (elem.target.files[0].size > 71680) {
-      //alert("File is too big!");
-      //elem.target.value = "";
-    };
-
-    this.setState({
-      avatarCropRadius: undefined
-    })
-  }
-
   setFormValid() {
     const { name, email, url } = this.state;
     let formValid = true;
@@ -238,22 +271,37 @@ class UserProfile extends Component {
     });
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
+    const { authenticateIfPossible } = this.context.modals.methods;
+
+    event.preventDefault();
+
     const { currentUser } = this.props;
     let user = this.state.user;
+
     user.address = currentUser.address;
+
     user.name = this.state.name;
     user.email = this.state.email;
     user.url = this.state.url;
     user.avatar = this.state.avatarPreview;
-    this.setState({
-      isSaving: true,
-      user: user
-    }, () => {
+
+    if (!currentUser.authenticated) {
+      const result = await authenticateIfPossible(this.props.currentUser);
+
+      if (!result) {
+        console.log("User not authenticated!"); //Throw error?
+        return;
+      }
+    }
+
+    this.setState({ isSaving: true, user: user }, () => {
+      console.log(`[UserProfile] handleSubmit`, user)
+
       this.props.registerCurrentUser(this.state.user);
-      history.push(`/`);
+      //history.push(`/`);
     });
-    event.preventDefault();
+
   }
 
   cancel() {
@@ -261,7 +309,8 @@ class UserProfile extends Component {
   }
 
   render() {
-    const { user,
+    const {
+      user,
       nameHelperText,
       nameError,
       emailHelperText,
@@ -270,8 +319,8 @@ class UserProfile extends Component {
       urlError,
       formValid,
       avatarImg,
-      avatarImgWidth,
-      avatarCropRadius } = this.state;
+      isSaving
+    } = this.state;
     const { currentUser, classes, t, ...rest } = this.props;
 
     return (
@@ -292,34 +341,34 @@ class UserProfile extends Component {
         <Parallax small image={require("assets/img/profile-default-bg.jpg")} />
 
         <div className={classNames(classes.main, classes.mainRaised)}>
-
           <form onSubmit={this.handleSubmit}
             className={classes.form}
             noValidate
             autoComplete="off" >
 
-            <Grid container spacing={2} style={{margin: "0px"}}>
+            <Grid container spacing={2} style={{ margin: "0px" }}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
                   {t('userProfileTitle')}
                 </Typography>
               </Grid>
-              <Grid item sm={12} md={5} spacing={0}>
-                <div className={classes.avatarContainer}> 
-                  {<Avatar
-                    img={avatarImg}
-                    label={t('userAvatarChoose')}
-                    width={avatarImgWidth}
-                    imageWidth={avatarImgWidth}
-                    cropRadius={avatarCropRadius}
-                    onCrop={this.onCrop}
-                    onClose={this.onClose}
-                    onBeforeFileLoad={this.onBeforeFileLoad}
-                  />}
+              <Grid item xs={12} md={5}>  
+                <div className={classes.avatarContainer}>
+                  <Avatar
+                    imageSrc={avatarImg}
+                    onCropped={(cropped) => {
+                      this.setState({ avatarPreview: cropped })
+                      this.setFormValid();
+                    }}
+                    labels={{
+                      choose:t('userAvatarChoose')
+                    }}
+                  />
+
                 </div>
               </Grid>
-              <Grid container spacing={3} sm={12} md={7}>
-                <Grid item sm={12} md={12}>
+              <Grid container item spacing={3} xs={12} md={7}>
+                <Grid item xs={12}>
                   <TextField
                     id="nameTextField"
                     value={this.state.name}
@@ -333,10 +382,10 @@ class UserProfile extends Component {
                     }}
                     error={nameError}
                     required
-                    inputProps={{ maxlength: 42 }}
+                    inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
-                <Grid item sm={12} md={12}>
+                <Grid item xs={12}>
                   <TextField id="emailTextField"
                     value={this.state.email}
                     onChange={this.handleChangeEmail}
@@ -349,10 +398,10 @@ class UserProfile extends Component {
                     }}
                     error={emailError}
                     required
-                    inputProps={{ maxlength: 42 }}
+                    inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
-                <Grid item sm={12} md={12}>
+                <Grid item xs={12}>
                   <TextField id="urlTextField"
                     value={this.state.url}
                     onChange={this.handleChangeUrl}
@@ -365,24 +414,35 @@ class UserProfile extends Component {
                     }}
                     error={urlError}
                     required
-                    inputProps={{ maxlength: 42 }}
+                    inputProps={{ maxLength: 42 }}
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  disabled={!formValid}
-                  className={classes.button}>
-                  {t('save')}
-                </Button>
-                <Button
-                  onClick={this.cancel}
-                  className={classes.button}>
-                  {t('cancel')}
-                </Button>
+
+              <Grid
+                container
+                item
+                xs={12}
+                md={4}
+                justifyContent={"center"}
+              >
+                <div style={{ paddingTop: "25px", display: "flex", alignItems: "center" }}>
+                    <LoadingOverlay loading={isSaving}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={!formValid || isSaving}
+                        className={classes.button}>
+                        {t('save')}
+                      </Button>
+                    </LoadingOverlay>
+                  <Button
+                    onClick={this.cancel}
+                    className={classes.button}>
+                    {t('cancel')}
+                  </Button>
+                </div>
               </Grid>
             </Grid>
 
@@ -464,9 +524,13 @@ const styles = theme => ({
     margin: theme.spacing(1),
   },
   avatarContainer: {
+    width: "100%",
+    height: "100%",
+    minHeight: "325px",
+
     "@media (max-width: 950px)": {
-      width: "100%",
-      marginLeft: "calc((100% - 300px) / 2)"
+      display: "flex",
+      justifyContent: "center",
     }
   }
 });

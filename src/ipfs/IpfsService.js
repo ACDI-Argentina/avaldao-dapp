@@ -3,7 +3,7 @@ import ImageTools from '../lib/ImageResizer';
 import { feathersClient } from '../lib/feathersClient';
 
 const isIPFS = require('is-ipfs');
-const axios = require('axios').default;
+const axios = require('axios');
 const url = require('url');
 
 class IpfsService {
@@ -67,11 +67,7 @@ class IpfsService {
   async downloadJson(path) {
     const { ipfsGateway } = config;
     if (!isIPFS.path(path)) throw new Error(`${path} is not a valid ipfs path`);
-    const response = await axios({
-      method: 'get',
-      url: url.resolve(ipfsGateway, path),
-      responseType: 'json'
-    });
+    const response = await axios.get(url.resolve(ipfsGateway, path), { responseType: 'json' });
     return response.data;
   }
 }
