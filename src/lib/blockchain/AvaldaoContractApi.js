@@ -165,61 +165,20 @@ class AvaldaoContractApi {
             aval.avaladoAddress,
             aval.avaldaoAddress];
 
-            // Cuota 1: Vencimiento Thursday, July 1, 2021 12:00:00 AM / Desbloqueo Saturday, July 10, 2021 12:00:00 AM
-            const cuota1 = {
-                numero: 1,
-                montoFiat: 1000,
-                timestampVencimiento: 1625097600,
-                timestampDesbloqueo: 1625875200
-            };
-
-            // Cuota 2: Vencimiento Sunday, August 1, 2021 12:00:00 AM / Desbloqueo Tuesday, August 10, 2021 12:00:00 AM
-            const cuota2 = {
-                numero: 2,
-                montoFiat: 1000,
-                timestampVencimiento: 1627776000,
-                timestampDesbloqueo: 1628553600
-            };
-
-            // Cuota 3: Wednesday, September 1, 2021 12:00:00 AM / Desbloqueo Friday, September 10, 2021 12:00:00 AM
-            const cuota3 = {
-                numero: 3,
-                montoFiat: 1000,
-                timestampVencimiento: 1630454400,
-                timestampDesbloqueo: 1631232000
-            };
-
-            // Cuota 4: Vencimiento Friday, October 1, 2021 12:00:00 AM / Desbloqueo Sunday, October 10, 2021 12:00:00 AM
-            const cuota4 = {
-                numero: 4,
-                montoFiat: 1000,
-                timestampVencimiento: 1633046400,
-                timestampDesbloqueo: 1633824000
-            };
-
-            // Cuota 5: Vencimiento Monday, November 1, 2021 12:00:00 AM / Desbloqueo Wednesday, November 10, 2021 12:00:00 AM
-            const cuota5 = {
-                numero: 5,
-                montoFiat: 1000,
-                timestampVencimiento: 1635724800,
-                timestampDesbloqueo: 1636502400
-            };
-
-            // Cuota 6: Vencimiento Wednesday, December 1, 2021 12:00:00 AM / Desbloqueo Friday, December 10, 2021 12:00:00 AM
-            const cuota6 = {
-                numero: 6,
-                montoFiat: 1000,
-                timestampVencimiento: 1638316800,
-                timestampDesbloqueo: 1639094400
-            };
-
-            const cuotas = [cuota1, cuota2, cuota3, cuota4, cuota5, cuota6];
-
+            // Tiemstamp actual medido en segundos.
+            const timestampCurrent = Math.round(Date.now() / 1000);
+            // Tiempo entre vencimientos de cuota medido en segundos.
+            // 30 días.
+            const vencimientoRange = 30 * 24 * 60 * 60;
+            // Tiempo de desbloqueo de fondos desde la fecha de venicmiento de una cuota medido en segundos.
+            // 10 días.
+            const desbloqueoRange = 10 * 24 * 60 * 60;
             const timestampCuotas = [];
-            for (let i = 0; i < cuotas.length; i++) {
-                const cuota = cuotas[i];
-                timestampCuotas.push(utils.numberToHex(cuota.timestampVencimiento));
-                timestampCuotas.push(utils.numberToHex(cuota.timestampDesbloqueo));
+            for (let cuotaNumero = 1; cuotaNumero < aval.cuotasCantidad; cuotaNumero++) {
+                const timestampVencimiento = timestampCurrent + (cuotaNumero * vencimientoRange);
+                const timestampDesbloqueo = timestampVencimiento + desbloqueoRange;
+                timestampCuotas.push(utils.numberToHex(timestampVencimiento));
+                timestampCuotas.push(utils.numberToHex(timestampDesbloqueo));
             }
 
             const method = this.avaldao.methods.saveAval(
@@ -489,7 +448,7 @@ class AvaldaoContractApi {
             aval.avaladoAddress,
             aval.avaldaoAddress];
 
-            
+
             const method = this.avaldao.methods.unlockFundManual(
                 aval.address);
 
