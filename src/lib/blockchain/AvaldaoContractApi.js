@@ -174,7 +174,7 @@ class AvaldaoContractApi {
             // 10 días.
             const desbloqueoRange = 10 * 24 * 60 * 60;
             const timestampCuotas = [];
-            for (let cuotaNumero = 1; cuotaNumero < aval.cuotasCantidad; cuotaNumero++) {
+            for (let cuotaNumero = 1; cuotaNumero <= aval.cuotasCantidad; cuotaNumero++) {
                 const timestampVencimiento = timestampCurrent + (cuotaNumero * vencimientoRange);
                 const timestampDesbloqueo = timestampVencimiento + desbloqueoRange;
                 timestampCuotas.push(utils.numberToHex(timestampVencimiento));
