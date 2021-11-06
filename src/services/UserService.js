@@ -6,6 +6,7 @@ import { ALL_ROLES } from '../constants/Role';
 import messageUtils from '../redux/utils/messageUtils'
 import userIpfsConnector from '../ipfs/UserIpfsConnector'
 
+
 class UserService {
 
   /**
@@ -94,33 +95,7 @@ class UserService {
       try {
 
         const userData = await feathersClient.service('/users').get(address);
-
-        let registered = true;
-        let name = userData.name;
-        let email = userData.email;
-        let url = userData.url;
-        let infoCid = userData.infoCid;
-        let avatarCid;
-        let avatar;
-
-        if (infoCid) {
-          // Se obtiene la información del usuario desde IPFS.
-          const userIpfs = await userIpfsConnector.download(infoCid);
-          avatarCid = userIpfs.avatarCid;
-          avatar = userIpfs.avatar;
-        }
-
-        const user = new User({
-          registered: registered,
-          address: address,
-          name: name,
-          email: email,
-          url: url,
-          infoCid: infoCid,
-          avatarCid: avatarCid,
-          avatar: avatar
-        });
-
+        const user = new User({ registered: true, ...await loadIpfsInfo(userData) });
         subscriber.next(user);
 
       } catch (e) {
@@ -144,19 +119,25 @@ class UserService {
   /**
    * Carga los usuarios con sus roles.
    * 
-   * TODO Esto deberíamos obtimizarlo porque se están cargadno todos los usuarios
+   * TODO Esto deberíamos optimizarlo porque se están cargando todos los usuarios
    * al mismo tiempo y cuando crezca la cantidad habrá problemas de performance.
+   * 
    */
   loadUsersWithRoles() {
-    console.log(`[UserService] loadUsersWithRoles`)
+    console.log(`[UserService] loadUsersWithRoles`);
+
     return new Observable(async subscriber => {
+      const { data: users } = await feathersClient.service("users").find();
+      const hydratedUsers = (await Promise.all(users.map(loadIpfsInfo))).map(rawUser => new User({...rawUser}));
+      subscriber.next(hydratedUsers);
+
+      /* 
+      Revisar en el smart contract los roles
       const usersByGroups = [];
-      const { data: users } = {data: []}// await feathersClient.service("users").find();
       for (const user of users) {
         const roles = await getRoles(user.address);
         usersByGroups.push(new User({ ...user, roles }));
-      }
-      subscriber.next(usersByGroups);
+      } */
     })
   }
 
@@ -172,7 +153,7 @@ class UserService {
       try {
         // Se almacena en IPFS toda la información del Usuario.
         let infoCid = await userIpfsConnector.upload(user); 
-        user.infoCid = infoCid;       
+        user.infoCid = infoCid;
 
         if (user.registered === false) {
           // Nuevo usuario
@@ -243,3 +224,23 @@ const pause = (ms = 3000) => {
 }
 
 export default UserService;
+
+
+// Se obtiene la información del usuario desde IPFS.
+async function loadIpfsInfo(rawUser){
+  let avatarCid;
+  let avatar;
+  
+  if (rawUser.infoCid) {
+    const userIpfs = await userIpfsConnector.download(rawUser.infoCid);
+    avatarCid = userIpfs.avatarCid;
+    avatar = userIpfs.avatar;
+  }
+
+  return {
+    ...rawUser,
+    avatar,
+    avatarCid
+  }
+
+}

@@ -62,7 +62,7 @@ class Cuota {
     switch (status) {
       case 0: return Cuota.PENDIENTE;
       case 1: return Cuota.PAGADA;
-      case 2: return Cuota.REITEGRADA;
+      case 2: return Cuota.REINTEGRADA;
     }
   }
 
@@ -74,7 +74,7 @@ class Cuota {
     return StatusUtils.build(1, 'Pagada', false);
   }
 
-  static get REITEGRADA() {
+  static get REINTEGRADA() {
     return StatusUtils.build(2, 'Reintegrada', false);
   }
 

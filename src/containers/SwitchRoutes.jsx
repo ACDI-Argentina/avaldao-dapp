@@ -21,8 +21,9 @@ import LoginPage from "views/LoginPage/LoginPage.js"
 import AvalCompletar from 'components/views/AvalCompletar'
 import Avales from 'components/views/Avales'
 import UserProfile from 'components/UserProfile'
+import ViewAval from 'components/views/aval/ViewAval';
 
-const SwitchRoutes = ({ currentUser}) => (
+const SwitchRoutes = ({ currentUser }) => (
     <Switch>
 
         {/*NOTE order matters, wrong order breaks routes!*/}
@@ -247,6 +248,12 @@ const SwitchRoutes = ({ currentUser}) => (
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
+            )}
+        />
+        <Route
+            exact
+            path="/avales/:id"
+            render={props => (<ViewAval {...props}/>
             )}
         />
         <Route

@@ -44,6 +44,7 @@ class AvalService {
                     }
                 })
                 .then(response => {
+                    console.log(`Avales offchain: ${response.total}`)
                     let avales = [];
                     for (let i = 0; i < response.total; i++) {
                         let avalData = response.data[i];

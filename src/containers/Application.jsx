@@ -39,6 +39,7 @@ import TransactionViewer from 'components/TransactionViewer';
 import Web3Banner from 'lib/blockchain/Web3Banner';
 import Web3App from 'lib/blockchain/Web3App';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
+import AvalStoreInspector from 'inspectors/AvalStoreInspector';
 
 /* global document */
 /**

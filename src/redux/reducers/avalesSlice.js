@@ -90,5 +90,8 @@ export const selectAvalById = (state, id) => {
   }
   return undefined;
 }
+export const selectAllAvales = state => {
+  return state.avales;
+}
 
 export default avalesSlice.reducer;

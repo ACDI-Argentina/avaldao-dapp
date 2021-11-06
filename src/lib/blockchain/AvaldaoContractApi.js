@@ -40,11 +40,17 @@ class AvaldaoContractApi {
     getAvales() {
         return new Observable(async subscriber => {
             try {
-                let ids = await this.avaldao.methods.getAvalIds().call();
+                let ids = await this.avaldao.methods.getAvalIds().call(); //Devuelve un array de un solo elemento, 614ba578844de200126b50d0
+                console.log(`avales:`,ids)
                 let avales = [];
                 for (let i = 0; i < ids.length; i++) {
-                    let aval = await this.getAvalById(ids[i]);
-                    avales.push(aval);
+                    try{
+                        let aval = await this.getAvalById(ids[i]);
+                        avales.push(aval);
+
+                    } catch(err){
+                        console.log(err);
+                    }
                 }
                 subscriber.next(avales);
             } catch (error) {

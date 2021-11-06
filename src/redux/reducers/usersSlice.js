@@ -57,6 +57,8 @@ function merge(stateUser, newUser) {
     let email = newUser.email !== '' ? newUser.email : stateUser.email;
     let url = newUser.url !== '' ? newUser.url : stateUser.url;
     let avatar = newUser.avatar !== '' ? newUser.avatar : stateUser.avatar;
+    let infoCid = newUser.infoCid !== '' ? newUser.infoCid : stateUser.infoCid;
+    let avatarCid = newUser.avatarCid !== '' ? newUser.avatarCid : stateUser.avatarCid;
     let roles = newUser.roles.length !== 0 ? newUser.roles : stateUser.roles;
     let balance = newUser.balance !== new BigNumber(0) ? newUser.balance : stateUser.balance;
     let registered = newUser.registered === true ? newUser.registered : stateUser.registered;
@@ -65,6 +67,8 @@ function merge(stateUser, newUser) {
         name,
         email,
         url,
+        infoCid,
+        avatarCid,
         avatar,
         roles,
         balance,
@@ -76,7 +80,7 @@ export const { fetchUserByAddress, fetchUsers } = usersSlice.actions;
 
 export const selectUserByAddress = (state, address) => {
     let userStore = state.users.find(u => Web3Utils.addressEquals(u.address, address));
-    if(userStore) {
+    if (userStore) {
         return new User(userStore);
     }
     return undefined;

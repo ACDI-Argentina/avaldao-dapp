@@ -14,6 +14,7 @@ import { withTranslation } from 'react-i18next';
 import { selectAvales } from '../../redux/reducers/avalesSlice'
 import List from '@material-ui/core/List';
 import AvalItem from './AvalItem';
+import AvalStoreInspector from 'inspectors/AvalStoreInspector';
 
 /**
  * Pantalla con el listado de avales.
@@ -89,6 +90,7 @@ class Avales extends Component {
 
     return (
       <div className={classes.root}>
+        {/* <AvalStoreInspector /> */}
         <Header
           color="white"
           brand={<img src={require("assets/img/logos/give4forest.png")}
