@@ -20,7 +20,7 @@ class Aval {
       causa = '',
       adquisicion = '',
       beneficiarios = '',
-      monto = new BigNumber(0),
+      montoFiat = new BigNumber(0),
       cuotasCantidad = 1,
       cuotas = [],
       solicitanteAddress,
@@ -43,7 +43,7 @@ class Aval {
     this._causa = causa;
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
-    this._monto = new BigNumber(monto);
+    this._montoFiat = new BigNumber(montoFiat);
     this._cuotasCantidad = cuotasCantidad;
     this._cuotas = [];
     cuotas.forEach(cuota => {
@@ -71,7 +71,7 @@ class Aval {
       causa: this._causa,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
-      monto: this._monto,
+      montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad
     };
   }
@@ -94,7 +94,7 @@ class Aval {
       causa: this._causa,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
-      monto: this._monto,
+      montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad,
       cuotas: cuotas,
       avaldaoAddress: this._avaldaoAddress,
@@ -353,12 +353,12 @@ class Aval {
     this._beneficiarios = value;
   }
 
-  get monto() {
-    return this._monto;
+  get montoFiat() {
+    return this._montoFiat;
   }
 
-  set monto(value) {
-    this._monto = value;
+  set montoFiat(value) {
+    this._montoFiat = value;
   }
 
   get cuotasCantidad() {

@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-import { utils } from 'web3';
 import config from '../configuration';
 
 /**

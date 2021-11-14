@@ -295,7 +295,7 @@ class AvalCompletar extends Component {
               <Grid item sm={12} md={3}>
                 <TextField
                   id="montoTextField"
-                  value={FiatUtils.format(aval.monto)}
+                  value={FiatUtils.format(aval.montoFiat)}
                   label={t('avalMonto')}
                   fullWidth
                   margin="normal"

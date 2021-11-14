@@ -101,7 +101,7 @@ class AvaldaoContractApi {
             const cuotaOnChain = await aval.methods.getCuotaByNumero(cuotaNumero).call();
             const cuota = {
                 numero: parseInt(cuotaOnChain.numero),
-                monto: parseInt(cuotaOnChain.montoFiat),
+                montoFiat: parseInt(cuotaOnChain.montoFiat),
                 timestampVencimiento: parseInt(cuotaOnChain.timestampVencimiento),
                 timestampDesbloqueo: parseInt(cuotaOnChain.timestampDesbloqueo),
                 status: Cuota.mapCuotaStatus(parseInt(cuotaOnChain.status))
@@ -121,7 +121,7 @@ class AvaldaoContractApi {
             causa: avalOffChain.causa,
             adquisicion: avalOffChain.adquisicion,
             beneficiarios: avalOffChain.beneficiarios,
-            monto: avalOnChain.montoFiat,
+            montoFiat: avalOnChain.montoFiat,
             cuotasCantidad: avalOnChain.cuotasCantidad,
             cuotas: avalOnChain.cuotas,
             solicitanteAddress: avalOnChain.solicitante,
@@ -191,7 +191,7 @@ class AvaldaoContractApi {
                 aval.id,
                 aval.infoCid,
                 users,
-                aval.monto,
+                aval.montoFiat,
                 timestampCuotas);
 
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);

@@ -11,7 +11,7 @@ class Cuota {
     const {
       clientId = nanoid(),
       numero,
-      monto = new BigNumber(0),
+      montoFiat = new BigNumber(0),
       timestampVencimiento,
       timestampDesbloqueo,
       status = Cuota.PENDIENTE.toStore()
@@ -19,7 +19,7 @@ class Cuota {
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
     this._numero = numero;
-    this._monto = new BigNumber(monto);
+    this._montoFiat = new BigNumber(montoFiat);
     this._timestampVencimiento = timestampVencimiento;
     this._timestampDesbloqueo = timestampDesbloqueo;
     this._status = StatusUtils.build(status.id, status.name, status.isLocal);;
@@ -31,7 +31,7 @@ class Cuota {
   toIpfs() {
     return {
       numero: this._numero,
-      monto: this._monto,
+      montoFiat: this._montoFiat,
       timestampVencimiento: this._timestampVencimiento,
       timestampDesbloqueo: this._timestampDesbloqueo
     };
@@ -44,7 +44,7 @@ class Cuota {
     return {
       clientId: this._clientId,
       numero: this._numero,
-      monto: this._monto,
+      montoFiat: this._montoFiat,
       timestampVencimiento: this._timestampVencimiento,
       timestampDesbloqueo: this._timestampDesbloqueo,
       status: this._status.toStore()
@@ -94,12 +94,12 @@ class Cuota {
     this._numero = value;
   }
 
-  get monto() {
-    return this._monto;
+  get montoFiat() {
+    return this._montoFiat;
   }
 
-  set monto(value) {
-    this._monto = value;
+  set montoFiat(value) {
+    this._montoFiat = value;
   }
 
   get timestampVencimiento() {

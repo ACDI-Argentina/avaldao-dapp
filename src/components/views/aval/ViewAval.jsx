@@ -14,7 +14,7 @@ import SignaturesSection from 'components/aval/sections/SignaturesSection';
 import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
 import StatusTag from 'components/aval/StatusTag';
-import { demoCuotas, demoReclamos } from "./demoData";
+import { demoReclamos } from "./demoData";
 
 
 const ViewAval = ({ }) => {
@@ -30,7 +30,6 @@ const ViewAval = ({ }) => {
 
 
   if (aval && location.search.includes("demo")) {
-    aval.cuotas = demoCuotas;
     aval.reclamos = demoReclamos;
   }
 

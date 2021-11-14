@@ -258,6 +258,16 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
+            path="/aval-visualizar/:id"
+            render={props => (
+                <ViewAval
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
             path="/aval-completar/:id"
             render={props => (
                 <AvalCompletar

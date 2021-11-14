@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
+import DateUtils from 'utils/DateUtils';
+import FiatUtils from '../../../utils/FiatUtils';
 
 //https://gradients.cssgears.com/
 
@@ -51,26 +53,18 @@ const Value = styled.span`
   font-size:0.9em;
 `
 
-export const formatDate = date => {
-  const dd = date.getDate().toString().padStart(2, "0");
-  const mm = (date.getMonth() + 1).toString().padStart(2, "0");
-  const yyyy = date.getFullYear();
-
-  return `${dd}/${mm}/${yyyy}`;
-}
-
 const CuotaCard = ({ cuota }) => {
   const statusStr = cuota?.status?.name?.toUpperCase();
-  const montoStr = "300 USD"
-  const vencimiento = formatDate(new Date(cuota.timestampVencimiento));
-  const desbloqueo = formatDate(new Date(cuota.timestampDesbloqueo));
+  const montoFiatStr = FiatUtils.format(cuota?.montoFiat);
+  const vencimiento = DateUtils.formatTimestampSeconds(cuota.timestampVencimiento);
+  const desbloqueo = DateUtils.formatTimestampSeconds(cuota.timestampDesbloqueo);
 
   return (
     <Card status={statusStr}>
       <Index>Cuota #{cuota.numero}</Index>
       <div>
         <Label>Monto:</Label>
-        <Value>{montoStr}</Value>{/* cuota.monto - Esto es un bignumber*/}
+        <Value>{montoFiatStr}</Value>
       </div>
       <div>
         <Label>Estado:</Label>

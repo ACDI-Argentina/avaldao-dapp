@@ -260,7 +260,7 @@ class AvalService {
             causa: avalData.causa,
             adquisicion: avalData.adquisicion,
             beneficiarios: avalData.beneficiarios,
-            monto: new BigNumber(avalData.monto),
+            montoFiat: new BigNumber(avalData.montoFiat),
             cuotasCantidad: avalData.cuotasCantidad,
             avaldaoAddress: avalData.avaldaoAddress,
             solicitanteAddress: avalData.solicitanteAddress,

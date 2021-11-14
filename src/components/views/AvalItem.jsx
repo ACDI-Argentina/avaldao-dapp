@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid'
 import ListItemText from '@material-ui/core/ListItemText'
 import StatusIndicator from 'components/StatusIndicator'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
+import PageviewIcon from '@material-ui/icons/Pageview'
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import IconButton from '@material-ui/core/IconButton'
@@ -35,6 +36,7 @@ class AvalItem extends Component {
     this.state = {
       availableFundFiat: new BigNumber(0)
     };
+    this.goVisualizar = this.goVisualizar.bind(this);
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
     this.desbloquear = this.desbloquear.bind(this);
@@ -45,6 +47,11 @@ class AvalItem extends Component {
     this.setState({
       availableFundFiat: availableFundFiat
     });
+  }
+
+  goVisualizar() {
+    const { aval } = this.props;
+    history.push(`/aval-visualizar/${aval.id}`);
   }
 
   goCompletar() {
@@ -74,12 +81,12 @@ class AvalItem extends Component {
 
     let allowFirmar = aval.allowFirmar(currentUser);
     let alertMessage = null;
-    if (availableFundFiat.isLessThan(aval.monto)) {
-      const diff = aval.monto.minus(availableFundFiat);
+    if (availableFundFiat.isLessThan(aval.montoFiat)) {
+      const diff = aval.montoFiat.minus(availableFundFiat);
       alertMessage = t('avalFondosInsuficientes', {
         diff: FiatUtils.format(diff)
       });
-      if(aval.isAvaldao(currentUser)) {
+      if (aval.isAvaldao(currentUser)) {
         // Cuando el usuario es Avaldao, no puede firmar si no hay fondos suficientes.
         allowFirmar = false;
       }
@@ -94,7 +101,7 @@ class AvalItem extends Component {
               <React.Fragment>
                 {aval.causa}
                 <br></br>
-                <FiatAmount amount={aval.monto}/>
+                <FiatAmount amount={aval.montoFiat} />
                 <br></br>
                 <StatusIndicator status={aval.status}></StatusIndicator>
 
@@ -141,6 +148,15 @@ class AvalItem extends Component {
             }
           />
           <ListItemSecondaryAction>
+            <Tooltip title={t('avalVisualizarTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="visualizar"
+                color="primary"
+                onClick={this.goVisualizar}>
+                <PageviewIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title={t('avalCompletarTitle')}>
               <IconButton
                 edge="end"

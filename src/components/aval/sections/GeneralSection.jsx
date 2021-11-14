@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Box from 'components/Box/box';
 
 import Section from './Section';
+import FiatUtils from 'utils/FiatUtils';
 
 const Label = styled.label`
   display: block;
@@ -24,7 +25,7 @@ const GeneralSection = ({ aval }) => {
   console.log(aval);
   const proyecto = aval.proyecto;
   const proposito = aval.proposito;
-  const monto = "10.000 USD";/* Nan? */
+  const montoFiat = FiatUtils.format(aval.montoFiat)
   const causa = aval.causa;
   const adquisicion = aval.adquisicion;
   const beneficiarios = aval.beneficiarios;
@@ -48,7 +49,7 @@ const GeneralSection = ({ aval }) => {
         <Box sm={2} lg={12}>
           <Info>
             <Label>Monto</Label>
-            {monto}
+            {montoFiat}
           </Info>
         </Box>
       </Flex>
