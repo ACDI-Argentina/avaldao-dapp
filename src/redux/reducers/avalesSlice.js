@@ -17,14 +17,11 @@ export const avalesSlice = createSlice({
       // Solo se obtiene el estado actual.
     },
     resetAvales: (state, action) => {
-      // Se resguardan las Avales Pendientes.
-      //var pendings = state.filter(c => c.status.name === Aval.PENDING.name);
       state.splice(0, state.length);
       for (let i = 0; i < action.payload.length; i++) {
         let avalStore = action.payload[i].toStore();
         state.push(avalStore);
       }
-      //pendings.forEach(c => state.push(c));
     },
     mergeAvales: (state, action) => {
       for (let i = 0; i < action.payload.length; i++) {

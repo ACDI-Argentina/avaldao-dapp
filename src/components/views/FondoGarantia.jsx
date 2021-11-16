@@ -5,55 +5,58 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import Grid from '@material-ui/core/Grid'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
+import FiatAmount from 'components/FiatAmount'
+import { selectTokenBalances, selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import { Typography } from '@material-ui/core'
-import { selectAvales } from '../../redux/reducers/avalesSlice'
-import List from '@material-ui/core/List';
-import AvalItem from './AvalItem';
+import TokenBalanceCard from 'components/TokenBalanceCard'
 
 /**
- * Listado de Avales.
+ * Fondo de Garantía.
  * 
  */
-class Avales extends Component {
+class FondoGarantia extends Component {
 
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { avales, classes, t } = this.props;
+    const { tokenBalances, fondoGarantiaBalanceFiat, t } = this.props;
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h5" component="h5">
-            {t('avalesTitle')}
+            {t('fondoGarantia')}
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <List className={classes.list}>
-            {avales.map(aval => (
-              <AvalItem key={aval.id} aval={aval}></AvalItem>
-            ))}
-          </List>
+          <Typography variant="subtitle1">
+            <FiatAmount amount={fondoGarantiaBalanceFiat}></FiatAmount>
+          </Typography>
+          {t('fondoGarantiaExplain')}
         </Grid>
+        {tokenBalances.map(tb => (
+          <Grid item sm={12} md={4}>
+            <TokenBalanceCard key={tb.address} tokenBalance={tb} />
+          </Grid>
+        ))}
       </Grid>
     );
   }
 }
 
-Avales.contextType = Web3AppContext;
+FondoGarantia.contextType = Web3AppContext;
 
 const styles = theme => ({
-  list: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper
-  }
+
+
 });
 
 const mapStateToProps = (state, ownProps) => {
   return {
     currentUser: selectCurrentUser(state),
-    avales: selectAvales(state)
+    tokenBalances: selectTokenBalances(state),
+    fondoGarantiaBalanceFiat: selectFondoGarantiaBalanceFiat(state)
   };
 }
 const mapDispatchToProps = {
@@ -61,5 +64,5 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(Avales)))
+  withTranslation()(FondoGarantia)))
 );

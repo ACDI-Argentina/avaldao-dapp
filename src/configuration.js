@@ -6,6 +6,7 @@ const {
   REACT_APP_NODE_CONNECTION_URL,
   REACT_APP_AVALDAO_ADDRESS,
   REACT_APP_AVALDAO_CONTRACT_ADDRESS,
+  REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS,
   REACT_APP_CROWDFUNDING_ADDRESS,
   REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS,
   REACT_APP_TOKEN_RIF_ADDRESS,
@@ -261,6 +262,7 @@ const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT]);
 config.crowdfundingAddress = REACT_APP_CROWDFUNDING_ADDRESS || config.crowdfundingAddress;
 config.avaldaoAddress = REACT_APP_AVALDAO_ADDRESS || config.avaldaoAddress;
 config.avaldaoContractAddress = REACT_APP_AVALDAO_CONTRACT_ADDRESS || config.avaldaoContractAddress;
+config.fondoGarantiaVaultContractAddress = REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS || config.fondoGarantiaVaultContractAddress;
 config.exchangeRateProviderContractAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS || config.exchangeRateProviderContractAddress;
 config.tokens.doc.address = REACT_APP_TOKEN_DOC_ADDRESS || config.tokens.doc.address;
 config.tokens.rif.address = REACT_APP_TOKEN_RIF_ADDRESS || config.tokens.rif.address;

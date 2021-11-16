@@ -15,6 +15,9 @@
     "userAvatarChoose": "Elige una foto de perfil",
     "userUnknown": "Usuario desconocido",
 
+    "fondoGarantia": "Fondo de garantía",
+    "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
+
     "noSignature": "Sin firmar",
 
     "avaldao": "Avaldao",

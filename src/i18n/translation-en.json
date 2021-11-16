@@ -15,6 +15,9 @@
     "userAvatarChoose": "Choose a profile photo",
     "userUnknown": "Unknown user",
 
+    "fondoGarantia": "Guarantee fund",
+    "fondoGarantiaExplain": "The guarantee fund is made up of tokens from the RSK blockchain and serves as backing for the guarantees.",
+
     "noSignature": "No signature",
 
     "avaldao": "Avaldao",

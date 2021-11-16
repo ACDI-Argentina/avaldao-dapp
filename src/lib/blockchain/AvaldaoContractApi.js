@@ -6,10 +6,11 @@ import web3Manager from './Web3Manager'
 import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
-import { AvaldaoAbi, AvalAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
+import { AvaldaoAbi, AvalAbi, FondoGarantiaVaultAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
 import avalStoreUtils from 'redux/utils/avalStoreUtils';
 import { utils } from 'web3';
 import Cuota from 'models/Cuota';
+import TokenBalance from 'models/TokenBalance';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -35,20 +36,47 @@ class AvaldaoContractApi {
     }
 
     /**
+     * Obtiene todos los token balances que conforman el fondo de garantía.
+     */
+    getFondoGarantia() {
+        return new Observable(async subscriber => {
+            try {
+                let tokenBalances = [];
+                let tokens = await this.fondoGarantiaVault.methods.getTokens().call();
+                for (let i = 0; i < tokens.length; i++) {
+                    let { token,
+                        amount,
+                        rate,
+                        amountFiat } = await this.fondoGarantiaVault.methods.getTokenBalance(tokens[i]).call();
+                    tokenBalances.push(new TokenBalance({
+                        address: token,
+                        amount: amount,
+                        rate: rate,
+                        amountFiat: amountFiat
+                    }));
+                }
+                subscriber.next(tokenBalances);
+            } catch (error) {
+                console.log('[Avaldao Contract API] Error obteniendo Fondo de Garantía.', error);
+                subscriber.error(error);
+            }
+        });
+    }
+
+    /**
      * Obtiene todos los Avales desde el Smart Contract.
      */
     getAvales() {
         return new Observable(async subscriber => {
             try {
                 let ids = await this.avaldao.methods.getAvalIds().call(); //Devuelve un array de un solo elemento, 614ba578844de200126b50d0
-                console.log(`avales:`,ids)
                 let avales = [];
                 for (let i = 0; i < ids.length; i++) {
-                    try{
+                    try {
                         let aval = await this.getAvalById(ids[i]);
                         avales.push(aval);
 
-                    } catch(err){
+                    } catch (err) {
                         console.log(err);
                     }
                 }
@@ -130,21 +158,6 @@ class AvaldaoContractApi {
             avaldaoAddress: avalOnChain.avaldao,
             status: Aval.mapAvalStatus(parseInt(avalOnChain.status))
         });
-    }
-
-    /**
-     * Obtiene el monto disponible en moneda FIAT del fondo de garantía.
-     * 
-     * @returns monto disponible de garantía. 
-     */
-    async getAvailableFundFiat() {
-        let availableFundFiat = 0;
-        try {
-            availableFundFiat = await this.avaldao.methods.getAvailableFundFiat().call();
-        } catch (err) {
-            console.error("[AvaldaoContractApi] Fallo al consultar fondos de garantía.", err);
-        }
-        return new BigNumber(availableFundFiat);
     }
 
     /**
@@ -538,9 +551,10 @@ class AvaldaoContractApi {
     }
 
     updateContracts() {
-        const { avaldaoContractAddress, exchangeRateProviderContractAddress } = config;
-        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, exchangeRateProviderContractAddress);
+        const { avaldaoContractAddress, fondoGarantiaVaultContractAddress, exchangeRateProviderContractAddress } = config;
+        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, fondoGarantiaVaultContractAddress, exchangeRateProviderContractAddress);
         this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
+        this.fondoGarantiaVault = new this.web3.eth.Contract(FondoGarantiaVaultAbi, fondoGarantiaVaultContractAddress);
         this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
     }
 }

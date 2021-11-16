@@ -18,10 +18,9 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
 import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
+import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import ProfileSignature from './ProfileSignature'
 import { firmarAval, desbloquearAval } from '../../redux/reducers/avalesSlice'
-import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi'
-import BigNumber from 'bignumber.js';
 import FiatAmount from 'components/FiatAmount'
 import FiatUtils from 'utils/FiatUtils'
 
@@ -34,7 +33,7 @@ class AvalItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      availableFundFiat: new BigNumber(0)
+      
     };
     this.goVisualizar = this.goVisualizar.bind(this);
     this.goCompletar = this.goCompletar.bind(this);
@@ -42,11 +41,8 @@ class AvalItem extends Component {
     this.desbloquear = this.desbloquear.bind(this);
   }
 
-  async componentDidMount() {
-    const availableFundFiat = await avaldaoContractApi.getAvailableFundFiat();
-    this.setState({
-      availableFundFiat: availableFundFiat
-    });
+  componentDidMount() {
+    
   }
 
   goVisualizar() {
@@ -76,13 +72,12 @@ class AvalItem extends Component {
 
   render() {
 
-    const { currentUser, aval, classes, t } = this.props;
-    const { availableFundFiat } = this.state;
-
+    const { currentUser, aval, classes, t, fondoGarantiaBalanceFiat } = this.props;
+    
     let allowFirmar = aval.allowFirmar(currentUser);
     let alertMessage = null;
-    if (availableFundFiat.isLessThan(aval.montoFiat)) {
-      const diff = aval.montoFiat.minus(availableFundFiat);
+    if (fondoGarantiaBalanceFiat.isLessThan(aval.montoFiat)) {
+      const diff = aval.montoFiat.minus(fondoGarantiaBalanceFiat);
       alertMessage = t('avalFondosInsuficientes', {
         diff: FiatUtils.format(diff)
       });
@@ -204,7 +199,8 @@ const styles = theme => ({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    currentUser: selectCurrentUser(state)
+    currentUser: selectCurrentUser(state),
+    fondoGarantiaBalanceFiat: selectFondoGarantiaBalanceFiat(state)
   };
 }
 const mapDispatchToProps = {

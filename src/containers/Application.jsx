@@ -28,6 +28,7 @@ import { connect } from 'react-redux'
 import { fetchDacs } from '../redux/reducers/dacsSlice'
 import { fetchCampaigns } from '../redux/reducers/campaignsSlice'
 import { fetchAvalesOnChain, fetchAvalesOffChain } from '../redux/reducers/avalesSlice'
+import { fetchFondoGarantia } from '../redux/reducers/fondoGarantiaSlice'
 import { fetchMilestones } from '../redux/reducers/milestonesSlice'
 import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { fetchUsers } from '../redux/reducers/usersSlice';
@@ -81,6 +82,7 @@ class Application extends Component {
     this.props.fetchAvalesOffChain();
     this.props.fetchUsers();
     this.props.fetchExchangeRates();
+    this.props.fetchFondoGarantia();
     initExchangeRateListener();
   }
 
@@ -147,7 +149,8 @@ const mapDispatchToProps = {
   fetchCampaigns,
   fetchMilestones,
   fetchUsers,
-  fetchExchangeRates
+  fetchExchangeRates,
+  fetchFondoGarantia
 }
 
 Application.contextType = Web3AppContext;
