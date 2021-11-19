@@ -112,21 +112,21 @@ class AvaldaoContractApi {
 
         // Se obtiene la información del aval desde la Blockchain.
         const avalAddress = await this.avaldao.methods.getAvalAddress(id).call();
-        const aval = new this.web3.eth.Contract(AvalAbi, avalAddress);
+        const avalContract = new this.web3.eth.Contract(AvalAbi, avalAddress);
         const avalOnChain = {
             id: id,
-            infoCid: await aval.methods.infoCid().call(),
-            avaldao: await aval.methods.avaldao().call(),
-            solicitante: await aval.methods.solicitante().call(),
-            comerciante: await aval.methods.comerciante().call(),
-            avalado: await aval.methods.avalado().call(),
-            montoFiat: await aval.methods.montoFiat().call(),
-            cuotasCantidad: await aval.methods.cuotasCantidad().call(),
+            infoCid: await avalContract.methods.infoCid().call(),
+            avaldao: await avalContract.methods.avaldao().call(),
+            solicitante: await avalContract.methods.solicitante().call(),
+            comerciante: await avalContract.methods.comerciante().call(),
+            avalado: await avalContract.methods.avalado().call(),
+            montoFiat: await avalContract.methods.montoFiat().call(),
+            cuotasCantidad: await avalContract.methods.cuotasCantidad().call(),
             cuotas: [],
-            status: await aval.methods.status().call()
+            status: await avalContract.methods.status().call()
         };
         for (let cuotaNumero = 1; cuotaNumero <= avalOnChain.cuotasCantidad; cuotaNumero++) {
-            const cuotaOnChain = await aval.methods.getCuotaByNumero(cuotaNumero).call();
+            const cuotaOnChain = await avalContract.methods.getCuotaByNumero(cuotaNumero).call();
             const cuota = {
                 numero: parseInt(cuotaOnChain.numero),
                 montoFiat: parseInt(cuotaOnChain.montoFiat),
@@ -452,24 +452,14 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
-            try {
-                // Se almacena en IPFS toda la información del Aval.
-                let infoCid = await avalIpfsConnector.upload(aval);
-                aval.infoCid = infoCid;
-            } catch (e) {
-                console.error('[AvaldaoContractApi] Error subiendo aval a IPFS.', e);
-                subscriber.error(e);
-                return;
-            }
+            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
             const users = [aval.solicitanteAddress,
             aval.comercianteAddress,
             aval.avaladoAddress,
             aval.avaldaoAddress];
 
-
-            const method = this.avaldao.methods.unlockFundManual(
-                aval.address);
+            const method = avalContract.methods.unlockFundManual();
 
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
             const gasPrice = await this.getGasPrice();
