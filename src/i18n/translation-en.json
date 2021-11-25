@@ -30,6 +30,7 @@
     "avalCompletarTitle": "Complete aval",
     "avalFirmarTitle": "Sign aval",
     "avalDesbloquearTitle": "Unlock funds of aval",
+    "avalReclamarTitle": "Claim aval",
     "avalCompletar": "Complete",
     "avalCancelar": "Cancel",
     "avalProyecto": "Project",
@@ -296,6 +297,14 @@
     "transactionConfirmedDescriptionDesbloquearAval": "The aval's share funds has been unlocked.",
     "transactionFailuredTitleDesbloquearAval": "The aval's share funds was not unlocked",
     "transactionFailuredDescriptionDesbloquearAval": "A failure occurred during aval's share funds unlocking.",
+
+    "transactionCreatedTitleReclamarAval": "Confirm that you claim funds of the aval in the wallet",
+    "transactionCreatedSubtitleReclamarAval": "Double check the details here – the claim funds of the aval can't be refunded.",
+    "transactionPendingTitleReclamarAval": "Claiming funds of the aval...",
+    "transactionConfirmedTitleReclamarAval": "The funds of the aval have been claimed",
+    "transactionConfirmedDescriptionReclamarAval": "The funds of the aval have been claimed.",
+    "transactionFailuredTitleReclamarAval": "The funds of the aval were not claimed",
+    "transactionFailuredDescriptionReclamarAval": "A failure occurred during claiming funds of the aval.",
 
     "transactionCreatedTitleSignAval": "Confirm your sign of aval in the wallet",
     "transactionCreatedSubtitleSignAval": "Double check the details here – your sign of aval can't be refunded.",

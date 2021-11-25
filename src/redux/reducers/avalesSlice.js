@@ -49,6 +49,9 @@ export const avalesSlice = createSlice({
     desbloquearAval: (state, action) => {
 
     },
+    reclamarAval: (state, action) => {
+
+    },
     fetchAvalById: (state, action) => {
       // Solo se obtiene el estado actual.
     },
@@ -72,6 +75,7 @@ export const {
   completarAval,
   firmarAval,
   desbloquearAval,
+  reclamarAval,
   fetchAvalById,
   updateAvalById } = avalesSlice.actions;
 

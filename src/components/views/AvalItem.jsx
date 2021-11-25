@@ -13,6 +13,7 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 import PageviewIcon from '@material-ui/icons/Pageview'
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import IconButton from '@material-ui/core/IconButton'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -20,7 +21,7 @@ import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import ProfileSignature from './ProfileSignature'
-import { firmarAval, desbloquearAval } from '../../redux/reducers/avalesSlice'
+import { firmarAval, desbloquearAval, reclamarAval } from '../../redux/reducers/avalesSlice'
 import FiatAmount from 'components/FiatAmount'
 import FiatUtils from 'utils/FiatUtils'
 
@@ -39,6 +40,7 @@ class AvalItem extends Component {
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
     this.desbloquear = this.desbloquear.bind(this);
+    this.reclamar = this.reclamar.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +68,13 @@ class AvalItem extends Component {
   desbloquear() {
     const { currentUser, aval, desbloquearAval, t } = this.props;
     desbloquearAval({
+      aval: aval
+    })
+  }
+
+  reclamar() {
+    const { currentUser, aval, reclamarAval, t } = this.props;
+    reclamarAval({
       aval: aval
     })
   }
@@ -182,6 +191,16 @@ class AvalItem extends Component {
                 <LockOpenIcon />
               </IconButton>
             </Tooltip>
+            <Tooltip title={t('avalReclamarTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="reclamar"
+                color="primary"
+                onClick={this.reclamar}
+                disabled={!aval.allowReclamar(currentUser)}>
+                <AttachMoneyIcon />
+              </IconButton>
+            </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
         <Divider component="li" />
@@ -204,7 +223,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 }
 const mapDispatchToProps = {
-  firmarAval, desbloquearAval
+  firmarAval, desbloquearAval, reclamarAval
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(

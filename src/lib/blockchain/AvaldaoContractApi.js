@@ -186,6 +186,8 @@ class AvaldaoContractApi {
 
             // Tiemstamp actual medido en segundos.
             const timestampCurrent = Math.round(Date.now() / 1000);
+            // Simulación de cuotas vencidas.
+            //const timestampCurrent = Math.round(Date.now() / 1000) - 100 * 24 * 60 * 60;
             // Tiempo entre vencimientos de cuota medido en segundos.
             // 30 días.
             const vencimientoRange = 30 * 24 * 60 * 60;
@@ -454,11 +456,6 @@ class AvaldaoContractApi {
 
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
-            const users = [aval.solicitanteAddress,
-            aval.comercianteAddress,
-            aval.avaladoAddress,
-            aval.avaldaoAddress];
-
             const method = avalContract.methods.unlockFundManual();
 
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
@@ -521,6 +518,84 @@ class AvaldaoContractApi {
 
                 error.aval = aval;
                 console.error(`Error procesando transacción para desbloquear fondos de aval.`, error);
+                subscriber.error(error);
+            });
+        });
+    }
+
+    /**
+     * Reclama los fondos de un aval.
+     * 
+     * @param aval a reclamar
+     */
+    reclamarAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
+
+            const method = avalContract.methods.openReclamo();
+
+            const gasEstimated = await this.estimateGas(method, aval.comercianteAddress);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionStoreUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleReclamarAval'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleReclamarAval'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleReclamarAval'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleReclamarAval'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionReclamarAval'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleReclamarAval'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionReclamarAval'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: aval.comercianteAddress,
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionStoreUtils.updateTransaction(transaction);
+
+                aval.txHash = hash;
+                subscriber.next(aval);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                //const numeroCuota = receipt.events['AvalCuotaUnlock'].returnValues.numeroCuota;
+
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(aval.id);
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error(`Error procesando transacción para reclamar fondos de aval.`, error);
                 subscriber.error(error);
             });
         });

@@ -192,11 +192,48 @@ class Aval {
       // https://github.com/ACDI-Argentina/avaldao/issues/21
       return false;
     }
-    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+    if (!Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // Solo el Solicitante puede desbloquear fondos el aval
-      return true;
+      return false;
     }
-    return false;
+    return true;
+  }
+
+  /**
+   * Determina si el Aval pueden ser reclamado o no.
+   * @param user usuario que reclama el aval.
+   */
+  allowReclamar(user) {
+    if (this.status.name !== Aval.VIGENTE.name) {
+      // Solo un aval Vigente puede ser reclamado.
+      return false;
+    }
+    if (!user.registered) {
+      // El usuario no está autenticado.
+      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
+      // https://github.com/ACDI-Argentina/avaldao/issues/21
+      return false;
+    }
+    if (!Web3Utils.addressEquals(user.address, this.comercianteAddress)) {
+      // Solo el Comerciante puede desbloquear fondos el aval
+      return false;
+    }
+    // TODO Verificar reclamos vigentes
+    // La fecha actual debe ser mayor a la fecha de vencimiento de la primera cuota Pendiente.
+    const timestampCurrent = Math.round(Date.now() / 1000);
+    let hasCuotaPendienteVencida = false;
+    for (let i = 0; i < this.cuotas.length; i++) {
+      const cuota = this.cuotas[i];
+      if (cuota.status.name == Cuota.PENDIENTE.name &&
+        cuota.timestampVencimiento <= timestampCurrent) {
+        hasCuotaPendienteVencida = true;
+        break;
+      }
+    }
+    if (!hasCuotaPendienteVencida) {
+      return false;
+    }
+    return true;
   }
 
   /**
