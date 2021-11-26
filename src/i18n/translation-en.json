@@ -32,6 +32,7 @@
     "avalDesbloquearTitle": "Unlock funds of aval",
     "avalCompletar": "Complete",
     "avalCancelar": "Cancel",
+    "avalReclamarTitle": "Open claim",
     "avalProyecto": "Project",
     "avalProposito": "Purpose",
     "avalCausa": "Why",
@@ -48,6 +49,21 @@
     "avalComercianteAddressHelper": "Seller wallet address",
     "avalAvaladoAddressHelper": "Endorsed wallet address",
     "avalFondosInsuficientes": "Insufficient funds for the guarantee. {{diff}} more required.",
+
+
+    "avalFirmasSection": "Signatures",
+    "avalCuotaSection": "Dues",
+    "avalCuota": "Due",
+    "avalCuotaAmount": "Amount",
+    "avalCuotaStatus": "Status",
+    "avalCuotaDueDate": "Due date",
+    "avalCuotaUnlockDate": "Unlock date",
+
+    "avalClaimSection":"Claims",
+    "noClaims":"No claims.",
+    "openClaim":"Open a new claim",
+
+    "soloAvalesVigentes": "Available only for endorsements in active status ",
 
     "give4forest": "Give for forest",
 

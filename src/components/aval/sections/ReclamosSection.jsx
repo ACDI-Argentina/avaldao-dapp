@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NoAvailable from './NoAvailable';
 import ReclamoCard from '../cards/ReclamoCard';
 import Section from './Section';
+import { useTranslation } from 'react-i18next';
 
 
 const Content = styled.div`
@@ -65,9 +66,11 @@ const SNoClaims = styled.div`
 
 
 const NoClaims = () => {
+  const { t } = useTranslation();
+
   return (
     <SNoClaims>
-      <div>Aún no hay reclamos.</div>
+      <div>{t("noClaims")}</div>
       <div>
         <OpenClaimButton disabled>
           <FontAwesomeIcon
@@ -77,21 +80,21 @@ const NoClaims = () => {
               fontSize: "15px"
             }}
           />
-          Abrir un reclamo
+          {t("openClaim")}
         </OpenClaimButton>
       </div>
     </SNoClaims>)
 }
 
 const ReclamosSection = ({ aval }) => {
-  const status = aval?.status?.name?.toUpperCase();
+  const { t } = useTranslation();
 
-  const available = status === "VIGENTE" || status === "FINALIZADO";
+  const available = aval.showReclamos();
   const hasClaims = aval?.reclamos?.length > 0;
 
   return (
     <Section>
-      <h3>Reclamos</h3>
+      <h3>{t('avalClaimSection')}</h3>
       {available ? (
         <Content>
           {hasClaims ? <ClaimsList aval={aval}/> : <NoClaims />}

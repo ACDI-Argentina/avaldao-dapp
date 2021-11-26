@@ -9,12 +9,13 @@ import { selectAvalById } from 'redux/reducers/avalesSlice';
 import { fetchUsers } from 'redux/reducers/usersSlice';
 
 import AvalActions from 'components/aval/sections/AvalActions';
-import GeneralSection from 'components/aval/sections/GeneralSection';
+import AvalGeneralSection from 'components/aval/sections/AvalGeneralSection';
+
 import SignaturesSection from 'components/aval/sections/SignaturesSection';
 import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
-import StatusTag from 'components/aval/StatusTag';
 import { demoReclamos } from "./demoData";
+import StatusIndicator from 'components/StatusIndicator';
 
 
 const ViewAval = ({ }) => {
@@ -43,10 +44,10 @@ const ViewAval = ({ }) => {
   return (
     <Page>
       <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-        <StatusTag aval={aval} />
+        <StatusIndicator status={aval.status}/>
       </Flex>
       <AvalActions aval={aval} />
-      <GeneralSection aval={aval} />
+      <AvalGeneralSection aval={aval} />
       <SignaturesSection aval={aval} />
       <CuotasSection aval={aval} />
       <ReclamosSection aval={aval} />

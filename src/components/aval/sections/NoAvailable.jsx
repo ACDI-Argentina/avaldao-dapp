@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 const SNoAvailable = styled.div`
@@ -15,9 +16,10 @@ const SNoAvailable = styled.div`
 
 
 const NoAvailable = ({ }) => {
+  const {t} = useTranslation();
   return (
     <SNoAvailable >
-      Disponible solo para avales en estado vigente
+      {t('soloAvalesVigentes')}
     </SNoAvailable >
   )
 }

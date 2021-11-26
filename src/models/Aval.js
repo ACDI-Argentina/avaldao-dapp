@@ -239,6 +239,19 @@ class Aval {
     return false;
   }
 
+  showCuotas() {
+    const vigente = this.status.name === Aval.VIGENTE.name;
+    const finalizado = this.status.name === Aval.FINALIZADO.name;
+
+    return vigente || finalizado;
+  }
+  
+  showReclamos() {
+    const vigente = this.status.name === Aval.VIGENTE.name;
+    const finalizado = this.status.name === Aval.FINALIZADO.name;
+    return vigente || finalizado;
+  }
+
   /**
    * Determina si el usuario es Avalado del Aval.
    * @param user usuario a determinar si es Avaldao.

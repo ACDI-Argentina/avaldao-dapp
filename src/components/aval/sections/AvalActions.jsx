@@ -1,39 +1,16 @@
 import React from 'react'
-import { faEdit, faExclamationTriangle, faFileSignature, faUnlock, faUnlockAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import { IconButton, Tooltip } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import ReportIcon from '@material-ui/icons/Report';
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 
-
-const Button = styled.button`
-  border:1px solid transparent;
-  margin:5px;
-  padding:5px 10px;
-  border-radius:4px;
-  cursor: pointer;
-  font-size:16px;
-  font-weight:500;
-
-  ${props => props.primary && `
-    color: #F2F2F2;
-    background-color:#01579B;
-  `}
-
-  ${props => props.warningAlt && `
-    color: #555555;
-    background-color:#FFC04F;
-  `}
-  ${props => props.successAlt && `
-    color: #F2F2F2;
-    background-color:#1AA251;
-  `}  
-
-  ${props => props.disabled && `
-    color: #999999;
-    background-color:#F2F2F2;
-    cursor: default;
-  `}
-
-`
+import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
+import { firmarAval, desbloquearAval } from 'redux/reducers/avalesSlice';
 
 const ActionsSection = styled.div`  
   display: flex;
@@ -52,89 +29,103 @@ const ActionsSection = styled.div`
   }
 `
 
-const CompleteButton = () => {
+const CompleteButton = ({ aval }) => {
+  const history = useHistory();
+  const { t } = useTranslation();
+  const currentUser = useSelector(selectCurrentUser);
+
   return (
-    <Button primary>
-      <FontAwesomeIcon
-        icon={faEdit}
-        style={{
-          color: "#F2F2F2",
-          margin: "0px 5px",
-          fontSize: "1em"
-        }}
-      />
-      Completar
-    </Button>
+    <Tooltip title={t('avalCompletarTitle')}>
+      <IconButton
+        edge="end"
+        aria-label="completar"
+        color="primary"
+        onClick={() => history.push(`/aval-completar/${aval.id}`)}
+        style={{ pointerEvents: "auto" }}
+        disabled={!aval.allowCompletar(currentUser)}
+        >
+        <AssignmentTurnedInIcon />
+      </IconButton>
+    </Tooltip>
   )
 }
 
-const SignatureButton = () => {
+const SignatureButton = ({ aval }) => {
+
+  const { t } = useTranslation();
+  const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+
+  const allowFirmar = aval.allowFirmar(currentUser);
+
   return (
-    <Button primary>
-      <FontAwesomeIcon
-        icon={faFileSignature}
-        style={{
-          color: "#F2F2F2",
-          margin: "0px 5px",
-          fontSize: "1em"
+    <Tooltip title={t('avalFirmarTitle')}>
+      <IconButton
+        edge="end"
+        aria-label="firmar"
+        color="primary"
+        onClick={() => {
+          dispatch(firmarAval({
+            aval: aval,
+            signerAddress: currentUser.address
+          }));
         }}
-      />
-      Firmar
-    </Button>
+        disabled={!allowFirmar}
+        style={{ pointerEvents: "auto" }}
+      >
+        <VpnKeyIcon />
+      </IconButton>
+    </Tooltip>
   )
 }
 
-const ClaimButton = () => {
+const ClaimButton = ({ aval }) => {
+  const { t } = useTranslation();
+
   return (
-    <Button warningAlt disabled>
-      <FontAwesomeIcon
-        icon={faExclamationTriangle}
-        style={{
-          color: "#555555",
-          margin: "0px 5px",
-          fontSize: "1em"
-        }}
-      />
-      Reclamar
-    </Button>
+    <Tooltip title={t('avalReclamarTitle')}>
+      <IconButton
+        edge="end"
+        aria-label="reclamar"
+        color="primary"
+        onClick={() => { console.log(`Implementar abrir nuevo reclamo`) }}
+        disabled={true} /* TODO: implementar funcionalidad */
+        style={{ pointerEvents: "auto" }}
+      >
+        <ReportIcon />
+      </IconButton>
+    </Tooltip>
   )
 }
 
-const UnlockButton = () => {
+const UnlockButton = ({ aval }) => {
+  const { t } = useTranslation();
+  const currentUser = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+
   return (
-    <Button successAlt disabled>
-      <FontAwesomeIcon
-        icon={faUnlockAlt}
-        style={{
-          color: "#555555",
-          margin: "0px 5px",
-          fontSize: "1em"
-        }}
-      />
-      Desbloquear cuota
-    </Button>
+    <Tooltip title={t('avalDesbloquearTitle')}>
+      <IconButton
+        edge="end"
+        aria-label="desbloquear"
+        color="primary"
+        onClick={() => dispatch(desbloquearAval({ aval }))}
+        disabled={!aval.allowDesbloquear(currentUser)}
+        style={{ pointerEvents: "auto" }}
+      >
+        <LockOpenIcon />
+      </IconButton>
+    </Tooltip>
   )
 }
 
 const AvalActions = ({ aval }) => {
-  /*
-    Firmar : COMPLETADO && (solicitante|| comerciante || avalado) ||(All firmed & avaldao)  
-    Este podria aparecer en el card tmb del perfil asociado tmb
-    */
-  /*Desbloquear cuota : vigente + comerciante  */
-  const status = aval?.status?.name?.toUpperCase();
-  const showComplete = status === "ACEPTADO"; // && currentUser isSolicitante
-  const showSignature = status === "COMPLETADO"; //  && currentUser relacionado al aval en cuestion
-  const showClaimButton = status === "VIGENTE";/*Reclamar : vigente + comerciante (deshabilitado x el momento) */
-  const showUnlockButton = status === "VIGENTE";
-
   return (
     <ActionsSection>
-      {showComplete && <CompleteButton />}
-      {showSignature && <SignatureButton />}
-      {showClaimButton && <ClaimButton />}
-      {showUnlockButton && <UnlockButton />}
-
+      <CompleteButton aval={aval} />
+      <ClaimButton aval={aval} />
+      <SignatureButton aval={aval} />
+      <UnlockButton aval={aval} />
     </ActionsSection>
   )
 }

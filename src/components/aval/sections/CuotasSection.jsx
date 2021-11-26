@@ -1,31 +1,33 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import AvalCuotaCard from '../cards/AvalCuotaCard';
 
-import CuotaCard from '../cards/CuotaCard';
 import NoAvailable from './NoAvailable';
 import Section from './Section';
+import Aval from 'models/Aval';
 
 const CuotasList = styled.div`
   display:flex;
   overflow-x:auto;
   padding-bottom:10px;
   min-height: 250px;
-  background-color: #F2F2F2;
+  background-color: white;
   border-radius:12px;
 `;
 
 const CuotasSection = ({ aval }) => {
-  const status = aval?.status?.name?.toUpperCase();
-  
-  const available = status === "VIGENTE" || status === "FINALIZADO" ;
+  const { t } = useTranslation();
+
+  const available = aval.showCuotas();
 
   return (
     <Section>
-      <h3>Cuotas</h3>
+      <h3>{t('avalCuotaSection')}</h3>
       {available ? (
         <CuotasList>
           {aval?.cuotas.map((cuota, idx) => (
-            <CuotaCard key={idx} cuota={cuota} />
+            <AvalCuotaCard key={idx} cuota={cuota} />
           ))}
         </CuotasList>
       ) : (<NoAvailable />)}

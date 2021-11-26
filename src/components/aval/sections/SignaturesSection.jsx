@@ -1,44 +1,71 @@
 import React from 'react'
 import Box from 'components/Box/box';
 import styled from 'styled-components';
-import SignatureCard from '../cards/SignatureCard';
+import ProfileSignature from 'components/views/ProfileSignature';
+import { useSelector } from 'react-redux';
+import { selectUserByAddress } from 'redux/reducers/usersSlice';
+import Section from './Section';
+import { useTranslation } from 'react-i18next';
 
 const Flex = styled.div`
   display: flex;
   flex-wrap:wrap;
 `;
 
-const SignaturesSection = ({ aval }) => {
-  
-  const users = [
-    { address: aval?.solicitanteAddress,
-      signature: aval?.solicitanteSignature,
-      rol:"Solicitante"
-    },
-    { address: aval?.avaladoAddress,
-      signature: aval?.avaladoSignature,
-      rol:"Avalado"
-    },
-    { address: aval?.comercianteAddress,
-      signature: aval?.comercianteSignature,
-      rol:"Comerciante"
-    },
-    { address: aval?.avaldaoAddress,
-      signature: aval?.avaldaoSignature,
-      rol:"Avaldao"
-    },
-  ]; 
-  
+
+
+const Signature = ({ signature }) => {
+  const user = useSelector(state => selectUserByAddress(state, signature.address));
   return (
-    <Flex>
-      {Object.keys(users).map(key => users[key]).map(user => {
-        return (
-          <Box xs={12} md={6} xxl={3} key={user.address} style={{ padding: "14px" }}>
-            <SignatureCard user={user} />
-          </Box>
-        )
-      })}
-    </Flex>
+    <ProfileSignature
+      address={signature.address}
+      user={user}
+      title={signature.title}
+      signature={signature.signature}
+    />
+  )
+}
+
+const SignaturesSection = ({ aval }) => {
+
+  const { t } = useTranslation();
+
+  const signatures = [
+    {
+      address: aval?.avaldaoAddress,
+      signature: aval?.avaldaoSignature,
+      title: t("avaldao")
+    },
+    {
+      address: aval?.solicitanteAddress,
+      signature: aval?.solicitanteSignature,
+      title: t("solicitante")
+    },
+    {
+      address: aval?.comercianteAddress,
+      signature: aval?.comercianteSignature,
+      title: t("comerciante")
+    },
+    {
+      address: aval?.avaladoAddress,
+      signature: aval?.avaladoSignature,
+      title: t("avalado")
+    },
+  ];
+
+  return (
+    <Section>
+      <h3>{t('avalFirmasSection')}</h3>
+      <Flex>
+        {Object.keys(signatures).map(key => signatures[key]).map(signature => {
+          return (
+            <Box xs={12} md={6} xxl={3} key={signature.address} style={{ padding: "14px" }}>
+              <Signature signature={signature} />
+            </Box>
+          )
+        })}
+      </Flex>
+    </Section>
   )
 }
 export default SignaturesSection;

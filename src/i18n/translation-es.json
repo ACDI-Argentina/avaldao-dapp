@@ -32,6 +32,7 @@
     "avalDesbloquearTitle": "Desbloquear fondos de aval",
     "avalCompletar": "Completar",
     "avalCancelar": "Cancelar",
+    "avalReclamarTitle": "Abrir reclamo",
     "avalProyecto": "Proyecto",
     "avalProposito": "Propósito",
     "avalCausa": "Por qué",
@@ -48,8 +49,21 @@
     "avalComercianteAddressHelper": "Dirección de la billetera del comerciante",
     "avalAvaladoAddressHelper": "Dirección de la billetera del avalado",
     "avalFondosInsuficientes": "Fondos insuficientes para el aval. Se requiren {{diff}} más.",
-    
-    
+
+
+    "avalFirmasSection": "Firmas",
+    "avalCuotaSection": "Cuotas",
+    "avalCuota": "Cuota",
+    "avalCuotaAmount": "Monto",
+    "avalCuotaStatus": "Estado",
+    "avalCuotaDueDate": "Fecha de vencimiento",
+    "avalCuotaUnlockDate": "Fecha de desbloqueo",
+
+    "avalClaimSection":"Reclamos",
+    "noClaims":"Aún no hay reclamos.",
+    "openClaim":"Abrir un reclamo",
+
+    "soloAvalesVigentes": "Disponible solo para avales en estado vigente",
     
     "give4forest": "Give for forest",
 
