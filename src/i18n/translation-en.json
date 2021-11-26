@@ -31,6 +31,7 @@
     "avalFirmarTitle": "Sign aval",
     "avalDesbloquearTitle": "Unlock funds of aval",
     "avalReclamarTitle": "Claim aval",
+    "avalReintegrarTitle": "Reintegrate aval",
     "avalCompletar": "Complete",
     "avalCancelar": "Cancel",
     "avalProyecto": "Project",
@@ -305,6 +306,14 @@
     "transactionConfirmedDescriptionReclamarAval": "The funds of the aval have been claimed.",
     "transactionFailuredTitleReclamarAval": "The funds of the aval were not claimed",
     "transactionFailuredDescriptionReclamarAval": "A failure occurred during claiming funds of the aval.",
+
+    "transactionCreatedTitleReintegrarAval": "Confirm that you reintegrate funds of the aval in the wallet",
+    "transactionCreatedSubtitleReintegrarAval": "Double check the details here – the reintegrate funds of the aval can't be refunded.",
+    "transactionPendingTitleReintegrarAval": "Reintegrating funds of the aval...",
+    "transactionConfirmedTitleReintegrarAval": "The funds of the aval have been reintegrated",
+    "transactionConfirmedDescriptionReintegrarAval": "The funds of the aval have been reintegrated.",
+    "transactionFailuredTitleReintegrarAval": "The funds of the aval were not reintegrated",
+    "transactionFailuredDescriptionReintegrarAval": "A failure occurred during reintegrating funds of the aval.",
 
     "transactionCreatedTitleSignAval": "Confirm your sign of aval in the wallet",
     "transactionCreatedSubtitleSignAval": "Double check the details here – your sign of aval can't be refunded.",
