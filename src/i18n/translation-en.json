@@ -56,8 +56,8 @@
     "avalCuota": "Due",
     "avalCuotaAmount": "Amount",
     "avalCuotaStatus": "Status",
-    "avalCuotaDueDate": "Due date",
-    "avalCuotaUnlockDate": "Unlock date",
+    "avalCuotaDueDate": "Due",
+    "avalCuotaUnlockDate": "Unlock",
 
     "avalClaimSection":"Claims",
     "noClaims":"No claims.",

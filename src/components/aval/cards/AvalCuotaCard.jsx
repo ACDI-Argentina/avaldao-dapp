@@ -7,32 +7,27 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
 import { makeStyles, Typography } from '@material-ui/core';
-import CardHeader from 'components/Card/CardHeader';
+import CardHeader from '@material-ui/core/CardHeader';
 import { useTranslation } from 'react-i18next';
-
+import { red } from '@material-ui/core/colors';
+import Avatar from '@material-ui/core/Avatar';
+import StatusIndicator from 'components/StatusIndicator';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 340,
-    margin: 10,
-    padding: 15,
-    paddingBottom: 0,
-    flexShrink: 0,
+    minWidth: 250,
+    marginRight: 15
   },
-  header: {
-    marginTop: 0,
-    padding: 0
+  contentRoot: {
+    paddingTop: 0,
+    paddingBottom: 0
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 500
+  contentGrid: {
+    flexGrow: 1
   },
-  label: {
-    display: "inline-block",
-    fontWeight: 500
-  },
-  value: {
-    display: "inline-block",
+  avatar: {
+    backgroundColor: red[500],
   }
 });
 
@@ -41,38 +36,41 @@ const AvalCuotaCard = ({ cuota }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const statusStr = cuota?.status?.name?.toUpperCase();
   const montoFiatStr = FiatUtils.format(cuota?.montoFiat);
   const vencimiento = DateUtils.formatTimestampSeconds(cuota.timestampVencimiento);
   const desbloqueo = DateUtils.formatTimestampSeconds(cuota.timestampDesbloqueo);
 
   return (
     <Card className={classes.root}>
-      <CardHeader className={classes.header}>
-        <Typography variant={"h6"}>
-          {t('avalCuota')} #{cuota.numero}
-        </Typography>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="recipe" className={classes.avatar}>
+            #{cuota.numero}
+          </Avatar>
+        }
+        title={t('avalCuota')}
+        subheader={montoFiatStr}>
       </CardHeader>
-      <CardContent>
-        <div>
-          <Typography className={classes.label}>{t('avalCuotaAmount')}:&nbsp;</Typography>
-          <Typography className={classes.value}>{montoFiatStr}</Typography>
-        </div>
-        <div>
-          <Typography className={classes.label}>{t('avalCuotaStatus')}:&nbsp;</Typography>
-          <Typography className={classes.value}>{statusStr}</Typography>
-        </div>
-        <div>
-          <Typography className={classes.label}>{t('avalCuotaDueDate')}:&nbsp;</Typography>
-          <Typography className={classes.value}>{vencimiento}</Typography>
-        </div>
-        <div>
-          <Typography className={classes.label}>{t('avalCuotaUnlockDate')}:&nbsp;</Typography>
-          <Typography className={classes.value}>{desbloqueo}</Typography>
-        </div>
+      <CardContent className={classes.contentRoot}>
+        <Grid container className={classes.contentGrid} spacing={0}>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary" component="p">{t('avalCuotaDueDate')}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary" component="p">{vencimiento}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary" component="p">{t('avalCuotaUnlockDate')}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary" component="p">{desbloqueo}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <StatusIndicator status={cuota?.status}></StatusIndicator>
+          </Grid>
+        </Grid>
       </CardContent>
-    </Card >
-
+    </Card>
   )
 }
 export default AvalCuotaCard;

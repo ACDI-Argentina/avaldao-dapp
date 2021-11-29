@@ -11,7 +11,6 @@ const CuotasList = styled.div`
   display:flex;
   overflow-x:auto;
   padding-bottom:10px;
-  min-height: 250px;
   background-color: white;
   border-radius:12px;
 `;

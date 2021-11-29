@@ -56,8 +56,8 @@
     "avalCuota": "Cuota",
     "avalCuotaAmount": "Monto",
     "avalCuotaStatus": "Estado",
-    "avalCuotaDueDate": "Fecha de vencimiento",
-    "avalCuotaUnlockDate": "Fecha de desbloqueo",
+    "avalCuotaDueDate": "Vencimiento",
+    "avalCuotaUnlockDate": "Desbloqueo",
 
     "avalClaimSection":"Reclamos",
     "noClaims":"Aún no hay reclamos.",
