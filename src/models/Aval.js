@@ -3,6 +3,7 @@ import { nanoid } from '@reduxjs/toolkit'
 import Web3Utils from 'lib/blockchain/Web3Utils';
 import BigNumber from 'bignumber.js';
 import Cuota from './Cuota';
+import Reclamo from './Reclamo';
 
 /**
  * Modelo de Aval.
@@ -23,6 +24,7 @@ class Aval {
       montoFiat = new BigNumber(0),
       cuotasCantidad = 1,
       cuotas = [],
+      reclamos = [],
       solicitanteAddress,
       comercianteAddress,
       avaladoAddress,
@@ -48,6 +50,12 @@ class Aval {
     this._cuotas = [];
     cuotas.forEach(cuota => {
       this._cuotas.push(new Cuota(cuota));
+    });
+
+    this._reclamos = [];
+    
+    reclamos.forEach(reclamo => {
+      this._reclamos.push(new Reclamo(reclamo));
     });
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
@@ -84,6 +92,12 @@ class Aval {
     this._cuotas.forEach(cuota => {
       cuotas.push(cuota.toStore());
     });
+
+    const reclamos = [];
+    this._reclamos.forEach(reclamo => {
+      reclamos.push(reclamo.toStore());
+    });
+
     return {
       id: this._id,
       clientId: this._clientId,
@@ -97,6 +111,7 @@ class Aval {
       montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad,
       cuotas: cuotas,
+      reclamos: reclamos,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -388,6 +403,14 @@ class Aval {
 
   set cuotas(value) {
     this._cuotas = value;
+  }
+
+  get reclamos() {
+    return this._reclamos;
+  }
+
+  set reclamos(value) {
+    this._reclamos = value;
   }
 
   get avaldaoAddress() {
