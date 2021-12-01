@@ -201,7 +201,9 @@ class AvaldaoContractApi {
             aval.avaldaoAddress];
 
             // Tiemstamp actual medido en segundos.
-            const timestampCurrent = Math.round(Date.now() / 1000);
+            //const timestampCurrent = Math.round(Date.now() / 1000);
+            // Simulación de cuotas vencidas.
+            const timestampCurrent = Math.round(Date.now() / 1000) - 100 * 24 * 60 * 60;
             // Tiempo entre vencimientos de cuota medido en segundos.
             // 30 días.
             const vencimientoRange = 30 * 24 * 60 * 60;

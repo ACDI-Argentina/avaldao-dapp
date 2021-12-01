@@ -11,7 +11,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 import StatusIndicator from 'components/StatusIndicator'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 import PageviewIcon from '@material-ui/icons/Pageview'
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
@@ -20,7 +19,7 @@ import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import ProfileSignature from './ProfileSignature'
-import { firmarAval, desbloquearAval } from '../../redux/reducers/avalesSlice'
+import { firmarAval } from '../../redux/reducers/avalesSlice'
 import FiatAmount from 'components/FiatAmount'
 import FiatUtils from 'utils/FiatUtils'
 
@@ -38,7 +37,6 @@ class AvalItem extends Component {
     this.goVisualizar = this.goVisualizar.bind(this);
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
-    this.desbloquear = this.desbloquear.bind(this);
   }
 
   componentDidMount() {
@@ -60,13 +58,6 @@ class AvalItem extends Component {
     firmarAval({
       aval: aval,
       signerAddress: currentUser.address
-    })
-  }
-
-  desbloquear() {
-    const { currentUser, aval, desbloquearAval, t } = this.props;
-    desbloquearAval({
-      aval: aval
     })
   }
 
@@ -172,16 +163,6 @@ class AvalItem extends Component {
                 <VpnKeyIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title={t('avalDesbloquearTitle')}>
-              <IconButton
-                edge="end"
-                aria-label="desbloquear"
-                color="primary"
-                onClick={this.desbloquear}
-                disabled={!aval.allowDesbloquear(currentUser)}>
-                <LockOpenIcon />
-              </IconButton>
-            </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
         <Divider component="li" />
@@ -204,7 +185,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 }
 const mapDispatchToProps = {
-  firmarAval, desbloquearAval
+  firmarAval
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
