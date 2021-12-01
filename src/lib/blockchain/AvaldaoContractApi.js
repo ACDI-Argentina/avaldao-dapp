@@ -11,6 +11,7 @@ import avalStoreUtils from 'redux/utils/avalStoreUtils';
 import { utils } from 'web3';
 import Cuota from 'models/Cuota';
 import TokenBalance from 'models/TokenBalance';
+import Reclamo from 'models/Reclamo';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -123,9 +124,11 @@ class AvaldaoContractApi {
             montoFiat: await avalContract.methods.montoFiat().call(),
             cuotasCantidad: await avalContract.methods.cuotasCantidad().call(),
             cuotas: [],
+            reclamos: [],
             status: await avalContract.methods.status().call()
         };
-        for (let cuotaNumero = 1; cuotaNumero <= avalOnChain.cuotasCantidad; cuotaNumero++) {
+
+        for (let cuotaNumero = 1; cuotaNumero <= Number(avalOnChain.cuotasCantidad); cuotaNumero++) {
             const cuotaOnChain = await avalContract.methods.getCuotaByNumero(cuotaNumero).call();
             const cuota = {
                 numero: parseInt(cuotaOnChain.numero),
@@ -135,6 +138,18 @@ class AvaldaoContractApi {
                 status: Cuota.mapCuotaStatus(parseInt(cuotaOnChain.status))
             };
             avalOnChain.cuotas.push(cuota);
+        }
+
+        
+        const reclamosCantidad = await avalContract.methods.getReclamosLength().call();
+        for(let i=0; i < reclamosCantidad; i++){
+            const reclamoOnChain = await avalContract.methods.reclamos(i).call();
+            const reclamo = {
+                numero: reclamoOnChain.numero,
+                timestampCreacion: reclamoOnChain.timestampCreacion,
+                status: Reclamo.mapReclamoStatus(parseInt(reclamoOnChain.status))
+            };
+            avalOnChain.reclamos.push(reclamo);
         }
 
         // Se obtiene la información del aval desde IPFS.
@@ -152,6 +167,7 @@ class AvaldaoContractApi {
             montoFiat: avalOnChain.montoFiat,
             cuotasCantidad: avalOnChain.cuotasCantidad,
             cuotas: avalOnChain.cuotas,
+            reclamos: avalOnChain.reclamos,
             solicitanteAddress: avalOnChain.solicitante,
             comercianteAddress: avalOnChain.comerciante,
             avaladoAddress: avalOnChain.avalado,

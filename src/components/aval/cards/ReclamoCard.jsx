@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import { faCertificate, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DateUtils from 'utils/DateUtils';
 
 const Wrapper = styled.div`
   width:100%;
@@ -15,12 +16,10 @@ const Wrapper = styled.div`
 
   box-shadow: 1.40323px 0px 18.2419px rgba(48, 55, 85, 0.07);
 
-  ${ props => props.status === "ABIERTO" && `
-    border:2px solid #FFC04F;
+  ${ props => props.status === "VIGENTE" && `
     background-color: #FFC04F;
   `}
   ${ props => props.status === "CERRADO" && `
-    border:2px solid #F2F2F2;
     background-color: #F2F2F2;
 `}
 `
@@ -43,22 +42,28 @@ const Index = styled.div`
 `
 
 const ReclamoCard = ({ reclamo }) => {
+
+  const formattedDateCreacion = DateUtils.formatTimestampSeconds(reclamo.timestampCreacion);
+  const status = reclamo.status.name;
+  const vigente = status === "Vigente";
+
+
   return (
-    <Wrapper status={reclamo.status}>
+    <Wrapper status={status.toUpperCase()}>
       <Column>
         <FontAwesomeIcon
-          icon={reclamo.status === "ABIERTO"? faExclamationCircle : faCheckCircle}
+          icon={vigente? faExclamationCircle : faCheckCircle}
           style={{ 
             fontSize: "65px", 
             margin:"20px",
-            color: reclamo.status === "ABIERTO" ? "#555555" : "#79D2D2"
+            color: vigente ? "#555555" : "#79D2D2"
           }}
         />
       </Column>
       <ReclamoData>
-        <Index>Cuota #{reclamo.cuota} </Index>
-        <div>Estado: {reclamo?.status}</div>
-        <div>Fecha: {reclamo?.date}</div>
+        <Index>Reclamo #{reclamo.numero} </Index>
+        <div>Estado: {status}</div>
+        <div>Fecha: {formattedDateCreacion}</div>
       
       </ReclamoData>
     </Wrapper>
