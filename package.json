@@ -1,6 +1,6 @@
 {
   "name": "@acdi/avaldao-dapp",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.3",
   "private": true,
   "main": "src/index.js",
   "dependencies": {
