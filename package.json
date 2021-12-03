@@ -4,7 +4,7 @@
   "private": true,
   "main": "src/index.js",
   "dependencies": {
-    "@acdi/avaldao-contract": "1.0.0-alpha.3",
+    "@acdi/avaldao-contract": "1.0.0-alpha.4",
     "@feathersjs/authentication-client": "^1.0.11",
     "@feathersjs/client": "^3.7.8",
     "@feathersjs/commons": "^4.0.0",
