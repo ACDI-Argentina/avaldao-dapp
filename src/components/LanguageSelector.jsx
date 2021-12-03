@@ -3,8 +3,6 @@ import { withTranslation } from 'react-i18next';
 import config from '../configuration';
 
 import styled from 'styled-components';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import Button from 'components/CustomButtons/Button.js';
 import styles from 'assets/jss/material-kit-react/components/headerLinksStyle.js';
 import { withStyles } from '@material-ui/core/styles';
@@ -65,6 +63,7 @@ class LanguageSelector extends Component {
 
     const options = config.language.options.map((language) => (
         <Button
+          key={language.name}
           color={'primary'}
           title={language.name}
           justIcon

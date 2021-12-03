@@ -19,10 +19,11 @@ import EditMilestone from '../components/views/EditMilestone'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
 import AvalCompletar from 'components/views/AvalCompletar'
-import Avales from 'components/views/Avales'
 import UserProfile from 'components/UserProfile'
+import ViewAval from 'components/views/aval/ViewAval';
+import Home from 'components/views/Home'
 
-const SwitchRoutes = ({ currentUser}) => (
+const SwitchRoutes = ({ currentUser }) => (
     <Switch>
 
         {/*NOTE order matters, wrong order breaks routes!*/}
@@ -241,9 +242,15 @@ const SwitchRoutes = ({ currentUser}) => (
         />
         <Route
             exact
-            path="/avales"
+            path="/avales/:id"
+            render={props => (<ViewAval {...props}/>
+            )}
+        />
+        <Route
+            exact
+            path="/aval-visualizar/:id"
             render={props => (
-                <Avales
+                <ViewAval
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
@@ -267,7 +274,7 @@ const SwitchRoutes = ({ currentUser}) => (
 
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"
-            render={props => <Avales
+            render={props => <Home
                 key={currentUser ? currentUser.id : 0}
                 {...props}
             />} />

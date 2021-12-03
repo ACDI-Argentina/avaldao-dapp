@@ -21,6 +21,7 @@ import Web3Utils from 'lib/blockchain/Web3Utils'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import { history } from 'lib/helpers'
+import FiatUtils from 'utils/FiatUtils'
 
 /**
  * Pantalla para completar aval.
@@ -178,13 +179,13 @@ class AvalCompletar extends Component {
       aval: aval
     }, () => {
       this.props.completarAval(this.state.aval);
-      history.push(`/avales`);
+      history.push(`/`);
     });
     event.preventDefault();
   }
 
   cancel() {
-    history.push(`/avales`);
+    history.push(`/`);
   }
 
   render() {
@@ -265,7 +266,7 @@ class AvalCompletar extends Component {
                   disabled
                 />
               </Grid>
-              <Grid item sm={12} md={4}>
+              <Grid item sm={12} md={3}>
                 <TextField
                   id="adquisicionTextField"
                   value={aval.adquisicion}
@@ -278,7 +279,7 @@ class AvalCompletar extends Component {
                   disabled
                 />
               </Grid>
-              <Grid item sm={12} md={4}>
+              <Grid item sm={12} md={3}>
                 <TextField
                   id="beneficiariosTextField"
                   value={aval.beneficiarios}
@@ -291,11 +292,24 @@ class AvalCompletar extends Component {
                   disabled
                 />
               </Grid>
-              <Grid item sm={12} md={4}>
+              <Grid item sm={12} md={3}>
                 <TextField
                   id="montoTextField"
-                  value={aval.monto}
+                  value={FiatUtils.format(aval.montoFiat)}
                   label={t('avalMonto')}
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  disabled
+                />
+              </Grid>
+              <Grid item sm={12} md={3}>
+                <TextField
+                  id="cuotasCantidadTextField"
+                  value={aval.cuotasCantidad}
+                  label={t('avalCuotasCantidad')}
                   fullWidth
                   margin="normal"
                   InputLabelProps={{

@@ -2,9 +2,11 @@ const {
   REACT_APP_ENVIRONMENT = 'localhost', // optional
   REACT_APP_DECIMALS = 8, // optional
   REACT_APP_FEATHERJS_CONNECTION_URL,
+  REACT_APP_FEATHERJS_USERS_CONNECTION_URL,
   REACT_APP_NODE_CONNECTION_URL,
   REACT_APP_AVALDAO_ADDRESS,
   REACT_APP_AVALDAO_CONTRACT_ADDRESS,
+  REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS,
   REACT_APP_CROWDFUNDING_ADDRESS,
   REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS,
   REACT_APP_TOKEN_RIF_ADDRESS,
@@ -44,6 +46,7 @@ const configurations = {
     nodeId: 88,
     etherscan: 'https://explorer.testnet.rsk.co/', // this won't work, only here so we can see links during development
     feathersConnection: 'http://localhost:3030',
+    feathersUsersConnection: 'https://feathers.beta.give4forest.org', //http://localhost:3031
     ipfsGateway: 'http://localhost:8080/ipfs/',
     ipfsPinningEnabled: true,
     sendErrors: true,
@@ -116,8 +119,9 @@ const configurations = {
     networkName: 'rsk_testnet',
     nodeId: 31,
     etherscan: 'https://explorer.testnet.rsk.co/',
-    feathersConnection: 'https://testnet.feathers.b4h.world',
-    ipfsGateway: 'https://testnet.ipfs.b4h.world/ipfs/',
+    feathersConnection: 'https://feathers.beta.avaldao.com/',
+    feathersUsersConnection: 'https://feathers.beta.give4forest.org',
+    ipfsGateway: 'https://ipfs.give4forest.org/ipfs/',
     ipfsPinningEnabled: true,
     sendErrors: true,
     analytics: {
@@ -189,8 +193,9 @@ const configurations = {
     networkName: 'rsk_mainnet',
     nodeId: 30,
     etherscan: 'https://explorer.rsk.co/',
-    feathersConnection: 'https://feathers.b4h.world',
-    ipfsGateway: 'https://ipfs.b4h.world/ipfs/',
+    feathersConnection: 'https://feathers.avaldao.com/',
+    feathersUsersConnection: 'https://feathers.give4forest.org/',
+    ipfsGateway: 'https://ipfs.give4forest.org/ipfs/',
     ipfsPinningEnabled: true,
     sendErrors: true,
     analytics: {
@@ -257,6 +262,7 @@ const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT]);
 config.crowdfundingAddress = REACT_APP_CROWDFUNDING_ADDRESS || config.crowdfundingAddress;
 config.avaldaoAddress = REACT_APP_AVALDAO_ADDRESS || config.avaldaoAddress;
 config.avaldaoContractAddress = REACT_APP_AVALDAO_CONTRACT_ADDRESS || config.avaldaoContractAddress;
+config.fondoGarantiaVaultContractAddress = REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS || config.fondoGarantiaVaultContractAddress;
 config.exchangeRateProviderContractAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS || config.exchangeRateProviderContractAddress;
 config.tokens.doc.address = REACT_APP_TOKEN_DOC_ADDRESS || config.tokens.doc.address;
 config.tokens.rif.address = REACT_APP_TOKEN_RIF_ADDRESS || config.tokens.rif.address;
@@ -265,6 +271,7 @@ config.tokenAddresses = REACT_APP_TOKEN_ADDRESSES
   : config.tokenAddresses;
 config.etherscan = REACT_APP_BLOCKEXPLORER || config.etherscan;
 config.feathersConnection = REACT_APP_FEATHERJS_CONNECTION_URL || config.feathersConnection;
+config.feathersUsersConnection = REACT_APP_FEATHERJS_USERS_CONNECTION_URL || config.feathersUsersConnection;
 config.network.nodeUrl = REACT_APP_NODE_CONNECTION_URL || config.network.nodeUrl;
 config.network.requiredId = (REACT_APP_NODE_ID && Number.parseInt(REACT_APP_NODE_ID, 10)) || config.nodeId;
 config.decimals = REACT_APP_DECIMALS;

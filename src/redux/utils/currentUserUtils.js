@@ -6,8 +6,6 @@ import { initCurrentUser, clearCurrentUser, updateCurrentUserBalance } from '../
  */
 class CurrentUserUtils {
 
-  constructor() { }
-
   /**
    * Inicializa el usuario actual.
    * 

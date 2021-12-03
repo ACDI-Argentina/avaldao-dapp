@@ -1,6 +1,9 @@
 import StatusUtils from '../utils/StatusUtils';
 import { nanoid } from '@reduxjs/toolkit'
 import Web3Utils from 'lib/blockchain/Web3Utils';
+import BigNumber from 'bignumber.js';
+import Cuota from './Cuota';
+import Reclamo from './Reclamo';
 
 /**
  * Modelo de Aval.
@@ -11,17 +14,21 @@ class Aval {
     const {
       id,
       clientId = nanoid(),
+      address,
       infoCid = '',
       proyecto = '',
       proposito = '',
       causa = '',
       adquisicion = '',
       beneficiarios = '',
-      monto = '',
-      avaldaoAddress,
+      montoFiat = new BigNumber(0),
+      cuotasCantidad = 1,
+      cuotas = [],
+      reclamos = [],
       solicitanteAddress,
       comercianteAddress,
       avaladoAddress,
+      avaldaoAddress,
       avaldaoSignature,
       solicitanteSignature,
       comercianteSignature,
@@ -31,22 +38,34 @@ class Aval {
     this._id = id;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
+    this._address = address;
     this._infoCid = infoCid;
     this._proyecto = proyecto;
     this._proposito = proposito;
     this._causa = causa;
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
-    this._monto = monto;
-    this._avaldaoAddress = avaldaoAddress;
+    this._montoFiat = new BigNumber(montoFiat);
+    this._cuotasCantidad = cuotasCantidad;
+    this._cuotas = [];
+    cuotas.forEach(cuota => {
+      this._cuotas.push(new Cuota(cuota));
+    });
+
+    this._reclamos = [];
+    
+    reclamos.forEach(reclamo => {
+      this._reclamos.push(new Reclamo(reclamo));
+    });
     this._solicitanteAddress = solicitanteAddress;
     this._comercianteAddress = comercianteAddress;
     this._avaladoAddress = avaladoAddress;
-    this._avaldaoSignature = avaldaoSignature;
+    this._avaldaoAddress = avaldaoAddress;
     this._solicitanteSignature = solicitanteSignature;
     this._comercianteSignature = comercianteSignature;
     this._avaladoSignature = avaladoSignature;
-    this._status = StatusUtils.build(status.id, status.name, status.isLocal);;
+    this._avaldaoSignature = avaldaoSignature;
+    this._status = StatusUtils.build(status.id, status.name, status.isLocal);
   }
 
   /**
@@ -60,7 +79,8 @@ class Aval {
       causa: this._causa,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
-      monto: this._monto
+      montoFiat: this._montoFiat,
+      cuotasCantidad: this._cuotasCantidad
     };
   }
 
@@ -68,16 +88,30 @@ class Aval {
    * Obtiene un objeto plano para ser almacenado.
    */
   toStore() {
+    const cuotas = [];
+    this._cuotas.forEach(cuota => {
+      cuotas.push(cuota.toStore());
+    });
+
+    const reclamos = [];
+    this._reclamos.forEach(reclamo => {
+      reclamos.push(reclamo.toStore());
+    });
+
     return {
       id: this._id,
       clientId: this._clientId,
+      address: this._address,
       infoCid: this._infoCid,
       proyecto: this._proyecto,
       proposito: this._proposito,
       causa: this._causa,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
-      monto: this._monto,
+      montoFiat: this._montoFiat,
+      cuotasCantidad: this._cuotasCantidad,
+      cuotas: cuotas,
+      reclamos: reclamos,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -91,12 +125,12 @@ class Aval {
   }
 
   /**
-     * Realiza el mapping de los estados del aval en el
-     * smart contract con los estados en la dapp.
-     * 
-     * @param status del aval en el smart contract.
-     * @returns estado del aval en la dapp.
-     */
+   * Realiza el mapping de los estados del aval en el
+   * smart contract con los estados en la dapp.
+   * 
+   * @param status del aval en el smart contract.
+   * @returns estado del aval en la dapp.
+   */
   static mapAvalStatus(status) {
     switch (status) {
       case 0: return Aval.SOLICITADO;
@@ -159,6 +193,28 @@ class Aval {
   }
 
   /**
+   * Determina si los fondos del Aval pueden ser desbloqueados o no.
+   * @param user usuario que desbloquea los fondos del aval.
+   */
+  allowDesbloquear(user) {
+    if (this.status.name !== Aval.VIGENTE.name) {
+      // Solo un aval Vigente puede ser desbloqueado.
+      return false;
+    }
+    if (!user.registered) {
+      // El usuario no está autenticado.
+      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
+      // https://github.com/ACDI-Argentina/avaldao/issues/21
+      return false;
+    }
+    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+      // Solo el Solicitante puede desbloquear fondos el aval
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Determina si el Aval puede ser firmado o no por el usuario con el address especificado.
    * @param user usuario firmante.
    */
@@ -194,6 +250,30 @@ class Aval {
       return this.solicitanteSignature != undefined &&
         this.comercianteSignature != undefined &&
         this.avaladoSignature != undefined;
+    }
+    return false;
+  }
+
+  showCuotas() {
+    const vigente = this.status.name === Aval.VIGENTE.name;
+    const finalizado = this.status.name === Aval.FINALIZADO.name;
+
+    return vigente || finalizado;
+  }
+  
+  showReclamos() {
+    const vigente = this.status.name === Aval.VIGENTE.name;
+    const finalizado = this.status.name === Aval.FINALIZADO.name;
+    return vigente || finalizado;
+  }
+
+  /**
+   * Determina si el usuario es Avalado del Aval.
+   * @param user usuario a determinar si es Avaldao.
+   */
+  isAvaldao(user) {
+    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+      return true;
     }
     return false;
   }
@@ -245,6 +325,14 @@ class Aval {
     this._clientId = value;
   }
 
+  get address() {
+    return this._address;
+  }
+
+  set address(value) {
+    this._address = value;
+  }
+
   get infoCid() {
     return this._infoCid;
   }
@@ -293,12 +381,36 @@ class Aval {
     this._beneficiarios = value;
   }
 
-  get monto() {
-    return this._monto;
+  get montoFiat() {
+    return this._montoFiat;
   }
 
-  set monto(value) {
-    this._monto = value;
+  set montoFiat(value) {
+    this._montoFiat = value;
+  }
+
+  get cuotasCantidad() {
+    return this._cuotasCantidad;
+  }
+
+  set cuotasCantidad(value) {
+    this._cuotasCantidad = value;
+  }
+
+  get cuotas() {
+    return this._cuotas;
+  }
+
+  set cuotas(value) {
+    this._cuotas = value;
+  }
+
+  get reclamos() {
+    return this._reclamos;
+  }
+
+  set reclamos(value) {
+    this._reclamos = value;
   }
 
   get avaldaoAddress() {

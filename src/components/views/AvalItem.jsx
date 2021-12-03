@@ -5,18 +5,23 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
+import Alert from '@material-ui/lab/Alert';
 import Grid from '@material-ui/core/Grid'
 import ListItemText from '@material-ui/core/ListItemText'
 import StatusIndicator from 'components/StatusIndicator'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
+import PageviewIcon from '@material-ui/icons/Pageview'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
 import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
+import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import ProfileSignature from './ProfileSignature'
 import { firmarAval } from '../../redux/reducers/avalesSlice'
+import FiatAmount from 'components/FiatAmount'
+import FiatUtils from 'utils/FiatUtils'
 
 /**
  * Item de un Aval
@@ -27,9 +32,20 @@ class AvalItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      
     };
+    this.goVisualizar = this.goVisualizar.bind(this);
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
+  }
+
+  componentDidMount() {
+    
+  }
+
+  goVisualizar() {
+    const { aval } = this.props;
+    history.push(`/aval-visualizar/${aval.id}`);
   }
 
   goCompletar() {
@@ -39,9 +55,6 @@ class AvalItem extends Component {
 
   firmar() {
     const { currentUser, aval, firmarAval, t } = this.props;
-    /*AvaldaoContractApi.sign(currentUser.address, aval).subscribe(aval => {
-      console.log('Firmado', aval);
-    });*/
     firmarAval({
       aval: aval,
       signerAddress: currentUser.address
@@ -50,7 +63,20 @@ class AvalItem extends Component {
 
   render() {
 
-    const { currentUser, aval, classes, t } = this.props;
+    const { currentUser, aval, classes, t, fondoGarantiaBalanceFiat } = this.props;
+    
+    let allowFirmar = aval.allowFirmar(currentUser);
+    let alertMessage = null;
+    if (fondoGarantiaBalanceFiat.isLessThan(aval.montoFiat)) {
+      const diff = aval.montoFiat.minus(fondoGarantiaBalanceFiat);
+      alertMessage = t('avalFondosInsuficientes', {
+        diff: FiatUtils.format(diff)
+      });
+      if (aval.isAvaldao(currentUser)) {
+        // Cuando el usuario es Avaldao, no puede firmar si no hay fondos suficientes.
+        allowFirmar = false;
+      }
+    }
 
     return (
       <React.Fragment>
@@ -61,9 +87,11 @@ class AvalItem extends Component {
               <React.Fragment>
                 {aval.causa}
                 <br></br>
+                <FiatAmount amount={aval.montoFiat} />
+                <br></br>
                 <StatusIndicator status={aval.status}></StatusIndicator>
 
-                <Grid container alignItems="center" style={{marginTop: "0.5em"}} sm={10} spacing={3}>
+                <Grid container alignItems="center" style={{ marginTop: "0.5em" }} sm={10} spacing={3}>
 
                   <Grid item sm={12} md={3}>
                     <ProfileSignature
@@ -98,10 +126,23 @@ class AvalItem extends Component {
                   </Grid>
                 </Grid>
 
+                {(alertMessage &&
+                  <Alert severity="warning">{alertMessage}</Alert>
+                )}
+
               </React.Fragment>
             }
           />
           <ListItemSecondaryAction>
+            <Tooltip title={t('avalVisualizarTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="visualizar"
+                color="primary"
+                onClick={this.goVisualizar}>
+                <PageviewIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title={t('avalCompletarTitle')}>
               <IconButton
                 edge="end"
@@ -118,7 +159,7 @@ class AvalItem extends Component {
                 aria-label="firmar"
                 color="primary"
                 onClick={this.firmar}
-                disabled={!aval.allowFirmar(currentUser)}>
+                disabled={!allowFirmar}>
                 <VpnKeyIcon />
               </IconButton>
             </Tooltip>
@@ -139,7 +180,8 @@ const styles = theme => ({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    currentUser: selectCurrentUser(state)
+    currentUser: selectCurrentUser(state),
+    fondoGarantiaBalanceFiat: selectFondoGarantiaBalanceFiat(state)
   };
 }
 const mapDispatchToProps = {

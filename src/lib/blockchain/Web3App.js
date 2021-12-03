@@ -3,6 +3,7 @@ import ConnectionModalUtil from "./ConnectionModalsUtil";
 import config from '../../configuration';
 import BigNumber from 'bignumber.js';
 import { feathersClient } from '../feathersClient';
+import { feathersUsersClient } from '../feathersUsersClient';
 import Web3Utils from "./Web3Utils";
 import { history } from '../helpers';
 import { utils } from 'web3';
@@ -425,8 +426,10 @@ class Web3App extends React.Component {
     if (currentUser && currentUser.address && currentUser.authenticated) {
       return true;
     }
-    currentUser.authenticated = await this.authenticate(currentUser.address);
-    return currentUser.authenticated;
+    if(currentUser.address){
+      currentUser.authenticated = await this.authenticate(currentUser.address);
+      return currentUser.authenticated;
+    }
   };
 
   authenticate = async (address, redirectOnFail = true) => {
@@ -435,18 +438,23 @@ class Web3App extends React.Component {
       strategy: 'web3',
       address,
     };
-    const accessToken = await feathersClient.passport.getJWT();
+    const accessToken = await feathersUsersClient.passport.getJWT();
     if (accessToken) {
-      const payload = await feathersClient.passport.verifyJWT(accessToken);
+      console.log(`[Web3App] authenticate ${address} using access token ${accessToken}`)
+      const payload = await feathersUsersClient.passport.verifyJWT(accessToken);
       if (Web3Utils.addressEquals(address, payload.userId)) {
-        await feathersClient.authenticate(); // authenticate the socket connection
+        await feathersUsersClient.authenticate(); // authenticate the socket connection
+        console.log(`[Web3App authenticated re using jwt`);
         return true;
+      } else {
+        console.log(`[Web3App] web3 address doesn't match - logout`);
+        await feathersUsersClient.logout();
+        await feathersClient.logout();
       }
-      await feathersClient.logout();
     }
 
     try {
-      await feathersClient.authenticate(authData);
+      await feathersUsersClient.authenticate(authData);
       return true;
     } catch (response) {
       // normal flow will issue a 401 with a challenge message we need to sign and send to
@@ -467,7 +475,7 @@ class Web3App extends React.Component {
             try {
               const signature = await web3.eth.personal.sign(msg, address);
               authData.signature = signature;
-              await feathersClient.authenticate(authData);
+              await feathersUsersClient.authenticate(authData);
               //React.swal.close();
               this.closeSignatureRequestModal();
               clearTimeout(timeOut);
@@ -475,7 +483,7 @@ class Web3App extends React.Component {
             } catch (e) {
               console.error('Error firmando mensaje de autenticación', e);
               clearTimeout(timeOut);
-              history.goBack();
+              history.goBack(); 
               resolve(false);
             }
           });

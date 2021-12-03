@@ -2,12 +2,9 @@ import Aval from 'models/Aval';
 import { Observable } from 'rxjs'
 import { feathersClient } from '../lib/feathersClient';
 import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
+import BigNumber from 'bignumber.js';
 
 class AvalService {
-
-    constructor() {
-
-    }
 
     /**
      * Obtiene todos los Avales on chain.
@@ -47,6 +44,7 @@ class AvalService {
                     }
                 })
                 .then(response => {
+                    console.log(`Avales offchain: ${response.total}`)
                     let avales = [];
                     for (let i = 0; i < response.total; i++) {
                         let avalData = response.data[i];
@@ -111,8 +109,8 @@ class AvalService {
 
             // Para mantener la consistencia de los datos,
             // se sincronizan los datos en este punto si se requiere.
-            if (/*aval.blockchainId != avalData.blockchainId ||*/
-                aval.status.id != avalData.status) {
+            if (/*aval.blockchainId !== avalData.blockchainId ||*/
+                aval.status.id !== avalData.status) {
 
                 this.syncOffChainAvalWithOnChainData(aval).subscribe();
             }
@@ -234,6 +232,25 @@ class AvalService {
         });
     }
 
+    /**
+     * Desbloquea los fondos de un aval.
+     * 
+     * @param aval a desbloquear
+     * @param signer dirección del usuario firmante
+     * @returns observable 
+     */
+    desbloquearAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            avaldaoContractApi.desbloquearAval(aval).subscribe(aval => {
+
+                console.log('[AvalService] Se desbloquearon los fondos del aval.', aval);
+                subscriber.next(aval);
+            });
+        });
+    }
+
     offChainAvalToAval(avalData) {
         return new Aval({
             id: avalData._id,
@@ -243,7 +260,8 @@ class AvalService {
             causa: avalData.causa,
             adquisicion: avalData.adquisicion,
             beneficiarios: avalData.beneficiarios,
-            monto: avalData.monto,
+            montoFiat: new BigNumber(avalData.montoFiat),
+            cuotasCantidad: avalData.cuotasCantidad,
             avaldaoAddress: avalData.avaldaoAddress,
             solicitanteAddress: avalData.solicitanteAddress,
             comercianteAddress: avalData.comercianteAddress,

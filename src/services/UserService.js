@@ -1,13 +1,11 @@
-import { feathersClient } from '../lib/feathersClient';
-import ErrorPopup from '../components/ErrorPopup';
-import ipfsService from '../ipfs/IpfsService';
+import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
 import crowdfundingContractApi from '../lib/blockchain/CrowdfundingContractApi';
 import { Observable } from 'rxjs';
-import BigNumber from 'bignumber.js';
 import User from '../models/User';
 import { ALL_ROLES } from '../constants/Role';
 import messageUtils from '../redux/utils/messageUtils'
 import userIpfsConnector from '../ipfs/UserIpfsConnector'
+
 
 class UserService {
 
@@ -31,12 +29,11 @@ class UserService {
         try {
 
           const userData = await feathersClient.service('/users').get(address);
+          console.log(userData)
 
           let registered = true;
-          let name = userData.name;
-          let email = userData.email;
-          let url = userData.url;
-          let infoCid = userData.infoCid;
+          const { name, email, url, infoCid } = userData;
+          
           let avatarCid;
           let avatar;
 
@@ -55,21 +52,22 @@ class UserService {
           currentUser.avatarCid = avatarCid;
           currentUser.avatar = avatar;
 
+          console.log(`Loaded current user:`, currentUser)
           subscriber.next(currentUser);
 
           // Se cargan los roles del usuario desde el smart constract
-          getRoles(address).then(roles => {
+       /*     getRoles(address).then(roles => {
             currentUser.roles = roles;
             subscriber.next(currentUser);
-          });
+          });  */
 
           authenticateFeathers(currentUser).then(authenticated => {
-            currentUser.authenticated = authenticated;
+            currentUser.authenticated = authenticated; //Muta el objeto y es accesible desde toda la aplicacion xq lo propaga con el store
             subscriber.next(currentUser);
           });
 
         } catch (error) {
-          console.error('[UserService] Error obteniendo datos del usuario desde Feathers.', error);
+          console.error('[UserService] Error obteniendo datos del usuario desde Feathers.', error.message);
           if (error.code === 404) {
             currentUser.registered = false;
             currentUser.name = undefined;
@@ -97,33 +95,7 @@ class UserService {
       try {
 
         const userData = await feathersClient.service('/users').get(address);
-
-        let registered = true;
-        let name = userData.name;
-        let email = userData.email;
-        let url = userData.url;
-        let infoCid = userData.infoCid;
-        let avatarCid;
-        let avatar;
-
-        if (infoCid) {
-          // Se obtiene la información del usuario desde IPFS.
-          const userIpfs = await userIpfsConnector.download(infoCid);
-          avatarCid = userIpfs.avatarCid;
-          avatar = userIpfs.avatar;
-        }
-
-        const user = new User({
-          registered: registered,
-          address: address,
-          name: name,
-          email: email,
-          url: url,
-          infoCid: infoCid,
-          avatarCid: avatarCid,
-          avatar: avatar
-        });
-
+        const user = new User({ registered: true, ...await loadIpfsInfo(userData) });
         subscriber.next(user);
 
       } catch (e) {
@@ -147,18 +119,25 @@ class UserService {
   /**
    * Carga los usuarios con sus roles.
    * 
-   * TODO Esto deberíamos obtimizarlo porque se están cargadno todos los usuarios
+   * TODO Esto deberíamos optimizarlo porque se están cargando todos los usuarios
    * al mismo tiempo y cuando crezca la cantidad habrá problemas de performance.
+   * 
    */
   loadUsersWithRoles() {
+    console.log(`[UserService] loadUsersWithRoles`);
+
     return new Observable(async subscriber => {
-      const usersByGroups = [];
       const { data: users } = await feathersClient.service("users").find();
+      const hydratedUsers = (await Promise.all(users.map(loadIpfsInfo))).map(rawUser => new User({...rawUser}));
+      subscriber.next(hydratedUsers);
+
+      /* 
+      Revisar en el smart contract los roles
+      const usersByGroups = [];
       for (const user of users) {
         const roles = await getRoles(user.address);
         usersByGroups.push(new User({ ...user, roles }));
-      }
-      subscriber.next(usersByGroups);
+      } */
     })
   }
 
@@ -172,14 +151,13 @@ class UserService {
     return new Observable(async subscriber => {
 
       try {
-
         // Se almacena en IPFS toda la información del Usuario.
-        let infoCid = await userIpfsConnector.upload(user);
+        let infoCid = await userIpfsConnector.upload(user); 
         user.infoCid = infoCid;
 
         if (user.registered === false) {
           // Nuevo usuario
-          await feathersClient.service('users').create(user.toFeathers());
+          await feathersClient.service('users').update(user.address, user.toFeathers());
           user.registered = true;
           messageUtils.addMessageSuccess({
             title: 'Bienvenido!',
@@ -246,3 +224,23 @@ const pause = (ms = 3000) => {
 }
 
 export default UserService;
+
+
+// Se obtiene la información del usuario desde IPFS.
+async function loadIpfsInfo(rawUser){
+  let avatarCid;
+  let avatar;
+  
+  if (rawUser.infoCid) {
+    const userIpfs = await userIpfsConnector.download(rawUser.infoCid);
+    avatarCid = userIpfs.avatarCid;
+    avatar = userIpfs.avatar;
+  }
+
+  return {
+    ...rawUser,
+    avatar,
+    avatarCid
+  }
+
+}

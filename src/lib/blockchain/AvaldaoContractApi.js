@@ -6,9 +6,12 @@ import web3Manager from './Web3Manager'
 import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
-import { AvaldaoAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
-import feathers from '@feathersjs/feathers';
+import { AvaldaoAbi, AvalAbi, FondoGarantiaVaultAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
 import avalStoreUtils from 'redux/utils/avalStoreUtils';
+import { utils } from 'web3';
+import Cuota from 'models/Cuota';
+import TokenBalance from 'models/TokenBalance';
+import Reclamo from 'models/Reclamo';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -34,16 +37,49 @@ class AvaldaoContractApi {
     }
 
     /**
+     * Obtiene todos los token balances que conforman el fondo de garantía.
+     */
+    getFondoGarantia() {
+        return new Observable(async subscriber => {
+            try {
+                let tokenBalances = [];
+                let tokens = await this.fondoGarantiaVault.methods.getTokens().call();
+                for (let i = 0; i < tokens.length; i++) {
+                    let { token,
+                        amount,
+                        rate,
+                        amountFiat } = await this.fondoGarantiaVault.methods.getTokenBalance(tokens[i]).call();
+                    tokenBalances.push(new TokenBalance({
+                        address: token,
+                        amount: amount,
+                        rate: rate,
+                        amountFiat: amountFiat
+                    }));
+                }
+                subscriber.next(tokenBalances);
+            } catch (error) {
+                console.log('[Avaldao Contract API] Error obteniendo Fondo de Garantía.', error);
+                subscriber.error(error);
+            }
+        });
+    }
+
+    /**
      * Obtiene todos los Avales desde el Smart Contract.
      */
     getAvales() {
         return new Observable(async subscriber => {
             try {
-                let ids = await this.avaldao.methods.getAvalIds().call();
+                let ids = await this.avaldao.methods.getAvalIds().call(); //Devuelve un array de un solo elemento, 614ba578844de200126b50d0
                 let avales = [];
                 for (let i = 0; i < ids.length; i++) {
-                    let aval = await this.getAvalById(ids[i]);
-                    avales.push(aval);
+                    try {
+                        let aval = await this.getAvalById(ids[i]);
+                        avales.push(aval);
+
+                    } catch (err) {
+                        console.log(err);
+                    }
                 }
                 subscriber.next(avales);
             } catch (error) {
@@ -74,38 +110,69 @@ class AvaldaoContractApi {
      * @returns Aval cuyo Id coincide con el especificado.
      */
     async getAvalById(id) {
-        const avalOnChain = await this.avaldao.methods.getAval(id).call();
+
         // Se obtiene la información del aval desde la Blockchain.
-        const { infoCid,
-            avaldao,
-            solicitante,
-            comerciante,
-            avalado,
-            status } = avalOnChain;
+        const avalAddress = await this.avaldao.methods.getAvalAddress(id).call();
+        const avalContract = new this.web3.eth.Contract(AvalAbi, avalAddress);
+        const avalOnChain = {
+            id: id,
+            infoCid: await avalContract.methods.infoCid().call(),
+            avaldao: await avalContract.methods.avaldao().call(),
+            solicitante: await avalContract.methods.solicitante().call(),
+            comerciante: await avalContract.methods.comerciante().call(),
+            avalado: await avalContract.methods.avalado().call(),
+            montoFiat: await avalContract.methods.montoFiat().call(),
+            cuotasCantidad: await avalContract.methods.cuotasCantidad().call(),
+            cuotas: [],
+            reclamos: [],
+            status: await avalContract.methods.status().call()
+        };
+
+        for (let cuotaNumero = 1; cuotaNumero <= Number(avalOnChain.cuotasCantidad); cuotaNumero++) {
+            const cuotaOnChain = await avalContract.methods.getCuotaByNumero(cuotaNumero).call();
+            const cuota = {
+                numero: parseInt(cuotaOnChain.numero),
+                montoFiat: parseInt(cuotaOnChain.montoFiat),
+                timestampVencimiento: parseInt(cuotaOnChain.timestampVencimiento),
+                timestampDesbloqueo: parseInt(cuotaOnChain.timestampDesbloqueo),
+                status: Cuota.mapCuotaStatus(parseInt(cuotaOnChain.status))
+            };
+            avalOnChain.cuotas.push(cuota);
+        }
+
+        
+        const reclamosCantidad = await avalContract.methods.getReclamosLength().call();
+        for(let i=0; i < reclamosCantidad; i++){
+            const reclamoOnChain = await avalContract.methods.reclamos(i).call();
+            const reclamo = {
+                numero: reclamoOnChain.numero,
+                timestampCreacion: reclamoOnChain.timestampCreacion,
+                status: Reclamo.mapReclamoStatus(parseInt(reclamoOnChain.status))
+            };
+            avalOnChain.reclamos.push(reclamo);
+        }
+
         // Se obtiene la información del aval desde IPFS.
-        const avalOffChain = await avalIpfsConnector.download(infoCid);
-        const {
-            proyecto,
-            proposito,
-            causa,
-            adquisicion,
-            beneficiarios,
-            monto } = avalOffChain;
+        const avalOffChain = await avalIpfsConnector.download(avalOnChain.infoCid);
 
         return new Aval({
             id: id,
-            infoCid: infoCid,
-            proyecto: proyecto,
-            proposito: proposito,
-            causa: causa,
-            adquisicion: adquisicion,
-            beneficiarios: beneficiarios,
-            monto: monto,
-            avaldaoAddress: avaldao,
-            solicitanteAddress: solicitante,
-            comercianteAddress: comerciante,
-            avaladoAddress: avalado,
-            status: Aval.mapAvalStatus(parseInt(status))
+            address: avalAddress,
+            infoCid: avalOnChain.infoCid,
+            proyecto: avalOffChain.proyecto,
+            proposito: avalOffChain.proposito,
+            causa: avalOffChain.causa,
+            adquisicion: avalOffChain.adquisicion,
+            beneficiarios: avalOffChain.beneficiarios,
+            montoFiat: avalOnChain.montoFiat,
+            cuotasCantidad: avalOnChain.cuotasCantidad,
+            cuotas: avalOnChain.cuotas,
+            reclamos: avalOnChain.reclamos,
+            solicitanteAddress: avalOnChain.solicitante,
+            comercianteAddress: avalOnChain.comerciante,
+            avaladoAddress: avalOnChain.avalado,
+            avaldaoAddress: avalOnChain.avaldao,
+            status: Aval.mapAvalStatus(parseInt(avalOnChain.status))
         });
     }
 
@@ -128,12 +195,35 @@ class AvaldaoContractApi {
                 return;
             }
 
+            const users = [aval.solicitanteAddress,
+            aval.comercianteAddress,
+            aval.avaladoAddress,
+            aval.avaldaoAddress];
+
+            // Tiemstamp actual medido en segundos.
+            //const timestampCurrent = Math.round(Date.now() / 1000);
+            // Simulación de cuotas vencidas.
+            const timestampCurrent = Math.round(Date.now() / 1000) - 100 * 24 * 60 * 60;
+            // Tiempo entre vencimientos de cuota medido en segundos.
+            // 30 días.
+            const vencimientoRange = 30 * 24 * 60 * 60;
+            // Tiempo de desbloqueo de fondos desde la fecha de venicmiento de una cuota medido en segundos.
+            // 10 días.
+            const desbloqueoRange = 10 * 24 * 60 * 60;
+            const timestampCuotas = [];
+            for (let cuotaNumero = 1; cuotaNumero <= aval.cuotasCantidad; cuotaNumero++) {
+                const timestampVencimiento = timestampCurrent + (cuotaNumero * vencimientoRange);
+                const timestampDesbloqueo = timestampVencimiento + desbloqueoRange;
+                timestampCuotas.push(utils.numberToHex(timestampVencimiento));
+                timestampCuotas.push(utils.numberToHex(timestampDesbloqueo));
+            }
+
             const method = this.avaldao.methods.saveAval(
                 aval.id,
                 aval.infoCid,
-                aval.avaldaoAddress,
-                aval.comercianteAddress,
-                aval.avaladoAddress);
+                users,
+                aval.montoFiat,
+                timestampCuotas);
 
             const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
             const gasPrice = await this.getGasPrice();
@@ -154,7 +244,7 @@ class AvaldaoContractApi {
                     key: 'transactionConfirmedTitleCompletarAval'
                 },
                 confirmedDescription: {
-                    key:  'transactionConfirmedDescriptionCompletarAval'
+                    key: 'transactionConfirmedDescriptionCompletarAval'
                 },
                 failuredTitle: {
                     key: 'transactionFailuredTitleCompletarAval'
@@ -223,7 +313,7 @@ class AvaldaoContractApi {
                         { name: 'verifyingContract', type: 'address' }
                     ],
                     AvalSignable: [
-                        { name: 'id', type: 'string' },
+                        { name: 'aval', type: 'address' },
                         { name: 'infoCid', type: 'string' },
                         { name: 'avaldao', type: 'address' },
                         { name: 'solicitante', type: 'address' },
@@ -239,7 +329,7 @@ class AvaldaoContractApi {
                     verifyingContract: config.avaldaoContractAddress
                 },
                 message: {
-                    id: aval.id,
+                    aval: aval.address,
                     infoCid: aval.infoCid,
                     avaldao: aval.avaldaoAddress,
                     solicitante: aval.solicitanteAddress,
@@ -301,7 +391,7 @@ class AvaldaoContractApi {
             const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
 
             const method = this.avaldao.methods.signAval(
-                aval.id,
+                aval.address,
                 signatureV,
                 signatureR,
                 signatureS);
@@ -371,6 +461,89 @@ class AvaldaoContractApi {
         });
     }
 
+    /**
+     * Desbloquea los fondos de un aval.
+     * 
+     * @param aval a desbloquear
+     */
+    desbloquearAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
+
+            const users = [aval.solicitanteAddress,
+            aval.comercianteAddress,
+            aval.avaladoAddress,
+            aval.avaldaoAddress];
+
+            const method = avalContract.methods.unlockFundManual();
+
+            const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionStoreUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleDesbloquearAval'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleDesbloquearAval'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleDesbloquearAval'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleDesbloquearAval'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionDesbloquearAval'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleDesbloquearAval'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionDesbloquearAval'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: aval.solicitanteAddress,
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionStoreUtils.updateTransaction(transaction);
+
+                aval.txHash = hash;
+                subscriber.next(aval);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                //const numeroCuota = receipt.events['AvalCuotaUnlock'].returnValues.numeroCuota;
+
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(aval.id);
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error(`Error procesando transacción para desbloquear fondos de aval.`, error);
+                subscriber.error(error);
+            });
+        });
+    }
+
     async estimateGas(method, from) {
         const estimateGas = await method.estimateGas({ from: from });
         return new BigNumber(estimateGas);
@@ -386,9 +559,10 @@ class AvaldaoContractApi {
     }
 
     updateContracts() {
-        const { avaldaoContractAddress, exchangeRateProviderContractAddress } = config;
-        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, exchangeRateProviderContractAddress);
+        const { avaldaoContractAddress, fondoGarantiaVaultContractAddress, exchangeRateProviderContractAddress } = config;
+        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, fondoGarantiaVaultContractAddress, exchangeRateProviderContractAddress);
         this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
+        this.fondoGarantiaVault = new this.web3.eth.Contract(FondoGarantiaVaultAbi, fondoGarantiaVaultContractAddress);
         this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
     }
 }

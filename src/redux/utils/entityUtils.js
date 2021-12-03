@@ -5,8 +5,6 @@ import { selectMilestone, fetchMilestone } from '../reducers/milestonesSlice';
 
 class EntityUtils {
 
-  constructor() { }
-
   refreshEntity(entityId) {
     
     let state = store.getState();

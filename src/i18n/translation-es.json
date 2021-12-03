@@ -15,6 +15,9 @@
     "userAvatarChoose": "Elige una foto de perfil",
     "userUnknown": "Usuario desconocido",
 
+    "fondoGarantia": "Fondo de garantía",
+    "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
+
     "noSignature": "Sin firmar",
 
     "avaldao": "Avaldao",
@@ -23,16 +26,20 @@
     "avalado": "Avalado",
 
     "avalesTitle": "Avales", 
+    "avalVisualizarTitle": "Visualizar aval",
     "avalCompletarTitle": "Completar aval",
     "avalFirmarTitle": "Firmar aval",
+    "avalDesbloquearTitle": "Desbloquear fondos de aval",
     "avalCompletar": "Completar",
     "avalCancelar": "Cancelar",
+    "avalReclamarTitle": "Abrir reclamo",
     "avalProyecto": "Proyecto",
     "avalProposito": "Propósito",
     "avalCausa": "Por qué",
     "avalAdquisicion": "Adquisición",
     "avalBeneficiarios": "Beneficiarios",
     "avalMonto": "Monto",
+    "avalCuotasCantidad": "Cuotas",
     "avalAvaldaoAddress": "Dirección de Avaldao",
     "avalSolicitanteAddress": "Dirección del solicitante",
     "avalComercianteAddress": "Dirección del comerciante",
@@ -41,9 +48,22 @@
     "avalSolicitanteAddressHelper": "Dirección de la billetera del solicitante",
     "avalComercianteAddressHelper": "Dirección de la billetera del comerciante",
     "avalAvaladoAddressHelper": "Dirección de la billetera del avalado",
-    
-    
-    
+    "avalFondosInsuficientes": "Fondos insuficientes para el aval. Se requiren {{diff}} más.",
+
+
+    "avalFirmasSection": "Firmas",
+    "avalCuotaSection": "Cuotas",
+    "avalCuota": "Cuota",
+    "avalCuotaAmount": "Monto",
+    "avalCuotaStatus": "Estado",
+    "avalCuotaDueDate": "Vencimiento",
+    "avalCuotaUnlockDate": "Desbloqueo",
+
+    "avalClaimSection":"Reclamos",
+    "noClaims":"Aún no hay reclamos.",
+    "openClaim":"Abrir un reclamo",
+
+    "soloAvalesVigentes": "Disponible solo para avales en estado vigente",
     
     "give4forest": "Give for forest",
 
@@ -292,8 +312,16 @@
     "transactionFailuredTitleCompletarAval": "No se completó el aval",
     "transactionFailuredDescriptionCompletarAval": "Ocurrió una falla completando de aval.",
 
+    "transactionCreatedTitleDesbloquearAval": "Confirma que desbloquea los fundos de cuota del aval en la billetera",
+    "transactionCreatedSubtitleDesbloquearAval": "Verifique los detalles aquí - el desbloqueo de los fondos de cuota del aval no puede ser reembolsado.",
+    "transactionPendingTitleDesbloquearAval": "Desbloqueando fondos de cuota de aval...",
+    "transactionConfirmedTitleDesbloquearAval": "Los fondos de cuota del aval han sido desbloqueados",
+    "transactionConfirmedDescriptionDesbloquearAval": "Los fondos de cuota del aval han sido desbloqueados.",
+    "transactionFailuredTitleDesbloquearAval": "No se desbloqueron los fondos de cuota del aval",
+    "transactionFailuredDescriptionDesbloquearAval": "Ocurrió una falla desbloqueando los fondos de cuota del aval.",
+
     "transactionCreatedTitleSignAval": "Confirma tu firma del aval en la billetera",
-    "transactionCreatedSubtitleSignAval": "Verifique los detalles aquí - su firma del aval no puede ser reembolsada.",
+    "transactionCreatedSubtitleSignAval": "Verifique los detalles aquí - su firma del aval no puede ser reembolsado.",
     "transactionPendingTitleSignAval": "Firmando aval...",
     "transactionConfirmedTitleSignAval": "El aval ha sido firmado",
     "transactionConfirmedDescriptionSignAval": "El aval ha sido firmado.",
