@@ -190,7 +190,6 @@ class AvalService {
      * 
      * @param aval a firmar
      * @param signer dirección del usuario firmante
-     * @returns observable 
      */
     firmarAval(aval, signerAddress) {
 
@@ -236,8 +235,6 @@ class AvalService {
      * Desbloquea los fondos de un aval.
      * 
      * @param aval a desbloquear
-     * @param signer dirección del usuario firmante
-     * @returns observable 
      */
     desbloquearAval(aval) {
 
@@ -246,6 +243,40 @@ class AvalService {
             avaldaoContractApi.desbloquearAval(aval).subscribe(aval => {
 
                 console.log('[AvalService] Se desbloquearon los fondos del aval.', aval);
+                subscriber.next(aval);
+            });
+        });
+    }
+
+    /**
+     * Reclama los fondos de un aval.
+     * 
+     * @param aval a reclamar
+     */
+    reclamarAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            avaldaoContractApi.reclamarAval(aval).subscribe(aval => {
+
+                console.log('[AvalService] Se reclamaron los fondos del aval.', aval);
+                subscriber.next(aval);
+            });
+        });
+    }
+
+    /**
+     * Reintegra los fondos de un aval al comerciante.
+     * 
+     * @param aval a reintegrar al comerciante
+     */
+    reintegrarAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            avaldaoContractApi.reintegrarAval(aval).subscribe(aval => {
+
+                console.log('[AvalService] Se reintegraron los fondos del aval.', aval);
                 subscriber.next(aval);
             });
         });

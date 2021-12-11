@@ -14,12 +14,16 @@ import messagesReducer from './reducers/messagesSlice.js'
 import transactionsReducer from './reducers/transactionsSlice.js'
 import exchangeRatesReducer from './reducers/exchangeRatesSlice'
 
-import { registerCurrentUserEpic, 
-  setCurrentUserEpic, 
-  loadCurrentUserEpic } from './epics/currentUserEpics';
-import { fetchDacsEpic, 
-  fetchDacEpic, 
-  saveDacEpic } from './epics/dacsEpics';
+import {
+  registerCurrentUserEpic,
+  setCurrentUserEpic,
+  loadCurrentUserEpic
+} from './epics/currentUserEpics';
+import {
+  fetchDacsEpic,
+  fetchDacEpic,
+  saveDacEpic
+} from './epics/dacsEpics';
 import {
   fetchMilestonesEpic,
   fetchMilestoneEpic,
@@ -29,21 +33,31 @@ import {
   milestoneWithdrawEpic
 } from './epics/milestonesEpics'
 import { fetchActivitiesByIdsEpic } from './epics/activitiesEpics'
-import { fetchCampaignsEpic, 
-  fetchCampaignEpic, 
-  saveCampaignEpic } from './epics/campaignsEpics'
-import { fetchAvalesOnChainEpic, 
-  fetchAvalesOffChainEpic, 
-  fetchAvalByIdEpic, 
-  completarAvalEpic, 
-  firmarAvalEpic, 
-  desbloquearAvalEpic } from './epics/avalesEpics'
-import { fetchUsersEpic, 
-  fetchUserByAddressEpic } from './epics/usersEpics';
-import { fetchDonationsEpic, 
-  fetchDonationsByIdsEpic, 
-  addDonationEpic, 
-  transferDonationsEpic } from './epics/donationsEpics'
+import {
+  fetchCampaignsEpic,
+  fetchCampaignEpic,
+  saveCampaignEpic
+} from './epics/campaignsEpics'
+import {
+  fetchAvalesOnChainEpic,
+  fetchAvalesOffChainEpic,
+  fetchAvalByIdEpic,
+  completarAvalEpic,
+  firmarAvalEpic,
+  desbloquearAvalEpic,
+  reclamarAvalEpic,
+  reintegrarAvalEpic
+} from './epics/avalesEpics'
+import {
+  fetchUsersEpic,
+  fetchUserByAddressEpic
+} from './epics/usersEpics';
+import {
+  fetchDonationsEpic,
+  fetchDonationsByIdsEpic,
+  addDonationEpic,
+  transferDonationsEpic
+} from './epics/donationsEpics'
 import { fetchExchangeRatesEpic } from './epics/exchangeRatesEpics'
 import { fetchFondoGarantiaEpic } from './epics/fondoGarantiaEpics'
 
@@ -63,6 +77,8 @@ const rootEpic = combineEpics(
   completarAvalEpic,
   firmarAvalEpic,
   desbloquearAvalEpic,
+  reclamarAvalEpic,
+  reintegrarAvalEpic,
   fetchMilestonesEpic,
   fetchMilestoneEpic,
   saveMilestoneEpic,

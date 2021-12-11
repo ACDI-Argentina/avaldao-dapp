@@ -12,6 +12,8 @@ import StatusIndicator from 'components/StatusIndicator'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 import PageviewIcon from '@material-ui/icons/Pageview'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 import IconButton from '@material-ui/core/IconButton'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -19,7 +21,7 @@ import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import ProfileSignature from './ProfileSignature'
-import { firmarAval } from '../../redux/reducers/avalesSlice'
+import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval } from '../../redux/reducers/avalesSlice'
 import FiatAmount from 'components/FiatAmount'
 import FiatUtils from 'utils/FiatUtils'
 
@@ -32,15 +34,18 @@ class AvalItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+
     };
     this.goVisualizar = this.goVisualizar.bind(this);
     this.goCompletar = this.goCompletar.bind(this);
     this.firmar = this.firmar.bind(this);
+    this.desbloquear = this.desbloquear.bind(this);
+    this.reclamar = this.reclamar.bind(this);
+    this.reintegrar = this.reintegrar.bind(this);
   }
 
   componentDidMount() {
-    
+
   }
 
   goVisualizar() {
@@ -61,10 +66,31 @@ class AvalItem extends Component {
     })
   }
 
+  desbloquear() {
+    const { currentUser, aval, desbloquearAval, t } = this.props;
+    desbloquearAval({
+      aval: aval
+    })
+  }
+
+  reclamar() {
+    const { currentUser, aval, reclamarAval, t } = this.props;
+    reclamarAval({
+      aval: aval
+    })
+  }
+
+  reintegrar() {
+    const { currentUser, aval, reintegrarAval, t } = this.props;
+    reintegrarAval({
+      aval: aval
+    })
+  }
+
   render() {
 
     const { currentUser, aval, classes, t, fondoGarantiaBalanceFiat } = this.props;
-    
+
     let allowFirmar = aval.allowFirmar(currentUser);
     let alertMessage = null;
     if (fondoGarantiaBalanceFiat.isLessThan(aval.montoFiat)) {
@@ -163,6 +189,36 @@ class AvalItem extends Component {
                 <VpnKeyIcon />
               </IconButton>
             </Tooltip>
+            <Tooltip title={t('avalDesbloquearTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="desbloquear"
+                color="primary"
+                onClick={this.desbloquear}
+                disabled={!aval.allowDesbloquear(currentUser)}>
+                <LockOpenIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={t('avalReclamarTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="reclamar"
+                color="primary"
+                onClick={this.reclamar}
+                disabled={!aval.allowReclamar(currentUser)}>
+                <MoneyOffIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={t('avalReintegrarTitle')}>
+              <IconButton
+                edge="end"
+                aria-label="reintegrar"
+                color="primary"
+                onClick={this.reintegrar}
+                disabled={!aval.allowReintegrar(currentUser)}>
+                <AttachMoneyIcon />
+              </IconButton>
+            </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
         <Divider component="li" />
@@ -185,7 +241,10 @@ const mapStateToProps = (state, ownProps) => {
   };
 }
 const mapDispatchToProps = {
-  firmarAval
+  firmarAval,
+  desbloquearAval,
+  reclamarAval,
+  reintegrarAval
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(

@@ -62,3 +62,25 @@ export const desbloquearAvalEpic = action$ => action$.pipe(
     payload: aval
   }))
 )
+
+export const reclamarAvalEpic = action$ => action$.pipe(
+  ofType('avales/reclamarAval'),
+  mergeMap(action => avalService.reclamarAval(
+    action.payload.aval
+  )),
+  map(aval => ({
+    type: 'avales/updateAvalById',
+    payload: aval
+  }))
+)
+
+export const reintegrarAvalEpic = action$ => action$.pipe(
+  ofType('avales/reintegrarAval'),
+  mergeMap(action => avalService.reintegrarAval(
+    action.payload.aval
+  )),
+  map(aval => ({
+    type: 'avales/updateAvalById',
+    payload: aval
+  }))
+)

@@ -390,8 +390,9 @@ class AvaldaoContractApi {
             const signatureR = [solicitanteSignatureR, comercianteSignatureR, avaladoSignatureR, avaldaoSignatureR];
             const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
 
-            const method = this.avaldao.methods.signAval(
-                aval.address,
+            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
+
+            const method = avalContract.methods.sign(
                 signatureV,
                 signatureR,
                 signatureS);
@@ -444,10 +445,10 @@ class AvaldaoContractApi {
 
                 // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
                 // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                const avalIdEvent = receipt.events['SignAval'].returnValues.id;
+                //const avalIdEvent = receipt.events['Signed'].returnValues.id;
 
                 // Se instruye al store para obtener el aval actualizado.
-                avalStoreUtils.fetchAvalById(avalIdEvent);
+                avalStoreUtils.fetchAvalById(aval.id);
 
             }).on('error', function (error) {
 
@@ -471,11 +472,6 @@ class AvaldaoContractApi {
         return new Observable(async subscriber => {
 
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
-
-            const users = [aval.solicitanteAddress,
-            aval.comercianteAddress,
-            aval.avaladoAddress,
-            aval.avaldaoAddress];
 
             const method = avalContract.methods.unlockFundManual();
 
@@ -539,6 +535,162 @@ class AvaldaoContractApi {
 
                 error.aval = aval;
                 console.error(`Error procesando transacción para desbloquear fondos de aval.`, error);
+                subscriber.error(error);
+            });
+        });
+    }
+
+    /**
+     * Reclama los fondos de un aval.
+     * 
+     * @param aval a reclamar
+     */
+    reclamarAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
+
+            const method = avalContract.methods.openReclamo();
+
+            const gasEstimated = await this.estimateGas(method, aval.comercianteAddress);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionStoreUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleReclamarAval'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleReclamarAval'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleReclamarAval'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleReclamarAval'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionReclamarAval'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleReclamarAval'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionReclamarAval'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: aval.comercianteAddress,
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionStoreUtils.updateTransaction(transaction);
+
+                aval.txHash = hash;
+                subscriber.next(aval);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                //const numeroCuota = receipt.events['AvalCuotaUnlock'].returnValues.numeroCuota;
+
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(aval.id);
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error(`Error procesando transacción para reclamar fondos de aval.`, error);
+                subscriber.error(error);
+            });
+        });
+    }
+
+    /**
+     * Reintegra los fondos de un aval al comerciante.
+     * 
+     * @param aval a reintegrar
+     */
+    reintegrarAval(aval) {
+
+        return new Observable(async subscriber => {
+
+            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
+
+            const method = avalContract.methods.reintegrar();
+
+            const gasEstimated = await this.estimateGas(method, aval.avaldaoAddress);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionStoreUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleReintegrarAval'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleReintegrarAval'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleReintegrarAval'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleReintegrarAval'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionReintegrarAval'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleReintegrarAval'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionReintegrarAval'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: aval.avaldaoAddress,
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionStoreUtils.updateTransaction(transaction);
+
+                aval.txHash = hash;
+                subscriber.next(aval);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                //const numeroCuota = receipt.events['AvalCuotaUnlock'].returnValues.numeroCuota;
+
+                // Se instruye al store para obtener el aval actualizado.
+                avalStoreUtils.fetchAvalById(aval.id);
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                error.aval = aval;
+                console.error(`Error procesando transacción para reintegrar fondos de aval.`, error);
                 subscriber.error(error);
             });
         });
