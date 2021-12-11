@@ -237,7 +237,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={6}>
@@ -250,7 +250,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={6}>
@@ -263,7 +263,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={3}>
@@ -276,7 +276,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={3}>
@@ -289,7 +289,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={3}>
@@ -302,7 +302,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={3}>
@@ -315,7 +315,7 @@ class AvalCompletar extends Component {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  disabled
+                  readonly
                 />
               </Grid>
               <Grid item sm={12} md={6}>

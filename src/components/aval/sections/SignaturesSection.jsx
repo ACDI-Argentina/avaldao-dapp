@@ -1,18 +1,17 @@
 import React from 'react'
-import Box from 'components/Box/box';
-import styled from 'styled-components';
 import ProfileSignature from 'components/views/ProfileSignature';
 import { useSelector } from 'react-redux';
 import { selectUserByAddress } from 'redux/reducers/usersSlice';
 import Section from './Section';
 import { useTranslation } from 'react-i18next';
+import { makeStyles, Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
-const Flex = styled.div`
-  display: flex;
-  flex-wrap:wrap;
-`;
-
-
+const useStyles = makeStyles({
+  root: {
+    flexGrow: 1
+  }
+});
 
 const Signature = ({ signature }) => {
   const user = useSelector(state => selectUserByAddress(state, signature.address));
@@ -28,6 +27,7 @@ const Signature = ({ signature }) => {
 
 const SignaturesSection = ({ aval }) => {
 
+  const classes = useStyles();
   const { t } = useTranslation();
 
   const signatures = [
@@ -55,16 +55,14 @@ const SignaturesSection = ({ aval }) => {
 
   return (
     <Section>
-      <h3>{t('avalFirmasSection')}</h3>
-      <Flex>
-        {Object.keys(signatures).map(key => signatures[key]).map(signature => {
-          return (
-            <Box xs={12} md={6} xxl={3} key={signature.address} style={{ padding: "14px" }}>
-              <Signature signature={signature} />
-            </Box>
-          )
-        })}
-      </Flex>
+      <Typography variant="subtitle1">{t('avalFirmasSection')}</Typography>
+      <Grid container className={classes.root} spacing={1}>
+        {signatures.map((signature, idx) => (
+          <Grid item lg={3} md={4} sm={6} xs={12} key={idx}>
+            <Signature signature={signature} />
+          </Grid>
+        ))}
+      </Grid>
     </Section>
   )
 }

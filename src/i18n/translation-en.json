@@ -61,6 +61,8 @@
     "avalCuotaDueDate": "Due",
     "avalCuotaUnlockDate": "Unlock",
 
+    "avalReclamo": "Claim",
+    "avalReclamoCreacion": "Creation",
     "avalClaimSection":"Claims",
     "noClaims":"No claims.",
     "openClaim":"Open a new claim",

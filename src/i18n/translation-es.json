@@ -61,6 +61,8 @@
     "avalCuotaDueDate": "Vencimiento",
     "avalCuotaUnlockDate": "Desbloqueo",
 
+    "avalReclamo": "Reclamo",
+    "avalReclamoCreacion": "Creación",
     "avalClaimSection":"Reclamos",
     "noClaims":"Aún no hay reclamos.",
     "openClaim":"Abrir un reclamo",

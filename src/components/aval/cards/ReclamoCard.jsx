@@ -1,72 +1,76 @@
 import React from 'react'
-import styled from 'styled-components';
-import { faCertificate, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DateUtils from 'utils/DateUtils';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { makeStyles, Typography } from '@material-ui/core';
+import CardHeader from '@material-ui/core/CardHeader';
+import { useTranslation } from 'react-i18next';
+import { yellow, green } from '@material-ui/core/colors';
+import Avatar from '@material-ui/core/Avatar';
+import StatusIndicator from 'components/StatusIndicator';
+import Grid from '@material-ui/core/Grid';
+import ReportOutlinedIcon from '@material-ui/icons/ReportOutlined';
+import ReportOffOutlinedIcon from '@material-ui/icons/ReportOffOutlined';
 
-const Wrapper = styled.div`
-  width:100%;
-  max-width: 768px;
-  min-height:190px;
-  
-  padding:10px;
-  margin:10px;
-  border-radius:8px;
-  display:flex;
-
-  box-shadow: 1.40323px 0px 18.2419px rgba(48, 55, 85, 0.07);
-
-  ${ props => props.status === "VIGENTE" && `
-    background-color: #FFC04F;
-  `}
-  ${ props => props.status === "CERRADO" && `
-    background-color: #F2F2F2;
-`}
-`
-
-const Column = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-`
-
-const ReclamoData = styled(Column)`
-  flex:1;
-  justify-content: center;
-  line-height:30px;
-`
-
-const Index = styled.div`
-  font-weight:bold;
-  font-size:1.25em;
-`
+const useStyles = makeStyles({
+  root: {
+    minWidth: 250,
+    marginRight: 15
+  },
+  contentRoot: {
+    paddingTop: 0,
+    paddingBottom: 0
+  },
+  contentGrid: {
+    flexGrow: 1
+  },
+  yellow: {
+    backgroundColor: yellow[800]
+  },
+  green: {
+    backgroundColor: green[800]
+  }
+});
 
 const ReclamoCard = ({ reclamo }) => {
 
-  const formattedDateCreacion = DateUtils.formatTimestampSeconds(reclamo.timestampCreacion);
-  const status = reclamo.status.name;
-  const vigente = status === "Vigente";
+  const classes = useStyles();
+  const { t } = useTranslation();
 
+  let avatarClass = classes.yellow;
+  let avatarIcon = (<ReportOutlinedIcon />);
+  if(!reclamo.isVigente()) {
+    avatarClass = classes.green;
+    avatarIcon = (<ReportOffOutlinedIcon />);
+  }
+  const numero = '#' + reclamo.numero;
+  const creacion = DateUtils.formatTimestampSeconds(reclamo.timestampCreacion);
 
   return (
-    <Wrapper status={status.toUpperCase()}>
-      <Column>
-        <FontAwesomeIcon
-          icon={vigente? faExclamationCircle : faCheckCircle}
-          style={{ 
-            fontSize: "65px", 
-            margin:"20px",
-            color: vigente ? "#555555" : "#79D2D2"
-          }}
-        />
-      </Column>
-      <ReclamoData>
-        <Index>Reclamo #{reclamo.numero} </Index>
-        <div>Estado: {status}</div>
-        <div>Fecha: {formattedDateCreacion}</div>
-      
-      </ReclamoData>
-    </Wrapper>
+    <Card className={classes.root}>
+      <CardHeader
+        avatar={
+          <Avatar className={avatarClass}>
+            {avatarIcon}
+          </Avatar>
+        }
+        title={t('avalReclamo')}
+        subheader={numero}>
+      </CardHeader>
+      <CardContent className={classes.contentRoot}>
+        <Grid container className={classes.contentGrid} spacing={0}>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary" component="p">{t('avalReclamoCreacion')}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary" component="p">{creacion}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <StatusIndicator status={reclamo.status}></StatusIndicator>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
   )
 }
 

@@ -1,35 +1,38 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-import AvalCuotaCard from '../cards/AvalCuotaCard';
-
+import CuotaCard from '../cards/CuotaCard';
 import NoAvailable from './NoAvailable';
 import Section from './Section';
-import Aval from 'models/Aval';
+import { makeStyles, Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
-const CuotasList = styled.div`
-  display:flex;
-  overflow-x:auto;
-  padding-bottom:10px;
-  background-color: white;
-  border-radius:12px;
-`;
+const useStyles = makeStyles({
+  root: {
+    flexGrow: 1
+  }
+});
 
 const CuotasSection = ({ aval }) => {
+
+  const classes = useStyles();
   const { t } = useTranslation();
 
   const available = aval.showCuotas();
 
   return (
     <Section>
-      <h3>{t('avalCuotaSection')}</h3>
-      {available ? (
-        <CuotasList>
-          {aval?.cuotas.map((cuota, idx) => (
-            <AvalCuotaCard key={idx} cuota={cuota} />
+      <Typography variant="subtitle1">{t('avalCuotaSection')}</Typography>
+      {available ?
+        (<Grid container className={classes.root} spacing={1}>
+          {aval.cuotas.map((cuota, idx) => (
+            <Grid item lg={3} md={4} sm={6} xs={12} key={idx}>
+              <CuotaCard cuota={cuota} />
+            </Grid>
           ))}
-        </CuotasList>
-      ) : (<NoAvailable />)}
+        </Grid>
+        ) :
+        (<NoAvailable />)
+      }
     </Section>
   )
 }

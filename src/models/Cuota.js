@@ -78,6 +78,10 @@ class Cuota {
     return StatusUtils.build(2, 'Reintegrada', false);
   }
 
+  isPendiente() {
+    return this.status.name === Cuota.PENDIENTE.name;
+  }
+
   get clientId() {
     return this._clientId;
   }

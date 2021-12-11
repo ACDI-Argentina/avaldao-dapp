@@ -1,24 +1,18 @@
 import React, { useEffect } from 'react'
-
 import { useLocation } from 'react-router';
-import Page from '../Page';
+import Page from './Page';
 import { Flex } from './styled';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAvalById } from 'redux/reducers/avalesSlice';
 import { fetchUsers } from 'redux/reducers/usersSlice';
-
 import AvalActions from 'components/aval/sections/AvalActions';
 import AvalGeneralSection from 'components/aval/sections/AvalGeneralSection';
-
 import SignaturesSection from 'components/aval/sections/SignaturesSection';
 import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
-import { demoReclamos } from "./demoData";
 import StatusIndicator from 'components/StatusIndicator';
 
-
-const ViewAval = ({ }) => {
+const AvalView = ({ }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -29,17 +23,9 @@ const ViewAval = ({ }) => {
     dispatch(fetchUsers());
   }, []);
 
-
-  if (aval && location.search.includes("demo")) {
-    aval.reclamos = demoReclamos;
-  }
-
-
   if (!aval) { //TODO: add skeleton
     return <Page />;
   }
-
-
 
   return (
     <Page>
@@ -51,9 +37,8 @@ const ViewAval = ({ }) => {
       <SignaturesSection aval={aval} />
       <CuotasSection aval={aval} />
       <ReclamosSection aval={aval} />
-
     </Page>
   )
 }
 
-export default ViewAval;
+export default AvalView;

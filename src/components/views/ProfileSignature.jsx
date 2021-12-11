@@ -5,11 +5,11 @@ import { withTranslation } from 'react-i18next'
 import { selectUserByAddress, fetchUserByAddress } from '../../redux/reducers/usersSlice'
 import { withStyles } from '@material-ui/core/styles';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
-import { green, grey } from '@material-ui/core/colors';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import { yellow, green, grey } from '@material-ui/core/colors';
 
 class ProfileSignature extends Component {
 
@@ -37,24 +37,29 @@ class ProfileSignature extends Component {
             name = user.name;
         }
 
+        let avatarClass = classes.yellow;
         let signatureText = t('noSignature');;
         let signatureColor = grey[300];
         if (signature) {
+            avatarClass = classes.green;
             signatureText = signature;
             signatureColor = green[400];
         }
 
         return (
-            <ListItem>
-                <ListItemIcon style={{ minWidth: "unset", marginRight: "1em" }}>
-                    <Tooltip title={signatureText}>
-                        <VpnKeyIcon style={{ color: signatureColor }} />
-                    </Tooltip>
-                </ListItemIcon>
-                <ListItemText
-                    primary={title}
-                    secondary={name} />
-            </ListItem>
+            <Card className={classes.root}>
+                <CardHeader
+                    avatar={
+                        <Tooltip title={signatureText}>
+                            <Avatar className={avatarClass}>
+                                <VpnKeyIcon />
+                            </Avatar>
+                        </Tooltip>
+                    }
+                    title={title}
+                    subheader={name}>
+                </CardHeader>
+            </Card>
         );
     }
 }
@@ -71,6 +76,16 @@ const styles = theme => ({
     logo: {
         width: theme.spacing(6),
         height: theme.spacing(6),
+    },
+    root: {
+        minWidth: 250,
+        marginRight: 15
+    },
+    yellow: {
+        backgroundColor: yellow[800]
+    },
+    green: {
+        backgroundColor: green[800]
     }
 });
 

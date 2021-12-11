@@ -53,7 +53,7 @@ class Aval {
     });
 
     this._reclamos = [];
-    
+
     reclamos.forEach(reclamo => {
       this._reclamos.push(new Reclamo(reclamo));
     });
@@ -233,7 +233,18 @@ class Aval {
       // Solo el Comerciante puede desbloquear fondos el aval
       return false;
     }
-    // TODO Verificar que no tenga reclamos vigentes
+    // El aval no debe tener un reclamo en estado Vigente.
+    let hasReclamoVigente = false;
+    for (let i = 0; i < this.reclamos.length; i++) {
+      const reclamo = this.reclamos[i];
+      if (reclamo.isVigente()) {
+        hasReclamoVigente = true;
+        break;
+      }
+    }
+    if (hasReclamoVigente) {
+      return false;
+    }
     // La fecha actual debe ser mayor a la fecha de vencimiento de la primera cuota Pendiente.
     const timestampCurrent = Math.round(Date.now() / 1000);
     let hasCuotaPendienteVencida = false;
@@ -270,19 +281,16 @@ class Aval {
       // Solo el usuario Avaldao puede desbloquear fondos el aval
       return false;
     }
-    // TODO Verificar que tenga reclamos vigentes
-    // La fecha actual debe ser mayor a la fecha de vencimiento de la primera cuota Pendiente.
-    const timestampCurrent = Math.round(Date.now() / 1000);
-    let hasCuotaPendienteVencida = false;
-    for (let i = 0; i < this.cuotas.length; i++) {
-      const cuota = this.cuotas[i];
-      if (cuota.status.name == Cuota.PENDIENTE.name &&
-        cuota.timestampVencimiento <= timestampCurrent) {
-        hasCuotaPendienteVencida = true;
+    // El aval debe tener un reclamo en estado Vigente.
+    let hasReclamoVigente = false;
+    for (let i = 0; i < this.reclamos.length; i++) {
+      const reclamo = this.reclamos[i];
+      if (reclamo.isVigente()) {
+        hasReclamoVigente = true;
         break;
       }
     }
-    if (!hasCuotaPendienteVencida) {
+    if (!hasReclamoVigente) {
       return false;
     }
     return true;
@@ -331,10 +339,9 @@ class Aval {
   showCuotas() {
     const vigente = this.status.name === Aval.VIGENTE.name;
     const finalizado = this.status.name === Aval.FINALIZADO.name;
-
     return vigente || finalizado;
   }
-  
+
   showReclamos() {
     const vigente = this.status.name === Aval.VIGENTE.name;
     const finalizado = this.status.name === Aval.FINALIZADO.name;

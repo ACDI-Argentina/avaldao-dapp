@@ -64,6 +64,10 @@ class Reclamo {
     return StatusUtils.build(1, 'Cerrado', false);
   }
 
+  isVigente() {
+    return this.status.name === Reclamo.VIGENTE.name;
+  }
+
   get clientId() {
     return this._clientId;
   }

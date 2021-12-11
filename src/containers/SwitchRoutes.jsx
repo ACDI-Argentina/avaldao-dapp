@@ -20,7 +20,7 @@ import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
 import AvalCompletar from 'components/views/AvalCompletar'
 import UserProfile from 'components/UserProfile'
-import ViewAval from 'components/views/aval/ViewAval';
+import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
 
 const SwitchRoutes = ({ currentUser }) => (
@@ -242,15 +242,9 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/avales/:id"
-            render={props => (<ViewAval {...props}/>
-            )}
-        />
-        <Route
-            exact
             path="/aval-visualizar/:id"
             render={props => (
-                <ViewAval
+                <AvalView
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
