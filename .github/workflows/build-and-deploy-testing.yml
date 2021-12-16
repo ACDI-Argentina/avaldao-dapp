@@ -2,7 +2,7 @@ name: Build and deploy dapp - testing
 
 on:
   push:
-    branches: [build]
+    branches: [beta]
 jobs:
   deploy:
     runs-on: ubuntu-latest
