@@ -22,6 +22,8 @@ import AvalCompletar from 'components/views/AvalCompletar'
 import UserProfile from 'components/UserProfile'
 import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
+import UsersPage from 'components/views/UsersPage'
+import UserPage from 'components/UserPage'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -242,7 +244,32 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/aval-visualizar/:id"
+            path="/profile/:userAddress"
+            render={props => <Profile {...props} />}
+        />
+        <Route
+            exact
+            path="/users"
+            render={props => (
+                <UsersPage
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
+            path="/user/:userAddress"
+            render={props => (
+                <UserPage
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
+            path="/aval/:id"
             render={props => (
                 <AvalView
                     key={currentUser ? currentUser.id : 0}
@@ -260,11 +287,7 @@ const SwitchRoutes = ({ currentUser }) => (
                 />
             )}
         />
-        <Route
-            exact
-            path="/profile/:userAddress"
-            render={props => <Profile {...props} />}
-        />
+
 
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"

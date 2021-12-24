@@ -6,7 +6,9 @@
 
     "cancel": "Cancelar",
     "save": "Guardar",
+    "view": "Visualizar",
 
+    "usersTitle": "Users",
     "userProfileTitle": "Perfil de usuario",
     "userName": "Nombre",
     "userEmail": "E-Mail",
@@ -14,7 +16,8 @@
     "userAvatar": "Foto de perfil",
     "userAvatarChoose": "Elige una foto de perfil",
     "userUnknown": "Usuario desconocido",
-
+    "userRoles": "Roles",
+    
     "fondoGarantia": "Fondo de garantía",
     "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
 

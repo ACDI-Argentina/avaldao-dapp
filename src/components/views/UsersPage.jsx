@@ -10,15 +10,13 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import FondoGarantia from './FondoGarantia';
-import AvalList from './AvalList';
-import Divider from '@material-ui/core/Divider'
+import UserList from './UserList';
 
 /**
- * Pantalla Home.
+ * Pantalla de Usuarios.
  * 
  */
-class Home extends Component {
+class UsersPage extends Component {
 
   constructor(props) {
     super(props);
@@ -106,13 +104,7 @@ class Home extends Component {
 
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <FondoGarantia></FondoGarantia>
-            </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <AvalList></AvalList>
+              <UserList></UserList>
             </Grid>
           </Grid>
         </div>
@@ -122,7 +114,7 @@ class Home extends Component {
   }
 }
 
-Home.contextType = Web3AppContext;
+UsersPage.contextType = Web3AppContext;
 
 const styles = theme => ({
   root: {
@@ -207,5 +199,5 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(Home)))
+  withTranslation()(UsersPage)))
 );

@@ -78,6 +78,11 @@ function merge(stateUser, newUser) {
 
 export const { fetchUserByAddress, fetchUsers } = usersSlice.actions;
 
+export const selectUsers = state => {
+    return state.users.map(function (userStore) {
+        return new User(userStore);
+    });
+}
 export const selectUserByAddress = (state, address) => {
     let userStore = state.users.find(u => Web3Utils.addressEquals(u.address, address));
     if (userStore) {

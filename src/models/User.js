@@ -37,7 +37,7 @@ class User extends Model {
       // https://gateway.pinata.cloud/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR
       avatarCid = '/ipfs/QmWCaq985NJjPnXhyDPQ4FPob8XNybncQqkQUZatySkY7E',
       avatar = '',
-      name,      
+      name,
       email,
       url,
       roles = [],
@@ -161,7 +161,7 @@ class User extends Model {
   /**
    * Obtiene la URL completa del avatar.
    */
-   get avatarCidUrl() {
+  get avatarCidUrl() {
     return ipfsService.resolveUrl(this._avatarCid)
   }
 

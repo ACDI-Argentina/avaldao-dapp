@@ -6,7 +6,9 @@
     
     "cancel": "Cancel",
     "save": "Save",
+    "view": "View",
 
+    "usersTitle": "Users",
     "userProfileTitle": "User profile",
     "userName": "Name",
     "userEmail": "E-Mail",
@@ -14,6 +16,7 @@
     "userAvatar": "Profile photo",
     "userAvatarChoose": "Choose a profile photo",
     "userUnknown": "Unknown user",
+    "userRoles": "Roles",
 
     "fondoGarantia": "Guarantee fund",
     "fondoGarantiaExplain": "The guarantee fund is made up of tokens from the RSK blockchain and serves as backing for the guarantees.",
