@@ -59,7 +59,7 @@ class AvaldaoContractApi {
                 subscriber.next(tokenBalances);
             } catch (error) {
                 console.log('[Avaldao Contract API] Error obteniendo Fondo de Garantía.', error);
-                subscriber.error(error);
+                //subscriber.error(error);
             }
         });
     }

@@ -2,6 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+const Wrapper = styled.div`
+  position: relative;
+  display: inline;
+`
+
 const LoaderContainer = styled.div`
   position:absolute; 
   right:0px;
@@ -12,11 +17,12 @@ const LoaderContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
 `
 
 const LoadingOverlay = ({ loading, children, ...props }) => {
   return (
-    <div style={{ position: 'relative' }} {...props}>
+    <Wrapper {...props}>
       {children}
       {loading && (
         <LoaderContainer>
@@ -28,7 +34,7 @@ const LoadingOverlay = ({ loading, children, ...props }) => {
         </LoaderContainer>
       )}
 
-    </div>
+    </Wrapper>
   )
 }
 

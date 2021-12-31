@@ -34,6 +34,13 @@ export const avalesSlice = createSlice({
         }
       }
     },
+    solicitarAval: (state, action) => {
+      const aval = action.payload;
+      aval.status = Aval.SOLICITANDO;
+      const avalStore = aval.toStore();
+      state.push(avalStore);
+      return state;
+    },
     completarAval: (state, action) => {
       let aval = action.payload;
       aval.status = Aval.COMPLETANDO;
@@ -67,6 +74,29 @@ export const avalesSlice = createSlice({
         state.push(avalStore);
       }
     },
+
+    updateAvalByClientId: (state, action) => {
+      const avalStore = action.payload.toStore();
+      console.log("updateAvalByClientId!", avalStore);
+      const index = state.findIndex(a => a.clientId === avalStore.clientId);
+      if (index != -1) {
+        state[index] = avalStore;
+      } else {
+        state.push(avalStore);
+      }
+    },
+
+    solicitarAvalError: (state,action) => {
+      const error = action?.payload;
+      const avalError = error?.aval;
+      
+      const idx = state.findIndex(a => a.clientId === avalError.clientId);
+      if(idx> -1){
+        state[idx].status = Aval.ERROR;
+      }
+
+      return state;
+    }
   },
 });
 
@@ -75,6 +105,7 @@ export const {
   fetchAvalesOffChain,
   fetchAval,
   resetAvales,
+  solicitarAval,
   completarAval,
   firmarAval,
   desbloquearAval,
@@ -83,11 +114,20 @@ export const {
   fetchAvalById,
   updateAvalById } = avalesSlice.actions;
 
+export const selectRawAvales = state => state.avales;
+
 export const selectAvales = state => {
   return state.avales.map(function (avalStore) {
     return new Aval(avalStore);
   });
 }
+export const selectAvalByClientId = (state, clientId) => {
+  const avalStore = state.avales.find(a => a.clientId === clientId);
+  if (avalStore) {
+    return new Aval(avalStore);
+  }
+}
+
 export const selectAvalById = (state, id) => {
   let avalStore = state.avales.find(a => a.id === id);
   if (avalStore) {

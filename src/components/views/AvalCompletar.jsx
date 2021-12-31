@@ -295,7 +295,7 @@ class AvalCompletar extends Component {
               <Grid item sm={12} md={3}>
                 <TextField
                   id="montoTextField"
-                  value={FiatUtils.format(aval.montoFiat)}
+                  value={aval.montoFiat} /* FiatUtils.format( */
                   label={t('avalMonto')}
                   fullWidth
                   margin="normal"
@@ -333,7 +333,7 @@ class AvalCompletar extends Component {
                   }}
                   error={comercianteError}
                   required
-                  inputProps={{ maxlength: 42 }}
+                  inputProps={{ maxLength: 42 }}
                   variant="filled"
                   InputProps={{
                     startAdornment: (
@@ -358,7 +358,7 @@ class AvalCompletar extends Component {
                   }}
                   error={avaladoError}
                   required
-                  inputProps={{ maxlength: 42 }}
+                  inputProps={{ maxLength: 42 }}
                   variant="filled"
                   InputProps={{
                     startAdornment: (

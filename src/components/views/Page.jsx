@@ -7,6 +7,7 @@ import AvalStoreInspector from 'inspectors/AvalStoreInspector';
 import MainMenu from 'components/MainMenu';
 
 import { useTranslation } from 'react-i18next';
+import { maxWidth } from 'styled-system';
 
 
 const Page = ({ children, ...props }) => {
@@ -62,7 +63,10 @@ const styles = theme => ({
       "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
     padding: '2em',
     flexGrow: 1,
-    minHeight: "75vh"
+    minHeight: "75vh",
+    /* maxWidth:"1300px",
+    margin: "-60px auto 0px", */
+    
   },
 
   dappLogo: {

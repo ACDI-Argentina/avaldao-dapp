@@ -142,6 +142,16 @@ class Aval {
     }
   }
 
+
+  /* Se usa este estado para indicar que ocurrio un error durante la actualizacion, es un estado efimero */
+  static get ERROR() {
+    return StatusUtils.build(undefined, 'Error', true);
+  }
+
+  static get SOLICITANDO() {
+    return StatusUtils.build(undefined, 'Solicitando', true);
+  }
+
   static get SOLICITADO() {
     return StatusUtils.build(0, 'Solicitado', false);
   }

@@ -147,6 +147,35 @@ class AvalService {
         });
     }
 
+
+    solicitarAval(aval){ //Falta requerir el solicitanteAddress, y el avaldaoAddress
+        return new Observable(async subscriber => {
+            console.log(`[AvalService] - solicitar aval`, aval)
+
+            try{
+                const avalData = await feathersClient.service('avales').create({
+                    ...aval.toStore(),
+                    status: 0, //En el backend no tenemos el estado "solicitando", ver como lo manejamos
+                }); 
+                console.log('[AvalService] Aval solicitado en Feathers.', avalData);
+
+                const updatedAval = new Aval({
+                    ...avalData, 
+                    id: avalData._id,
+                    clientId:aval.clientId,
+                    status: Aval.mapAvalStatus(parseInt(avalData.status)), 
+                });
+
+                subscriber.next(updatedAval);
+
+            } catch(error){
+                console.error("[AvalService] Error solicitando aval off chain.", error);
+                error.aval = aval;
+                subscriber.error(error);
+            }
+        });
+    }
+
     /**
      * Completa un aval.
      * 

@@ -28,13 +28,20 @@
     "avalesTitle": "Avales", 
     "avalVisualizarTitle": "Visualizar aval",
     "avalCompletarTitle": "Completar aval",
+    "avalSolicitarTitle": "Solicitar aval",
+    "avalSolicitarBtn": "Solicitar aval",
     "avalFirmarTitle": "Firmar aval",
     "avalDesbloquearTitle": "Desbloquear fondos de aval",
     "avalReclamarTitle": "Reclamar aval",
     "avalReintegrarTitle": "Reintegrar aval",
     "avalCompletar": "Completar",
+    "avalSolicitar": "Solicitar",
     "avalCancelar": "Cancelar",
-    "avalReclamarTitle": "Abrir reclamo",
+
+    "avalModalSuccessTitle": "¡Felicitaciones!",
+    "avalModalSuccessMessage": "El aval ha sido registrado. Se encuentra pendiente de aprobación por parte de AvalDAO",
+    "avalModalError": "Ha ocurrido un error al solicitar el aval",
+
     "avalProyecto": "Proyecto",
     "avalProposito": "Propósito",
     "avalCausa": "Por qué",
@@ -51,6 +58,11 @@
     "avalComercianteAddressHelper": "Dirección de la billetera del comerciante",
     "avalAvaladoAddressHelper": "Dirección de la billetera del avalado",
     "avalFondosInsuficientes": "Fondos insuficientes para el aval. Se requiren {{diff}} más.",
+
+
+    "required":"Requerido",
+    "montoError": "Debe ser un número positivo",
+    "cuotaError": "Debe ser un número positivo",
 
 
     "avalFirmasSection": "Firmas",

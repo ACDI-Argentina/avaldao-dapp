@@ -31,6 +31,20 @@ export const fetchAvalesOffChainEpic = action$ => action$.pipe(
   }))
 )
 
+export const solicitarAvalEpic = action$ => action$.pipe(
+  ofType('avales/solicitarAval'),
+  mergeMap(action => avalService.solicitarAval(action.payload)),
+  map(aval => ({
+    type: 'avales/updateAvalByClientId',
+    payload: aval
+  })),
+  catchError(error => of({
+    type: "avales/solicitarAvalError",
+    payload: error,
+    error: true
+  }))
+)
+
 export const completarAvalEpic = action$ => action$.pipe(
   ofType('avales/completarAval'),
   mergeMap(action => avalService.completarAval(action.payload)),

@@ -22,6 +22,7 @@ import AvalCompletar from 'components/views/AvalCompletar'
 import UserProfile from 'components/UserProfile'
 import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
+import AvalSolicitar from 'components/views/AvalSolicitar'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -255,6 +256,27 @@ const SwitchRoutes = ({ currentUser }) => (
             path="/aval-completar/:id"
             render={props => (
                 <AvalCompletar
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
+            path="/solicitar-aval"
+            render={props => (
+                <AvalSolicitar
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+
+        <Route
+            exact
+            path="/request-aval"
+            render={props => (
+                <AvalSolicitar
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />

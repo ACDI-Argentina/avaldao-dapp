@@ -28,13 +28,20 @@
     "avalesTitle": "Avales",    
     "avalVisualizarTitle": "View aval",
     "avalCompletarTitle": "Complete aval",
+    "avalSolicitarTitle": "Request aval",
+    "avalSolicitarBtn": "Request aval",
     "avalFirmarTitle": "Sign aval",
     "avalDesbloquearTitle": "Unlock funds of aval",
     "avalReclamarTitle": "Claim aval",
     "avalReintegrarTitle": "Reintegrate aval",
     "avalCompletar": "Complete",
+    "avalSolicitar": "Request",
     "avalCancelar": "Cancel",
-    "avalReclamarTitle": "Open claim",
+
+    "avalModalSuccessTitle": "Congratulations!",
+    "avalModalSuccessMessage": "The aval has been registered. It is pending approval by AvalDAO.",
+    "avalModalError": "An error occurred when requesting the aval",
+
     "avalProyecto": "Project",
     "avalProposito": "Purpose",
     "avalCausa": "Why",
@@ -52,6 +59,9 @@
     "avalAvaladoAddressHelper": "Endorsed wallet address",
     "avalFondosInsuficientes": "Insufficient funds for the guarantee. {{diff}} more required.",
 
+    "required":"Required",
+    "montoError": "A positive number is required",
+    "cuotaError": "A positive number is required",
 
     "avalFirmasSection": "Signatures",
     "avalCuotaSection": "Dues",

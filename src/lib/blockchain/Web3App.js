@@ -156,7 +156,8 @@ class Web3App extends React.Component {
       const after = this.closeConnectionPendingModal;
 
       const web3 = await web3Manager.connect(before, after);
-      return !web3.isFallbackProvider;
+      const account = (await web3.eth.getAccounts())[0];
+      return web3.isFallbackProvider ? false : account;
       
     } catch (err) {
       console.log(err);
