@@ -103,6 +103,7 @@ class Web3App extends React.Component {
           openNoWalletModal: this.openNoWalletModal,
           closeNoWalletModal: this.closeNoWalletModal,
           closeConnectionModal: this.closeConnectionModal,
+          closeSignatureRequestModal: this.closeSignatureRequestModal,
           openConnectionModal: this.openConnectionModal,
           closeConnectionPendingModal: this.closeConnectionPendingModal,
           openConnectionPendingModal: this.openConnectionPendingModal,
