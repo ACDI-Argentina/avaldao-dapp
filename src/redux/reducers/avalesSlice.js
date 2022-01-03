@@ -96,6 +96,11 @@ export const avalesSlice = createSlice({
       }
 
       return state;
+    },
+
+    fetchAvalesOnChainError: (state, action) => {
+      const error = action?.payload;
+      console.log(`[avalesSlice] handle error:`,error)
     }
   },
 });
@@ -117,7 +122,7 @@ export const {
 export const selectRawAvales = state => state.avales;
 
 export const selectAvales = state => {
-  return state.avales.map(function (avalStore) {
+  return state.avales.filter(aval => aval?.status?.name !=="Error").map(function (avalStore) {
     return new Aval(avalStore);
   });
 }
