@@ -10,6 +10,7 @@ import { utils } from 'web3';
 import web3Manager from "./Web3Manager";
 import networkManager from "./NetworkManager";
 import accountManager from "./AccountManager";
+import currentUserUtils from "redux/utils/currentUserUtils";
 
 
 export const Web3AppContext = React.createContext({
@@ -169,6 +170,9 @@ class Web3App extends React.Component {
 
   logoutAccount = async () => {
     await web3Manager.disconnect();
+    await feathersClient.logout();
+    await feathersUsersClient.logout();
+    currentUserUtils.setAuthenticated(false);
   }
 
   // CONNECTION MODAL METHODS
@@ -424,9 +428,11 @@ class Web3App extends React.Component {
     this.setState({ lastNotificationTs: Date.now() });
   }
 
+
   authenticateIfPossible = async (currentUser, redirectOnFail = false) => {
     if (!currentUser || !currentUser.address) {
       console.log(`authenticateIfPossible - empty user`);
+      currentUserUtils.setAuthenticated(false);
       return false;
     }
 
@@ -437,7 +443,7 @@ class Web3App extends React.Component {
 
     console.log(`authenticateIfPossible - Authenticating..`);
     const result = await this.authenticate(currentUser.address, redirectOnFail);
-    currentUser.authenticated = result;
+    currentUserUtils.setAuthenticated(result);
     return result;
 
   };
@@ -453,7 +459,8 @@ class Web3App extends React.Component {
       console.log(`[Web3App] authenticate ${address} using access token ${accessToken}`)
       const payload = await feathersUsersClient.passport.verifyJWT(accessToken);
       if (Web3Utils.addressEquals(address, payload.userId)) {
-        await feathersUsersClient.authenticate(); // authenticate the socket connection
+        // TODO: CRITICAL: Revisar si lanza excepciones cuando el token no es valido
+        const result = await feathersUsersClient.authenticate(); 
         console.log(`[Web3App authenticated re using jwt`);
         return true;
       } else {

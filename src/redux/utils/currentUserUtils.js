@@ -1,5 +1,5 @@
 import { store } from '../store';
-import { initCurrentUser, clearCurrentUser, updateCurrentUserBalance } from '../reducers/currentUserSlice';
+import { initCurrentUser, setAuthenticated, clearCurrentUser, updateCurrentUserBalance } from '../reducers/currentUserSlice';
 
 /**
  * Clase utilitaria para el manejo del usuario actual a través de Redux.
@@ -17,6 +17,10 @@ class CurrentUserUtils {
     });
     store.dispatch(action);
   }
+
+  setAuthenticated(isAuthenticated){
+    store.dispatch(setAuthenticated(isAuthenticated));
+  };
 
   /**
    * Limpia el usuario actual.

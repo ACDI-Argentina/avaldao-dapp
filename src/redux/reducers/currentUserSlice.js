@@ -21,6 +21,11 @@ export const currentUserSlice = createSlice({
       state.address = account;
       return state;
     },
+    setAuthenticated:(state,action) => {
+      const isAuthenticated = action.payload;
+      state.authenticated = isAuthenticated;
+    },
+ 
     updateCurrentUserBalance: (state, action) => {
       const { balance, tokenBalances } = action.payload;
       state.balance = balance;
@@ -60,11 +65,14 @@ export const currentUserSlice = createSlice({
   },
 });
 
-export const { registerCurrentUser, 
+export const { 
+  registerCurrentUser, 
+  setAuthenticated,
   initCurrentUser, 
   updateCurrentUserBalance, 
   setCurrentUser, 
-  clearCurrentUser } = currentUserSlice.actions;
+  clearCurrentUser 
+} = currentUserSlice.actions;
 
 export const selectCurrentUser = state => new User(state.currentUser);
 export const selectRoles = state => state.currentUser.roles;
