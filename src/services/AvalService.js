@@ -37,25 +37,20 @@ class AvalService {
      */
     getAvalesOffChain() {
         return new Observable(async subscriber => {
-            feathersClient.service('avales')
-                .find({
-                    query: {
-                        /*blockchainId: undefined*/
-                    }
-                })
-                .then(response => {
-                    console.log(`Avales offchain: ${response.total}`)
-                    let avales = [];
-                    for (let i = 0; i < response.total; i++) {
-                        let avalData = response.data[i];
-                        let aval = this.offChainAvalToAval(avalData);
-                        avales.push(aval);
-                    }
-                    subscriber.next(avales);
-                }).catch(error => {
-                    console.error("[AvalService] Error obteniendo avales off chain.", error);
-                    subscriber.next([]);
-                });
+            try {
+                const response = await feathersClient.service('avales').find({ query: {/*blockchainId: undefined*/ } })
+                let avales = [];
+                for (let i = 0; i < response.data.length; i++) { //TODO: Add pagination
+                    let avalData = response.data[i];
+                    let aval = this.offChainAvalToAval(avalData);
+                    avales.push(aval);
+                }
+                subscriber.next(avales);
+            } catch (error) {
+                console.error("[AvalService] Error obteniendo avales off chain.", error);
+                subscriber.error(error);
+
+            }
         });
     }
 
