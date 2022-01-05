@@ -41,7 +41,7 @@ const AvalSolicitar = ({ }) => {
   const [avalClientId, setAvalClientId] = useState();
 
   const { loading } = useSavingAval(avalClientId, onSuccess, onError);
-  const { currentUser, requestConnection } = useWeb3Account();
+  const { currentUser, requestConnection, requestAuthentication, authenticated } = useWeb3Account();
   const dispatch = useDispatch();
 
   
@@ -61,10 +61,15 @@ const AvalSolicitar = ({ }) => {
       solicitanteAddress = currentUser?.address;
     }
 
+    if(!authenticated){ //User must be authenticated
+      const result = await requestAuthentication(); 
+      if(!result) return;
+    }
+    
     const aval = new Aval({
       ...values,
       solicitanteAddress: solicitanteAddress,
-      avaldaoAddress: config.avaldaoAddress, //Validarlo desde el back
+      avaldaoAddress: config.avaldaoAddress,
     })
 
     setAvalClientId(aval.clientId);
@@ -83,7 +88,6 @@ const AvalSolicitar = ({ }) => {
 
   async function onError(error) {
     ErrorPopup(t('avalModalError'));
-    //history.push("/"); //go back to home
   }
 
 

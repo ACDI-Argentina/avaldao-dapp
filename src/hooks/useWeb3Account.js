@@ -1,5 +1,5 @@
 import { Web3AppContext } from "lib/blockchain/Web3App";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 
@@ -13,9 +13,14 @@ function useWeb3Account(params) {
   }
 
   const currentUser = useSelector(selectCurrentUser);
+  const [currentUserAddr,setCurrentUserAddr] = useState();
+   
   const { t } = useTranslation();
   const { loginAccount } = useContext(Web3AppContext);
 
+  const ctx = useContext(Web3AppContext);
+  const { authenticateIfPossible } = ctx.modals.methods;
+  
   async function requestConnection() {
     if (!currentUser?.address) {
       const confirmation = await showRequestConnectionModal();
@@ -30,14 +35,20 @@ function useWeb3Account(params) {
     }
   }
 
-
   useEffect(() => {
     requestConnection();
   }, [])
 
 
-  async function showRequestConnectionModal() { //Solamente muestra el modal
+  useEffect(() => { 
+    if(currentUser?.address && currentUser?.address !== currentUserAddr){
+      setCurrentUserAddr(currentUser.address)
+      authenticateIfPossible(currentUser, false);
+    }
+  },[currentUser, currentUserAddr])
 
+
+  async function showRequestConnectionModal() { 
     const labels = {
       title: t("requestConnectionTitle"),
       text: t("requestConnectionText"),
@@ -58,9 +69,16 @@ function useWeb3Account(params) {
 
   }
 
+  async function requestAuthentication(){ //TODO: check if current user is updated
+    return await authenticateIfPossible(currentUser, false); 
+  }
+  
   return {
     currentUser,
-    requestConnection
+    requestConnection,
+    authenticated: currentUser?.authenticated,
+    requestAuthentication
+
   }
 
 }

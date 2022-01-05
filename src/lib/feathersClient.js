@@ -30,7 +30,6 @@ export const feathersRest = feathers()
   );
 
 
-//Necesitariamos autenticar feathersUsersClient tmb
 export const feathersClient = feathers()
   .configure(socketio(socket, { timeout: 30000, pingTimeout: 30000, upgradeTimeout: 30000 }))
   .configure(auth({ storage: localforage }))
@@ -41,6 +40,7 @@ export const feathersClient = feathers()
   )
   .on('authenticated', auth => {
     feathersRest.passport.setJWT(auth);
+    console.log(`[FeathersClient] - authenticated`);
   }); // set token on feathersRest whenever it is changed
 
 feathersClient.service('uploads').timeout = 10000;
