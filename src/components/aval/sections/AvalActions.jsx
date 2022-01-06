@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
-import { IconButton, Tooltip } from '@material-ui/core';
+import moment from 'moment';
+import { Button, CircularProgress, IconButton, makeStyles, Tooltip } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import ReportIcon from '@material-ui/icons/Report';
@@ -10,7 +11,11 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
-import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval } from 'redux/reducers/avalesSlice';
+import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval, aceptarAval, rechazarAval, } from 'redux/reducers/avalesSlice';
+
+
+import Alert from '@material-ui/lab/Alert';
+import useWeb3Account from 'hooks/useWeb3Account';
 
 const ActionsSection = styled.div`  
   display: flex;
@@ -28,6 +33,36 @@ const ActionsSection = styled.div`
     flex-shrink:0;
   }
 `
+const useStyles = makeStyles((theme) => ({
+  alert: {
+    lineHeight: "1.5rem"
+  },
+  margin: {
+    margin: theme.spacing(1),
+  },
+  button: {
+    margin: "10px 10px 0px 0px",
+  },
+  danger: {
+
+  },
+  progress: {
+    marginLeft: "10px",
+    marginTop: "5px"
+  },
+  centered: {
+    display: "flex",
+    alignItems: "center"
+  },
+  actionContainer: {
+    minHeight: "50px",
+    display: "flex",
+    alignItems: "center"
+  }
+
+
+
+}));
 
 const CompleteButton = ({ aval }) => {
   const history = useHistory();
@@ -149,14 +184,117 @@ const UnlockButton = ({ aval }) => {
 }
 
 const AvalActions = ({ aval }) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const { currentUser, requestAuthentication } = useWeb3Account();
+
+  //TODO: check for error
+  useEffect(() => {
+    setLoading(aval?.isUpdating());
+  }, [aval?.isUpdating()])
+
+
+  let userElement = null;
+  let dateElement = null;
+
+  /* TODO: recuperar el usuario para ese address */
+  userElement = (<span>Este aval ha sido solicitado por el usuario <b>{aval.solicitanteAddress}</b> </span>);
+
+
+  if (aval?.createdAt) {
+    const day = moment(aval?.createdAt).format("DD/MM/YYYY");
+    const hour = moment(aval?.createdAt).format("HH:mm");
+
+    dateElement = (<span>el día <b>{`${day}`}</b> a las <b>{`${hour}`}</b></span>);
+  }
+
+
+  const isAvaladao = aval?.isAvaldao(currentUser);
+
   return (
-    <ActionsSection>
-      <CompleteButton aval={aval} />
-      {/*<SignatureButton aval={aval} />*/}
-      <UnlockButton aval={aval} />
-      <ReclamarButton aval={aval} />
-      <ReintegrarButton aval={aval} />
-    </ActionsSection>
+    <>
+      <ActionsSection>
+        <CompleteButton aval={aval} />
+        {/*<SignatureButton aval={aval} />*/}
+        <UnlockButton aval={aval} />
+        <ReclamarButton aval={aval} />
+        <ReintegrarButton aval={aval} />
+      </ActionsSection>
+
+      {(aval.isSolicitado() || aval.isUpdating()) && (
+        <Alert severity="warning" className={classes.alert}>
+          {userElement}{dateElement}.<br />
+          El mismo se encuentra <b>pendiente de aceptación</b> por parte de Avaldao.<br />
+          {isAvaladao && (
+
+            <div className={classes.actionContainer}>
+              {loading ?
+                <div className={classes.centered}>
+                  <b>Procesando... </b>
+                  <div className={classes.progressContainer}>
+                    <CircularProgress size={18} className={classes.progress} />
+                  </div>
+                </div>
+                : (
+                  <>
+                    <Button
+                      className={classes.button}
+                      variant="contained"
+                      color="primary"
+                      onClick={async () => {
+                        const authenticated = await requestAuthentication();
+                        if(authenticated){
+                          dispatch(aceptarAval({ id: aval.id }));
+                        } else {
+                          console.log(`Not authenticated`);
+                        }
+                      }}
+                    >
+                      Aceptar
+                    </Button>
+
+
+                    <Button
+                      className={classes.button}
+                      variant="outlined"
+                      color="secondary"
+                      onClick={async () => {
+                        const authenticated = await requestAuthentication();
+                        if(authenticated){
+                        //TODO: ask cause
+                          dispatch(rechazarAval({ id: aval.id }));
+                        } else {
+                          console.log(`Not authenticated`);
+                        }
+                      }}
+                    >
+                      Rechazar
+                    </Button>
+                  </>
+                )
+
+              }
+
+            </div>
+          )}
+        </Alert>
+      )}
+      {aval.isAceptado() && (
+        <Alert severity="success">
+          El aval ha sido aceptado.
+          {aval.isSolicitante(currentUser) && (
+            <span>Ya puedes completar las address del avalado y del comerciante. </span>
+          )}
+
+        </Alert>
+      )}
+      {aval.isRechazado() && (
+        <Alert severity="error">
+          El aval ha sido rechazado.
+        </Alert>
+      )}
+    </>
   )
 }
 export default AvalActions;
