@@ -205,10 +205,6 @@ const AvalActions = ({ aval }) => {
   }, [aval.solicitanteAddress])
 
   const solicitanteUser = useSelector( state => selectUserByAddress(state, aval.solicitanteAddress));
-  if(solicitanteUser){
-    console.log(`SOLICITANTE:`,solicitanteUser)
-  }
-
 
   let userElement = null;
   let dateElement = null;
