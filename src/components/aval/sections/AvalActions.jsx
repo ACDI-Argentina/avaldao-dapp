@@ -16,6 +16,9 @@ import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval, aceptarAval,
 
 import Alert from '@material-ui/lab/Alert';
 import useWeb3Account from 'hooks/useWeb3Account';
+import { selectUserByAddress } from 'redux/reducers/usersSlice';
+import { fetchUserByAddress } from 'redux/reducers/usersSlice';
+import { Link } from 'react-router-dom';
 
 const ActionsSection = styled.div`  
   display: flex;
@@ -195,12 +198,29 @@ const AvalActions = ({ aval }) => {
     setLoading(aval?.isUpdating());
   }, [aval?.isUpdating()])
 
+  useEffect(() => {
+    if (aval?.solicitanteAddress) {
+      dispatch(fetchUserByAddress(aval.solicitanteAddress))
+    }
+  }, [aval.solicitanteAddress])
+
+  const solicitanteUser = useSelector( state => selectUserByAddress(state, aval.solicitanteAddress));
+  if(solicitanteUser){
+    console.log(`SOLICITANTE:`,solicitanteUser)
+  }
+
 
   let userElement = null;
   let dateElement = null;
 
   /* TODO: recuperar el usuario para ese address */
-  userElement = (<span>{t("avalSolicitadoBy")} <b>{aval.solicitanteAddress}</b> </span>);
+
+  userElement = (
+  <span>
+    {t("avalSolicitadoBy")}&nbsp; 
+    <Link to="#" title={aval.solicitanteAddress}><b>{solicitanteUser?.name || aval.solicitanteAddress}</b></Link> 
+  </span>
+  );
 
 
   if (aval?.createdAt) {
