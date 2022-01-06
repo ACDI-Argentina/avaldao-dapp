@@ -13,8 +13,6 @@ function useWeb3Account(params) {
   }
 
   const currentUser = useSelector(selectCurrentUser);
-  const [currentUserAddr,setCurrentUserAddr] = useState();
-   
   const { t } = useTranslation();
   const { loginAccount } = useContext(Web3AppContext);
 
@@ -34,19 +32,6 @@ function useWeb3Account(params) {
       typeof onFail === "function" && onFail();
     }
   }
-
-  useEffect(() => {
-    requestConnection();
-  }, [])
-
-
-  useEffect(() => { 
-    if(currentUser?.address && currentUser?.address !== currentUserAddr){
-      setCurrentUserAddr(currentUser.address)
-      authenticateIfPossible(currentUser, false);
-    }
-  },[currentUser, currentUserAddr])
-
 
   async function showRequestConnectionModal() { 
     const labels = {
@@ -69,16 +54,35 @@ function useWeb3Account(params) {
 
   }
 
-  async function requestAuthentication(){ //TODO: check if current user is updated
-    return await authenticateIfPossible(currentUser, false); 
+  //Request connection and authentication
+  async function requestAuthentication(connectedAddress) { 
+
+    if(connectedAddress){
+      return await authenticateIfPossible({ address: connectedAddress }, false);
+    }
+
+    if (!currentUser?.address) {
+      const connectedAddress = await requestConnection();
+      
+      if (!connectedAddress) return false;
+
+      const result = await authenticateIfPossible({ address: connectedAddress }, false); //{address}
+      return result;
+    }
+
+    const result = await authenticateIfPossible(currentUser, false);
+    if (!result) return false;
+
+
+    return true;
+
   }
-  
+
   return {
     currentUser,
     requestConnection,
     authenticated: currentUser?.authenticated,
-    requestAuthentication
-
+    requestAuthentication,
   }
 
 }
