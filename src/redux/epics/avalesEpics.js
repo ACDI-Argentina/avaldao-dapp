@@ -49,6 +49,35 @@ export const solicitarAvalEpic = action$ => action$.pipe(
   }))
 )
 
+export const aceptarAvalEpic = action$ => action$.pipe(
+  ofType('avales/aceptarAval'),
+  mergeMap(action => avalService.aceptarAval(action.payload)),
+  map(aval => ({
+    type: 'avales/updateAvalById',
+    payload: aval
+  })),
+  catchError(error => of({
+    type: "avales/updateAvalError",
+    payload: error,
+    error: true
+  }))
+)
+
+export const rechazarAvalEpic = action$ => action$.pipe(
+  ofType('avales/rechazarAval'),
+  mergeMap(action => avalService.rechazarAval(action.payload)),
+  map(aval => ({
+    type: 'avales/updateAvalById',
+    payload: aval
+  })),
+  catchError(error => of({
+    type: "avales/updateAvalError",
+    payload: error,
+    error: true
+  }))
+)
+
+
 export const completarAvalEpic = action$ => action$.pipe(
   ofType('avales/completarAval'),
   mergeMap(action => avalService.completarAval(action.payload)),

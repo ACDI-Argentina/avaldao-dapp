@@ -143,14 +143,14 @@ class AvalService {
     }
 
 
-    solicitarAval(aval){ //Falta requerir el solicitanteAddress, y el avaldaoAddress
+    solicitarAval(aval){ 
         return new Observable(async subscriber => {
             console.log(`[AvalService] - solicitar aval`, aval)
 
             try{
                 const avalData = await feathersClient.service('avales').create({
                     ...aval.toStore(),
-                    status: 0, //En el backend no tenemos el estado "solicitando", ver como lo manejamos
+                    status: 0,
                 }); 
                 console.log('[AvalService] Aval solicitado en Feathers.', avalData);
 
@@ -167,6 +167,29 @@ class AvalService {
                 console.error("[AvalService] Error solicitando aval off chain.", error);
                 error.aval = aval;
                 subscriber.error(error);
+            }
+        });
+    }
+
+    aceptarAval(aval){
+        return new Observable(async subscriber => {
+            try{
+                const response = await feathersClient.service('avales').patch(aval.id, { status: 2 });
+                subscriber.next(this.offChainAvalToAval(response));
+            }catch(err){
+                err.avalId = aval.id;
+                subscriber.error(err);
+            }
+        });
+    }
+    rechazarAval(aval){
+        return new Observable(async subscriber => {
+            try{
+                const response = await feathersClient.service('avales').patch(aval.id, { status: 1 });
+                subscriber.next(this.offChainAvalToAval(response));
+            }catch(err){
+                err.avalId = aval.id;
+                subscriber.error(err);
             }
         });
     }
@@ -325,7 +348,8 @@ class AvalService {
             solicitanteSignature: avalData.solicitanteSignature,
             comercianteSignature: avalData.comercianteSignature,
             avaladoSignature: avalData.avaladoSignature,
-            status: Aval.mapAvalStatus(parseInt(avalData.status))
+            status: Aval.mapAvalStatus(parseInt(avalData.status)),
+            createdAt: avalData.createdAt,
         });
     }
 }

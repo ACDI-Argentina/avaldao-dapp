@@ -424,14 +424,22 @@ class Web3App extends React.Component {
     this.setState({ lastNotificationTs: Date.now() });
   }
 
-  authenticateIfPossible = async (currentUser) => {
-    if (currentUser && currentUser.address && currentUser.authenticated) {
+  authenticateIfPossible = async (currentUser, redirectOnFail = false) => {
+    if (!currentUser || !currentUser.address) {
+      console.log(`authenticateIfPossible - empty user`);
+      return false;
+    }
+
+    if (currentUser.authenticated) {
+      console.log(`authenticateIfPossible - Already authenticated`);
       return true;
     }
-    if(currentUser.address){
-      currentUser.authenticated = await this.authenticate(currentUser.address);
-      return currentUser.authenticated;
-    }
+
+    console.log(`authenticateIfPossible - Authenticating..`);
+    const result = await this.authenticate(currentUser.address, redirectOnFail);
+    currentUser.authenticated = result;
+    return result;
+
   };
 
   authenticate = async (address, redirectOnFail = true) => {
@@ -469,7 +477,7 @@ class Web3App extends React.Component {
           new Promise(async resolve => {
             const timeOut = setTimeout(() => {
               resolve(false);
-              history.goBack();
+              redirectOnFail && history.goBack();
               //React.swal.close();
               this.closeSignatureRequestModal();
             }, 30000);
@@ -485,7 +493,7 @@ class Web3App extends React.Component {
             } catch (e) {
               console.error('Error firmando mensaje de autenticación', e);
               clearTimeout(timeOut);
-              history.goBack(); 
+              redirectOnFail && history.goBack(); 
               resolve(false);
             }
           });

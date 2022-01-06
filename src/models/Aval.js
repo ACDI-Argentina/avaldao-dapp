@@ -33,7 +33,8 @@ class Aval {
       solicitanteSignature,
       comercianteSignature,
       avaladoSignature,
-      status = Aval.ACEPTADO.toStore()
+      status = Aval.ACEPTADO.toStore(),
+      createdAt
     } = data;
     this._id = id;
     // ID utilizado solamente del lado cliente
@@ -66,6 +67,8 @@ class Aval {
     this._avaladoSignature = avaladoSignature;
     this._avaldaoSignature = avaldaoSignature;
     this._status = StatusUtils.build(status.id, status.name, status.isLocal);
+    this._createdAt = createdAt && new Date(createdAt);
+
   }
 
   /**
@@ -120,7 +123,8 @@ class Aval {
       solicitanteSignature: this._solicitanteSignature,
       comercianteSignature: this._comercianteSignature,
       avaladoSignature: this._avaladoSignature,
-      status: this._status.toStore()
+      status: this._status.toStore(),
+      createdAt: this._createdAt,
     };
   }
 
@@ -144,6 +148,10 @@ class Aval {
 
 
   /* Se usa este estado para indicar que ocurrio un error durante la actualizacion, es un estado efimero */
+  static get ACTUALIZANDO() {
+    return StatusUtils.build(undefined, 'Actualizando', true);
+  }
+
   static get ERROR() {
     return StatusUtils.build(undefined, 'Error', true);
   }
@@ -369,6 +377,13 @@ class Aval {
     return false;
   }
 
+  isSolicitante(user) {
+    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Actualiza la firma del usuario firmante
    * @param signerAddress dirección del usuario firmante.
@@ -574,6 +589,32 @@ class Aval {
 
   set status(value) {
     this._status = value;
+  }
+
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  set createdAt(value) {
+    this._createdAt = value;
+  }
+
+  isSolicitado() {
+    return this.status.name === Aval.SOLICITADO.name
+  }
+  isRechazado() {
+    return this.status.name === Aval.RECHAZADO.name
+  }
+  
+
+  isAceptado() {
+    return this.status.name === Aval.ACEPTADO.name
+  }
+  
+  
+  isUpdating() {
+    return this.status.name === Aval.ACTUALIZANDO.name || this.status.name === Aval.SOLICITANDO.name;
   }
 
   get txHash() {

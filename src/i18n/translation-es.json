@@ -64,6 +64,18 @@
     "montoError": "Debe ser un número positivo",
     "cuotaError": "Debe ser un número positivo",
 
+    "avalAceptar":"Aceptar",
+    "avalRechazar":"Rechazar",
+
+    "avalSolicitadoBy":"Este aval ha sido solicitado por el usuario",
+    "atDay":"el día",
+    "atHour":"a las",
+    "avalPendingAcceptance":"El mismo se encuentra pendiente de aceptación",
+    "processing": "Procesando",
+    "avalAceptado": "El aval ha sido aceptado.",
+    "avalRechazado": "El aval ha sido rechazado.",
+    "avalCompletarAddress":"Ya puedes completar las address del avalado y del comerciante.",
+
 
     "avalFirmasSection": "Firmas",
     "avalCuotaSection": "Cuotas",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 
 import Page from './Page';
@@ -43,7 +43,10 @@ const AvalSolicitar = ({ }) => {
   const { loading } = useSavingAval(avalClientId, onSuccess, onError);
   const { currentUser, requestConnection, requestAuthentication, authenticated } = useWeb3Account();
   const dispatch = useDispatch();
-
+  
+  useEffect(() => {
+    requestConnection();
+  }, [])
   
   async function handleSubmit(values) {
 
@@ -62,7 +65,7 @@ const AvalSolicitar = ({ }) => {
     }
 
     if(!authenticated){ //User must be authenticated
-      const result = await requestAuthentication(); 
+      const result = await requestAuthentication(solicitanteAddress); 
       if(!result) return;
     }
     

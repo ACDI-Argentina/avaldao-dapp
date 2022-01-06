@@ -43,6 +43,8 @@ import {
   fetchAvalesOffChainEpic,
   fetchAvalByIdEpic,
   solicitarAvalEpic,
+  aceptarAvalEpic,
+  rechazarAvalEpic,
   completarAvalEpic,
   firmarAvalEpic,
   desbloquearAvalEpic,
@@ -76,6 +78,8 @@ const rootEpic = combineEpics(
   fetchAvalesOffChainEpic,
   fetchCampaignEpic,
   solicitarAvalEpic,
+  aceptarAvalEpic,
+  rechazarAvalEpic,
   completarAvalEpic,
   firmarAvalEpic,
   desbloquearAvalEpic,
@@ -100,7 +104,7 @@ const rootEpic = combineEpics(
 
 const epicMiddleware = createEpicMiddleware();
 
-const middlewares = [loggerMiddleware, epicMiddleware]
+const middlewares = [/* loggerMiddleware,  */epicMiddleware]
 const middlewareEnhancer = applyMiddleware(...middlewares)
 
 const enhancers = [middlewareEnhancer]

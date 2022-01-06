@@ -63,6 +63,18 @@
     "montoError": "A positive number is required",
     "cuotaError": "A positive number is required",
 
+    "avalAceptar":"Accept",
+    "avalRechazar":"Reject",
+    "avalSolicitadoBy":"This guarantee has been requested by the user",
+    "atDay":"on",
+    "atHour":"at",
+    "avalPendingAcceptance":"It is pending acceptance",
+    "processing": "Processing",
+    "avalAceptado": "The guarantee has been accepted.",
+    "avalRechazado": "The guarantee has been rejected.",
+    "avalCompletarAddress":"You can now complete the addresses of the endorsed and the seller.",
+
+
     "avalFirmasSection": "Signatures",
     "avalCuotaSection": "Dues",
     "avalCuota": "Due",
