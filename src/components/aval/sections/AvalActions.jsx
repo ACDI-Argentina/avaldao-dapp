@@ -188,6 +188,7 @@ const AvalActions = ({ aval }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { currentUser, requestAuthentication } = useWeb3Account();
+  const { t } = useTranslation();
 
   //TODO: check for error
   useEffect(() => {
@@ -199,14 +200,14 @@ const AvalActions = ({ aval }) => {
   let dateElement = null;
 
   /* TODO: recuperar el usuario para ese address */
-  userElement = (<span>Este aval ha sido solicitado por el usuario <b>{aval.solicitanteAddress}</b> </span>);
+  userElement = (<span>{t("avalSolicitadoBy")} <b>{aval.solicitanteAddress}</b> </span>);
 
 
   if (aval?.createdAt) {
     const day = moment(aval?.createdAt).format("DD/MM/YYYY");
     const hour = moment(aval?.createdAt).format("HH:mm");
 
-    dateElement = (<span>el día <b>{`${day}`}</b> a las <b>{`${hour}`}</b></span>);
+    dateElement = (<span>{t("atDay")} <b>{`${day}`}</b> {t("atHour")} <b>{`${hour}`}</b></span>);
   }
 
 
@@ -225,13 +226,13 @@ const AvalActions = ({ aval }) => {
       {(aval.isSolicitado() || aval.isUpdating()) && (
         <Alert severity="warning" className={classes.alert}>
           {userElement}{dateElement}.<br />
-          El mismo se encuentra <b>pendiente de aceptación</b> por parte de Avaldao.<br />
+          {t("avalPendingAcceptance")}.<br />
           {isAvaladao && (
 
             <div className={classes.actionContainer}>
               {loading ?
                 <div className={classes.centered}>
-                  <b>Procesando... </b>
+                  <b>{t("processing")}... </b>
                   <div className={classes.progressContainer}>
                     <CircularProgress size={18} className={classes.progress} />
                   </div>
@@ -251,7 +252,7 @@ const AvalActions = ({ aval }) => {
                         }
                       }}
                     >
-                      Aceptar
+                     {t("avalAceptar")}
                     </Button>
 
 
@@ -269,7 +270,7 @@ const AvalActions = ({ aval }) => {
                         }
                       }}
                     >
-                      Rechazar
+                     {t("avalRechazar")}
                     </Button>
                   </>
                 )
@@ -282,16 +283,13 @@ const AvalActions = ({ aval }) => {
       )}
       {aval.isAceptado() && (
         <Alert severity="success">
-          El aval ha sido aceptado.
-          {aval.isSolicitante(currentUser) && (
-            <span>Ya puedes completar las address del avalado y del comerciante. </span>
-          )}
-
+          {t("avalAceptado")}
+          {aval.isSolicitante(currentUser) && (<span>{t("avalCompletarAddress")} </span>)}
         </Alert>
       )}
       {aval.isRechazado() && (
         <Alert severity="error">
-          El aval ha sido rechazado.
+          {t("avalRechazado")}
         </Alert>
       )}
     </>
