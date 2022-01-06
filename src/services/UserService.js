@@ -1,11 +1,11 @@
 import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
-import crowdfundingContractApi from '../lib/blockchain/CrowdfundingContractApi';
 import { Observable } from 'rxjs';
 import User from '../models/User';
 import { ALL_ROLES } from '../constants/Role';
 import messageUtils from '../redux/utils/messageUtils'
 import userIpfsConnector from '../ipfs/UserIpfsConnector'
-
+import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
+import roleUtils from 'redux/utils/roleUtils';
 
 class UserService {
 
@@ -16,71 +16,87 @@ class UserService {
    * - Datos identificatorios
    * - Roles. 
    * 
-   * @param currentUser usuario actual
+   * @param address usuario actual
    */
-  loadCurrentUser(currentUser) {
-
+  loadCurrentUser(address) {
     return new Observable(async subscriber => {
-
-      let address = currentUser.address;
-
       if (address) {
-
         try {
-
           const userData = await feathersClient.service('/users').get(address);
-          console.log(userData)
-
-          let registered = true;
-          const { name, email, url, infoCid } = userData;
-          
-          let avatarCid;
-          let avatar;
-
-          if (infoCid) {
-            // Se obtiene la información del usuario desde IPFS.
-            const userIpfs = await userIpfsConnector.download(infoCid);
-            avatarCid = userIpfs.avatarCid;
-            avatar = userIpfs.avatar;
-          }
-
-          currentUser.registered = registered;
-          currentUser.name = name;
-          currentUser.email = email;
-          currentUser.url = url;
-          currentUser.infoCid = infoCid;
-          currentUser.avatarCid = avatarCid;
-          currentUser.avatar = avatar;
-
-          console.log(`Loaded current user:`, currentUser)
-          subscriber.next(currentUser);
-
-          // Se cargan los roles del usuario desde el smart constract
-       /*     getRoles(address).then(roles => {
-            currentUser.roles = roles;
-            subscriber.next(currentUser);
-          });  */
-
-          authenticateFeathers(currentUser).then(authenticated => {
-            currentUser.authenticated = authenticated; //Muta el objeto y es accesible desde toda la aplicacion xq lo propaga con el store
-            subscriber.next(currentUser);
+          const user = await this.loadUserByFeathersData(userData);
+          subscriber.next(user);
+          authenticateFeathers(user).then(authenticated => {
+            user.authenticated = authenticated; //Muta el objeto y es accesible desde toda la aplicacion xq lo propaga con el store
+            subscriber.next(user);
           });
-
         } catch (error) {
-          console.error('[UserService] Error obteniendo datos del usuario desde Feathers.', error.message);
-          if (error.code === 404) {
-            currentUser.registered = false;
-            currentUser.name = undefined;
-            currentUser.email = undefined;
-            currentUser.url = undefined;
-            currentUser.infoCid = undefined;
-            currentUser.avatarCid = undefined;
-            currentUser.avatar = undefined;
-          }
-          subscriber.next(currentUser);
+          console.error('[UserService] Error obteniendo datos del usuario actual.', error);
+          const user = new User({ address });
+          subscriber.next(user);
         }
       }
     });
+  }
+
+  /**
+   * Almacena el usuario actual.
+   * 
+   * @param user usuario a guardar.
+   */
+  saveCurrentUser(user) {
+
+    return new Observable(async subscriber => {
+
+      try {
+        // Se almacena en IPFS toda la información del Usuario.
+        let infoCid = await userIpfsConnector.upload(user);
+        user.infoCid = infoCid;
+
+        await feathersClient.service('users').update(user.address, user.toFeathers());
+        if (user.registered === false) {
+          // Nuevo usuario     
+          user.registered = true;
+          messageUtils.addMessageSuccess({
+            title: `Bienvenido`,
+            text: `Su perfil ha sido registrado.`
+          });
+        } else {
+          // Actualización de usuario
+          messageUtils.addMessageSuccess({
+            text: `Su perfil ha sido actualizado.`
+          });
+        }
+
+        subscriber.next(user);
+
+      } catch (error) {
+        console.error('[User Service] Error almacenando usuario.', error);
+        subscriber.error(error);
+        messageUtils.addMessageError({
+          text: `Se produjo un error almacenando el perfil del usuario.`,
+          error: error
+        });
+      }
+    });
+  }
+
+  /**
+   * Carga los usuarios con sus roles.
+   * 
+   * TODO Esto deberíamos optimizarlo porque se están cargando todos los usuarios
+   * al mismo tiempo y cuando crezca la cantidad habrá problemas de performance.
+   * 
+   */
+  loadUsers() {
+    return new Observable(async subscriber => {
+      const users = [];
+      const { data: usersData } = await feathersClient.service("users").find();
+      for (let i = 0; i < usersData.length; i++) {
+        const user = await this.loadUserByFeathersData(usersData[i]);
+        users.push(user);
+      }
+      subscriber.next(users);
+    })
   }
 
   /**
@@ -95,7 +111,7 @@ class UserService {
       try {
 
         const userData = await feathersClient.service('/users').get(address);
-        const user = new User({ registered: true, ...await loadIpfsInfo(userData) });
+        const user = await this.loadUserByFeathersData(userData);
         subscriber.next(user);
 
       } catch (e) {
@@ -117,28 +133,34 @@ class UserService {
   }
 
   /**
-   * Carga los usuarios con sus roles.
+   * Carga las información de un usuario a partir de sus datos básicos obtenidos desde Feathers.
    * 
-   * TODO Esto deberíamos optimizarlo porque se están cargando todos los usuarios
-   * al mismo tiempo y cuando crezca la cantidad habrá problemas de performance.
-   * 
+   * @param userData datos del usuario obtenidos desde Feathers.
+   * @return Objeto User con todos los datos del usuario. 
    */
-  loadUsersWithRoles() {
-    console.log(`[UserService] loadUsersWithRoles`);
+  async loadUserByFeathersData(userData) {
 
-    return new Observable(async subscriber => {
-      const { data: users } = await feathersClient.service("users").find();
-      const hydratedUsers = (await Promise.all(users.map(loadIpfsInfo))).map(rawUser => new User({...rawUser}));
-      subscriber.next(hydratedUsers);
+    const registered = true;
+    const { address, name, email, url, infoCid } = userData;
 
-      /* 
-      Revisar en el smart contract los roles
-      const usersByGroups = [];
-      for (const user of users) {
-        const roles = await getRoles(user.address);
-        usersByGroups.push(new User({ ...user, roles }));
-      } */
-    })
+    let avatarCid;
+    let avatar;
+    if (infoCid) {
+      // Se obtiene la información del usuario desde IPFS.
+      const userIpfs = await userIpfsConnector.download(infoCid);
+      avatarCid = userIpfs.avatarCid;
+      avatar = userIpfs.avatar;
+    }
+
+    const user = new User({
+      address, name, email, url, infoCid, avatarCid, avatar, registered
+    });
+
+    // Se obtienen los roles del usuario desde la blockchain.
+    const roles = await avaldaoContractApi.getUserRoles(user);
+    user.roles = roles;
+
+    return user;
   }
 
   /**
@@ -146,38 +168,74 @@ class UserService {
    * 
    * @param user usuario a guardar.
    */
-  save(user) {
+  saveUser(user) {
 
     return new Observable(async subscriber => {
 
       try {
         // Se almacena en IPFS toda la información del Usuario.
-        let infoCid = await userIpfsConnector.upload(user); 
+        let infoCid = await userIpfsConnector.upload(user);
         user.infoCid = infoCid;
 
-        if (user.registered === false) {
-          // Nuevo usuario
-          await feathersClient.service('users').update(user.address, user.toFeathers());
-          user.registered = true;
-          messageUtils.addMessageSuccess({
-            title: 'Bienvenido!',
-            text: `Su perfil ha sido registrado`
-          });
-        } else {
-          // Actualización de usuario
-          await feathersClient.service('users').update(user.address, user.toFeathers());
-          messageUtils.addMessageSuccess({
-            text: `Su perfil ha sido actualizado`
-          });
+        await feathersClient.service('users').update(user.address, user.toFeathers());
+
+        // ---------------------
+        // Tratamiento de roles.
+
+        // Se obtienen los roles actuales del usuario.
+        const userRoles = await avaldaoContractApi.getUserRoles(user);
+
+        // Roles a agregar.
+        const rolesToAdd = [];
+        for (let i = 0; i < user.roles.length; i++) {
+          const role = user.roles[i];
+          if (!userRoles.some(r => r.value === role.value)) {
+            rolesToAdd.push(role);
+          }
         }
 
-        subscriber.next(user);
+        // Roles a eliminar
+        const rolesToRemove = [];
+        for (let i = 0; i < userRoles.length; i++) {
+          const role = userRoles[i];
+          if (!user.roles.some(r => r.value === role.value)) {
+            rolesToRemove.push(role);
+          }
+        }
+
+        if (rolesToAdd.length !== 0 || rolesToRemove.length !== 0) {
+
+          // Existen cambios en los roles para almacenar.
+          avaldaoContractApi.setUserRoles(user, rolesToAdd, rolesToRemove).subscribe(
+            user => {
+              messageUtils.addMessageSuccess({
+                text: `El usuario ${user.name} ha sido actualizado`
+              });
+              subscriber.next(user);
+            },
+            error => {
+              console.error('[User Service] Error almacenando roles de usuario.', error);
+              subscriber.error(error);
+              messageUtils.addMessageError({
+                text: `Se produjo un error almacenando roles del usuario.`,
+                error: error
+              });
+            });
+
+        } else {
+
+          // No existen cambios en los roles para almacenar.
+          messageUtils.addMessageSuccess({
+            text: `El usuario ${user.name} ha sido actualizado`
+          });
+          subscriber.next(user);
+        }
 
       } catch (error) {
         console.error('[User Service] Error almacenando usuario.', error);
         subscriber.error(error);
         messageUtils.addMessageError({
-          text: `Se produjo un error registrando su perfil.`,
+          text: `Se produjo un error almacenando el usuario.`,
           error: error
         });
       }
@@ -189,7 +247,7 @@ async function authenticateFeathers(user) {
   let authenticated = false;
   if (user) {
     const token = await feathersClient.passport.getJWT();
-    
+
     if (token) {
       const { userId } = await feathersClient.passport.verifyJWT(token);
 
@@ -204,43 +262,4 @@ async function authenticateFeathers(user) {
   return authenticated;
 }
 
-async function getRoles(address) {
-  const userRoles = [];
-  try {
-    for (const rol of ALL_ROLES) {
-      const canPerform = await crowdfundingContractApi.canPerformRole(address, rol);
-      if (canPerform) userRoles.push(rol);
-    }
-  } catch (err) {
-    console.error(`Error obteniendo roles del usuario ${address}.`, err);
-  }
-  return userRoles;
-}
-
-const pause = (ms = 3000) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(_ => resolve(), ms)
-  });
-}
-
 export default UserService;
-
-
-// Se obtiene la información del usuario desde IPFS.
-async function loadIpfsInfo(rawUser){
-  let avatarCid;
-  let avatar;
-  
-  if (rawUser.infoCid) {
-    const userIpfs = await userIpfsConnector.download(rawUser.infoCid);
-    avatarCid = userIpfs.avatarCid;
-    avatar = userIpfs.avatar;
-  }
-
-  return {
-    ...rawUser,
-    avatar,
-    avatarCid
-  }
-
-}

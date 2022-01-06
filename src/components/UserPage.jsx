@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from "classnames";
-import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
+import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
+import { saveUser } from '../redux/reducers/usersSlice';
 import { withStyles } from '@material-ui/core/styles';
 
 import Header from "components/Header/Header.js";
@@ -29,6 +30,9 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import Web3Utils from 'lib/blockchain/Web3Utils';
+import { selectRoles } from 'redux/reducers/rolesSlice';
+import Role from 'models/Role';
 
 /**
  * Visualización de usuario.
@@ -39,8 +43,15 @@ class UserPage extends Component {
   constructor(props) {
     super(props);
 
-    const { user, t } = props;
+    const { user, roles, t } = props;
 
+    const rolesSelected = [];
+    roles.forEach(r1 => {
+      if(user.roles.some(r2 => r1.value === r2.value)) {
+        rolesSelected.push(r1);
+      }
+    });
+    
     this.state = {
       name: user.name,
       email: user.email,
@@ -49,26 +60,7 @@ class UserPage extends Component {
       avatarPreview: null,
       user: new User(user),
       avatarImg: user.avatarCidUrl,
-      roles: [
-        {
-          value: 'SOLICITANTE',
-          label: 'Solictante'
-        },
-        {
-          value: 'AVALDAO',
-          label: 'Avaldao'
-        },
-        {
-          value: 'AVALADO',
-          label: 'Avalado'
-        },
-        {
-          value: 'COMERCIANTE',
-          label: 'Comerciante'
-        }
-      ],
-      rolesSelected: [],
-
+      rolesSelected: rolesSelected,
       registered: false,
       nameHelperText: '',
       nameError: false,
@@ -278,7 +270,6 @@ class UserPage extends Component {
   }
 
   handleChangeRoles(event) {
-    console.log('event.target.value', event.target.value);
     this.setState({
       rolesSelected: event.target.value
     }, () => {
@@ -310,53 +301,53 @@ class UserPage extends Component {
   getStyles(role, rolesSelected, theme) {
     let isSelected = false;
     for (let i = 0; i < rolesSelected.length; i++) {
-      if(rolesSelected[i].value === role.value) {
+      if (rolesSelected[i].value === role.value) {
         isSelected = true;
         break;
-      }      
+      }
     }
     return {
       fontWeight: isSelected
-          ? theme.typography.fontWeightMedium
-          : theme.typography.fontWeightRegular,
+        ? theme.typography.fontWeightMedium
+        : theme.typography.fontWeightRegular,
     };
   }
 
   async handleSubmit(event) {
-    const { authenticateIfPossible } = this.context.modals.methods;
 
     event.preventDefault();
 
+    const { authenticateIfPossible } = this.context.modals.methods;
     const { currentUser } = this.props;
+
     let user = this.state.user;
-
-    user.address = user.address;
-
     user.name = this.state.name;
     user.email = this.state.email;
     user.url = this.state.url;
     user.avatar = this.state.avatarPreview;
+    user.roles = this.state.rolesSelected;
 
     if (!currentUser.authenticated) {
       const result = await authenticateIfPossible(this.props.currentUser);
-
       if (!result) {
         console.log("User not authenticated!"); //Throw error?
         return;
       }
     }
 
-    this.setState({ isSaving: true, user: user }, () => {
-      console.log(`[UserProfile] handleSubmit`, user)
-
-      this.props.registerCurrentUser(this.state.user);
-      //history.push(`/`);
-    });
-
+    this.setState(
+      {
+        isSaving: true,
+        user: user
+      },
+      () => {
+        this.props.saveUser(user);
+        history.push(`/users`);
+      });
   }
 
   cancel() {
-    history.push(`/`);
+    history.push(`/users`);
   }
 
   render() {
@@ -371,12 +362,9 @@ class UserPage extends Component {
       formValid,
       avatarImg,
       isSaving,
-
-      roles,
       rolesSelected
-
     } = this.state;
-    const { currentUser, classes, t, theme, ...rest } = this.props;
+    const { currentUser, roles, classes, t, theme, ...rest } = this.props;
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -653,10 +641,13 @@ const mapStateToProps = (state, ownProps) => {
   const userAddress = ownProps.match.params.userAddress;
   return {
     currentUser: selectCurrentUser(state),
-    user: selectUserByAddress(state, userAddress)
+    user: selectUserByAddress(state, userAddress),
+    roles: selectRoles(state)
   };
 }
-const mapDispatchToProps = { registerCurrentUser }
+const mapDispatchToProps = {
+  saveUser
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, { withTheme: true })(
   withTranslation()(UserPage)))

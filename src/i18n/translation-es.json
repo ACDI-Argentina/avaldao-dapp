@@ -311,6 +311,14 @@
     "transactionFailuredTitleUpdateDac": "No se creó la DAC '{{dacTitle}}'",
     "transactionFailuredDescriptionUpdateDac": "Ocurrió una falla durante la edición de la DAC.",
 
+    "transactionCreatedTitleSetUserRoles": "Confirma la configuración de roles del usuario en la billetera",
+    "transactionCreatedSubtitleSetUserRoles": "Verifique los detalles aquí - la configuración de roles del usuario no puede ser reembolsada.",
+    "transactionPendingTitleSetUserRoles": "Configurando roles del usuario...",
+    "transactionConfirmedTitleSetUserRoles": "La configuración de roles del usuario ha sido completada",
+    "transactionConfirmedDescriptionSetUserRoles": "La configuración de roles del usuario ha sido completada.",
+    "transactionFailuredTitleSetUserRoles": "No se completó la configuración de roles del usuario",
+    "transactionFailuredDescriptionSetUserRoles": "Ocurrió una falla configurando roles del usuario.",
+
     "transactionCreatedTitleCompletarAval": "Confirma que completa el aval en la billetera",
     "transactionCreatedSubtitleCompletarAval": "Verifique los detalles aquí - el aval completado no puede ser reembolsada.",
     "transactionPendingTitleCompletarAval": "Completando aval...",

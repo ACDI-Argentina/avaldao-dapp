@@ -1,5 +1,6 @@
 import { store } from '../store';
 import { initCurrentUser, clearCurrentUser, updateCurrentUserBalance } from '../reducers/currentUserSlice';
+import { selectCurrentUser } from '../reducers/currentUserSlice';
 
 /**
  * Clase utilitaria para el manejo del usuario actual a través de Redux.
@@ -7,14 +8,19 @@ import { initCurrentUser, clearCurrentUser, updateCurrentUserBalance } from '../
 class CurrentUserUtils {
 
   /**
+   * Obtiene el usuario actual.
+   */
+  getCurrentUser() {
+    return selectCurrentUser(store.getState());
+  }
+
+  /**
    * Inicializa el usuario actual.
    * 
    * @param accountAddress dirección de la cuenta.
    */
   initCurrentUser(accountAddress) {
-    const action = initCurrentUser({
-      account: accountAddress
-    });
+    const action = initCurrentUser(accountAddress);
     store.dispatch(action);
   }
 

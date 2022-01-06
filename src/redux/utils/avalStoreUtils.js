@@ -12,7 +12,6 @@ class AvalStoreUtils {
    * @param id id del aval
    */
   fetchAvalById(id) {
-
     store.dispatch(fetchAvalById(id));
   }
 }
