@@ -103,7 +103,7 @@ class Home extends Component {
 
           </Grid>
           <Grid item xs={12}>
-            <Avales></Avales>
+            <AvalList></AvalList>
           </Grid>
         </Grid>
       </Page>

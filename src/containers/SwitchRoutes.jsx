@@ -22,6 +22,8 @@ import UserProfile from 'components/UserProfile'
 import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
 import AvalSolicitar from 'components/views/AvalSolicitar'
+import UsersPage from 'components/views/UsersPage'
+import UserEditPage from 'components/UserEditPage'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
