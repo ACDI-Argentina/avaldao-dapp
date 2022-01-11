@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Profile from '../components/views/Profile'
-import EditProfile from '../components/views/EditProfile'
 import ViewMilestone from '../components/views/ViewMilestone'
 import EditDAC from '../components/views/EditDAC'
 import ViewDAC from '../components/views/ViewDAC'
@@ -243,9 +242,14 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/aval-visualizar/:id"
+            path="/profile/:userAddress"
+            render={props => <Profile {...props} />}
+        />
+        <Route
+            exact
+            path="/users"
             render={props => (
-                <AvalView
+                <UsersPage
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
@@ -253,9 +257,9 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/aval-completar/:id"
+            path="/user/:userAddress/edit"
             render={props => (
-                <AvalCompletar
+                <UserEditPage
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
@@ -287,6 +291,17 @@ const SwitchRoutes = ({ currentUser }) => (
             path="/profile/:userAddress"
             render={props => <Profile {...props} />}
         />
+        <Route
+            exact
+            path="/aval-completar/:id"
+            render={props => (
+                <AvalCompletar
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+
 
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"

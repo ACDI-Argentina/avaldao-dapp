@@ -6,33 +6,33 @@ import { withTranslation } from 'react-i18next'
 import Grid from '@material-ui/core/Grid'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { Typography } from '@material-ui/core'
-import { selectAvales } from '../../redux/reducers/avalesSlice'
+import { selectUsers } from '../../redux/reducers/usersSlice'
 import List from '@material-ui/core/List';
-import AvalItem from './AvalItem';
+import UserItem from './UserItem';
 
 /**
- * Listado de Avales.
+ * Listado de Usuarios.
  * 
  */
-class Avales extends Component {
+class UserList extends Component {
 
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { avales, classes, t } = this.props;
+    const { users, classes, t } = this.props;
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h5" component="h5">
-            {t('avalesTitle')}
+            {t('usersTitle')}
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <List className={classes.list}>
-            {avales.map(aval => (
-              <AvalItem key={aval.id} aval={aval}></AvalItem>
+            {users.map(user => (
+              <UserItem key={user.id} user={user}></UserItem>
             ))}
           </List>
         </Grid>
@@ -41,7 +41,7 @@ class Avales extends Component {
   }
 }
 
-Avales.contextType = Web3AppContext;
+UserList.contextType = Web3AppContext;
 
 const styles = theme => ({
   list: {
@@ -53,7 +53,7 @@ const styles = theme => ({
 const mapStateToProps = (state, ownProps) => {
   return {
     currentUser: selectCurrentUser(state),
-    avales: selectAvales(state)
+    users: selectUsers(state)
   };
 }
 const mapDispatchToProps = {
@@ -61,5 +61,5 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(Avales)))
+  withTranslation()(UserList)))
 );

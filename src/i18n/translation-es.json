@@ -6,15 +6,20 @@
 
     "cancel": "Cancelar",
     "save": "Guardar",
+    "edit": "Editar",
+    "view": "Visualizar",
 
+    "usersTitle": "Usuarios",
     "userProfileTitle": "Perfil de usuario",
+    "userEditTitle": "Edición de usuario",
     "userName": "Nombre",
     "userEmail": "E-Mail",
     "userUrl": "URL",
     "userAvatar": "Foto de perfil",
     "userAvatarChoose": "Elige una foto de perfil",
     "userUnknown": "Usuario desconocido",
-
+    "userRoles": "Roles",
+    
     "fondoGarantia": "Fondo de garantía",
     "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
 
@@ -172,7 +177,6 @@
     "campaigns": "Campañas",
     "campaign": "Campaña",
     "noCampaignsYet": "¡Aún no hay campañas!",
-    "edit": "Editar",
     "campaignsSectionDescription":"Nuestros emprendimientos de vida",
     "newCampaignTitle": "Comienza una nueva campaña!",
     "editCampaignTitle": "Editar campaña",
@@ -331,6 +335,14 @@
     "transactionConfirmedDescriptionUpdateDac": "Felicitaciones! La DAC ha sido editada y está disponible para agregar campañas y recibir fondos.",
     "transactionFailuredTitleUpdateDac": "No se creó la DAC '{{dacTitle}}'",
     "transactionFailuredDescriptionUpdateDac": "Ocurrió una falla durante la edición de la DAC.",
+
+    "transactionCreatedTitleSetUserRoles": "Confirma la configuración de roles del usuario en la billetera",
+    "transactionCreatedSubtitleSetUserRoles": "Verifique los detalles aquí - la configuración de roles del usuario no puede ser reembolsada.",
+    "transactionPendingTitleSetUserRoles": "Configurando roles del usuario...",
+    "transactionConfirmedTitleSetUserRoles": "La configuración de roles del usuario ha sido completada",
+    "transactionConfirmedDescriptionSetUserRoles": "La configuración de roles del usuario ha sido completada.",
+    "transactionFailuredTitleSetUserRoles": "No se completó la configuración de roles del usuario",
+    "transactionFailuredDescriptionSetUserRoles": "Ocurrió una falla configurando roles del usuario.",
 
     "transactionCreatedTitleCompletarAval": "Confirma que completa el aval en la billetera",
     "transactionCreatedSubtitleCompletarAval": "Verifique los detalles aquí - el aval completado no puede ser reembolsada.",

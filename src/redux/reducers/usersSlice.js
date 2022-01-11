@@ -11,7 +11,22 @@ export const usersSlice = createSlice({
             // Solo se obtiene el estado actual.
         },
         /**
-         * Incorpora el user al estado global.
+         * Almacena el user al estado global.
+         */
+        saveUser: (state, action) => {
+            let userStore = action.payload.toStore();
+            let index = state.findIndex(u => u.address === userStore.address);
+            if (index != -1) {
+                // El usuario ya existe localmente,
+                // por lo que se realiza un merge de sus datos con los actuales.
+                state[index] = merge(state[index], userStore);
+            } else {
+                // El usuario es nuevo localmente
+                state.push(userStore);
+            }
+        },
+        /**
+         * Actualiza el user al estado global.
          */
         mergeUser: (state, action) => {
             let userStore = action.payload.toStore();
@@ -76,8 +91,16 @@ function merge(stateUser, newUser) {
     };
 }
 
-export const { fetchUserByAddress, fetchUsers } = usersSlice.actions;
+export const {
+    saveUser,
+    fetchUserByAddress,
+    fetchUsers } = usersSlice.actions;
 
+export const selectUsers = state => {
+    return state.users.map(function (userStore) {
+        return new User(userStore);
+    });
+}
 export const selectUserByAddress = (state, address) => {
     let userStore = state.users.find(u => Web3Utils.addressEquals(u.address, address));
     if (userStore) {

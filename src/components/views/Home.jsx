@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
 import FondoGarantia from './FondoGarantia';
-import Avales from './Avales';
+import AvalList from './AvalList';
 import Divider from '@material-ui/core/Divider'
 import Page from './Page';
 

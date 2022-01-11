@@ -4,13 +4,6 @@ import UserService from '../../services/UserService';
 
 const userService = new UserService();
 
-/**
- * Epic que reacciona a la acción de obtención de una usuario local por su address,
- * busca el usuario en el servicio y envía la acción de
- * merge en los usuarios locales.
- * 
- * @param action$ de Redux.
- */
 export const fetchUserByAddressEpic = action$ => action$.pipe(
   ofType('users/fetchUserByAddress'),
   mergeMap(action => userService.loadUserByAddress(action.payload)),
@@ -20,9 +13,23 @@ export const fetchUserByAddressEpic = action$ => action$.pipe(
   }))
 )
 
+export const saveUserEpic = (action$) => action$.pipe(
+  ofType('users/saveUser'),
+  mergeMap(
+    action => userService.saveUser(
+      action.payload
+    ).pipe(
+      map(user => ({
+        type: 'users/mergeUser',
+        payload: user
+      }))
+    )
+  )
+)
+
 export const fetchUsersEpic = action$ => action$.pipe(
   ofType('users/fetchUsers'),
-  mergeMap(action => userService.loadUsersWithRoles()),
+  mergeMap(action => userService.loadUsers()),
   map(users => ({
     type: 'users/mergeUsers',
     payload: users

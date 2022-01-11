@@ -8,7 +8,8 @@ import {
   CAMPAIGN_REVIEWER_ROLE,
   MILESTONE_REVIEWER_ROLE,
   RECIPIENT_ROLE
-} from '../constants/Role';
+} from '../constants/RoleConstants';
+import { AVALDAO_ROLE } from './Role';
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
 import ipfsService from '../ipfs/IpfsService';
@@ -37,7 +38,7 @@ class User extends Model {
       // https://gateway.pinata.cloud/ipfs/QmcUtSFecvRAn6yda4H1aMNxrLoRAggCdHL3DgjerhBZhR
       avatarCid = '/ipfs/QmWCaq985NJjPnXhyDPQ4FPob8XNybncQqkQUZatySkY7E',
       avatar = '',
-      name,      
+      name,
       email,
       url,
       roles = [],
@@ -161,7 +162,7 @@ class User extends Model {
   /**
    * Obtiene la URL completa del avatar.
    */
-   get avatarCidUrl() {
+  get avatarCidUrl() {
     return ipfsService.resolveUrl(this._avatarCid)
   }
 
@@ -236,21 +237,6 @@ class User extends Model {
     this._tokenBalances = value;
   }
 
-  hasRole(role) {
-    return this.roles.includes(role);
-  }
-
-  hasAnyRoles(roles) { //roles should be an array
-    let found = false;
-
-    for (const wanted of roles) {
-      found = this.roles.includes(wanted);
-      if (found) break;
-    }
-
-    return found;
-  }
-
   get status() {
     return this._status;
   }
@@ -260,8 +246,8 @@ class User extends Model {
     this._status = value;
   }
 
-  isDelegate() {
-    return this.roles.includes(CREATE_DAC_ROLE);
+  isAvaldao() {
+    return this.hasRole(AVALDAO_ROLE);
   }
   isCampaignManager() {
     return this.roles.includes(CREATE_CAMPAIGN_ROLE);
@@ -277,6 +263,21 @@ class User extends Model {
   }
   isRecipient() {
     return this.roles.includes(RECIPIENT_ROLE);
+  }
+
+  hasRole(role) {
+    return this.roles.some(r => r.value === role);
+  }
+
+  hasAnyRoles(roles) { //roles should be an array
+    let found = false;
+
+    for (const wanted of roles) {
+      found = this.roles.includes(wanted);
+      if (found) break;
+    }
+
+    return found;
   }
 
   hasCompleteProfile() {

@@ -12,6 +12,8 @@ import { utils } from 'web3';
 import Cuota from 'models/Cuota';
 import TokenBalance from 'models/TokenBalance';
 import Reclamo from 'models/Reclamo';
+import currentUserUtils from 'redux/utils/currentUserUtils';
+import roleUtils from 'redux/utils/roleUtils';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -25,15 +27,107 @@ class AvaldaoContractApi {
         });
     }
 
-    async canPerformRole(address, role) {
+    /**
+     * Obtiene los roles de un usuario.
+     * 
+     * @param user usuario del cual se obtienen los roles.
+     */
+    async getUserRoles(user) {
+        const userRoles = [];
         try {
-            const hashedRole = Web3Utils.toKeccak256(role);
-            const response = await this.avaldao.methods.canPerform(address, hashedRole, []).call();
-            return response;
+            const roles = roleUtils.getRoles();
+            for (const role of roles) {
+                const canPerform = await this.avaldao.methods.canPerform(user.address, role.hash, []).call();
+                if (canPerform === true) {
+                    userRoles.push(role);
+                }
+            }
         } catch (err) {
-            console.log("Fail to invoke canPerform on smart contract.", err);
-            return false;
+            console.error(`Error obteniendo roles del usuario ${user.address}.`, err);
         }
+        return userRoles;
+    }
+
+    /**
+     * Establece los roles del usuario.
+     *  
+     * @param user sobre el cual se establecen los roles.
+     */
+    setUserRoles(user, rolesToAdd, rolesToRemove) {
+
+        return new Observable(async subscriber => {
+
+            const currentUser = currentUserUtils.getCurrentUser();
+
+            const method = this.avaldao.methods.setUserRoles(
+                user.address,
+                rolesToAdd.map(r => r.hash),
+                rolesToRemove.map(r => r.hash));
+
+            const gasEstimated = await this.estimateGas(method, currentUser.address);
+            const gasPrice = await this.getGasPrice();
+
+            let transaction = transactionStoreUtils.addTransaction({
+                gasEstimated: gasEstimated,
+                gasPrice: gasPrice,
+                createdTitle: {
+                    key: 'transactionCreatedTitleSetUserRoles'
+                },
+                createdSubtitle: {
+                    key: 'transactionCreatedSubtitleSetUserRoles'
+                },
+                pendingTitle: {
+                    key: 'transactionPendingTitleSetUserRoles'
+                },
+                confirmedTitle: {
+                    key: 'transactionConfirmedTitleSetUserRoles'
+                },
+                confirmedDescription: {
+                    key: 'transactionConfirmedDescriptionSetUserRoles'
+                },
+                failuredTitle: {
+                    key: 'transactionFailuredTitleSetUserRoles'
+                },
+                failuredDescription: {
+                    key: 'transactionFailuredDescriptionSetUserRoles'
+                }
+            });
+
+            const promiEvent = method.send({
+                from: currentUser.address
+            });
+
+            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
+
+                transaction.submit(hash);
+                transactionStoreUtils.updateTransaction(transaction);
+
+                subscriber.next(user);
+
+            }).once('confirmation', (confNumber, receipt) => {
+
+                transaction.confirme();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
+                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
+                //const avalIdEvent = receipt.events['SaveAval'].returnValues.id;
+
+                // Se instruye al store para obtener el aval actualizado.
+                //avalStoreUtils.fetchAvalById(avalIdEvent);
+
+                subscriber.next(user);
+
+            }).on('error', function (error) {
+
+                transaction.fail();
+                transactionStoreUtils.updateTransaction(transaction);
+
+                error.user = user;
+                console.error(`Error procesando transacción para configurar roles de usuario.`, error);
+                subscriber.error(error);
+            });
+        });
     }
 
     /**
@@ -140,9 +234,9 @@ class AvaldaoContractApi {
             avalOnChain.cuotas.push(cuota);
         }
 
-        
+
         const reclamosCantidad = await avalContract.methods.getReclamosLength().call();
-        for(let i=0; i < reclamosCantidad; i++){
+        for (let i = 0; i < reclamosCantidad; i++) {
             const reclamoOnChain = await avalContract.methods.reclamos(i).call();
             const reclamo = {
                 numero: reclamoOnChain.numero,

@@ -456,7 +456,6 @@ class Web3App extends React.Component {
     };
     const accessToken = await feathersUsersClient.passport.getJWT();
     if (accessToken) {
-      console.log(`[Web3App] authenticate ${address} using access token ${accessToken}`)
       const payload = await feathersUsersClient.passport.verifyJWT(accessToken);
       if (Web3Utils.addressEquals(address, payload.userId)) {
         // TODO: CRITICAL: Revisar si lanza excepciones cuando el token no es valido

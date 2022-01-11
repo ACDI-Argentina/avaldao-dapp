@@ -16,8 +16,7 @@ const userService = new UserService();
 export const loadCurrentUserEpic = (action$, state$) => action$.pipe(
   ofType('currentUser/initCurrentUser'),
   mergeMap(action => {
-    let currentUser = new User(state$.value.currentUser);
-    return userService.loadCurrentUser(currentUser);
+    return userService.loadCurrentUser(action.payload);
   }),
   map(currentUser => ({
     type: 'currentUser/setCurrentUser',
@@ -28,7 +27,7 @@ export const loadCurrentUserEpic = (action$, state$) => action$.pipe(
 export const registerCurrentUserEpic = (action$) => action$.pipe(
   ofType('currentUser/registerCurrentUser'),
   mergeMap(
-    action => userService.save(action.payload).pipe(
+    action => userService.saveCurrentUser(action.payload).pipe(
       map(currentUser => ({
         type: 'currentUser/setCurrentUser',
         payload: currentUser

@@ -43,7 +43,7 @@ class AvalItem extends Component {
 
   goVisualizar() {
     const { aval } = this.props;
-    history.push(`/aval-visualizar/${aval.id}`);
+    history.push(`/aval/${aval.id}`);
   }
 
   firmar() {

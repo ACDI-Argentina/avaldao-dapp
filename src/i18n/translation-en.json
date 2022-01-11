@@ -6,14 +6,19 @@
     
     "cancel": "Cancel",
     "save": "Save",
+    "edit": "Edit",
+    "view": "View",
 
+    "usersTitle": "Users",
     "userProfileTitle": "User profile",
+    "userEditTitle": "User edit",
     "userName": "Name",
     "userEmail": "E-Mail",
     "userUrl": "URL",
     "userAvatar": "Profile photo",
     "userAvatarChoose": "Choose a profile photo",
     "userUnknown": "Unknown user",
+    "userRoles": "Roles",
 
     "fondoGarantia": "Guarantee fund",
     "fondoGarantiaExplain": "The guarantee fund is made up of tokens from the RSK blockchain and serves as backing for the guarantees.",
@@ -170,7 +175,6 @@
     "campaigns": "Campaigns",
     "campaign": "Campaign",
     "noCampaignsYet": "There are no campaings yet!",
-    "edit": "Edit",
     "campaignsSectionDescription":"Our life endeavours",
     "newCampaignTitle": "Start a new campaign!",
     "editCampaignTitle": "Edit campaign",
@@ -322,6 +326,14 @@
     "transactionConfirmedDescriptionUpdateDac": "Congratulations! The DAC has been updated and is available to add campaigns and receive funds.",
     "transactionFailuredTitleUpdateDac": "The DAC '{{dacTitle}}' was not updated",
     "transactionFailuredDescriptionUpdateDac": "A failure occurred during DAC update.",
+
+    "transactionCreatedTitleSetUserRoles": "Confirm the configuration of user roles in the wallet",
+    "transactionCreatedSubtitleSetUserRoles": "Double check the details here – the configuration of user roles can't be refunded.",
+    "transactionPendingTitleSetUserRoles": "Configuring user roles...",
+    "transactionConfirmedTitleSetUserRoles": "The configuration of user roles has been completed",
+    "transactionConfirmedDescriptionSetUserRoles": "The configuration of user roles has been completed.",
+    "transactionFailuredTitleSetUserRoles": "The configuration of user roles was not completed",
+    "transactionFailuredDescriptionSetUserRoles": "A failure occurred configuring user roles.",
 
     "transactionCreatedTitleCompletarAval": "Confirm the completion of aval in the wallet",
     "transactionCreatedSubtitleCompletarAval": "Double check the details here – the completion of aval can't be refunded.",
