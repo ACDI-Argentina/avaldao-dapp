@@ -66,9 +66,10 @@
     "avalAceptar":"Accept",
     "avalRechazar":"Reject",
     "avalSolicitadoBy":"This guarantee has been requested by the user",
+    "avalSolicitadoTo":"It is pending acceptance by the user",
     "atDay":"on",
     "atHour":"at",
-    "avalPendingAcceptance":"It is pending acceptance",
+    
     "processing": "Processing",
     "avalAceptado": "The guarantee has been accepted.",
     "avalRechazado": "The guarantee has been rejected.",

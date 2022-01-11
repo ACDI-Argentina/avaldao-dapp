@@ -3,8 +3,7 @@ import { useFormik } from 'formik';
 import { Button, Grid, InputAdornment, makeStyles, TextField, Typography } from "@material-ui/core";
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useTranslation } from "react-i18next";
-import FiatUtils from 'utils/FiatUtils';
-import BigNumber from 'bignumber.js';
+
 import LoadingOverlay from 'components/Loading/LoadingOverlay';
 import config from 'configuration';
 
@@ -48,7 +47,7 @@ const FormikInput = ({ formik, id, ...props }) => {
 }
 
 
-const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, showAddress, validationSchema }) => {
+const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, showAddress, validationSchema, defaultAvaldaoAddress }) => {
 
   const formik = useFormik({
     initialValues: {
@@ -60,7 +59,8 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
       montoFiat: 1000, //in usd
       cuotasCantidad: 6,
       comercianteAddress: "",
-      avaladoAddress: ""
+      avaladoAddress: "",
+      avaldaoAddress: defaultAvaldaoAddress
     },
     validationSchema: validationSchema,
 
@@ -162,6 +162,23 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
             readOnly={readonly}
           />
         </Grid>
+
+        <Grid item xs={12} md={6}>
+              <FormikInput /* required */
+                id="avaldaoAddress"
+                label={t('avalAvaldaoAddress')}
+                placeholder="0x..."
+                formik={formik}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountBalanceWalletIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+
         {showAddress && (
           <>
             <Grid item xs={12} md={6}>

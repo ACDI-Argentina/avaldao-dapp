@@ -68,9 +68,11 @@
     "avalRechazar":"Rechazar",
 
     "avalSolicitadoBy":"Este aval ha sido solicitado por el usuario",
+    "avalSolicitadoTo":"El mismo se encuentra pendiente de aceptación por parte del usuario",
+
     "atDay":"el día",
     "atHour":"a las",
-    "avalPendingAcceptance":"El mismo se encuentra pendiente de aceptación",
+    
     "processing": "Procesando",
     "avalAceptado": "El aval ha sido aceptado.",
     "avalRechazado": "El aval ha sido rechazado.",

@@ -204,19 +204,36 @@ const AvalActions = ({ aval }) => {
     }
   }, [aval.solicitanteAddress])
 
-  const solicitanteUser = useSelector( state => selectUserByAddress(state, aval.solicitanteAddress));
 
-  let userElement = null;
+  useEffect(() => {
+    if (aval?.avaldaoAddress) {
+      dispatch(fetchUserByAddress(aval.avaldaoAddress))
+    }
+  }, [aval.avaldaoAddress])
+
+  const solicitanteUser = useSelector( state => selectUserByAddress(state, aval.solicitanteAddress));
+  const avaldaoUser = useSelector( state => selectUserByAddress(state, aval.avaldaoAddress));
+
+  let solicitanteElement = null;
+  let avaldaoElement = null;
   let dateElement = null;
 
   /* TODO: recuperar el usuario para ese address */
 
-  userElement = (
+  solicitanteElement = (
   <span>
     {t("avalSolicitadoBy")}&nbsp; 
     <Link to="#" title={aval.solicitanteAddress}><b>{solicitanteUser?.name || aval.solicitanteAddress}</b></Link> 
   </span>
   );
+
+  avaldaoElement = (
+    <span>
+      {t("avalSolicitadoTo")}&nbsp; 
+      <Link to="#" title={aval.avaldaoAddress}><b>{avaldaoUser?.name || aval.avaldaoAddress}</b></Link> 
+    </span>
+    );
+  
 
 
   if (aval?.createdAt) {
@@ -241,10 +258,10 @@ const AvalActions = ({ aval }) => {
 
       {(aval.isSolicitado() || aval.isUpdating()) && (
         <Alert severity="warning" className={classes.alert}>
-          {userElement}{dateElement}.<br />
-          {t("avalPendingAcceptance")}.<br />
-          {isAvaladao && (
+          {solicitanteElement}&nbsp; {dateElement}.<br />
+          {avaldaoElement}.
 
+          {isAvaladao && (
             <div className={classes.actionContainer}>
               {loading ?
                 <div className={classes.centered}>

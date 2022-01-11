@@ -15,6 +15,7 @@ import * as Yup from 'yup';
 
 import ErrorPopup from 'components/ErrorPopup';
 import useSavingAval from 'hooks/useSavingAval';
+import Web3Utils from 'lib/blockchain/Web3Utils';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -31,6 +32,16 @@ const avalSchema = Yup.object({
   beneficiarios: Yup.string().trim().max(100).required('required'),
   montoFiat: Yup.number().required('required').positive('montoError').typeError('montoError'), 
   cuotasCantidad: Yup.number().required('required').positive('cuotaError').integer('cuotaError').typeError('cuotaError'),
+
+  avaldaoAddress: Yup.string().test(
+    "test-address", 
+    "addressError",
+    function(value) {
+      if(!value) 
+        return false;
+      return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
+    }).required('required')
+  
 });
 
 
@@ -71,8 +82,7 @@ const AvalSolicitar = ({ }) => {
     
     const aval = new Aval({
       ...values,
-      solicitanteAddress: solicitanteAddress,
-      avaldaoAddress: config.avaldaoAddress,
+      solicitanteAddress: solicitanteAddress
     })
 
     setAvalClientId(aval.clientId);
@@ -93,8 +103,6 @@ const AvalSolicitar = ({ }) => {
     ErrorPopup(t('avalModalError'));
   }
 
-
-
   return (
     <Page>
 
@@ -110,6 +118,7 @@ const AvalSolicitar = ({ }) => {
         showAddress={false}
         submitText={t("avalSolicitar")}
         loading={loading}
+        defaultAvaldaoAddress={config.avaldaoAddress}
       />
     </Page>
   )
