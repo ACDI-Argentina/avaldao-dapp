@@ -6,10 +6,12 @@
     
     "cancel": "Cancel",
     "save": "Save",
+    "edit": "Edit",
     "view": "View",
 
     "usersTitle": "Users",
     "userProfileTitle": "User profile",
+    "userEditTitle": "User edit",
     "userName": "Name",
     "userEmail": "E-Mail",
     "userUrl": "URL",
@@ -37,7 +39,6 @@
     "avalReintegrarTitle": "Reintegrate aval",
     "avalCompletar": "Complete",
     "avalCancelar": "Cancel",
-    "avalReclamarTitle": "Open claim",
     "avalProyecto": "Project",
     "avalProposito": "Purpose",
     "avalCausa": "Why",
@@ -151,7 +152,6 @@
     "campaigns": "Campaigns",
     "campaign": "Campaign",
     "noCampaignsYet": "There are no campaings yet!",
-    "edit": "Edit",
     "campaignsSectionDescription":"Our life endeavours",
     "newCampaignTitle": "Start a new campaign!",
     "editCampaignTitle": "Edit campaign",

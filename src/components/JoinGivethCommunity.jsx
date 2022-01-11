@@ -9,7 +9,7 @@ import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 
 import OnlyRole from '../components/OnlyRole';
 
-import { CREATE_DAC_ROLE, CREATE_CAMPAIGN_ROLE } from "../constants/Role";
+import { CREATE_DAC_ROLE, CREATE_CAMPAIGN_ROLE } from "../constants/RoleConstants";
 
 import Button from "components/CustomButtons/Button.js";
 import OnlyCorrectNetwork from './OnlyCorrectNetwork';

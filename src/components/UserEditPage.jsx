@@ -1,44 +1,39 @@
-import React, { Component } from 'react';
-import classNames from "classnames";
-import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
-import { saveUser } from '../redux/reducers/usersSlice';
-import { withStyles } from '@material-ui/core/styles';
-
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import Parallax from "components/Parallax/Parallax.js";
-import MainMenu from 'components/MainMenu';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
-import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
-import { connect } from 'react-redux';
-import { Web3AppContext } from 'lib/blockchain/Web3App';
-import { withTranslation } from 'react-i18next';
-import { Button } from '@material-ui/core';
-import User from 'models/User';
-import TextField from '@material-ui/core/TextField';
-import { history } from 'lib/helpers';
-
-import validatorUtils from 'lib/blockchain/ValidatorUtils';
-import Avatar from './Avatar/Avatar';
-import LoadingOverlay from './Loading/LoadingOverlay';
-import { selectUserByAddress } from 'redux/reducers/usersSlice';
-
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Chip from '@material-ui/core/Chip';
-import MenuItem from '@material-ui/core/MenuItem';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import Web3Utils from 'lib/blockchain/Web3Utils';
-import { selectRoles } from 'redux/reducers/rolesSlice';
-import Role from 'models/Role';
+import React, { Component } from 'react'
+import classNames from "classnames"
+import { selectCurrentUser } from '../redux/reducers/currentUserSlice'
+import { saveUser } from '../redux/reducers/usersSlice'
+import { withStyles } from '@material-ui/core/styles'
+import Header from "components/Header/Header.js"
+import Footer from "components/Footer/Footer.js"
+import Parallax from "components/Parallax/Parallax.js"
+import MainMenu from 'components/MainMenu'
+import Grid from '@material-ui/core/Grid'
+import { Typography } from '@material-ui/core'
+import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js"
+import { connect } from 'react-redux'
+import { Web3AppContext } from 'lib/blockchain/Web3App'
+import { withTranslation } from 'react-i18next'
+import { Button } from '@material-ui/core'
+import User from 'models/User'
+import TextField from '@material-ui/core/TextField'
+import { history } from 'lib/helpers'
+import validatorUtils from 'lib/blockchain/ValidatorUtils'
+import Avatar from './Avatar/Avatar'
+import LoadingOverlay from './Loading/LoadingOverlay'
+import { selectUserByAddress } from 'redux/reducers/usersSlice'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+import Chip from '@material-ui/core/Chip'
+import MenuItem from '@material-ui/core/MenuItem'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import { selectRoles } from 'redux/reducers/rolesSlice'
 
 /**
- * Visualización de usuario.
+ * Edición de usuario.
  * 
  */
-class UserPage extends Component {
+class UserEditPage extends Component {
 
   constructor(props) {
     super(props);
@@ -80,7 +75,6 @@ class UserPage extends Component {
     this.handleChangeAvatar = this.handleChangeAvatar.bind(this);
     this.handleChangeRoles = this.handleChangeRoles.bind(this);
     this.setFormValid = this.setFormValid.bind(this);
-
   }
 
   clearForm() {
@@ -403,7 +397,7 @@ class UserPage extends Component {
             <Grid container spacing={2} style={{ margin: "0px" }}>
               <Grid item xs={12}>
                 <Typography variant="h5" component="h5">
-                  {t('userProfileTitle')}
+                  {t('userEditTitle')}
                 </Typography>
               </Grid>
               <Grid item xs={12} md={5}>
@@ -545,7 +539,7 @@ class UserPage extends Component {
   }
 }
 
-UserPage.contextType = Web3AppContext;
+UserEditPage.contextType = Web3AppContext;
 
 const styles = theme => ({
   root: {
@@ -650,5 +644,5 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles, { withTheme: true })(
-  withTranslation()(UserPage)))
+  withTranslation()(UserEditPage)))
 );

@@ -8,8 +8,7 @@ export const EXCHANGE_RATE_ROLE = "EXCHANGE_RATE_ROLE";
 export const TRANSFER_ROLE = "TRANSFER_ROLE";
 
 // GRUPOS
-//TODO: Revisar como establecer relaciones entre los anteriores que se usan en el
-//smart contract y los establecidos a nivel de documentacion
+
 export const GIVER_ROLE = "GIVER_ROLE";
 export const DELEGATE_ROLE = "DELEGATE_ROLE";
 export const CAMPAIGN_MANAGER_ROLE = "CAMPAIGN_MANAGER_ROLE";

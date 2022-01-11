@@ -1,17 +1,4 @@
 import Model from './Model';
-import { cleanIpfsPath } from '../lib/helpers';
-import BigNumber from 'bignumber.js';
-import {
-  CREATE_DAC_ROLE,
-  CREATE_CAMPAIGN_ROLE,
-  CREATE_MILESTONE_ROLE,
-  CAMPAIGN_REVIEWER_ROLE,
-  MILESTONE_REVIEWER_ROLE,
-  RECIPIENT_ROLE
-} from '../constants/Role';
-import StatusUtils from '../utils/StatusUtils';
-import Status from './Status';
-import ipfsService from '../ipfs/IpfsService';
 
 /**
  * Modelo de Rol.
@@ -71,3 +58,8 @@ class Role extends Model {
 }
 
 export default Role;
+
+export const AVALDAO_ROLE = "AVALDAO_ROLE";
+export const SOLICITANTE_ROLE = "SOLICITANTE_ROLE";
+export const COMERCIANTE_ROLE = "COMERCIANTE_ROLE";
+export const AVALADO_ROLE = "AVALADO_ROLE";

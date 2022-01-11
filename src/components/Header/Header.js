@@ -1,28 +1,44 @@
-import React, { useContext } from "react";
-// nodejs library that concatenates classes
-import classNames from "classnames";
-// nodejs library to set properties for components
-import PropTypes from "prop-types";
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Hidden from "@material-ui/core/Hidden";
-import Drawer from "@material-ui/core/Drawer";
-// @material-ui/icons
-import Menu from "@material-ui/icons/Menu";
-// core components
-import styles from "assets/jss/material-kit-react/components/headerStyle.js";
-import { NavLink } from "react-router-dom";
-import Connect from "components/Connect";
-import LanguageSelector from "components/LanguageSelector";
+import React, { useContext } from "react"
+import classNames from "classnames"
+import PropTypes from "prop-types"
+import { makeStyles } from "@material-ui/core/styles"
+import AppBar from "@material-ui/core/AppBar"
+import Toolbar from "@material-ui/core/Toolbar"
+import IconButton from "@material-ui/core/IconButton"
+import Hidden from "@material-ui/core/Hidden"
+import Drawer from "@material-ui/core/Drawer"
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import styles from "assets/jss/material-kit-react/components/headerStyle.js"
+import { NavLink } from "react-router-dom"
+import Connect from "components/Connect"
+import LanguageSelector from "components/LanguageSelector"
+import MenuIcon from '@material-ui/icons/Menu'
+import { history } from 'lib/helpers'
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles(styles);
 
 export default function Header(props) {
   const classes = useStyles();
+  const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+
+  const handleMenuClick = (event) => {
+    console.log('handleMenuClick', event.currentTarget);
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const goUsers = () => {
+    setMenuAnchorEl(null);
+    history.push(`/users`);
+  };
+
   React.useEffect(() => {
     if (props.changeColorOnScroll) {
       window.addEventListener("scroll", headerColorChange);
@@ -66,10 +82,29 @@ export default function Header(props) {
     {brand}
   </NavLink>;
 
-  return (
+  return (    
 
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
+
+        <IconButton edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+          aria-controls="menu"
+          onClick={handleMenuClick}>
+          <MenuIcon />
+        </IconButton>
+        <Menu
+          id="menu"
+          anchorEl={menuAnchorEl}
+          keepMounted
+          open={Boolean(menuAnchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={goUsers}>{t('usersTitle')}</MenuItem>
+        </Menu>
+
         {leftLinks !== undefined ? brandComponent : null}
         {<div className={classes.flex}>
           {leftLinks !== undefined ? (
@@ -77,13 +112,13 @@ export default function Header(props) {
               {leftLinks}
             </Hidden>
           ) : (
-              brandComponent
-            )}
+            brandComponent
+          )}
         </div>}
 
         <LanguageSelector></LanguageSelector>
 
-        <Connect/>
+        <Connect />
 
         <Hidden smDown implementation="css">
 
@@ -95,10 +130,10 @@ export default function Header(props) {
             aria-label="open drawer"
             onClick={handleDrawerToggle}
           >
-            <Menu />
+            {/*<Menu />*/}
           </IconButton>
         </Hidden>
-        
+
       </Toolbar>
 
       <Hidden mdUp implementation="js">

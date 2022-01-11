@@ -6,14 +6,14 @@ import { withTranslation } from 'react-i18next'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import ListItemText from '@material-ui/core/ListItemText'
-import PageviewIcon from '@material-ui/icons/Pageview'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
 import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import Avatar from '@material-ui/core/Avatar'
+import EditIcon from '@material-ui/icons/Edit'
 
 /**
  * Item de un Usuario
@@ -26,21 +26,23 @@ class UserItem extends Component {
     this.state = {
 
     };
-    this.goVisualizar = this.goVisualizar.bind(this);
+    this.goEdit = this.goEdit.bind(this);
   }
 
   componentDidMount() {
 
   }
 
-  goVisualizar() {
+  goEdit() {
     const { user } = this.props;
-    history.push(`/user/${user.address}`);
+    history.push(`/user/${user.address}/edit`);
   }
 
   render() {
 
-    const { currentUser, user, classes, t, fondoGarantiaBalanceFiat } = this.props;
+    const { currentUser, user, classes, t } = this.props;
+
+    const editEnabled = currentUser.isAvaldao();
 
     return (
       <React.Fragment>
@@ -53,13 +55,14 @@ class UserItem extends Component {
             secondary={user.email}
           />
           <ListItemSecondaryAction>
-            <Tooltip title={t('view')}>
+            <Tooltip title={t('edit')}>
               <IconButton
                 edge="end"
-                aria-label="visualizar"
+                aria-label="edit"
                 color="primary"
-                onClick={this.goVisualizar}>
-                <PageviewIcon />
+                onClick={this.goEdit}
+                disabled={!editEnabled}>
+                <EditIcon />
               </IconButton>
             </Tooltip>
           </ListItemSecondaryAction>

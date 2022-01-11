@@ -39,6 +39,9 @@ const headerStyle = {
     position: "fixed",
     zIndex: "1100"
   },
+  menuButton: {
+    marginRight: '1em',
+  },
   container: {
     ...container,
     minHeight: "50px",

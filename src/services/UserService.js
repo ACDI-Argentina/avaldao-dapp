@@ -1,7 +1,7 @@
 import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
 import { Observable } from 'rxjs';
 import User from '../models/User';
-import { ALL_ROLES } from '../constants/Role';
+import { ALL_ROLES } from '../constants/RoleConstants';
 import messageUtils from '../redux/utils/messageUtils'
 import userIpfsConnector from '../ipfs/UserIpfsConnector'
 import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
@@ -208,9 +208,9 @@ class UserService {
           // Existen cambios en los roles para almacenar.
           avaldaoContractApi.setUserRoles(user, rolesToAdd, rolesToRemove).subscribe(
             user => {
-              messageUtils.addMessageSuccess({
+              /*messageUtils.addMessageSuccess({
                 text: `El usuario ${user.name} ha sido actualizado`
-              });
+              });*/
               subscriber.next(user);
             },
             error => {

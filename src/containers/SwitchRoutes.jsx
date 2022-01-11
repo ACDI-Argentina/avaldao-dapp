@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Profile from '../components/views/Profile'
-import EditProfile from '../components/views/EditProfile'
 import ViewMilestone from '../components/views/ViewMilestone'
 import EditDAC from '../components/views/EditDAC'
 import ViewDAC from '../components/views/ViewDAC'
@@ -23,7 +22,7 @@ import UserProfile from 'components/UserProfile'
 import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
 import UsersPage from 'components/views/UsersPage'
-import UserPage from 'components/UserPage'
+import UserEditPage from 'components/UserEditPage'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -259,9 +258,9 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/user/:userAddress"
+            path="/user/:userAddress/edit"
             render={props => (
-                <UserPage
+                <UserEditPage
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />

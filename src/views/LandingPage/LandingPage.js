@@ -24,7 +24,7 @@ import { withTranslation } from 'react-i18next';
 
 import OnlyRole from 'components/OnlyRole';
 
-import { CREATE_CAMPAIGN_ROLE } from "constants/Role";
+import { CREATE_CAMPAIGN_ROLE } from "constants/RoleConstants";
 
 import Button from "components/CustomButtons/Button.js";
 import OnlyCorrectNetwork from 'components/OnlyCorrectNetwork';

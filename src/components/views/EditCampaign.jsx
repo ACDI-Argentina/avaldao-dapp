@@ -20,7 +20,7 @@ import { connect } from 'react-redux'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 import { campaignReviewers } from '../../redux/reducers/usersSlice';
 import { saveCampaign, selectCampaign } from '../../redux/reducers/campaignsSlice'
-import { CAMPAIGN_REVIEWER_ROLE } from '../../constants/Role';
+import { CAMPAIGN_REVIEWER_ROLE } from '../../constants/RoleConstants';
 
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
