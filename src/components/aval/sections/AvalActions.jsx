@@ -12,8 +12,6 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval, aceptarAval, rechazarAval, } from 'redux/reducers/avalesSlice';
-
-
 import Alert from '@material-ui/lab/Alert';
 import useWeb3Account from 'hooks/useWeb3Account';
 import { selectUserByAddress } from 'redux/reducers/usersSlice';
@@ -71,7 +69,7 @@ const CompleteButton = ({ aval }) => {
   const history = useHistory();
   const { t } = useTranslation();
   const currentUser = useSelector(selectCurrentUser);
-  const allowCOmpletar = aval.allowCompletar(currentUser);
+  const allowCompletar = aval.allowCompletar(currentUser);
   return (
     <Tooltip title={t('avalCompletarTitle')}>
       <IconButton
@@ -80,7 +78,7 @@ const CompleteButton = ({ aval }) => {
         color="primary"
         onClick={() => history.push(`/aval-completar/${aval.id}`)}
         style={{ pointerEvents: "auto" }}
-        disabled={!allowCOmpletar}
+        disabled={!allowCompletar}
       >
         <AssignmentTurnedInIcon />
       </IconButton>

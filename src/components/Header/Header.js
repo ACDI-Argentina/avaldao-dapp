@@ -26,7 +26,6 @@ export default function Header(props) {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
   const handleMenuClick = (event) => {
-    console.log('handleMenuClick', event.currentTarget);
     setMenuAnchorEl(event.currentTarget);
   };
 

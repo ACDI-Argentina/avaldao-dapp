@@ -267,6 +267,18 @@ const SwitchRoutes = ({ currentUser }) => (
                 />
             )}
         />
+
+        <Route
+            exact
+            path="/aval/:id"
+            render={props => (
+                <AvalView
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+
         <Route
             exact
             path="/solicitar-aval"

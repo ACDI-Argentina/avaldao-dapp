@@ -197,10 +197,12 @@ class Aval {
       // Solo un aval Aceptado puede ser firmado.
       return false;
     }
-    if (!user.registered) {
+    if (!user.authenticated) {
       // El usuario no está autenticado.
-      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
-      // https://github.com/ACDI-Argentina/avaldao/issues/21
+      return false;
+    }
+    if (!user.isSolicitante()) {
+      // El usuario no tiene el rol de Solicitante.
       return false;
     }
     if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {

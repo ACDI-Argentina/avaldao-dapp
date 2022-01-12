@@ -9,7 +9,7 @@ import {
   MILESTONE_REVIEWER_ROLE,
   RECIPIENT_ROLE
 } from '../constants/RoleConstants';
-import { AVALDAO_ROLE } from './Role';
+import { AVALDAO_ROLE, SOLICITANTE_ROLE } from './Role';
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
 import ipfsService from '../ipfs/IpfsService';
@@ -248,6 +248,9 @@ class User extends Model {
 
   isAvaldao() {
     return this.hasRole(AVALDAO_ROLE);
+  }
+  isSolicitante() {
+    return this.hasRole(SOLICITANTE_ROLE);
   }
   isCampaignManager() {
     return this.roles.includes(CREATE_CAMPAIGN_ROLE);
