@@ -14,6 +14,7 @@ import TokenBalance from 'models/TokenBalance';
 import Reclamo from 'models/Reclamo';
 import currentUserUtils from 'redux/utils/currentUserUtils';
 import roleUtils from 'redux/utils/roleUtils';
+import ExchangeRate from '../../models/ExchangeRate';
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -787,6 +788,30 @@ class AvaldaoContractApi {
                 console.error(`Error procesando transacción para reintegrar fondos de aval.`, error);
                 subscriber.error(error);
             });
+        });
+    }
+
+    /**
+     * Obtiene todas los tipos de cambios de token.
+     */
+    getExchangeRates() {
+        return new Observable(async subscriber => {
+            try {
+                const rate = await this.exchangeRateProvider.methods.getExchangeRate(config.nativeToken.address).call();
+                // TODO Obtener otros Exchage Rates desde el smart contract.
+                let exchangeRates = [];
+                // RBTC
+                let exchangeRate = new ExchangeRate({
+                    tokenAddress: config.nativeToken.address,
+                    rate: new BigNumber(rate),
+                    date: Date.now()
+                });
+                exchangeRates.push(exchangeRate);
+                subscriber.next(exchangeRates);
+            } catch (error) {
+                console.error(error);
+                subscriber.error(error);
+            }
         });
     }
 

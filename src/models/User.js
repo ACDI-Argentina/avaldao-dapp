@@ -1,14 +1,6 @@
 import Model from './Model';
 import { cleanIpfsPath } from '../lib/helpers';
 import BigNumber from 'bignumber.js';
-import {
-  CREATE_DAC_ROLE,
-  CREATE_CAMPAIGN_ROLE,
-  CREATE_MILESTONE_ROLE,
-  CAMPAIGN_REVIEWER_ROLE,
-  MILESTONE_REVIEWER_ROLE,
-  RECIPIENT_ROLE
-} from '../constants/RoleConstants';
 import { AVALDAO_ROLE, SOLICITANTE_ROLE } from './Role';
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
@@ -251,21 +243,6 @@ class User extends Model {
   }
   isSolicitante() {
     return this.hasRole(SOLICITANTE_ROLE);
-  }
-  isCampaignManager() {
-    return this.roles.includes(CREATE_CAMPAIGN_ROLE);
-  }
-  isMilestoneManager() {
-    return this.roles.includes(CREATE_MILESTONE_ROLE);
-  }
-  isCampaignReviewer() {
-    return this.roles.includes(CAMPAIGN_REVIEWER_ROLE);
-  }
-  isMilestoneReviewer() {
-    return this.roles.includes(MILESTONE_REVIEWER_ROLE);
-  }
-  isRecipient() {
-    return this.roles.includes(RECIPIENT_ROLE);
   }
 
   hasRole(role) {

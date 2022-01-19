@@ -1,11 +1,9 @@
 import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
 import { Observable } from 'rxjs';
 import User from '../models/User';
-import { ALL_ROLES } from '../constants/RoleConstants';
 import messageUtils from '../redux/utils/messageUtils'
 import userIpfsConnector from '../ipfs/UserIpfsConnector'
 import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
-import roleUtils from 'redux/utils/roleUtils';
 
 class UserService {
 
@@ -22,6 +20,7 @@ class UserService {
     return new Observable(async subscriber => {
       if (address) {
         try {
+          console.log('address erronea', address);
           const userData = await feathersClient.service('/users').get(address);
           const user = await this.loadUserByFeathersData(userData);
           subscriber.next(user);

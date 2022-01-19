@@ -111,23 +111,5 @@ export const selectUserByAddress = (state, address) => {
 export const selectUsersByRoles = (state, roles) => {
     return state.users.map(userStore => new User(userStore)).filter(user => user.hasAnyRoles(roles));
 }
-export const delegates = state => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.isDelegate());
-}
-export const campaignManagers = state => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.isCampaignManager());
-}
-export const campaignReviewers = state => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.isCampaignReviewer());
-}
-export const milestoneManagers = state => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.isMilestoneManager());
-}
-export const milestoneReviewers = state => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.isMilestoneReviewer());
-}
-export const recipients = state => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.isRecipient());
-}
 
 export default usersSlice.reducer;

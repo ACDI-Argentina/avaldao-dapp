@@ -1,35 +1,18 @@
 import React, { useContext, Component } from 'react';
 import ReactDOM from 'react-dom';
-
 import { Router } from 'react-router-dom';
-
 import localforage from 'localforage';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-
 import Sweetalert from 'sweetalert';
-
 import GA from 'lib/GoogleAnalytics';
-
 import { ScrollToTop, history } from '../lib/helpers';
-
 import config from '../configuration';
-
-// components
-//import MainMenu from '../components/MainMenu';
-
 import ErrorBoundary from '../components/ErrorBoundary';
-
-// context providers
-
 import '../lib/validators';
 import { connect } from 'react-redux'
-import { fetchDacs } from '../redux/reducers/dacsSlice'
-import { fetchCampaigns } from '../redux/reducers/campaignsSlice'
 import { fetchAvalesOnChain, fetchAvalesOffChain } from '../redux/reducers/avalesSlice'
 import { fetchFondoGarantia } from '../redux/reducers/fondoGarantiaSlice'
-import { fetchMilestones } from '../redux/reducers/milestonesSlice'
 import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { fetchUsers } from '../redux/reducers/usersSlice';
 import { fetchExchangeRates } from '../redux/reducers/exchangeRatesSlice'
@@ -40,7 +23,6 @@ import TransactionViewer from 'components/TransactionViewer';
 import Web3Banner from 'lib/blockchain/Web3Banner';
 import Web3App from 'lib/blockchain/Web3App';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
-import AvalStoreInspector from 'inspectors/AvalStoreInspector';
 
 /* global document */
 /**
@@ -145,9 +127,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
   fetchAvalesOnChain,
   fetchAvalesOffChain,
-  fetchDacs,
-  fetchCampaigns,
-  fetchMilestones,
   fetchUsers,
   fetchExchangeRates,
   fetchFondoGarantia
