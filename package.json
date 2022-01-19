@@ -1,6 +1,6 @@
 {
   "name": "@acdi/avaldao-dapp",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.6",
   "private": true,
   "main": "src/index.js",
   "dependencies": {
@@ -120,6 +120,7 @@
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-app-rewired build",
+    "dev": "env-cmd -f envs/development.env npm-run-all -p watch-css start-js",
     "start:hybrid": "env-cmd -f envs/hybrid.env npm-run-all -p watch-css start-js",
     "start:localhost": "env-cmd -f envs/localhost.env npm-run-all -p watch-css start-js",
     "start:testing": "env-cmd -f -f envs/testing.env npm-run-all -p watch-css start-js",
