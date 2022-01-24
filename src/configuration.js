@@ -7,7 +7,6 @@ const {
   REACT_APP_AVALDAO_ADDRESS,
   REACT_APP_AVALDAO_CONTRACT_ADDRESS,
   REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS,
-  REACT_APP_CROWDFUNDING_ADDRESS,
   REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS,
   REACT_APP_TOKEN_RIF_ADDRESS,
   REACT_APP_TOKEN_DOC_ADDRESS,
@@ -259,7 +258,6 @@ if (configurations[REACT_APP_ENVIRONMENT] === undefined)
 const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT]);
 
 // Overwrite the environment values with parameters
-config.crowdfundingAddress = REACT_APP_CROWDFUNDING_ADDRESS || config.crowdfundingAddress;
 config.avaldaoAddress = REACT_APP_AVALDAO_ADDRESS || config.avaldaoAddress;
 config.avaldaoContractAddress = REACT_APP_AVALDAO_CONTRACT_ADDRESS || config.avaldaoContractAddress;
 config.fondoGarantiaVaultContractAddress = REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS || config.fondoGarantiaVaultContractAddress;
