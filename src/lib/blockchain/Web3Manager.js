@@ -28,8 +28,6 @@ const web3Modal = new Web3Modal({
   providerOptions: providerOptions
 });
 
-
-
 /**
  * Manager encargado de manejar el objeto Web3.
  */
@@ -246,11 +244,9 @@ class Web3Manager {
         this.disconnect();
 
         //Logout feathers
-        feathersClient.logout();
+        //authService.logout();
+        //feathersClient.logout();
         feathersUsersClient.logout();
-
-
-
       });
     }
   }

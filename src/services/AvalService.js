@@ -3,6 +3,7 @@ import { Observable } from 'rxjs'
 import { feathersClient } from '../lib/feathersClient';
 import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
 import BigNumber from 'bignumber.js';
+import messageUtils from '../redux/utils/messageUtils'
 
 class AvalService {
 
@@ -142,93 +143,68 @@ class AvalService {
         });
     }
 
-
-    solicitarAval(aval){ 
+    /**
+     * Solicita un aval.
+     */
+    solicitarAval(aval) {
         return new Observable(async subscriber => {
-            console.log(`[AvalService] - solicitar aval`, aval)
-
-            try{
+            const clientId = aval.clientId;
+            try {
                 const avalData = await feathersClient.service('avales').create({
-                    ...aval.toStore(),
-                    status: 0,
-                }); 
-                console.log('[AvalService] Aval solicitado en Feathers.', avalData);
-
-                const updatedAval = new Aval({
-                    ...avalData, 
-                    id: avalData._id,
-                    clientId:aval.clientId,
-                    status: Aval.mapAvalStatus(parseInt(avalData.status)), 
+                    ...aval.toFeathers(),
+                    status: Aval.SOLICITADO.id,
                 });
-
-                subscriber.next(updatedAval);
-
-            } catch(error){
+                let avalSolicitado = this.offChainAvalToAval(avalData);
+                avalSolicitado.clientId = clientId;
+                console.log('[AvalService] Aval solicitado en Feathers.', avalSolicitado);
+                subscriber.next(avalSolicitado);
+            } catch (error) {
                 console.error("[AvalService] Error solicitando aval off chain.", error);
-                error.aval = aval;
-                subscriber.error(error);
-            }
-        });
-    }
-
-    aceptarAval(aval){
-        return new Observable(async subscriber => {
-            try{
-                const response = await feathersClient.service('avales').patch(aval.id, { status: 2 });
-                subscriber.next(this.offChainAvalToAval(response));
-            }catch(err){
-                err.avalId = aval.id;
-                subscriber.error(err);
-            }
-        });
-    }
-    rechazarAval(aval){
-        return new Observable(async subscriber => {
-            try{
-                const response = await feathersClient.service('avales').patch(aval.id, { status: 1 });
-                subscriber.next(this.offChainAvalToAval(response));
-            }catch(err){
-                err.avalId = aval.id;
-                subscriber.error(err);
+                subscriber.error({
+                    aval: aval,
+                    error: error
+                });
             }
         });
     }
 
     /**
-     * Completa un aval.
-     * 
-     * @param aval a completar
-     * @returns observable 
+     * Acepta un aval, almacenándolo on chain.
      */
-    completarAval(aval) {
-
-        const clientId = aval.clientId;
-
+    aceptarAval(aval) {
         return new Observable(async subscriber => {
-
-            feathersClient.service('avales').patch(
-                aval.id,
-                {
-                    comercianteAddress: aval.comercianteAddress,
-                    avaladoAddress: aval.avaladoAddress
-                }).then(avalData => {
-                    console.log('[AvalService] Aval completado en Feathers.', aval);
-                    avaldaoContractApi.completarAval(aval).subscribe(
-                        aval => {
-                            aval.clientId = clientId;
-                            //if (aval.blockchainId) {
-                            this.syncOffChainAvalWithOnChainData(aval).subscribe();
-                            //}
-                            subscriber.next(aval);
-                        },
-                        error => {
-                            console.error("[AvalService] Error completando aval on chain.", error);
-                            subscriber.error(error);
-                        });
-                }).catch(error => {
-                    console.error("[AvalService] Error completando aval off chain.", error);
-                    subscriber.error(error);
+            const clientId = aval.clientId;
+            avaldaoContractApi.saveAval(aval).subscribe(
+                aval => {
+                    aval.clientId = clientId;
+                    this.syncOffChainAvalWithOnChainData(aval).subscribe();
+                    subscriber.next(aval);
+                },
+                error => {
+                    console.error("[AvalService] Error aceptando aval on chain.", error);
+                    subscriber.error({
+                        aval: aval,
+                        error: error
+                    });
                 });
+        });
+    }
+
+    /**
+     * Rechaza un aval, colocándolo en estado rechazado off chain.
+     */
+    rechazarAval(aval) {
+        return new Observable(async subscriber => {
+            try {
+                const response = await feathersClient.service('avales').patch(aval.id, { status: Aval.RECHAZADO.id });
+                subscriber.next(this.offChainAvalToAval(response));
+            } catch (error) {
+                console.error("[AvalService] Error rechando aval off chain.", error);
+                subscriber.error({
+                    aval: aval,
+                    error: error
+                });
+            }
         });
     }
 
@@ -236,13 +212,12 @@ class AvalService {
      * Firma un aval.
      * 
      * @param aval a firmar
-     * @param signer dirección del usuario firmante
      */
-    firmarAval(aval, signerAddress) {
+    firmarAval(aval) {
 
         return new Observable(async subscriber => {
 
-            avaldaoContractApi.signAvalOffChain(aval, signerAddress).subscribe(aval => {
+            avaldaoContractApi.signAvalOffChain(aval).subscribe(aval => {
 
                 feathersClient.service('avales').patch(
                     aval.id,
@@ -258,7 +233,7 @@ class AvalService {
 
                         if (aval.areSignaturesComplete() === true) {
                             // Todos los usuarios han firmado el aval.
-                            avaldaoContractApi.signAvalOnChain(aval, signerAddress).subscribe(
+                            avaldaoContractApi.signAvalOnChain(aval).subscribe(
                                 aval => {
                                     subscriber.next(aval);
                                 },

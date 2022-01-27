@@ -37,10 +37,6 @@ const AvalStoreInspector = ({ }) => {
           <pre>
             {JSON.stringify(aval, null, 3)}
           </pre>
-          <button onClick={() => {
-            console.log(`navigate to /aval-completar/${aval.id}`)
-            history.push(`/aval-completar/${aval.id}`);
-          }}>Completar</button>
         </Aval>
       ))}
     </Wrapper>

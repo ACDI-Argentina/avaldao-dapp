@@ -40,11 +40,11 @@ class SignerCard extends Component {
 
         let signatureTooltip = t('notSigned');
         let signatureText = t('notSigned');
-        let signatureColor = 'secondary';
+        let signatureVariant = 'outlined';
         if (signature) {
             signatureTooltip = signature;
             signatureText = t('signed');
-            signatureColor = 'primary';
+            signatureVariant = 'default';
         }
 
         return (
@@ -65,7 +65,8 @@ class SignerCard extends Component {
                                     size="small"
                                     icon={<GestureIcon />}
                                     label={signatureText}
-                                    color={signatureColor} />
+                                    color="primary"
+                                    variant={signatureVariant} />
                             </Tooltip>
                         </Grid>
                     </Grid>

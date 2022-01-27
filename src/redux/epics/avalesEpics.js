@@ -43,9 +43,8 @@ export const solicitarAvalEpic = action$ => action$.pipe(
     payload: aval
   })),
   catchError(error => of({
-    type: "avales/solicitarAvalError",
-    payload: error,
-    error: true
+    type: "avales/rollbackAvalStatus",
+    payload: error
   }))
 )
 
@@ -57,9 +56,8 @@ export const aceptarAvalEpic = action$ => action$.pipe(
     payload: aval
   })),
   catchError(error => of({
-    type: "avales/updateAvalError",
-    payload: error,
-    error: true
+    type: "avales/rollbackAvalStatus",
+    payload: error
   }))
 )
 
@@ -71,27 +69,15 @@ export const rechazarAvalEpic = action$ => action$.pipe(
     payload: aval
   })),
   catchError(error => of({
-    type: "avales/updateAvalError",
-    payload: error,
-    error: true
-  }))
-)
-
-
-export const completarAvalEpic = action$ => action$.pipe(
-  ofType('avales/completarAval'),
-  mergeMap(action => avalService.completarAval(action.payload)),
-  map(aval => ({
-    type: 'avales/updateAvalById',
-    payload: aval
+    type: "avales/rollbackAvalStatus",
+    payload: error
   }))
 )
 
 export const firmarAvalEpic = action$ => action$.pipe(
   ofType('avales/firmarAval'),
   mergeMap(action => avalService.firmarAval(
-    action.payload.aval,
-    action.payload.signerAddress
+    action.payload.aval
   )),
   map(aval => ({
     type: 'avales/updateAvalById',

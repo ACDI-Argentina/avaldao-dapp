@@ -1,10 +1,7 @@
 import { ofType } from 'redux-observable';
-import { map, mergeMap, catchError } from 'rxjs/operators'
-import UserService from '../../services/UserService';
-import { of } from 'rxjs';
-import User from '../../models/User'
-
-const userService = new UserService();
+import { map, mergeMap } from 'rxjs/operators'
+import userService from '../../services/UserService';
+import authService from 'services/AuthService';
 
 /**
  * Epic que reacciona a la acción de obtención del usuario actual local,
@@ -14,27 +11,26 @@ const userService = new UserService();
  * @param action$ de Redux.
  */
 export const loadCurrentUserEpic = (action$, state$) => action$.pipe(
-  ofType('currentUser/initCurrentUser'),
-  mergeMap(action => {
-    return userService.loadCurrentUser(action.payload);
-  }),
-  map(currentUser => ({
-    type: 'currentUser/setCurrentUser',
-    payload: currentUser
-  }))
-)
-
-export const registerCurrentUserEpic = (action$) => action$.pipe(
-  ofType('currentUser/registerCurrentUser'),
-  mergeMap(
-    action => userService.saveCurrentUser(action.payload).pipe(
+  ofType('currentUser/loadCurrentUser'),
+  mergeMap(action =>
+    userService.loadUserByAddress(action.payload).pipe(
+      mergeMap(currentUser => authService.login(currentUser)),
       map(currentUser => ({
         type: 'currentUser/setCurrentUser',
         payload: currentUser
-      })),
-      catchError(error => of({
-        type: 'currentUser/initCurrentUser',
-        payload: error, error: true
+      }))
+    )
+  )
+)
+
+export const registerCurrentUserEpic = (action$, state$) => action$.pipe(
+  ofType('currentUser/registerCurrentUser'),
+  mergeMap(action =>
+    userService.saveCurrentUser(action.payload).pipe(
+      mergeMap(currentUser => authService.login(currentUser)),
+      map(currentUser => ({
+        type: 'currentUser/setCurrentUser',
+        payload: currentUser
       }))
     )
   )
@@ -47,4 +43,3 @@ export const setCurrentUserEpic = (action$) => action$.pipe(
     payload: action.payload
   }))
 )
-

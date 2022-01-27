@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider'
 import Page from './Page';
 import Button from "components/CustomButtons/Button.js";
 import { withStyles } from '@material-ui/core/styles'
+import { history } from '../../lib/helpers'
 
 /**
  * Pantalla Home.
@@ -48,34 +49,8 @@ class Home extends Component {
     return confirm;
   }
 
-  async componentDidMount() {
-    const { history, currentUser, t } = this.props;
-    const { loginAccount } = this.context;
-    const { authenticateIfPossible } = this.context.modals.methods;
-
-    const goHome = () => history.push('/');
-
-    if (!currentUser || !currentUser.address) {
-      const confirmation = await this.requestConnection(t);
-      if (confirmation) {
-        const connected = await loginAccount();
-        if (!connected) {
-          return goHome();
-        }
-      } else {
-        return goHome();
-      }
-    }
-
-    authenticateIfPossible(this.props.currentUser)
-      .then(() => this.setState({ isLoading: false }))
-      .catch(err => {
-        if (err === 'noBalance') {
-          history.goBack();
-        } else {
-          this.setState({ isLoading: false });
-        }
-      });
+  goSolicitarAval() {
+    history.push(`/aval/solicitud`);
   }
 
   render() {
@@ -98,7 +73,7 @@ class Home extends Component {
               <Button color="primary"
                 className="btn btn-info"
                 disabled={!allowSolicitar}
-                href="/solicitar-aval">
+                onClick={this.goSolicitarAval}>
                 {t("avalSolicitarBtn")}
               </Button>
             </Grid>
@@ -106,7 +81,7 @@ class Home extends Component {
           <Grid item xs={12}>
             <AvalTable />
           </Grid>
-        </Grid>        
+        </Grid>
       </Page>
     );
   }

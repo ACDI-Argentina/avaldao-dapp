@@ -42,7 +42,7 @@ const SignaturesSection = ({ aval }) => {
 
   return (
     <Section>
-      {/*<Typography variant="subtitle1">{t('avalFirmasSection')}</Typography>*/}
+      <Typography variant="subtitle1">{t('avalFirmantesTitle')}</Typography>
       <Grid container className={classes.root} spacing={1}>
         {signers.map((signer, idx) => (
           <Grid item key={idx} lg={3} md={4} sm={6} xs={12} >

@@ -272,13 +272,15 @@ class AvaldaoContractApi {
     }
 
     /**
-     * Completa el aval, almacenándolo en la blockchain.
+     * Almacena el aval en la blockchain.
      *  
-     * @param aval a completar y almacenar.
+     * @param aval a almacenar.
      */
-    completarAval(aval) {
+    saveAval(aval) {
 
         return new Observable(async subscriber => {
+
+            const currentUser = currentUserUtils.getCurrentUser();
 
             try {
                 // Se almacena en IPFS toda la información del Aval.
@@ -290,10 +292,12 @@ class AvaldaoContractApi {
                 return;
             }
 
-            const users = [aval.solicitanteAddress,
-            aval.comercianteAddress,
-            aval.avaladoAddress,
-            aval.avaldaoAddress];
+            const users = [
+                aval.avaldaoAddress,
+                aval.solicitanteAddress,
+                aval.comercianteAddress,
+                aval.avaladoAddress
+            ];
 
             // Tiemstamp actual medido en segundos.
             //const timestampCurrent = Math.round(Date.now() / 1000);
@@ -320,37 +324,37 @@ class AvaldaoContractApi {
                 aval.montoFiat,
                 timestampCuotas);
 
-            const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
+            const gasEstimated = await this.estimateGas(method, currentUser.address);
             const gasPrice = await this.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
-                    key: 'transactionCreatedTitleCompletarAval'
+                    key: 'transactionCreatedTitleSaveAval'
                 },
                 createdSubtitle: {
-                    key: 'transactionCreatedSubtitleCompletarAval'
+                    key: 'transactionCreatedSubtitleSaveAval'
                 },
                 pendingTitle: {
-                    key: 'transactionPendingTitleCompletarAval'
+                    key: 'transactionPendingTitleSaveAval'
                 },
                 confirmedTitle: {
-                    key: 'transactionConfirmedTitleCompletarAval'
+                    key: 'transactionConfirmedTitleSaveAval'
                 },
                 confirmedDescription: {
-                    key: 'transactionConfirmedDescriptionCompletarAval'
+                    key: 'transactionConfirmedDescriptionSaveAval'
                 },
                 failuredTitle: {
-                    key: 'transactionFailuredTitleCompletarAval'
+                    key: 'transactionFailuredTitleSaveAval'
                 },
                 failuredDescription: {
-                    key: 'transactionFailuredDescriptionCompletarAval'
+                    key: 'transactionFailuredDescriptionSaveAval'
                 }
             });
 
             const promiEvent = method.send({
-                from: aval.solicitanteAddress,
+                from: currentUser.address,
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -379,7 +383,7 @@ class AvaldaoContractApi {
                 transactionStoreUtils.updateTransaction(transaction);
 
                 error.aval = aval;
-                console.error(`Error procesando transacción para completar aval.`, error);
+                console.error(`Error procesando transacción para almacenar aval.`, error);
                 subscriber.error(error);
             });
         });
@@ -393,11 +397,12 @@ class AvaldaoContractApi {
      * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md
      * 
      * @param aval a firmar
-     * @param signerAddress dirección del usuario firmante
      */
-    signAvalOffChain(aval, signerAddress) {
+    signAvalOffChain(aval) {
 
         return new Observable(async subscriber => {
+
+            const currentUser = currentUserUtils.getCurrentUser();
 
             const typedData = {
                 types: {
@@ -438,11 +443,11 @@ class AvaldaoContractApi {
             this.web3.currentProvider.request(
                 {
                     method: "eth_signTypedData_v4",
-                    params: [signerAddress, data],
-                    from: signerAddress
+                    params: [currentUser.address, data],
+                    from: currentUser.address
                 }).then(async result => {
                     console.log('[AvaldaoContractApi] Firma de aval off chain.', result);
-                    aval.updateSignature(signerAddress, result);
+                    aval.updateSignature(currentUser.address, result);
                     subscriber.next(aval);
                 }).catch(error => {
                     console.error('[AvaldaoContractApi] Error firmando aval off chain.', error);
@@ -459,11 +464,16 @@ class AvaldaoContractApi {
      * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-712.md
      * 
      * @param aval a firmar
-     * @param signerAddress dirección del usuario firmante
      */
-    signAvalOnChain(aval, signerAddress) {
+    signAvalOnChain(aval) {
 
         return new Observable(async subscriber => {
+
+            const currentUser = currentUserUtils.getCurrentUser();
+
+            const avaldaoSignatureR = "0x" + aval.avaldaoSignature.substring(2).substring(0, 64);
+            const avaldaoSignatureS = "0x" + aval.avaldaoSignature.substring(2).substring(64, 128);
+            const avaldaoSignatureV = parseInt(aval.avaldaoSignature.substring(2).substring(128, 130), 16);
 
             const solicitanteSignatureR = "0x" + aval.solicitanteSignature.substring(2).substring(0, 64);
             const solicitanteSignatureS = "0x" + aval.solicitanteSignature.substring(2).substring(64, 128);
@@ -477,13 +487,9 @@ class AvaldaoContractApi {
             const avaladoSignatureS = "0x" + aval.avaladoSignature.substring(2).substring(64, 128);
             const avaladoSignatureV = parseInt(aval.avaladoSignature.substring(2).substring(128, 130), 16);
 
-            const avaldaoSignatureR = "0x" + aval.avaldaoSignature.substring(2).substring(0, 64);
-            const avaldaoSignatureS = "0x" + aval.avaldaoSignature.substring(2).substring(64, 128);
-            const avaldaoSignatureV = parseInt(aval.avaldaoSignature.substring(2).substring(128, 130), 16);
-
-            const signatureV = [solicitanteSignatureV, comercianteSignatureV, avaladoSignatureV, avaldaoSignatureV];
-            const signatureR = [solicitanteSignatureR, comercianteSignatureR, avaladoSignatureR, avaldaoSignatureR];
-            const signatureS = [solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS, avaldaoSignatureS];
+            const signatureV = [avaldaoSignatureV, solicitanteSignatureV, comercianteSignatureV, avaladoSignatureV];
+            const signatureR = [avaldaoSignatureR, solicitanteSignatureR, comercianteSignatureR, avaladoSignatureR];
+            const signatureS = [avaldaoSignatureS, solicitanteSignatureS, comercianteSignatureS, avaladoSignatureS];
 
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
@@ -492,7 +498,7 @@ class AvaldaoContractApi {
                 signatureR,
                 signatureS);
 
-            const gasEstimated = await this.estimateGas(method, signerAddress);
+            const gasEstimated = await this.estimateGas(method, currentUser.address);
             const gasPrice = await this.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -522,7 +528,7 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: signerAddress
+                from: currentUser.address
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -566,11 +572,13 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
+            const currentUser = currentUserUtils.getCurrentUser();
+
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
             const method = avalContract.methods.unlockFundManual();
 
-            const gasEstimated = await this.estimateGas(method, aval.solicitanteAddress);
+            const gasEstimated = await this.estimateGas(method, currentUser.address);
             const gasPrice = await this.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -600,7 +608,7 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: aval.solicitanteAddress,
+                from: currentUser.address
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -644,11 +652,13 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
+            const currentUser = currentUserUtils.getCurrentUser();
+
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
             const method = avalContract.methods.openReclamo();
 
-            const gasEstimated = await this.estimateGas(method, aval.comercianteAddress);
+            const gasEstimated = await this.estimateGas(method, currentUser.address);
             const gasPrice = await this.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -678,7 +688,7 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: aval.comercianteAddress,
+                from: currentUser.address
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -722,11 +732,13 @@ class AvaldaoContractApi {
 
         return new Observable(async subscriber => {
 
+            const currentUser = currentUserUtils.getCurrentUser();
+
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
             const method = avalContract.methods.reintegrar();
 
-            const gasEstimated = await this.estimateGas(method, aval.avaldaoAddress);
+            const gasEstimated = await this.estimateGas(method, currentUser.address);
             const gasPrice = await this.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -756,7 +768,7 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: aval.avaldaoAddress,
+                from: currentUser.address
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.

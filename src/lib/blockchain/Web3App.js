@@ -2,16 +2,12 @@ import React from "react";
 import ConnectionModalUtil from "./ConnectionModalsUtil";
 import config from '../../configuration';
 import BigNumber from 'bignumber.js';
-import { feathersClient } from '../feathersClient';
-import { feathersUsersClient } from '../feathersUsersClient';
-import Web3Utils from "./Web3Utils";
 import { history } from '../helpers';
 import { utils } from 'web3';
 import web3Manager from "./Web3Manager";
 import networkManager from "./NetworkManager";
 import accountManager from "./AccountManager";
-import currentUserUtils from "redux/utils/currentUserUtils";
-
+import authService from "services/AuthService";
 
 export const Web3AppContext = React.createContext({
   contract: {},
@@ -151,7 +147,6 @@ class Web3App extends React.Component {
     });
   }
 
-
   loginAccount = async () => {
     try {
       const before = this.openConnectionPendingModal;
@@ -159,6 +154,7 @@ class Web3App extends React.Component {
 
       const web3 = await web3Manager.connect(before, after);
       const account = (await web3.eth.getAccounts())[0];
+
       return web3.isFallbackProvider ? false : account;
       
     } catch (err) {
@@ -167,12 +163,9 @@ class Web3App extends React.Component {
     }
   };
 
-
   logoutAccount = async () => {
     await web3Manager.disconnect();
-    await feathersClient.logout();
-    await feathersUsersClient.logout();
-    currentUserUtils.setAuthenticated(false);
+    await authService.logout();
   }
 
   // CONNECTION MODAL METHODS
@@ -427,87 +420,6 @@ class Web3App extends React.Component {
   bounceNotification = () => {
     this.setState({ lastNotificationTs: Date.now() });
   }
-
-
-  authenticateIfPossible = async (currentUser, redirectOnFail = false) => {
-    if (!currentUser || !currentUser.address) {
-      console.log(`authenticateIfPossible - empty user`);
-      currentUserUtils.setAuthenticated(false);
-      return false;
-    }
-
-    if (currentUser.authenticated) {
-      console.log(`authenticateIfPossible - Already authenticated`);
-      return true;
-    }
-
-    console.log(`authenticateIfPossible - Authenticating..`);
-    const result = await this.authenticate(currentUser.address, redirectOnFail);
-    currentUserUtils.setAuthenticated(result);
-    return result;
-
-  };
-
-  authenticate = async (address, redirectOnFail = true) => {
-    const web3 = this.state.web3;
-    const authData = {
-      strategy: 'web3',
-      address,
-    };
-    const accessToken = await feathersUsersClient.passport.getJWT();
-    if (accessToken) {
-      const payload = await feathersUsersClient.passport.verifyJWT(accessToken);
-      if (Web3Utils.addressEquals(address, payload.userId)) {
-        // TODO: CRITICAL: Revisar si lanza excepciones cuando el token no es valido
-        const result = await feathersUsersClient.authenticate(); 
-        console.log(`[Web3App authenticated re using jwt`);
-        return true;
-      } else {
-        console.log(`[Web3App] web3 address doesn't match - logout`);
-        await feathersUsersClient.logout();
-        await feathersClient.logout();
-      }
-    }
-
-    try {
-      await feathersUsersClient.authenticate(authData);
-      return true;
-    } catch (response) {
-      // normal flow will issue a 401 with a challenge message we need to sign and send to
-      // verify our identity
-      if (response.code === 401 && response.data.startsWith('Challenge =')) {
-        const msg = response.data.replace('Challenge =', '').trim();
-        this.openSignatureRequestModal();
-        // we have to wrap in a timeout b/c if you close the chrome window MetaMask opens, the promise never resolves
-        const signOrTimeout = () =>
-          new Promise(async resolve => {
-            const timeOut = setTimeout(() => {
-              resolve(false);
-              redirectOnFail && history.goBack();
-              //React.swal.close();
-              this.closeSignatureRequestModal();
-            }, 30000);
-
-            try {
-              const signature = await web3.eth.personal.sign(msg, address);
-              authData.signature = signature;
-              await feathersUsersClient.authenticate(authData);
-              //React.swal.close();
-              this.closeSignatureRequestModal();
-              clearTimeout(timeOut);
-              resolve(true);
-            } catch (e) {
-              console.error('Error firmando mensaje de autenticación', e);
-              clearTimeout(timeOut);
-              redirectOnFail && history.goBack(); 
-              resolve(false);
-            }
-          });
-        return signOrTimeout();
-      }
-    }
-    return false;
-  };
 
   checkProfile = async (currentUser) => {
     // already created a profile

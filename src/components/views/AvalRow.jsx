@@ -34,7 +34,7 @@ class AvalItem extends Component {
 
   goVisualizar() {
     const { aval } = this.props;
-    history.push(`/aval/${aval.id}`);
+    history.push(`/aval/${aval.id}/view`);
   }
 
   render() {

@@ -8,36 +8,6 @@ import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
 class UserService {
 
   /**
-   * Carga el usuario actual con los siguientes datos.
-   * - Address según wallet
-   * - Balance según wallet
-   * - Datos identificatorios
-   * - Roles. 
-   * 
-   * @param address usuario actual
-   */
-  loadCurrentUser(address) {
-    return new Observable(async subscriber => {
-      if (address) {
-        try {
-          console.log('address erronea', address);
-          const userData = await feathersClient.service('/users').get(address);
-          const user = await this.loadUserByFeathersData(userData);
-          subscriber.next(user);
-          authenticateFeathers(user).then(authenticated => {
-            user.authenticated = authenticated; //Muta el objeto y es accesible desde toda la aplicacion xq lo propaga con el store
-            subscriber.next(user);
-          });
-        } catch (error) {
-          console.error('[UserService] Error obteniendo datos del usuario actual.', error);
-          const user = new User({ address });
-          subscriber.next(user);
-        }
-      }
-    });
-  }
-
-  /**
    * Almacena el usuario actual.
    * 
    * @param user usuario a guardar.
@@ -50,9 +20,9 @@ class UserService {
         // Se almacena en IPFS toda la información del Usuario.
         let infoCid = await userIpfsConnector.upload(user);
         user.infoCid = infoCid;
-
-        await feathersClient.service('users').update(user.address, user.toFeathers());
+        
         if (user.registered === false) {
+          await feathersClient.service('users').create(user.toFeathers());
           // Nuevo usuario     
           user.registered = true;
           messageUtils.addMessageSuccess({
@@ -61,6 +31,7 @@ class UserService {
           });
         } else {
           // Actualización de usuario
+          await feathersClient.service('users').update(user.address, user.toFeathers());
           messageUtils.addMessageSuccess({
             text: `Su perfil ha sido actualizado.`
           });
@@ -242,23 +213,4 @@ class UserService {
   }
 }
 
-async function authenticateFeathers(user) {
-  let authenticated = false;
-  if (user) {
-    const token = await feathersClient.passport.getJWT();
-
-    if (token) {
-      const { userId } = await feathersClient.passport.verifyJWT(token);
-
-      if (user.address === userId) {
-        await feathersClient.authenticate(); // authenticate the socket connection
-        authenticated = true;
-      } else {
-        await feathersClient.logout();
-      }
-    }
-  }
-  return authenticated;
-}
-
-export default UserService;
+export default new UserService();

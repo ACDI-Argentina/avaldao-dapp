@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router';
 import Page from './Page';
 import { Flex } from './styled';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,11 +11,9 @@ import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
 import StatusIndicator from 'components/StatusIndicator';
 
-const AvalView = ({ }) => {
-  const location = useLocation();
+const AvalView = (props) => {
   const dispatch = useDispatch();
-
-  const avalId = location.pathname?.split("/").slice(-1)[0];
+  const avalId = props.match.params.avalId;
   const aval = useSelector(state => selectAvalById(state, avalId));
 
   useEffect(() => {
@@ -30,13 +27,15 @@ const AvalView = ({ }) => {
   return (
     <Page>
       <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-        <StatusIndicator status={aval.status}/>
+        <StatusIndicator status={aval.status} />
       </Flex>
-      <AvalActions aval={aval} />
       <AvalGeneralSection aval={aval} />
       <SignaturesSection aval={aval} />
       <CuotasSection aval={aval} />
       <ReclamosSection aval={aval} />
+      <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
+        <AvalActions aval={aval} />
+      </Flex>
     </Page>
   )
 }

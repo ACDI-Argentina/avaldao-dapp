@@ -1,16 +1,14 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import Profile from '../components/views/Profile'
 import NotFound from '../components/views/NotFound'
 import TermsAndConditions from '../components/views/TermsAndConditions'
 import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
-import AvalCompletar from 'components/views/AvalCompletar'
 import UserProfile from 'components/UserProfile'
 import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
-import AvalSolicitar from 'components/views/AvalSolicitar'
+import AvalSolicitud from 'components/views/AvalSolicitud'
 import UsersPage from 'components/views/UsersPage'
 import UserEditPage from 'components/UserEditPage'
 
@@ -35,11 +33,6 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/profile/:userAddress"
-            render={props => <Profile {...props} />}
-        />
-        <Route
-            exact
             path="/users"
             render={props => (
                 <UsersPage
@@ -60,7 +53,7 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/aval/:id"
+            path="/aval/:avalId/view"
             render={props => (
                 <AvalView
                     key={currentUser ? currentUser.id : 0}
@@ -70,35 +63,9 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route
             exact
-            path="/solicitar-aval"
+            path="/aval/solicitud"
             render={props => (
-                <AvalSolicitar
-                    key={currentUser ? currentUser.id : 0}
-                    {...props}
-                />
-            )}
-        />
-
-        <Route
-            exact
-            path="/request-aval"
-            render={props => (
-                <AvalSolicitar
-                    key={currentUser ? currentUser.id : 0}
-                    {...props}
-                />
-            )}
-        />
-        <Route
-            exact
-            path="/profile/:userAddress"
-            render={props => <Profile {...props} />}
-        />
-        <Route
-            exact
-            path="/aval-completar/:id"
-            render={props => (
-                <AvalCompletar
+                <AvalSolicitud
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />

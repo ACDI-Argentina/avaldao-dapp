@@ -36,36 +36,26 @@ export const avalesSlice = createSlice({
     },
     solicitarAval: (state, action) => {
       const aval = action.payload;
+      aval.statusPrev = aval.status;
       aval.status = Aval.SOLICITANDO;
       const avalStore = aval.toStore();
       state.push(avalStore);
       return state;
     },
     aceptarAval: (state, action) => {
-      const avalAction = action.payload; //Solamente recibe el id
-      const avalId = avalAction.id;
-
-      let index = state.findIndex(a => a.id === avalId);
-      if(index > -1){
-        const aval = state[index];
-        aval.status = Aval.ACTUALIZANDO;
-        return state;
+      let aval = action.payload;
+      aval.statusPrev = aval.status;
+      aval.status = Aval.ACTUALIZANDO;
+      const avalStore = aval.toStore();
+      let index = state.findIndex(a => a.id === avalStore.id);
+      if (index != -1) {
+        state[index] = avalStore;
       }
-
     },
     rechazarAval: (state, action) => {
-      const avalAction = action.payload;
-      const avalId = avalAction.id; //Solamente recibe el id
-      const index = state.findIndex(a => a.id === avalId);
-      if(index > -1){
-        const aval = state[index];
-        aval.status = Aval.ACTUALIZANDO;
-        return state;
-      }
-    },
-    completarAval: (state, action) => {
       let aval = action.payload;
-      aval.status = Aval.COMPLETANDO;
+      aval.statusPrev = aval.status;
+      aval.status = Aval.ACTUALIZANDO;
       const avalStore = aval.toStore();
       let index = state.findIndex(a => a.id === avalStore.id);
       if (index != -1) {
@@ -96,10 +86,8 @@ export const avalesSlice = createSlice({
         state.push(avalStore);
       }
     },
-
     updateAvalByClientId: (state, action) => {
       const avalStore = action.payload.toStore();
-      console.log("updateAvalByClientId!", avalStore);
       const index = state.findIndex(a => a.clientId === avalStore.clientId);
       if (index != -1) {
         state[index] = avalStore;
@@ -107,34 +95,24 @@ export const avalesSlice = createSlice({
         state.push(avalStore);
       }
     },
-
-    solicitarAvalError: (state,action) => {
-      const error = action?.payload;
-      const avalError = error?.aval;
-      
-      const idx = state.findIndex(a => a.clientId === avalError.clientId);
-      if(idx> -1){
-        state[idx].status = Aval.ERROR;
+    rollbackAvalStatus: (state, action) => {
+      const avalStore = action.payload.aval.toStore();
+      // Se busca por clientId porque no siempre el aval está identificado
+      // por un id del backend. Por ejemplo en la solicitud.
+      const index = state.findIndex(a => a.clientId === avalStore.clientId);
+      if (index != -1) {
+        if (state[index].statusPrev != null) {
+          // Se asigna el status anterior y se anula
+          // para no volver a hacer un rollback.
+          state[index].status = state[index].statusPrev;
+          state[index].statusPrev = null;
+        }
       }
-
       return state;
     },
-
-    updateAvalError: (state, action) => { //Unificarlo con el anterior
-      const error = action?.payload;
-      const avalId = error?.avalId;
-      
-      const idx = state.findIndex(a => a.id === avalId);
-      if(idx> -1){
-        state[idx].status = Aval.ERROR;
-      }
-
-      return state;
-    },
-
     fetchAvalesOnChainError: (state, action) => {
       const error = action?.payload;
-      console.log(`[avalesSlice] handle error:`,error);
+      console.log(`[avalesSlice] handle error:`, error);
       return state;
     }
   },
@@ -148,18 +126,18 @@ export const {
   solicitarAval,
   aceptarAval,
   rechazarAval,
-  completarAval,
   firmarAval,
   desbloquearAval,
   reclamarAval,
   reintegrarAval,
   fetchAvalById,
-  updateAvalById } = avalesSlice.actions;
+  updateAvalById,
+  rollbackAvalStatus } = avalesSlice.actions;
 
 export const selectRawAvales = state => state.avales;
 
 export const selectAvales = state => {
-  return state.avales.filter(aval => aval?.status?.name !=="Error").map(function (avalStore) {
+  return state.avales.filter(aval => aval?.status?.name !== "Error").map(function (avalStore) {
     return new Aval(avalStore);
   });
 }

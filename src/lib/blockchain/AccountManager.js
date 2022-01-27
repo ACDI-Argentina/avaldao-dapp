@@ -31,7 +31,7 @@ class AccountManager {
       let account = this.accountSubject.getValue();
       account.address = accountAddress;
       this.accountSubject.next(account);
-      currentUserUtils.initCurrentUser(accountAddress);
+      currentUserUtils.loadCurrentUser(accountAddress);
       await this.updateAccountBalances(accountAddress);
     }    
   }

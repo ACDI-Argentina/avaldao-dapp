@@ -49,36 +49,6 @@ class UsersPage extends Component {
     return confirm;
   }
 
-  async componentDidMount() {
-    const { history, currentUser, t } = this.props;
-    const { loginAccount } = this.context;
-    const { authenticateIfPossible } = this.context.modals.methods;
-
-    const goHome = () => history.push('/');
-
-    if (!currentUser || !currentUser.address) {
-      const confirmation = await this.requestConnection(t);
-      if (confirmation) {
-        const connected = await loginAccount();
-        if (!connected) {
-          return goHome();
-        }
-      } else {
-        return goHome();
-      }
-    }
-
-    authenticateIfPossible(this.props.currentUser)
-      .then(() => this.setState({ isLoading: false }))
-      .catch(err => {
-        if (err === 'noBalance') {
-          history.goBack();
-        } else {
-          this.setState({ isLoading: false });
-        }
-      });
-  }
-
   render() {
 
     const { classes, t, ...rest } = this.props;

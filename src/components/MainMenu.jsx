@@ -18,7 +18,7 @@ import AboutUs from './Dialogs/AboutUs';
  * The main top menu
  */
 class MainMenu extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       showAboutUs: false,
@@ -34,9 +34,8 @@ class MainMenu extends Component {
   }
 
   render() {
-    const { classes, currentUser,t } = this.props;
+    const { classes, currentUser, t } = this.props;
     const registered = (currentUser && currentUser.registered) || false;
-
 
     const labels = {
       welcome: t('menuWelcome'),
@@ -63,44 +62,51 @@ class MainMenu extends Component {
       <div
         className={classes.dropdownLink}
         onClick={() => {
-          this.setState({showAboutUs: true})
+          this.setState({ showAboutUs: true })
         }}>
         {labels.aboutUs}
       </div>
     );
 
+    let dropdownList = [
+      aboutUs
+    ]
+    if (currentUser?.address) {
+      dropdownList = [
+        profileLink,
+        aboutUs
+      ]
+    }
+
     return (
       <>
-      <List className={classes.list}>
+        <List className={classes.list}>
 
-        {currentUser && (
-          <ListItem className={classes.listItem}>
-            <CustomDropdown
-              noLiPadding
-              buttonText={<span>{buttonText}</span>}
-              buttonProps={{
-                className: classes.navLink,
-                color: 'transparent',
-              }}
-              dropdownList={[
-                profileLink,
-                aboutUs
-                ]}
-            />
-          </ListItem>
-        )}
-      </List>
-      <AboutUs
-        fullWidth={true}
-        maxWidth="sm"
-        open={this.state.showAboutUs}
-        onClose={() => {
+          {currentUser && (
+            <ListItem className={classes.listItem}>
+              <CustomDropdown
+                noLiPadding
+                buttonText={<span>{buttonText}</span>}
+                buttonProps={{
+                  className: classes.navLink,
+                  color: 'transparent',
+                }}
+                dropdownList={dropdownList}
+              />
+            </ListItem>
+          )}
+        </List>
+        <AboutUs
+          fullWidth={true}
+          maxWidth="sm"
+          open={this.state.showAboutUs}
+          onClose={() => {
             console.log('close modal')
-            this.setState({showAboutUs:false})
-        }}
-        
+            this.setState({ showAboutUs: false })
+          }}
+
         >
-      </AboutUs>
+        </AboutUs>
       </>
     );
   }

@@ -3,12 +3,8 @@ import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
 import { makeStyles } from "@material-ui/core";
-import AvalStoreInspector from 'inspectors/AvalStoreInspector';
 import MainMenu from 'components/MainMenu';
-
 import { useTranslation } from 'react-i18next';
-import { maxWidth } from 'styled-system';
-
 
 const Page = ({ children, ...props }) => {
   const classes = makeStyles(styles)();
@@ -66,7 +62,7 @@ const styles = theme => ({
     minHeight: "75vh",
     /* maxWidth:"1300px",
     margin: "-60px auto 0px", */
-    
+
   },
 
   dappLogo: {

@@ -33,7 +33,7 @@ class Aval {
       solicitanteSignature,
       comercianteSignature,
       avaladoSignature,
-      status = Aval.ACEPTADO.toStore(),
+      status = Aval.SOLICITADO.toStore(),
       createdAt
     } = data;
     this._id = id;
@@ -67,8 +67,8 @@ class Aval {
     this._avaladoSignature = avaladoSignature;
     this._avaldaoSignature = avaldaoSignature;
     this._status = StatusUtils.build(status.id, status.name, status.isLocal);
+    this._statusPrev = null;
     this._createdAt = createdAt && new Date(createdAt);
-
   }
 
   /**
@@ -85,6 +85,28 @@ class Aval {
       montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad
     };
+  }
+
+  toFeathers() {
+    return {
+      _id: this._id,
+      proyecto: this._proyecto,
+      proposito: this._proposito,
+      causa: this._causa,
+      adquisicion: this._adquisicion,
+      beneficiarios: this._beneficiarios,
+      montoFiat: this._montoFiat,
+      cuotasCantidad: this._cuotasCantidad,
+      avaldaoAddress: this._avaldaoAddress,
+      solicitanteAddress: this._solicitanteAddress,
+      comercianteAddress: this._comercianteAddress,
+      avaladoAddress: this._avaladoAddress,
+      avaldaoSignature: this._avaldaoSignature,
+      solicitanteSignature: this._solicitanteSignature,
+      comercianteSignature: this._comercianteSignature,
+      avaladoSignature: this._avaladoSignature,
+      status: this._status.toStore()
+    }
   }
 
   /**
@@ -124,6 +146,7 @@ class Aval {
       comercianteSignature: this._comercianteSignature,
       avaladoSignature: this._avaladoSignature,
       status: this._status.toStore(),
+      statusPrev: this._statusPrev,
       createdAt: this._createdAt,
     };
   }
@@ -140,9 +163,8 @@ class Aval {
       case 0: return Aval.SOLICITADO;
       case 1: return Aval.RECHAZADO;
       case 2: return Aval.ACEPTADO;
-      case 3: return Aval.COMPLETADO;
-      case 4: return Aval.VIGENTE;
-      case 5: return Aval.FINALIZADO;
+      case 3: return Aval.VIGENTE;
+      case 4: return Aval.FINALIZADO;
     }
   }
 
@@ -150,10 +172,6 @@ class Aval {
   /* Se usa este estado para indicar que ocurrio un error durante la actualizacion, es un estado efimero */
   static get ACTUALIZANDO() {
     return StatusUtils.build(undefined, 'Actualizando', true);
-  }
-
-  static get ERROR() {
-    return StatusUtils.build(undefined, 'Error', true);
   }
 
   static get SOLICITANDO() {
@@ -172,41 +190,57 @@ class Aval {
     return StatusUtils.build(2, 'Aceptado', false);
   }
 
-  static get COMPLETANDO() {
-    return StatusUtils.build(undefined, 'Completando', true);
-  }
-
-  static get COMPLETADO() {
-    return StatusUtils.build(3, 'Completado', false);
-  }
-
   static get VIGENTE() {
-    return StatusUtils.build(4, 'Vigente', false);
+    return StatusUtils.build(3, 'Vigente', false);
   }
 
   static get FINALIZADO() {
-    return StatusUtils.build(5, 'Finalizado', false);
+    return StatusUtils.build(4, 'Finalizado', false);
   }
 
   /**
-   * Determina si el Aval puede ser completado o no.
-   * @param user usuario que completa el aval.
+   * Determina si el Aval puede ser aceptado o no.
+   * @param user usuario que acepta el aval.
    */
-  allowCompletar(user) {
-    if (this.status.name !== Aval.ACEPTADO.name) {
-      // Solo un aval Aceptado puede ser firmado.
+  allowAceptar(user) {
+    if (this.status.name !== Aval.SOLICITADO.name) {
+      // Solo un aval solicitado puede ser aceptado.
       return false;
     }
     if (!user.authenticated) {
       // El usuario no está autenticado.
       return false;
     }
-    if (!user.isSolicitante()) {
-      // El usuario no tiene el rol de Solicitante.
+    if (!user.isAvaldao()) {
+      // El usuario no tiene el rol de Avaldao.
       return false;
     }
-    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
-      // Solo el Solicitante puede completar el aval
+    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+      // Solo el Avaldao puede aceptar el aval
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Determina si el Aval puede ser rechazado o no.
+   * @param user usuario que rechaza el aval.
+   */
+   allowRechazar(user) {
+    if (this.status.name !== Aval.SOLICITADO.name) {
+      // Solo un aval solicitado puede ser rechazado.
+      return false;
+    }
+    if (!user.authenticated) {
+      // El usuario no está autenticado.
+      return false;
+    }
+    if (!user.isAvaldao()) {
+      // El usuario no tiene el rol de Avaldao.
+      return false;
+    }
+    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+      // Solo el Avaldao puede rechazar el aval
       return true;
     }
     return false;
@@ -221,10 +255,8 @@ class Aval {
       // Solo un aval Vigente puede ser desbloqueado.
       return false;
     }
-    if (!user.registered) {
+    if (!user.authenticated) {
       // El usuario no está autenticado.
-      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
-      // https://github.com/ACDI-Argentina/avaldao/issues/21
       return false;
     }
     if (!Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
@@ -243,10 +275,8 @@ class Aval {
       // Solo un aval Vigente puede ser reclamado.
       return false;
     }
-    if (!user.registered) {
+    if (!user.authenticated) {
       // El usuario no está autenticado.
-      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
-      // https://github.com/ACDI-Argentina/avaldao/issues/21
       return false;
     }
     if (!Web3Utils.addressEquals(user.address, this.comercianteAddress)) {
@@ -291,10 +321,8 @@ class Aval {
       // Solo un aval Vigente puede ser reclamado.
       return false;
     }
-    if (!user.registered) {
+    if (!user.authenticated) {
       // El usuario no está autenticado.
-      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
-      // https://github.com/ACDI-Argentina/avaldao/issues/21
       return false;
     }
     if (!Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
@@ -321,14 +349,12 @@ class Aval {
    * @param user usuario firmante.
    */
   allowFirmar(user) {
-    if (this.status.name !== Aval.COMPLETADO.name) {
-      // Solo un aval Completado puede ser firmado.
+    if (this.status.name !== Aval.ACEPTADO.name) {
+      // Solo un aval Aceptado puede ser firmado.
       return false;
     }
-    if (!user.registered) {
+    if (!user.authenticated) {
       // El usuario no está autenticado.
-      // TODO Reemplazar por 'authenticated' una vez resuelto el issue
-      // https://github.com/ACDI-Argentina/avaldao/issues/21
       return false;
     }
     if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
@@ -346,7 +372,7 @@ class Aval {
     if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // El firmante es Avaldao.
       // Avaldao solo puede firmar una vez que el Solictante, Comerciante y Avalado hayan firmado.
-      // En este punto el aval está Completo. 
+      // En este punto el aval está Aceptado. 
       // Puede darse la situación donde Avaldao ya haya firmado y falta ejecutar la firma en la blockchain,
       // por lo que no se consulta por la firma de Avaldao.
       return this.solicitanteSignature != undefined &&
@@ -593,6 +619,13 @@ class Aval {
     this._status = value;
   }
 
+  get statusPrev() {
+    return this._statusPrev;
+  }
+
+  set statusPrev(value) {
+    this._statusPrev = value;
+  }
 
   get createdAt() {
     return this._createdAt;
@@ -605,15 +638,14 @@ class Aval {
   isSolicitado() {
     return this.status.name === Aval.SOLICITADO.name
   }
+  
   isRechazado() {
     return this.status.name === Aval.RECHAZADO.name
   }
   
-
   isAceptado() {
     return this.status.name === Aval.ACEPTADO.name
   }
-  
   
   isUpdating() {
     return this.status.name === Aval.ACTUALIZANDO.name || this.status.name === Aval.SOLICITANDO.name;

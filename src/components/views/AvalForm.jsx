@@ -59,9 +59,9 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
       montoFiat: 1000, //in usd
       cuotasCantidad: 6,
       solicitanteAddress: solicitanteAddress,
-      comercianteAddress: "",
-      avaladoAddress: "",
-      avaldaoAddress: defaultAvaldaoAddress
+      avaldaoAddress: defaultAvaldaoAddress,
+      comercianteAddress: '',
+      avaladoAddress: ''
     },
     validationSchema: validationSchema,
 
@@ -159,7 +159,6 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
             label={t('avalCuotasCantidad')}
             formik={formik}
             type="number"
-
             readOnly={readonly}
           />
         </Grid>
@@ -172,6 +171,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
             placeholder="0x..."
             formik={formik}
             disabled
+            inputProps={{ maxLength: 42 }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -188,6 +188,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
             label={t('avalAvaldaoAddress')}
             placeholder="0x..."
             formik={formik}
+            inputProps={{ maxLength: 42 }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -198,51 +199,40 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
           />
         </Grid>
 
-        {showAddress && (
-          <>
-            <Grid item xs={12} md={6}>
-              <FormikInput
-                id="comercianteAddress"
-                label={t('avalComercianteAddress')}
-                placeholder="0x..."
-                formik={formik}
-
-                readOnly //Read from props
-                //required TODO: define with yup
-                //inputProps={{ maxLength: 42 }} TODO: define schema with yup for valid address
-                variant="filled"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountBalanceWalletIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <FormikInput
-                id="avaladoAddress"
-                label={t('avalAvaladoAddress')}
-                placeholder="0x..."
-                formik={formik}
-
-                readOnly //Read from props
-                //required  TODO: define with yup
-                //inputProps={{ maxLength: 42 }}TODO: define schema with yup for valid address
-                variant="filled"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountBalanceWalletIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-          </>
-
-        )}
+        <Grid item xs={12} md={6}>
+          <FormikInput
+            id="comercianteAddress"
+            label={t('avalComercianteAddress')}
+            placeholder="0x..."
+            formik={formik}
+            variant="filled"
+            inputProps={{ maxLength: 42 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountBalanceWalletIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormikInput
+            id="avaladoAddress"
+            label={t('avalAvaladoAddress')}
+            placeholder="0x..."
+            formik={formik}
+            variant="filled"
+            inputProps={{ maxLength: 42 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountBalanceWalletIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
 
         <Grid item xs={12}>
 
@@ -253,7 +243,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
               type="submit"
               disabled={loading || !formik.isValid || !formik.dirty}  //Habilitarlo pero que en el click solamente maneje el submit si el form es valido
               className={classes.button}>
-              {submitText || t('avalCompletar')}
+              {submitText}
             </Button>
           </LoadingOverlay>
 

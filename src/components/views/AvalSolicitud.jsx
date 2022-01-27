@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import ErrorPopup from 'components/ErrorPopup';
 import useSavingAval from 'hooks/useSavingAval';
 import Web3Utils from 'lib/blockchain/Web3Utils';
+import messageUtils from 'redux/utils/messageUtils';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -27,35 +28,52 @@ const avalSchema = Yup.object({
   causa: Yup.string().trim().max(100).required('required'),
   adquisicion: Yup.string().trim().max(100).required('required'),
   beneficiarios: Yup.string().trim().max(100).required('required'),
-  montoFiat: Yup.number().required('required').positive('montoError').typeError('montoError'), 
+  montoFiat: Yup.number().required('required').positive('montoError').typeError('montoError'),
   cuotasCantidad: Yup.number().required('required').positive('cuotaError').integer('cuotaError').typeError('cuotaError'),
-
+  
   avaldaoAddress: Yup.string().test(
-    "test-address", 
-    "addressError",
-    function(value) {
-      if(!value) 
+    "test-address",
+    "errorInvalidAddress",
+    function (value) {
+      if (!value)
+        return false;
+      return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
+    }).required('required'),
+  
+    comercianteAddress: Yup.string().test(
+    "test-address",
+    "errorInvalidAddress",
+    function (value) {
+      if (!value)
+        return false;
+      return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
+    }).required('required'),
+  
+    avaladoAddress: Yup.string().test(
+    "test-address",
+    "errorInvalidAddress",
+    function (value) {
+      if (!value)
         return false;
       return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
     }).required('required')
-  
 });
 
 
-const AvalSolicitar = ({ }) => {
+const AvalSolicitud = ({ }) => {
   const history = useHistory();
   const { t } = useTranslation();
   const classes = useStyles();
   const [avalClientId, setAvalClientId] = useState();
 
   const { loading } = useSavingAval(avalClientId, onSuccess, onError);
-  const { currentUser, requestConnection, requestAuthentication, authenticated } = useWeb3Account();
+  const { currentUser, requestConnection } = useWeb3Account();
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     requestConnection();
   }, [])
-  
+
   async function handleSubmit(values) {
 
     let solicitanteAddress;
@@ -72,11 +90,6 @@ const AvalSolicitar = ({ }) => {
       solicitanteAddress = currentUser?.address;
     }
 
-    if(!authenticated){ //User must be authenticated
-      const result = await requestAuthentication(solicitanteAddress); 
-      if(!result) return;
-    }
-    
     const aval = new Aval({
       ...values,
       solicitanteAddress: solicitanteAddress
@@ -87,17 +100,16 @@ const AvalSolicitar = ({ }) => {
   }
 
   async function onSuccess() {
-    const result = await React.swal({
-      title: t('avalModalSuccessTitle'),
-      text: t('avalModalSuccessMessage'),
-      icon: "success",
+    messageUtils.addMessageSuccess({
+      text: t('avalSolicitadoSuccess')
     });
-
-    history.push("/"); //go back to home
+    history.push("/");
   }
 
   async function onError(error) {
-    ErrorPopup(t('avalModalError'));
+    messageUtils.addMessageError({
+      text: t('avalSolicitadoError')
+    });
   }
 
   return (
@@ -105,7 +117,7 @@ const AvalSolicitar = ({ }) => {
 
       <Grid item xs={12} className={classes.title}>
         <Typography variant="h5" component="h5">
-          {t('avalSolicitarTitle')}
+          {t('avalSolicitudTitle')}
         </Typography>
       </Grid>
 
@@ -122,4 +134,4 @@ const AvalSolicitar = ({ }) => {
   )
 }
 
-export default AvalSolicitar;
+export default AvalSolicitud;

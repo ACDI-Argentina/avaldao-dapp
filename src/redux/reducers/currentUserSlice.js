@@ -14,7 +14,7 @@ export const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState: currentUserInitialState,
   reducers: {
-    initCurrentUser: (state, action) => {
+    loadCurrentUser: (state, action) => {
       // Cuando se carga el usuario, se obtiene un
       // estado inicial para ir cargándolo desde el Epic.
       state.address = action.payload;
@@ -67,7 +67,7 @@ export const currentUserSlice = createSlice({
 export const { 
   registerCurrentUser, 
   setAuthenticated,
-  initCurrentUser, 
+  loadCurrentUser, 
   updateCurrentUserBalance, 
   setCurrentUser, 
   clearCurrentUser 

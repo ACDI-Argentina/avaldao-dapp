@@ -1,6 +1,6 @@
 import { store } from '../store';
 import {
-  initCurrentUser,
+  loadCurrentUser,
   setAuthenticated,
   clearCurrentUser,
   updateCurrentUserBalance,
@@ -20,12 +20,12 @@ class CurrentUserUtils {
   }
 
   /**
-   * Inicializa el usuario actual.
+   * Carga el usuario actual.
    * 
    * @param accountAddress dirección de la cuenta.
    */
-  initCurrentUser(accountAddress) {
-    const action = initCurrentUser(accountAddress);
+  loadCurrentUser(accountAddress) {
+    const action = loadCurrentUser(accountAddress);
     store.dispatch(action);
   }
 

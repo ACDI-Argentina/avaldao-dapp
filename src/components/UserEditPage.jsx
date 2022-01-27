@@ -111,38 +111,6 @@ class UserEditPage extends Component {
 
   }
 
-  async componentDidMount() {
-    const { history, currentUser, t } = this.props;
-    const { loginAccount } = this.context;
-    const { authenticateIfPossible } = this.context.modals.methods;
-
-    const goHome = () => history.push('/');
-
-    if (!currentUser || !currentUser.address) {
-      const confirmation = await this.requestConnection(t);
-      if (confirmation) {
-        const connected = await loginAccount();
-        if (!connected) {
-          return goHome();
-        }
-      } else {
-        return goHome();
-      }
-    }
-
-    authenticateIfPossible(this.props.currentUser)
-      .then(() => this.setState({ isLoading: false }))
-      .catch(err => {
-        if (err === 'noBalance') {
-          history.goBack();
-        } else {
-          this.setState({ isLoading: false });
-        }
-      });
-
-    this.setFormValid();
-  }
-
   handleChangeName(event) {
     const { t } = this.props;
     let nameError = false;
@@ -259,23 +227,12 @@ class UserEditPage extends Component {
 
     event.preventDefault();
 
-    const { authenticateIfPossible } = this.context.modals.methods;
-    const { currentUser } = this.props;
-
     let user = this.state.user;
     user.name = this.state.name;
     user.email = this.state.email;
     user.url = this.state.url;
     user.avatar = this.state.avatarPreview;
     user.roles = this.state.rolesSelected;
-
-    if (!currentUser.authenticated) {
-      const result = await authenticateIfPossible(this.props.currentUser);
-      if (!result) {
-        console.log("User not authenticated!"); //Throw error?
-        return;
-      }
-    }
 
     this.setState(
       {

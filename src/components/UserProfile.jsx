@@ -95,38 +95,6 @@ class UserProfile extends Component {
 
   }
 
-  async componentDidMount() {
-    const { history, currentUser, t } = this.props;
-    const { loginAccount } = this.context;
-    const { authenticateIfPossible } = this.context.modals.methods;
-
-    const goHome = () => history.push('/');
-
-    if (!currentUser || !currentUser.address) {
-      const confirmation = await this.requestConnection(t);
-      if (confirmation) {
-        const connected = await loginAccount();
-        if (!connected) {
-          return goHome();
-        }
-      } else {
-        return goHome();
-      }
-    }
-
-    authenticateIfPossible(this.props.currentUser)
-      .then(() => this.setState({ isLoading: false }))
-      .catch(err => {
-        if (err === 'noBalance') {
-          history.goBack();
-        } else {
-          this.setState({ isLoading: false });
-        }
-      });
-
-    this.setFormValid();
-  }
-
   async componentDidUpdate(prevProps, prevState) {
     const userHasUpdated = prevProps.currentUser !== this.props.currentUser;
 
@@ -271,8 +239,7 @@ class UserProfile extends Component {
   }
 
   async handleSubmit(event) {
-    const { authenticateIfPossible } = this.context.modals.methods;
-
+    
     event.preventDefault();
 
     const { currentUser } = this.props;
@@ -285,18 +252,8 @@ class UserProfile extends Component {
     user.url = this.state.url;
     user.avatar = this.state.avatarPreview;
 
-    if (!currentUser.authenticated) {
-      const result = await authenticateIfPossible(this.props.currentUser);
-
-      if (!result) {
-        console.log("User not authenticated!"); //Throw error?
-        return;
-      }
-    }
-
     this.setState({ isSaving: true, user: user }, () => {
       console.log(`[UserProfile] handleSubmit`, user)
-
       this.props.registerCurrentUser(this.state.user);
       //history.push(`/`);
     });

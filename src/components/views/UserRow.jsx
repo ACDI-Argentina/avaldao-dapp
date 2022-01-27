@@ -27,10 +27,6 @@ class UserRow extends Component {
     this.goEdit = this.goEdit.bind(this);
   }
 
-  componentDidMount() {
-
-  }
-
   goEdit() {
     const { user } = this.props;
     history.push(`/user/${user.address}/edit`);
