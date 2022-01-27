@@ -23,11 +23,13 @@ import LoadingOverlay from './Loading/LoadingOverlay'
 import { selectUserByAddress } from 'redux/reducers/usersSlice'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import Chip from '@material-ui/core/Chip'
 import MenuItem from '@material-ui/core/MenuItem'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import { selectRoles } from 'redux/reducers/rolesSlice'
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import RoleChip from './RoleChip'
 
 /**
  * Edición de usuario.
@@ -42,11 +44,11 @@ class UserEditPage extends Component {
 
     const rolesSelected = [];
     roles.forEach(r1 => {
-      if(user.roles.some(r2 => r1.value === r2.value)) {
+      if (user.roles.some(r2 => r1.value === r2.value)) {
         rolesSelected.push(r1);
       }
     });
-    
+
     this.state = {
       name: user.name,
       email: user.email,
@@ -139,60 +141,6 @@ class UserEditPage extends Component {
       });
 
     this.setFormValid();
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    const userHasUpdated = prevProps.user !== this.props.user;
-
-    const prevAddress = prevProps.user && prevProps.user.address;
-    const nextAddress = this.props.user && this.props.user.address;
-
-    const userHasChanged = prevAddress && nextAddress && (prevAddress !== nextAddress);
-    const userHasDisconnected = this.props.currentUser.address === null && prevProps.currentUser.address != undefined;
-
-    if (userHasDisconnected || userHasChanged) {
-      this.clearForm();
-    }
-
-    const statusHasChanged = this.props.currentUser.status !== prevProps.currentUser.status;
-    if (statusHasChanged) {
-      const isRegistering = this.props.currentUser?.status?.name === "Registering";
-      this.setState({ isSaving: isRegistering });
-    }
-
-    const wasSaving = prevProps.currentUser?.status?.name === "Registering";
-    const isRegistered = this.props.currentUser?.status?.name === "Registered";
-
-    if (wasSaving && isRegistered) {
-      setTimeout(() => history.push("/"), 1000);
-    }
-
-
-
-
-    if (userHasUpdated) {
-      console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
-
-      const { name, email, url, registered } = this.props.currentUser;
-      const avatarCidUrl = this.props.currentUser?.avatarCidUrl;
-
-      const state = {};
-      if (name) {
-        state.name = name;
-      }
-      if (email) {
-        state.email = email;
-      }
-      if (url) {
-        state.url = url;
-      }
-      if (avatarCidUrl) {
-        state.avatarImg = avatarCidUrl;
-      }
-
-      this.setState({ ...state, registered, user: new User(this.props.currentUser) })
-    }
-
   }
 
   handleChangeName(event) {
@@ -418,6 +366,26 @@ class UserEditPage extends Component {
               <Grid container item spacing={3} xs={12} md={7}>
                 <Grid item xs={12}>
                   <TextField
+                    id="addressTextField"
+                    value={this.state.user.address}
+                    label={t('userAddress')}
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    disabled
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountBalanceWalletIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
                     id="nameTextField"
                     value={this.state.name}
                     onChange={this.handleChangeName}
@@ -483,9 +451,7 @@ class UserEditPage extends Component {
                       renderValue={(rolesSelected) => (
                         <div className={classes.chips}>
                           {rolesSelected.map((roleSelected) => (
-                            <Chip key={roleSelected.value}
-                              label={roleSelected.label}
-                              className={classes.chip} />
+                            <RoleChip role={roleSelected} />
                           ))}
                         </div>
                       )}
@@ -628,7 +594,7 @@ const styles = theme => ({
   },
   chip: {
     margin: 2,
-  },
+  }
 });
 
 const mapStateToProps = (state, ownProps) => {

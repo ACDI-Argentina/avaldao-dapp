@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import { withTranslation } from 'react-i18next'
 import { selectUserByAddress, fetchUserByAddress } from '../redux/reducers/usersSlice'
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import ProfileCardAnonymous from './ProfileCardAnonymous';
+import UserCardAnonymous from './UserCardAnonymous';
 import AddressLink from './AddressLink';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
 
-class ProfileCard extends Component {
+class UserCard extends Component {
 
     preventDefault = (event) => event.preventDefault();
 
@@ -32,43 +30,33 @@ class ProfileCard extends Component {
         const { address, user, classes } = this.props;
         if (!user || !user.registered) {
             return (
-                <ProfileCardAnonymous address={address} />
+                <UserCardAnonymous address={address} />
             )
         }
         return (
-            <ListItem alignItems="flex-start" className={classes.root}>
-                <ListItemAvatar>
-                    <Avatar src={user.avatar} className={classes.logo} />
-                </ListItemAvatar>
-                <ListItemText
-                    primary={user.name}
-                    secondary={
-                        <React.Fragment>
-                            <AddressLink address={address} />
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                            >
-                                {user.email}
-                            </Typography>
-                        </React.Fragment>
+            <Card className={classes.root}>
+                <CardHeader
+                    avatar={
+                        <Avatar src={user.avatarCidUrl} />
                     }
-                />
-            </ListItem>
+                    title={user.name}
+                    subheader={
+                        <AddressLink address={address} />
+                    }>
+                </CardHeader>
+            </Card>
         );
     }
 }
 
-ProfileCard.propTypes = {
+UserCard.propTypes = {
     address: PropTypes.string
 };
 
 const styles = theme => ({
     root: {
-        padding: '0px'
-    },
-    inline: {
-        display: 'inline',
+        minWidth: 250,
+        marginRight: 15
     },
     logo: {
         width: theme.spacing(6),
@@ -86,6 +74,6 @@ const mapDispatchToProps = { fetchUserByAddress }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     withStyles(styles)(
-        withTranslation()(ProfileCard)
+        withTranslation()(UserCard)
     )
 );

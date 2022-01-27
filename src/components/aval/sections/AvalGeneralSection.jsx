@@ -1,14 +1,12 @@
 import React from 'react'
-
-import Section from './Section';
-import FiatUtils from 'utils/FiatUtils';
-import { Grid, TextField } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
-
+import Section from './Section'
+import FiatUtils from 'utils/FiatUtils'
+import { Grid, TextField } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 const AvalGeneralSection = ({ aval }) => {
   const { t } = useTranslation();
-  
+
   return (
     <Section>
       <Grid container spacing={3}>
@@ -89,10 +87,8 @@ const AvalGeneralSection = ({ aval }) => {
             readonly
           />
         </Grid>
+
       </Grid>
-
-
-
     </Section>
   )
 }

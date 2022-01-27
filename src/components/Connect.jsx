@@ -77,7 +77,8 @@ const ConnectButton = styled.button`
 const Connect = (props) => {
   const [showAccountDetailsModal, setShowAccountDetailsModal] = useState(false);
   const currentUser = useSelector(selectCurrentUser);
-  const addr = toChecksumAddress(currentUser?.address);
+  //const addr = toChecksumAddress(currentUser?.address);
+  const addr = currentUser?.address;
   const {t} = props;
   const {
     loginAccount,

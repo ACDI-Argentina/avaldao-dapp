@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
 import FondoGarantia from './FondoGarantia';
-import AvalList from './AvalList';
+import AvalTable from './AvalTable';
 import Divider from '@material-ui/core/Divider'
 import Page from './Page';
-
 import Button from "components/CustomButtons/Button.js";
-import { Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles'
 
 /**
  * Pantalla Home.
@@ -76,12 +75,14 @@ class Home extends Component {
         } else {
           this.setState({ isLoading: false });
         }
-      }); 
+      });
   }
 
   render() {
 
-    const { classes, t, ...rest } = this.props;
+    const { currentUser, classes, t, ...rest } = this.props;
+
+    const allowSolicitar = currentUser.isSolicitante();
 
     return (
       <Page>
@@ -94,18 +95,18 @@ class Home extends Component {
           </Grid>
           <Grid item xs={12} style={{ padding: "0px" }}>
             <Grid container justifyContent="flex-end">
-              <Link to="/solicitar-aval">
-                <Button color="primary" className="btn btn-info">
-                  {t("avalSolicitarBtn")}
-                </Button>
-              </Link>
+              <Button color="primary"
+                className="btn btn-info"
+                disabled={!allowSolicitar}
+                href="/solicitar-aval">
+                {t("avalSolicitarBtn")}
+              </Button>
             </Grid>
-
           </Grid>
           <Grid item xs={12}>
-            <AvalList></AvalList>
+            <AvalTable />
           </Grid>
-        </Grid>
+        </Grid>        
       </Page>
     );
   }
@@ -113,6 +114,9 @@ class Home extends Component {
 
 Home.contextType = Web3AppContext;
 
+const styles = theme => ({
+
+});
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -121,4 +125,6 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(Home));
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
+  withTranslation()(Home)))
+);

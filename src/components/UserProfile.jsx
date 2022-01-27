@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classNames from "classnames";
 import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
-
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import Parallax from "components/Parallax/Parallax.js";
@@ -17,11 +16,11 @@ import { Button } from '@material-ui/core';
 import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
 import { history } from 'lib/helpers';
-
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
 import Avatar from './Avatar/Avatar';
 import LoadingOverlay from './Loading/LoadingOverlay';
-
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 /**
  * Formulario de perfil de usuario.
@@ -368,6 +367,26 @@ class UserProfile extends Component {
                 </div>
               </Grid>
               <Grid container item spacing={3} xs={12} md={7}>
+              <Grid item xs={12}>
+                  <TextField
+                    id="addressTextField"
+                    value={this.state.user.address}
+                    label={t('userAddress')}
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    disabled
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccountBalanceWalletIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     id="nameTextField"

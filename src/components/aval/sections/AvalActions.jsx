@@ -248,7 +248,7 @@ const AvalActions = ({ aval }) => {
     <>
       <ActionsSection>
         <CompleteButton aval={aval} />
-        {/*<SignatureButton aval={aval} />*/}
+        <SignatureButton aval={aval} />
         <UnlockButton aval={aval} />
         <ReclamarButton aval={aval} />
         <ReintegrarButton aval={aval} />

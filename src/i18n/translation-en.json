@@ -12,6 +12,7 @@
     "usersTitle": "Users",
     "userProfileTitle": "User profile",
     "userEditTitle": "User edit",
+    "userAddress": "Address",
     "userName": "Name",
     "userEmail": "E-Mail",
     "userUrl": "URL",
@@ -19,11 +20,13 @@
     "userAvatarChoose": "Choose a profile photo",
     "userUnknown": "Unknown user",
     "userRoles": "Roles",
-
+    "userNotRegistered": "Not registered",
+    
     "fondoGarantia": "Guarantee fund",
     "fondoGarantiaExplain": "The guarantee fund is made up of tokens from the RSK blockchain and serves as backing for the guarantees.",
 
-    "noSignature": "No signature",
+    "notSigned": "Not signed",
+    "signed": "Signed",
 
     "avaldao": "Avaldao",
     "solicitante": "Applicant",
@@ -62,6 +65,7 @@
     "avalSolicitanteAddressHelper": "Applicant wallet address",
     "avalComercianteAddressHelper": "Seller wallet address",
     "avalAvaladoAddressHelper": "Endorsed wallet address",
+    "avalEstado": "Status",
     "avalFondosInsuficientes": "Insufficient funds for the guarantee. {{diff}} more required.",
 
     "required":"Required",

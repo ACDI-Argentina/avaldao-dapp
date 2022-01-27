@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-
 import Page from './Page';
 import AvalForm from "./AvalForm";
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
-
 import { solicitarAval } from 'redux/reducers/avalesSlice';
 import Aval from 'models/Aval';
 import useWeb3Account from 'hooks/useWeb3Account';
 import { useHistory } from 'react-router';
 import config from 'configuration';
 import * as Yup from 'yup';
-
 import ErrorPopup from 'components/ErrorPopup';
 import useSavingAval from 'hooks/useSavingAval';
 import Web3Utils from 'lib/blockchain/Web3Utils';
@@ -118,6 +115,7 @@ const AvalSolicitar = ({ }) => {
         showAddress={false}
         submitText={t("avalSolicitar")}
         loading={loading}
+        solicitanteAddress={currentUser.address}
         defaultAvaldaoAddress={config.avaldaoAddress}
       />
     </Page>

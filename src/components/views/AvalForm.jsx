@@ -21,7 +21,7 @@ const Input = ({ ...props }) => (
     fullWidth
     margin="normal"
     InputLabelProps={{ shrink: true }}
-    style={{marginBottom: "-.5rem"}}
+    style={{ marginBottom: "-.5rem" }}
     {...props}
   />
 );
@@ -47,7 +47,7 @@ const FormikInput = ({ formik, id, ...props }) => {
 }
 
 
-const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, showAddress, validationSchema, defaultAvaldaoAddress }) => {
+const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, showAddress, validationSchema, solicitanteAddress, defaultAvaldaoAddress }) => {
 
   const formik = useFormik({
     initialValues: {
@@ -58,6 +58,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
       beneficiarios: '',
       montoFiat: 1000, //in usd
       cuotasCantidad: 6,
+      solicitanteAddress: solicitanteAddress,
       comercianteAddress: "",
       avaladoAddress: "",
       avaldaoAddress: defaultAvaldaoAddress
@@ -78,7 +79,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
 
   const readonly = false;/* state or prop */
   const { i18n, t } = useTranslation();
-  
+
   //Update error messages when lng changed
   useEffect(() => {
     const refresh = ev => formik.validateForm();
@@ -128,7 +129,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
           />
         </Grid>
         <Grid item xs={12} md={3}>
-        <FormikInput
+          <FormikInput
             id="beneficiarios"
             label={t('avalBeneficiarios')}
             formik={formik}
@@ -145,7 +146,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
             readOnly={readonly}
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end" style={{marginLeft: "10px"}}>
+                <InputAdornment position="end" style={{ marginLeft: "10px" }}>
                   {config?.fiat?.symbol}
                 </InputAdornment>
               ),
@@ -164,20 +165,38 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
         </Grid>
 
         <Grid item xs={12} md={6}>
-              <FormikInput /* required */
-                id="avaldaoAddress"
-                label={t('avalAvaldaoAddress')}
-                placeholder="0x..."
-                formik={formik}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountBalanceWalletIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
+          <FormikInput /* required */
+            value={solicitanteAddress}
+            id="solicitanteAddress"
+            label={t('avalSolicitanteAddress')}
+            placeholder="0x..."
+            formik={formik}
+            disabled
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountBalanceWalletIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <FormikInput /* required */
+            id="avaldaoAddress"
+            label={t('avalAvaldaoAddress')}
+            placeholder="0x..."
+            formik={formik}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountBalanceWalletIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
 
         {showAddress && (
           <>
@@ -207,7 +226,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
                 label={t('avalAvaladoAddress')}
                 placeholder="0x..."
                 formik={formik}
-                
+
                 readOnly //Read from props
                 //required  TODO: define with yup
                 //inputProps={{ maxLength: 42 }}TODO: define schema with yup for valid address

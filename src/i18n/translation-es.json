@@ -12,6 +12,7 @@
     "usersTitle": "Usuarios",
     "userProfileTitle": "Perfil de usuario",
     "userEditTitle": "Edición de usuario",
+    "userAddress": "Dirección",
     "userName": "Nombre",
     "userEmail": "E-Mail",
     "userUrl": "URL",
@@ -19,11 +20,13 @@
     "userAvatarChoose": "Elige una foto de perfil",
     "userUnknown": "Usuario desconocido",
     "userRoles": "Roles",
+    "userNotRegistered": "No registrado",
     
     "fondoGarantia": "Fondo de garantía",
     "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
 
-    "noSignature": "Sin firmar",
+    "notSigned": "Sin firmar",
+    "signed": "Firmado",
 
     "avaldao": "Avaldao",
     "solicitante": "Solicitante",
@@ -62,6 +65,7 @@
     "avalSolicitanteAddressHelper": "Dirección de la billetera del solicitante",
     "avalComercianteAddressHelper": "Dirección de la billetera del comerciante",
     "avalAvaladoAddressHelper": "Dirección de la billetera del avalado",
+    "avalEstado": "Estado",
     "avalFondosInsuficientes": "Fondos insuficientes para el aval. Se requiren {{diff}} más.",
 
     "required":"Requerido",

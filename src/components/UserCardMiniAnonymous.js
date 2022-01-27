@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { withTranslation } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles';
 
-class ProfileCardMiniAnonymous extends Component {
+class UserCardMiniAnonymous extends Component {
 
     render() {
         const { address, namePosition, classes, t } = this.props;
@@ -24,12 +24,12 @@ class ProfileCardMiniAnonymous extends Component {
     }
 }
 
-ProfileCardMiniAnonymous.propTypes = {
+UserCardMiniAnonymous.propTypes = {
     address: PropTypes.string,
     namePosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
 };
 
-ProfileCardMiniAnonymous.defaultProps = {
+UserCardMiniAnonymous.defaultProps = {
     namePosition: 'bottom'
 };
 
@@ -50,6 +50,6 @@ const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     withStyles(styles)(
-        withTranslation()(ProfileCardMiniAnonymous)
+        withTranslation()(UserCardMiniAnonymous)
     )
 );

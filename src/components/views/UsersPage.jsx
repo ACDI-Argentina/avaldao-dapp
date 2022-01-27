@@ -10,7 +10,7 @@ import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import UserList from './UserList';
+import UserTable from './UserTable';
 
 /**
  * Pantalla de Usuarios.
@@ -104,7 +104,7 @@ class UsersPage extends Component {
 
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <UserList></UserList>
+              <UserTable/>
             </Grid>
           </Grid>
         </div>

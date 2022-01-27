@@ -5,10 +5,10 @@ import Avatar from '@material-ui/core/Avatar';
 import { connect } from 'react-redux'
 import { withTranslation } from 'react-i18next'
 import { selectUserByAddress, fetchUserByAddress } from '../redux/reducers/usersSlice'
-import ProfileCardMiniAnonymous from './ProfileCardMiniAnonymous';
+import UserCardMiniAnonymous from './UserCardMiniAnonymous';
 import { withStyles } from '@material-ui/core/styles';
 
-class ProfileCardMini extends Component {  //va a recibir como prop un address
+class UserCardMini extends Component {  //va a recibir como prop un address
     componentDidMount() {
         if (this.props.address) {
             this.props.fetchUserByAddress(this.props.address);
@@ -31,7 +31,7 @@ class ProfileCardMini extends Component {  //va a recibir como prop un address
         }
         if (!user.registered) {
             return (
-                <ProfileCardMiniAnonymous address={user.address} />
+                <UserCardMiniAnonymous address={user.address} />
             )
         }
         return (
@@ -45,12 +45,12 @@ class ProfileCardMini extends Component {  //va a recibir como prop un address
     }
 }
 
-ProfileCardMini.propTypes = {
+UserCardMini.propTypes = {
     address: PropTypes.string,
     namePosition: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
 };
 
-ProfileCardMini.defaultProps = {
+UserCardMini.defaultProps = {
     namePosition: 'bottom'
 };
 
@@ -71,6 +71,6 @@ const mapDispatchToProps = { fetchUserByAddress }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     withStyles(styles)(
-        withTranslation()(ProfileCardMini)
+        withTranslation()(UserCardMini)
     )
 );
