@@ -639,6 +639,10 @@ class Aval {
     return this.status.name === Aval.SOLICITADO.name
   }
   
+  isSolicitando() {
+    return this.status.name === Aval.SOLICITANDO.name
+  }
+
   isRechazado() {
     return this.status.name === Aval.RECHAZADO.name
   }

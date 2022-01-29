@@ -6,23 +6,26 @@ const { useEffect, useState, useRef } = require("react");
 
 function useSavingAval(avalClientId, onSuccess, onError) {
   const [loading, setLoading] = useState();
+  const prevStatusRef = useRef();
   const savedRef = useRef(false);
   const avalStored = useSelector(state => selectAvalByClientId(state, avalClientId));
-  
+
   useEffect(() => {
-    if (avalStored?.status?.name === "Error") {
-      setLoading(false);
-      onError();
-    }
-    if (avalStored?.status?.name === "Solicitando") {
+    
+    if (avalStored?.isSolicitando()) {
       setLoading(true);
+      prevStatusRef.current = "Solicitando";
     }
-    if (avalStored?.status?.name === "Solicitado") {
+
+    if (prevStatusRef.current === "Solicitando" && avalStored?.isSolicitado()) {
+      prevStatusRef.current = null;
       setLoading(false);
 
-      if (!savedRef.current) {
-        savedRef.current = true;
-        onSuccess();
+      if (avalStored?.id) {
+        if (!savedRef.current) {
+          savedRef.current = true;
+          onSuccess();
+        }
       }
     }
   }, [avalStored])
