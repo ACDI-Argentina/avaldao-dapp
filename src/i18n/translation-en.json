@@ -46,6 +46,7 @@
 
     "avalSolicitadoSuccess": "The aval has been requested. It is pending approval by AvalDAO.",
     "avalSolicitadoError": "An error occurred when requesting the aval.",
+    "avalSolicitadoErrorNoAutorizado":"Unauthorized user ",
 
     "avalProyecto": "Project",
     "avalProposito": "Purpose",
