@@ -5,6 +5,8 @@ import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
 import BigNumber from 'bignumber.js';
 import messageUtils from '../redux/utils/messageUtils'
 
+import i18n from "i18n/i18n";
+
 class AvalService {
 
     /**
@@ -164,6 +166,10 @@ class AvalService {
                     aval: aval,
                     error: error
                 });
+                messageUtils.addMessageError({
+                    text: i18n.t('avalSolicitadoError'),
+                    error: error
+                  });
             }
         });
     }
