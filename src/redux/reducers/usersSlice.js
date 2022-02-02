@@ -16,7 +16,7 @@ export const usersSlice = createSlice({
         saveUser: (state, action) => {
             let userStore = action.payload.toStore();
             let index = state.findIndex(u => u.address === userStore.address);
-            if (index != -1) {
+            if (index !== -1) {
                 // El usuario ya existe localmente,
                 // por lo que se realiza un merge de sus datos con los actuales.
                 state[index] = merge(state[index], userStore);
@@ -31,7 +31,7 @@ export const usersSlice = createSlice({
         mergeUser: (state, action) => {
             let userStore = action.payload.toStore();
             let index = state.findIndex(u => u.address === userStore.address);
-            if (index != -1) {
+            if (index !== -1) {
                 // El usuario ya existe localmente,
                 // por lo que se realiza un merge de sus datos con los actuales.
                 state[index] = merge(state[index], userStore);
@@ -47,7 +47,7 @@ export const usersSlice = createSlice({
             for (let i = 0; i < action.payload.length; i++) {
                 let userStore = action.payload[i].toStore();
                 let index = state.findIndex(u => u.address === userStore.address);
-                if (index != -1) {
+                if (index !== -1) {
                     // El usuario ya existe localmente,
                     // por lo que se realiza un merge de sus datos con los actuales.
                     state[index] = merge(state[index], userStore);

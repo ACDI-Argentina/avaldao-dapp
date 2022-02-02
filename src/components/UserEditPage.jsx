@@ -40,7 +40,7 @@ class UserEditPage extends Component {
   constructor(props) {
     super(props);
 
-    const { user, roles, t } = props;
+    const { user, roles } = props;
 
     const rolesSelected = [];
     roles.forEach(r1 => {
@@ -251,7 +251,6 @@ class UserEditPage extends Component {
 
   render() {
     const {
-      user,
       nameHelperText,
       nameError,
       emailHelperText,
@@ -408,7 +407,7 @@ class UserEditPage extends Component {
                       renderValue={(rolesSelected) => (
                         <div className={classes.chips}>
                           {rolesSelected.map((roleSelected) => (
-                            <RoleChip role={roleSelected} />
+                            <RoleChip key={roleSelected.value} role={roleSelected} />
                           ))}
                         </div>
                       )}

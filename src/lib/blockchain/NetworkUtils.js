@@ -5,8 +5,7 @@ const funcs = {
   browserIsWeb3Capable: () => {
     // User Agent
     const browser = Bowser.getParser(window.navigator.userAgent);
-    const userAgent = browser.parse().parsedResult;
-
+    
     const validBrowser = browser.satisfies({
       desktop: {
         chrome: '>49',

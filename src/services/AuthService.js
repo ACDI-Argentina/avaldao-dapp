@@ -1,8 +1,7 @@
-import { feathersUsersClient as feathersClient, feathersUsersClient } from '../lib/feathersUsersClient';
+import { feathersUsersClient } from '../lib/feathersUsersClient';
 import { Observable } from 'rxjs';
 import web3Manager from 'lib/blockchain/Web3Manager';
 import Web3Utils from 'lib/blockchain/Web3Utils';
-import currentUserUtils from 'redux/utils/currentUserUtils';
 
 /**
  * Servicio encargado de proveer la autenticación del usuario.

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
 import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import Avatar from '@material-ui/core/Avatar'
@@ -34,7 +33,7 @@ class UserRow extends Component {
 
   render() {
 
-    const { currentUser, user, classes, t } = this.props;
+    const { currentUser, user, classes } = this.props;
 
     const editEnabled = currentUser.isAvaldao();
 
@@ -55,21 +54,19 @@ class UserRow extends Component {
         <TableCell>
           <div className={classes.chips}>
             {user.roles.map((role) => (
-              <RoleChip role={role} />
+              <RoleChip key={role.value} role={role} />
             ))}
           </div>
         </TableCell>
         <TableCell>
-          <Tooltip title={t('edit')}>
-            <IconButton
-              edge="end"
-              aria-label="edit"
-              color="primary"
-              onClick={this.goEdit}
-              disabled={!editEnabled}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
+          <IconButton
+            edge="end"
+            aria-label="edit"
+            color="primary"
+            onClick={this.goEdit}
+            disabled={!editEnabled}>
+            <EditIcon />
+          </IconButton>
         </TableCell>
       </TableRow>
     );

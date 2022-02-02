@@ -80,7 +80,7 @@ class ERC20ContractApi {
                 transactionStoreUtils.updateTransaction(transaction);
 
 
-                if(this.web3.providerName == "WalletConnect"){
+                if(this.web3.providerName === "WalletConnect"){
                     try {
                         const receipt = await this.transactionTracker.listenTransactionReceipt(hash);
                         

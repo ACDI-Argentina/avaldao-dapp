@@ -31,7 +31,7 @@ class UserProfile extends Component {
   constructor(props) {
     super(props);
 
-    const { currentUser, t } = props;
+    const { currentUser } = props;
 
     this.state = {
       name: currentUser.name,
@@ -102,7 +102,7 @@ class UserProfile extends Component {
     const nextAddress = this.props.currentUser && this.props.currentUser.address;
 
     const userHasChanged = prevAddress && nextAddress && (prevAddress !== nextAddress);
-    const userHasDisconnected = this.props.currentUser.address === null && prevProps.currentUser.address != undefined;
+    const userHasDisconnected = this.props.currentUser.address === null && prevProps.currentUser.address !== undefined;
 
     if (userHasDisconnected || userHasChanged) {
       this.clearForm();
@@ -266,7 +266,6 @@ class UserProfile extends Component {
 
   render() {
     const {
-      user,
       nameHelperText,
       nameError,
       emailHelperText,

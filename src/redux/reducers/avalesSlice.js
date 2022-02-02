@@ -27,7 +27,7 @@ export const avalesSlice = createSlice({
       for (let i = 0; i < action.payload.length; i++) {
         let avalStore = action.payload[i].toStore();
         let index = state.findIndex(a => a.id === avalStore.id);
-        if (index != -1) {
+        if (index !== -1) {
           state[index] = avalStore;
         } else {
           state.push(avalStore);
@@ -48,7 +48,7 @@ export const avalesSlice = createSlice({
       aval.status = Aval.ACTUALIZANDO;
       const avalStore = aval.toStore();
       let index = state.findIndex(a => a.id === avalStore.id);
-      if (index != -1) {
+      if (index !== -1) {
         state[index] = avalStore;
       }
     },
@@ -58,7 +58,7 @@ export const avalesSlice = createSlice({
       aval.status = Aval.ACTUALIZANDO;
       const avalStore = aval.toStore();
       let index = state.findIndex(a => a.id === avalStore.id);
-      if (index != -1) {
+      if (index !== -1) {
         state[index] = avalStore;
       }
     },
@@ -80,7 +80,7 @@ export const avalesSlice = createSlice({
     updateAvalById: (state, action) => {
       let avalStore = action.payload.toStore();
       let index = state.findIndex(a => a.id === avalStore.id);
-      if (index != -1) {
+      if (index !== -1) {
         state[index] = avalStore;
       } else {
         state.push(avalStore);
@@ -89,7 +89,7 @@ export const avalesSlice = createSlice({
     updateAvalByClientId: (state, action) => {
       const avalStore = action.payload.toStore();
       const index = state.findIndex(a => a.clientId === avalStore.clientId);
-      if (index != -1) {
+      if (index !== -1) {
         state[index] = avalStore;
       } else {
         state.push(avalStore);
@@ -100,7 +100,7 @@ export const avalesSlice = createSlice({
       // Se busca por clientId porque no siempre el aval está identificado
       // por un id del backend. Por ejemplo en la solicitud.
       const index = state.findIndex(a => a.clientId === avalStore.clientId);
-      if (index != -1) {
+      if (index !== -1) {
         if (state[index].statusPrev != null) {
           // Se asigna el status anterior y se anula
           // para no volver a hacer un rollback.
@@ -111,8 +111,7 @@ export const avalesSlice = createSlice({
       return state;
     },
     fetchAvalesOnChainError: (state, action) => {
-      const error = action?.payload;
-      console.log(`[avalesSlice] handle error:`, error);
+      //const error = action?.payload;
       return state;
     }
   },

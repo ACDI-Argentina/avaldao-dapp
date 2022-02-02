@@ -8,8 +8,6 @@ import { addMessage } from '../reducers/messagesSlice';
  */
 class MessageUtils {
 
-  constructor() { }
-
   /**
    * Agrega un mensaje de información para ser mostrado al usuario.
    * 

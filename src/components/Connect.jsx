@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { useSelector } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
-import { toChecksumAddress } from 'lib/blockchain/Web3Utils';
 import AccountDetailsModal from 'components/Dialogs/AccountDetailsModal';
 
 import { withTranslation } from 'react-i18next';
@@ -79,7 +78,7 @@ const Connect = (props) => {
   const currentUser = useSelector(selectCurrentUser);
   //const addr = toChecksumAddress(currentUser?.address);
   const addr = currentUser?.address;
-  const {t} = props;
+  const { t } = props;
   const {
     loginAccount,
     network,
@@ -92,10 +91,12 @@ const Connect = (props) => {
 
   let walletIndicator = null;
 
-  if(web3.wallet && web3.wallet.logo){
+  if (web3.wallet && web3.wallet.logo) {
     walletIndicator = (
       <WalletIndicator>
-        <img src={web3.wallet.logo} style={{ width: '25px' }} />
+        <img src={web3.wallet.logo}
+          style={{ width: '25px' }}
+          alt="connect" />
       </WalletIndicator>
     );
   }

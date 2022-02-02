@@ -8,8 +8,6 @@ import { addTransaction, updateTransaction } from '../reducers/transactionsSlice
  */
 class TransactionStoreUtils {
 
-  constructor() { }
-
   /**
    * Agrega una nueva transacción.
    * 

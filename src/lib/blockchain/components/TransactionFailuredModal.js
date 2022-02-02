@@ -1,5 +1,5 @@
 import React from "react";
-import { Heading, Text, Modal, Flex, Box, Icon, Link, Button } from "rimble-ui";
+import { Heading, Text, Modal, Flex, Box, Icon } from "rimble-ui";
 import ModalCard from './ModalCard';
 import { withTranslation } from 'react-i18next';
 import Web3App from '../Web3App'

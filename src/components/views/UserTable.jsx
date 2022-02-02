@@ -22,10 +22,6 @@ import Paper from '@material-ui/core/Paper';
  */
 class UserTable extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { users, classes, t } = this.props;
     return (

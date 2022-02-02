@@ -1,6 +1,3 @@
-import BigNumber from "bignumber.js";
-import { Map } from "immutable";
-
 /**
  * Modelo de Wallet.
  *

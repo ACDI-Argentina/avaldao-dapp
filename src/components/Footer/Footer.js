@@ -9,9 +9,6 @@ import { Link } from 'react-router-dom';
  * The Footer section
  */
 class Footer extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { classes, t, } = this.props;

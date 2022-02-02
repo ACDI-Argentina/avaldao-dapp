@@ -1,5 +1,5 @@
 import { Web3AppContext } from "lib/blockchain/Web3App";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 

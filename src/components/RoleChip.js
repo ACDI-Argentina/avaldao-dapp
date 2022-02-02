@@ -8,8 +8,7 @@ class RoleChip extends Component {
     render() {
         const { role, classes } = this.props;
         return (
-            <Chip key={role.value}
-                label={role.label}
+            <Chip label={role.label}
                 className={classes.chip}
                 size="small"
                 color="secondary"

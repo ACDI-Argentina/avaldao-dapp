@@ -38,7 +38,6 @@ const landingPageStyle = {
     ...title,
     display: "inline-block",
     position: "relative",
-    margin: "0 10%",
     minHeight: "32px",
     color: "#FFFFFF",
     textDecoration: "none",
@@ -46,8 +45,7 @@ const landingPageStyle = {
     textShadow: "1px 1px 2px rgba(0, 0, 0, 1)",
     fontWeight: "600",
     width: "70%",
-    margin: "0 15%"
- 
+    margin: "0 15%" 
   },
   subtitle: {
     textAlign: "center",

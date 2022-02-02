@@ -1,4 +1,4 @@
-import React, { useContext, Component } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
 import localforage from 'localforage';

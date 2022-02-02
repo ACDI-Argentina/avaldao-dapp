@@ -279,7 +279,7 @@ config.nodeId = (REACT_APP_NODE_ID && Number.parseInt(REACT_APP_NODE_ID, 10)) ||
 config.nativeTokenName = REACT_APP_NATIVE_TOKEN_NAME || config.nativeTokenName;
 
 config.ipfsGateway = REACT_APP_IPFS_GATEWAY || config.ipfsGateway;
-config.ipfsPinningEnabled = (REACT_APP_IPFS_PINNING_ENABLED !== undefined) ? (REACT_APP_IPFS_PINNING_ENABLED == "true") : config.ipfsPinningEnabled;
+config.ipfsPinningEnabled = (REACT_APP_IPFS_PINNING_ENABLED !== undefined) ? (REACT_APP_IPFS_PINNING_ENABLED === "true") : config.ipfsPinningEnabled;
 
 config.anonymousDonationThreshold = REACT_APP_ANONYMOUS_DONATION_THRESHOLD ||  config.anonymousDonationThreshold;
 

@@ -265,7 +265,7 @@ class User extends Model {
     const requiredProperties = ["address", "name", "email", "url", "avatar"];
 
     for (const prop of requiredProperties) {
-      if (this[prop] == undefined || this[prop].trim() == "") {
+      if (this[prop] === undefined || this[prop].trim() === "") {
         hasCompleteProfile = false;
         break;
       }

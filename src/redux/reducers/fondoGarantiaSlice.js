@@ -22,7 +22,7 @@ export const fondoGarantiaSlice = createSlice({
       for (let i = 0; i < action.payload.length; i++) {
         let tokenBalanceStore = action.payload[i].toStore();
         let index = state.findIndex(tb => tb.address === tokenBalanceStore.address);
-        if (index != -1) {
+        if (index !== -1) {
           state[index] = tokenBalanceStore;
         } else {
           state.push(tokenBalanceStore);

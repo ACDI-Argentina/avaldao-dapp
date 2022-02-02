@@ -12,10 +12,6 @@ import { withStyles } from '@material-ui/core/styles';
  */
 class StatusIndicator extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const { status, classes } = this.props;
         let iconSize = 10;

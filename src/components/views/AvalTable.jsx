@@ -22,10 +22,6 @@ import Paper from '@material-ui/core/Paper';
  */
 class AvalTable extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { avales, classes, t } = this.props;
     return (

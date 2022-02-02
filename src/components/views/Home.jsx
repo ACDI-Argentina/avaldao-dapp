@@ -55,7 +55,7 @@ class Home extends Component {
 
   render() {
 
-    const { currentUser, classes, t, ...rest } = this.props;
+    const { currentUser, t } = this.props;
 
     const allowSolicitar = currentUser.isSolicitante();
 

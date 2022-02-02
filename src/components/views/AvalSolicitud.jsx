@@ -10,7 +10,6 @@ import useWeb3Account from 'hooks/useWeb3Account';
 import { useHistory } from 'react-router';
 import config from 'configuration';
 import * as Yup from 'yup';
-import ErrorPopup from 'components/ErrorPopup';
 import useSavingAval from 'hooks/useSavingAval';
 import Web3Utils from 'lib/blockchain/Web3Utils';
 import messageUtils from 'redux/utils/messageUtils';
@@ -60,7 +59,7 @@ const avalSchema = Yup.object({
 });
 
 
-const AvalSolicitud = ({ }) => {
+const AvalSolicitud = () => {
   const history = useHistory();
   const { t } = useTranslation();
   const classes = useStyles();

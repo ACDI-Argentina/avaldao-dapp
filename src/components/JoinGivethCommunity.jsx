@@ -9,9 +9,6 @@ import OnlyCorrectNetwork from './OnlyCorrectNetwork';
  * The join Giveth community top-bar
  */
 class JoinGivethCommunity extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

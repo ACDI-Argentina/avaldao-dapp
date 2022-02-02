@@ -79,7 +79,7 @@ class AccountManager {
       }
     });
 
-    if (changed == true) {
+    if (changed === true) {
       currentUserUtils.updateCurrentUserBalance(account.balance, account.tokenBalances);
       this.accountSubject.next(account);
     }

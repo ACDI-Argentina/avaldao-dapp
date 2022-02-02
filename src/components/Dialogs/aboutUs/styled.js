@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import CloseIcon from '@material-ui/icons/Close';
 
 export const Content = styled.div`
   margin: 10px;

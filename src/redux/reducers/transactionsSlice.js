@@ -12,14 +12,14 @@ export const transactionsSlice = createSlice({
     updateTransaction: (state, action) => {
       let transactionStore = action.payload.toStore();
       let index = state.findIndex(t => t.clientId === transactionStore.clientId);
-      if (index != -1) {
+      if (index !== -1) {
         state[index] = transactionStore;
       }
     },
     deleteTransaction: (state, action) => {
       let transactionStore = action.payload.toStore();
       let index = state.findIndex(t => t.clientId === transactionStore.clientId);
-      if (index != -1) {
+      if (index !== -1) {
         state.splice(index, 1);
       }
     }

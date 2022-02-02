@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs'
 import config from '../../configuration';
 import ipfsService from '../../ipfs/IpfsService';
 import Wallet from 'models/Wallet';
-import { feathersClient } from 'lib/feathersClient';
 import { feathersUsersClient } from 'lib/feathersUsersClient';
 
 //TODO: determinar cuales es el mejor lugar para posicionar esto, creo que web3manager
@@ -126,7 +125,7 @@ class Web3Manager {
     let walletNetworkId;
     let walletNetworkIsCorrect = false;
 
-    const web3 = new Web3(provider);
+    let web3 = new Web3(provider);
 
     walletNetworkId = await web3.eth.net.getId();
     web3.providerName = "WalletConnect";

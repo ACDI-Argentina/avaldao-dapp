@@ -1,7 +1,6 @@
 import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Logo from 'assets/img/logos/avaldao.png';
-import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import packageJson from '../../../package.json';
 import CommitIcon from 'assets/img/icons/git-commit.svg';

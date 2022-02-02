@@ -9,8 +9,7 @@ import {
   Image,
   Link,
   Icon,
-  Tooltip,
-  Button
+  Tooltip
 } from "rimble-ui";
 import ModalCard from './ModalCard';
 import { withTranslation } from 'react-i18next';

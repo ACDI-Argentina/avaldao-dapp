@@ -10,7 +10,7 @@ import TokenUtils from 'utils/TokenUtils';
 class TokenAvatar extends Component {
 
   render() {
-    const { tokenAddress, classes, t } = this.props;
+    const { tokenAddress, classes } = this.props;
     let tokenConfig = TokenUtils.getTokenConfig(tokenAddress);
     let symbol = tokenConfig.symbol;
     let logo = ipfsService.resolveUrl(tokenConfig.logoCid);

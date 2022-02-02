@@ -8,9 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
  * The BlockchainBenefits section
  */
 class BlockchainBenefits extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { classes, t, } = this.props;

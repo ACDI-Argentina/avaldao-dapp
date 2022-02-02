@@ -16,10 +16,6 @@ import TokenBalanceCard from 'components/TokenBalanceCard'
  */
 class FondoGarantia extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { tokenBalances, fondoGarantiaBalanceFiat, t } = this.props;
     return (
@@ -36,8 +32,8 @@ class FondoGarantia extends Component {
           {t('fondoGarantiaExplain')}
         </Grid>
         {tokenBalances.map(tb => (
-          <Grid item sm={12} md={4}>
-            <TokenBalanceCard key={tb.address} tokenBalance={tb} />
+          <Grid item sm={12} md={4} key={tb.address}>
+            <TokenBalanceCard tokenBalance={tb} />
           </Grid>
         ))}
       </Grid>

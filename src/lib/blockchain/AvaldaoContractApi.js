@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs'
 import BigNumber from 'bignumber.js';
 import config from '../../configuration';
-import Web3Utils from './Web3Utils'
 import web3Manager from './Web3Manager'
 import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'

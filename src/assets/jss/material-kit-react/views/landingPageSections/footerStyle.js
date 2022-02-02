@@ -1,5 +1,3 @@
-import { title, primaryColor } from "assets/jss/material-kit-react.js";
-
 const footerStyle = {
 
   color: "#999",

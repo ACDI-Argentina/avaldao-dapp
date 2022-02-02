@@ -18,7 +18,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
@@ -29,7 +29,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
@@ -40,7 +40,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
@@ -51,7 +51,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
@@ -62,7 +62,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
@@ -73,7 +73,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
@@ -84,7 +84,7 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            readonly
+            readOnly
           />
         </Grid>
 

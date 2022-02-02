@@ -9,9 +9,6 @@ import { withStyles } from '@material-ui/core/styles';
  * The PlatformFeatures section
  */
 class PlatformFeatures extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { classes, t, } = this.props;

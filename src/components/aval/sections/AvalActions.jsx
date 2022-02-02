@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
-import { Button, ButtonGroup, CircularProgress, makeStyles } from '@material-ui/core';
+import { Button, ButtonGroup, makeStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval, aceptarAval, rechazarAval, } from 'redux/reducers/avalesSlice';
-import Alert from '@material-ui/lab/Alert';
 import useWeb3Account from 'hooks/useWeb3Account';
 import { selectUserByAddress } from 'redux/reducers/usersSlice';
 import { fetchUserByAddress } from 'redux/reducers/usersSlice';
@@ -41,16 +40,16 @@ const useStyles = makeStyles((theme) => ({
 
 
 const AvalActions = ({ aval }) => {
-  const classes = useStyles();
+  //const classes = useStyles();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const { currentUser } = useWeb3Account();
   const { t } = useTranslation();
 
   //TODO: check for error
-  useEffect(() => {
+  /*useEffect(() => {
     setLoading(aval?.isUpdating());
-  }, [aval?.isUpdating()])
+  }, [aval?.isUpdating()])*/
 
   useEffect(() => {
     if (aval?.solicitanteAddress) {
@@ -95,7 +94,7 @@ const AvalActions = ({ aval }) => {
     dateElement = (<span>{t("atDay")} <b>{`${day}`}</b> {t("atHour")} <b>{`${hour}`}</b></span>);
   }
 
-  const isAvaladao = aval?.isAvaldao(currentUser);
+  //const isAvaladao = aval?.isAvaldao(currentUser);
   const allowAceptar = aval.allowAceptar(currentUser);
   const allowRechazar = aval.allowRechazar(currentUser);
   const allowFirmar = aval.allowFirmar(currentUser);

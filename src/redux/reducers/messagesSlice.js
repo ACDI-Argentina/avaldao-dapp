@@ -12,7 +12,7 @@ export const messagesSlice = createSlice({
     deleteMessage: (state, action) => {
       let messageStore = action.payload.toStore();
       let index = state.findIndex(m => m.clientId === messageStore.clientId);
-      if (index != -1) {
+      if (index !== -1) {
         state.splice(index, 1);
       }
     }

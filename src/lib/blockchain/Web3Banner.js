@@ -1,6 +1,5 @@
 import React, { useContext, Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import NetworkUtils from './NetworkUtils';
 import { Image, MetaMaskButton } from 'rimble-ui';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';

@@ -134,8 +134,7 @@ class AvalService {
                 {
                     /*blockchainId: aval.blockchainId,*/
                     status: aval.status.id
-                }).
-                then(avalData => {
+                }).then(avalData => {
                     console.log('[AvalService] Aval sincronizado off chain.', aval);
                     subscriber.next(aval);
                 }).catch(error => {
@@ -169,7 +168,7 @@ class AvalService {
                 messageUtils.addMessageError({
                     text: i18n.t('avalSolicitadoError'),
                     error: error
-                  });
+                });
             }
         });
     }

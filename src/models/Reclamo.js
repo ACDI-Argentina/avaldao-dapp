@@ -53,6 +53,7 @@ class Reclamo {
     switch (status) {
       case 0: return Reclamo.VIGENTE;
       case 1: return Reclamo.CERRADO;
+      default: return null;
     }
   }
 

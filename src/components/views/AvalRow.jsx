@@ -11,7 +11,6 @@ import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import FiatAmount from 'components/FiatAmount'
-import FiatUtils from 'utils/FiatUtils'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
@@ -39,9 +38,9 @@ class AvalItem extends Component {
 
   render() {
 
-    const { currentUser, aval, classes, t, fondoGarantiaBalanceFiat } = this.props;
+    const { /*currentUser, */aval, t/*, fondoGarantiaBalanceFiat*/ } = this.props;
 
-    let allowFirmar = aval.allowFirmar(currentUser);
+    /*let allowFirmar = aval.allowFirmar(currentUser);
     let alertMessage = null;
     if (fondoGarantiaBalanceFiat.isLessThan(aval.montoFiat)) {
       const diff = aval.montoFiat.minus(fondoGarantiaBalanceFiat);
@@ -52,7 +51,7 @@ class AvalItem extends Component {
         // Cuando el usuario es Avaldao, no puede firmar si no hay fondos suficientes.
         allowFirmar = false;
       }
-    }
+    }*/
 
     return (
       <TableRow key={aval.id}>

@@ -63,6 +63,7 @@ class Cuota {
       case 0: return Cuota.PENDIENTE;
       case 1: return Cuota.PAGADA;
       case 2: return Cuota.REINTEGRADA;
+      default: return null;
     }
   }
 

@@ -165,6 +165,7 @@ class Aval {
       case 2: return Aval.ACEPTADO;
       case 3: return Aval.VIGENTE;
       case 4: return Aval.FINALIZADO;
+      default: return null;
     }
   }
 
@@ -226,7 +227,7 @@ class Aval {
    * Determina si el Aval puede ser rechazado o no.
    * @param user usuario que rechaza el aval.
    */
-   allowRechazar(user) {
+  allowRechazar(user) {
     if (this.status.name !== Aval.SOLICITADO.name) {
       // Solo un aval solicitado puede ser rechazado.
       return false;
@@ -300,7 +301,7 @@ class Aval {
     let hasCuotaPendienteVencida = false;
     for (let i = 0; i < this.cuotas.length; i++) {
       const cuota = this.cuotas[i];
-      if (cuota.status.name == Cuota.PENDIENTE.name &&
+      if (cuota.status.name === Cuota.PENDIENTE.name &&
         cuota.timestampVencimiento <= timestampCurrent) {
         hasCuotaPendienteVencida = true;
         break;
@@ -359,15 +360,15 @@ class Aval {
     }
     if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // El firmante es el Solicitante.
-      return this.solicitanteSignature == undefined;
+      return this.solicitanteSignature === undefined;
     }
     if (Web3Utils.addressEquals(user.address, this.comercianteAddress)) {
       // El firmante es el Comerciante.
-      return this.comercianteSignature == undefined;
+      return this.comercianteSignature === undefined;
     }
     if (Web3Utils.addressEquals(user.address, this.avaladoAddress)) {
       // El firmante es el Avalado.
-      return this.avaladoSignature == undefined;
+      return this.avaladoSignature === undefined;
     }
     if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // El firmante es Avaldao.
@@ -375,9 +376,9 @@ class Aval {
       // En este punto el aval está Aceptado. 
       // Puede darse la situación donde Avaldao ya haya firmado y falta ejecutar la firma en la blockchain,
       // por lo que no se consulta por la firma de Avaldao.
-      return this.solicitanteSignature != undefined &&
-        this.comercianteSignature != undefined &&
-        this.avaladoSignature != undefined;
+      return this.solicitanteSignature !== undefined &&
+        this.comercianteSignature !== undefined &&
+        this.avaladoSignature !== undefined;
     }
     return false;
   }
@@ -638,7 +639,7 @@ class Aval {
   isSolicitado() {
     return this.status.name === Aval.SOLICITADO.name
   }
-  
+
   isSolicitando() {
     return this.status.name === Aval.SOLICITANDO.name
   }
@@ -646,11 +647,11 @@ class Aval {
   isRechazado() {
     return this.status.name === Aval.RECHAZADO.name
   }
-  
+
   isAceptado() {
     return this.status.name === Aval.ACEPTADO.name
   }
-  
+
   isUpdating() {
     return this.status.name === Aval.ACTUALIZANDO.name || this.status.name === Aval.SOLICITANDO.name;
   }
