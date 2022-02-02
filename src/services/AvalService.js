@@ -4,7 +4,6 @@ import { feathersClient } from '../lib/feathersClient';
 import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
 import BigNumber from 'bignumber.js';
 import messageUtils from '../redux/utils/messageUtils'
-
 import i18n from "i18n/i18n";
 
 class AvalService {
@@ -165,8 +164,14 @@ class AvalService {
                     aval: aval,
                     error: error
                 });
+                
+                let cause = error?.message || "";
+                if(["Unauthorized", "Forbidden"].includes(error.name)){
+                    cause = i18n.t("avalSolicitadoErrorNoAutorizado");
+                }
+                
                 messageUtils.addMessageError({
-                    text: i18n.t('avalSolicitadoError'),
+                    text: [i18n.t('avalSolicitadoError'), cause].join("\n"),
                     error: error
                 });
             }

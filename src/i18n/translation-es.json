@@ -46,6 +46,7 @@
 
     "avalSolicitadoSuccess": "El aval ha sido solicitado. Se encuentra pendiente de aprobación por parte de AvalDAO.",
     "avalSolicitadoError": "Ha ocurrido un error al solicitar el aval.",
+    "avalSolicitadoErrorNoAutorizado":"Usuario no autorizado.",
 
     "avalProyecto": "Proyecto",
     "avalProposito": "Propósito",
