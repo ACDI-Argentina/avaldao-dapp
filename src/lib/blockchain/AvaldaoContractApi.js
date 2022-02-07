@@ -1,19 +1,16 @@
 import { Observable } from 'rxjs'
-import BigNumber from 'bignumber.js';
-import config from '../../configuration';
+import config from '../../configuration'
 import web3Manager from './Web3Manager'
 import Aval from 'models/Aval'
 import avalIpfsConnector from '../../ipfs/AvalIpfsConnector'
 import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
-import { AvaldaoAbi, AvalAbi, FondoGarantiaVaultAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract';
-import avalStoreUtils from 'redux/utils/avalStoreUtils';
-import { utils } from 'web3';
-import Cuota from 'models/Cuota';
-import TokenBalance from 'models/TokenBalance';
-import Reclamo from 'models/Reclamo';
-import currentUserUtils from 'redux/utils/currentUserUtils';
-import roleUtils from 'redux/utils/roleUtils';
-import ExchangeRate from '../../models/ExchangeRate';
+import { AvaldaoAbi, AvalAbi } from '@acdi/avaldao-contract'
+import avalStoreUtils from 'redux/utils/avalStoreUtils'
+import { utils } from 'web3'
+import Cuota from 'models/Cuota'
+import Reclamo from 'models/Reclamo'
+import currentUserUtils from 'redux/utils/currentUserUtils'
+import utilsContractApi from './UtilsContractApi'
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -24,137 +21,6 @@ class AvaldaoContractApi {
         web3Manager.getWeb3().subscribe(web3 => {
             this.web3 = web3;
             this.updateContracts();
-        });
-    }
-
-    /**
-     * Obtiene los roles de un usuario.
-     * 
-     * @param user usuario del cual se obtienen los roles.
-     */
-    async getUserRoles(user) {
-        const userRoles = [];
-        try {
-            const roles = roleUtils.getRoles();
-            for (const role of roles) {
-                const canPerform = await this.avaldao.methods.canPerform(user.address, role.hash, []).call();
-                if (canPerform === true) {
-                    userRoles.push(role);
-                }
-            }
-        } catch (err) {
-            console.error(`Error obteniendo roles del usuario ${user.address}.`, err);
-        }
-        return userRoles;
-    }
-
-    /**
-     * Establece los roles del usuario.
-     *  
-     * @param user sobre el cual se establecen los roles.
-     */
-    setUserRoles(user, rolesToAdd, rolesToRemove) {
-
-        return new Observable(async subscriber => {
-
-            const currentUser = currentUserUtils.getCurrentUser();
-
-            const method = this.avaldao.methods.setUserRoles(
-                user.address,
-                rolesToAdd.map(r => r.hash),
-                rolesToRemove.map(r => r.hash));
-
-            const gasEstimated = await this.estimateGas(method, currentUser.address);
-            const gasPrice = await this.getGasPrice();
-
-            let transaction = transactionStoreUtils.addTransaction({
-                gasEstimated: gasEstimated,
-                gasPrice: gasPrice,
-                createdTitle: {
-                    key: 'transactionCreatedTitleSetUserRoles'
-                },
-                createdSubtitle: {
-                    key: 'transactionCreatedSubtitleSetUserRoles'
-                },
-                pendingTitle: {
-                    key: 'transactionPendingTitleSetUserRoles'
-                },
-                confirmedTitle: {
-                    key: 'transactionConfirmedTitleSetUserRoles'
-                },
-                confirmedDescription: {
-                    key: 'transactionConfirmedDescriptionSetUserRoles'
-                },
-                failuredTitle: {
-                    key: 'transactionFailuredTitleSetUserRoles'
-                },
-                failuredDescription: {
-                    key: 'transactionFailuredDescriptionSetUserRoles'
-                }
-            });
-
-            const promiEvent = method.send({
-                from: currentUser.address
-            });
-
-            promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
-
-                transaction.submit(hash);
-                transactionStoreUtils.updateTransaction(transaction);
-
-                subscriber.next(user);
-
-            }).once('confirmation', (confNumber, receipt) => {
-
-                transaction.confirme();
-                transactionStoreUtils.updateTransaction(transaction);
-
-                // La transacción ha sido incluida en un bloque sin bloques de confirmación (once).                        
-                // TODO Aquí debería agregarse lógica para esperar un número determinado de bloques confirmados (on, confNumber).
-                //const avalIdEvent = receipt.events['SaveAval'].returnValues.id;
-
-                // Se instruye al store para obtener el aval actualizado.
-                //avalStoreUtils.fetchAvalById(avalIdEvent);
-
-                subscriber.next(user);
-
-            }).on('error', function (error) {
-
-                transaction.fail();
-                transactionStoreUtils.updateTransaction(transaction);
-
-                error.user = user;
-                console.error(`Error procesando transacción para configurar roles de usuario.`, error);
-                subscriber.error(error);
-            });
-        });
-    }
-
-    /**
-     * Obtiene todos los token balances que conforman el fondo de garantía.
-     */
-    getFondoGarantia() {
-        return new Observable(async subscriber => {
-            try {
-                let tokenBalances = [];
-                let tokens = await this.fondoGarantiaVault.methods.getTokens().call();
-                for (let i = 0; i < tokens.length; i++) {
-                    let { token,
-                        amount,
-                        rate,
-                        amountFiat } = await this.fondoGarantiaVault.methods.getTokenBalance(tokens[i]).call();
-                    tokenBalances.push(new TokenBalance({
-                        address: token,
-                        amount: amount,
-                        rate: rate,
-                        amountFiat: amountFiat
-                    }));
-                }
-                subscriber.next(tokenBalances);
-            } catch (error) {
-                console.log('[Avaldao Contract API] Error obteniendo Fondo de Garantía.', error);
-                //subscriber.error(error);
-            }
         });
     }
 
@@ -280,7 +146,7 @@ class AvaldaoContractApi {
         return new Observable(async subscriber => {
 
             const currentUser = currentUserUtils.getCurrentUser();
-
+            
             try {
                 // Se almacena en IPFS toda la información del Aval.
                 let infoCid = await avalIpfsConnector.upload(aval);
@@ -323,8 +189,8 @@ class AvaldaoContractApi {
                 aval.montoFiat,
                 timestampCuotas);
 
-            const gasEstimated = await this.estimateGas(method, currentUser.address);
-            const gasPrice = await this.getGasPrice();
+            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
@@ -497,8 +363,8 @@ class AvaldaoContractApi {
                 signatureR,
                 signatureS);
 
-            const gasEstimated = await this.estimateGas(method, currentUser.address);
-            const gasPrice = await this.getGasPrice();
+            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
@@ -577,8 +443,8 @@ class AvaldaoContractApi {
 
             const method = avalContract.methods.unlockFundManual();
 
-            const gasEstimated = await this.estimateGas(method, currentUser.address);
-            const gasPrice = await this.getGasPrice();
+            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
@@ -657,8 +523,8 @@ class AvaldaoContractApi {
 
             const method = avalContract.methods.openReclamo();
 
-            const gasEstimated = await this.estimateGas(method, currentUser.address);
-            const gasPrice = await this.getGasPrice();
+            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
@@ -737,8 +603,8 @@ class AvaldaoContractApi {
 
             const method = avalContract.methods.reintegrar();
 
-            const gasEstimated = await this.estimateGas(method, currentUser.address);
-            const gasPrice = await this.getGasPrice();
+            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
                 gasEstimated: gasEstimated,
@@ -802,50 +668,9 @@ class AvaldaoContractApi {
         });
     }
 
-    /**
-     * Obtiene todas los tipos de cambios de token.
-     */
-    getExchangeRates() {
-        return new Observable(async subscriber => {
-            try {
-                const rate = await this.exchangeRateProvider.methods.getExchangeRate(config.nativeToken.address).call();
-                // TODO Obtener otros Exchage Rates desde el smart contract.
-                let exchangeRates = [];
-                // RBTC
-                let exchangeRate = new ExchangeRate({
-                    tokenAddress: config.nativeToken.address,
-                    rate: new BigNumber(rate),
-                    date: Date.now()
-                });
-                exchangeRates.push(exchangeRate);
-                subscriber.next(exchangeRates);
-            } catch (error) {
-                console.error(error);
-                subscriber.error(error);
-            }
-        });
-    }
-
-    async estimateGas(method, from) {
-        const estimateGas = await method.estimateGas({ from: from });
-        return new BigNumber(estimateGas);
-    }
-
-    async getGasPrice() {
-        const gasPrice = await this.web3.eth.getGasPrice();
-        return new BigNumber(gasPrice);
-    }
-
-    async getExchangeRateByToken(tokenAddress) {
-        return await this.exchangeRateProvider.methods.getExchangeRate(tokenAddress).call();
-    }
-
     updateContracts() {
-        const { avaldaoContractAddress, fondoGarantiaVaultContractAddress, exchangeRateProviderContractAddress } = config;
-        console.log('[Avaldao Contract API] Se actualizan contratos.', avaldaoContractAddress, fondoGarantiaVaultContractAddress, exchangeRateProviderContractAddress);
+        const { avaldaoContractAddress } = config;
         this.avaldao = new this.web3.eth.Contract(AvaldaoAbi, avaldaoContractAddress);
-        this.fondoGarantiaVault = new this.web3.eth.Contract(FondoGarantiaVaultAbi, fondoGarantiaVaultContractAddress);
-        this.exchangeRateProvider = new this.web3.eth.Contract(ExchangeRateProviderAbi, exchangeRateProviderContractAddress);
     }
 }
 

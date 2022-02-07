@@ -1,9 +1,9 @@
-import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient';
-import { Observable } from 'rxjs';
-import User from '../models/User';
+import { feathersUsersClient as feathersClient } from '../lib/feathersUsersClient'
+import { Observable } from 'rxjs'
+import User from '../models/User'
 import messageUtils from '../redux/utils/messageUtils'
 import userIpfsConnector from '../ipfs/UserIpfsConnector'
-import avaldaoContractApi from 'lib/blockchain/AvaldaoContractApi';
+import adminContractApi from 'lib/blockchain/AdminContractApi'
 
 class UserService {
 
@@ -20,7 +20,7 @@ class UserService {
         // Se almacena en IPFS toda la información del Usuario.
         let infoCid = await userIpfsConnector.upload(user);
         user.infoCid = infoCid;
-        
+
         if (user.registered === false) {
           await feathersClient.service('users').create(user.toFeathers());
           // Nuevo usuario     
@@ -127,7 +127,7 @@ class UserService {
     });
 
     // Se obtienen los roles del usuario desde la blockchain.
-    const roles = await avaldaoContractApi.getUserRoles(user);
+    const roles = await adminContractApi.getUserRoles(user);
     user.roles = roles;
 
     return user;
@@ -153,7 +153,7 @@ class UserService {
         // Tratamiento de roles.
 
         // Se obtienen los roles actuales del usuario.
-        const userRoles = await avaldaoContractApi.getUserRoles(user);
+        const userRoles = await adminContractApi.getUserRoles(user);
 
         // Roles a agregar.
         const rolesToAdd = [];
@@ -176,7 +176,7 @@ class UserService {
         if (rolesToAdd.length !== 0 || rolesToRemove.length !== 0) {
 
           // Existen cambios en los roles para almacenar.
-          avaldaoContractApi.setUserRoles(user, rolesToAdd, rolesToRemove).subscribe(
+          adminContractApi.setUserRoles(user, rolesToAdd, rolesToRemove).subscribe(
             user => {
               /*messageUtils.addMessageSuccess({
                 text: `El usuario ${user.name} ha sido actualizado`

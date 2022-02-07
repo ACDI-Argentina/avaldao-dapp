@@ -1,7 +1,7 @@
-import { feathersUsersClient } from '../lib/feathersUsersClient';
-import { Observable } from 'rxjs';
-import web3Manager from 'lib/blockchain/Web3Manager';
-import Web3Utils from 'lib/blockchain/Web3Utils';
+import { feathersUsersClient } from '../lib/feathersUsersClient'
+import { Observable } from 'rxjs'
+import web3Manager from 'lib/blockchain/Web3Manager'
+import Web3Utils from 'lib/blockchain/Web3Utils'
 
 /**
  * Servicio encargado de proveer la autenticación del usuario.
@@ -11,6 +11,11 @@ class AuthService {
   constructor() {
     web3Manager.getWeb3().subscribe(web3 => {
       this.web3 = web3;
+    });
+    web3Manager.getAccountAddress().subscribe(async accountAddress => {
+      if (accountAddress === null) {
+        await this.logout();
+      }
     });
   }
 
@@ -98,9 +103,7 @@ class AuthService {
    * Cierra la sesión del usuario actual.
    */
   async logout() {
-    //await feathersClient.logout();
     await feathersUsersClient.logout();
-    //currentUserUtils.setAuthenticated(false);
   }
 }
 

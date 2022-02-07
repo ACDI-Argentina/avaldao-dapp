@@ -1,12 +1,11 @@
-import Web3 from 'web3';
-import Web3HttpProvider from 'web3-providers-http';
-import Web3Modal, { getProviderInfo } from 'web3modal';
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from 'web3'
+import Web3HttpProvider from 'web3-providers-http'
+import Web3Modal, { getProviderInfo } from 'web3modal'
+import WalletConnectProvider from "@walletconnect/web3-provider"
 import { BehaviorSubject } from 'rxjs'
-import config from '../../configuration';
-import ipfsService from '../../ipfs/IpfsService';
-import Wallet from 'models/Wallet';
-import { feathersUsersClient } from 'lib/feathersUsersClient';
+import config from '../../configuration'
+import ipfsService from '../../ipfs/IpfsService'
+import Wallet from 'models/Wallet'
 
 //TODO: determinar cuales es el mejor lugar para posicionar esto, creo que web3manager
 const providerOptions = {
@@ -234,18 +233,13 @@ class Web3Manager {
       });
 
       // Event accountsChanged
-      provider.on("accountsChanged", (accounts) => {
+      provider.on("accountsChanged", async (accounts) => {
         console.log('[Web3] Provider event: accountsChanged.', accounts);
         /*if (accounts.length > 0) {
           this.accountAddressSubject.next(accounts[0]);
         }*/
         // Al modificarse la cuenta, se desconocta el usuario actual.
-        this.disconnect();
-
-        //Logout feathers
-        //authService.logout();
-        //feathersClient.logout();
-        feathersUsersClient.logout();
+        await this.disconnect();
       });
     }
   }
@@ -270,4 +264,3 @@ class Web3Manager {
 }
 
 export default new Web3Manager();
-window.web3Manager = new Web3Manager();

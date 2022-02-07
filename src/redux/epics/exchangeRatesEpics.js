@@ -1,11 +1,11 @@
 import { of } from 'rxjs';
 import { ofType } from 'redux-observable';
 import { catchError, map, mergeMap } from 'rxjs/operators'
-import avaldaoContractApi from '../../lib/blockchain/AvaldaoContractApi';
+import fondoGarantiaContractApi from '../../lib/blockchain/FondoGarantiaContractApi';
 
 export const fetchExchangeRatesEpic = action$ => action$.pipe(
   ofType('exchangeRates/fetchExchangeRates'),
-  mergeMap(action => avaldaoContractApi.getExchangeRates()),
+  mergeMap(action => fondoGarantiaContractApi.getExchangeRates()),
   map(exchangeRates => ({
     type: 'exchangeRates/resetExchangeRates',
     payload: exchangeRates

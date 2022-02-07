@@ -1,10 +1,10 @@
 import Model from './Model';
 import { cleanIpfsPath } from '../lib/helpers';
 import BigNumber from 'bignumber.js';
-import { AVALDAO_ROLE, SOLICITANTE_ROLE } from './Role';
 import StatusUtils from '../utils/StatusUtils';
 import Status from './Status';
 import ipfsService from '../ipfs/IpfsService';
+import config from 'configuration';
 
 /**
  * Modelo de User en Dapp.
@@ -238,11 +238,16 @@ class User extends Model {
     this._status = value;
   }
 
-  isAvaldao() {
-    return this.hasRole(AVALDAO_ROLE);
+  isAdmin() {
+    return this.hasRole(config.ADMIN_ROLE);
   }
+
+  isAvaldao() {
+    return this.hasRole(config.AVALDAO_ROLE);
+  }
+
   isSolicitante() {
-    return this.hasRole(SOLICITANTE_ROLE);
+    return this.hasRole(config.SOLICITANTE_ROLE);
   }
 
   hasRole(role) {

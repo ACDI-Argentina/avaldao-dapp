@@ -19,14 +19,21 @@ client.configure(socketio(socket, feathersSocketOptions));
 client.configure(auth({ storage: localforage }));
 
 client.on('authenticated', async auth => {
-    try{
+    try {
         await feathersClient.authenticate(auth);
-        console.log(`[FeathersUsersClient] - authenticated`);
-    } catch (err){
-        console.log(`[feathersUsersClient] Err trying authenticate feathers client`,err)
+    } catch (err) {
+        console.error(`[Feathers Users Client] Error autenticando Feather Client.`, err);
         throw err;
     }
-}); 
+});
 
-export const feathersUsersClient = client; 
-window.feathersUsersClient = feathersUsersClient;
+client.on('logout', async () => {
+    try {
+        await feathersClient.logout();
+    } catch (err) {
+        console.error(`[Feathers Users Client] Error en logout de Feather Client.`, err);
+        throw err;
+    }
+});
+
+export const feathersUsersClient = client;

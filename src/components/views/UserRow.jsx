@@ -35,7 +35,7 @@ class UserRow extends Component {
 
     const { currentUser, user, classes } = this.props;
 
-    const editEnabled = currentUser.isAvaldao();
+    const editEnabled = currentUser.isAdmin();
 
     return (
       <TableRow>

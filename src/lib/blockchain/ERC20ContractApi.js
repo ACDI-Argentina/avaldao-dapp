@@ -4,6 +4,7 @@ import transactionStoreUtils from '../../redux/utils/transactionStoreUtils'
 import web3Manager from './Web3Manager';
 import { ERC20Abi } from '@acdi/avaldao-contract';
 import TransactionTracker from './TransactionTracker';
+import utilsContractApi from './UtilsContractApi'
 
 /**
  * API encargada de la interacción con ERC20 Smart Contracts.
@@ -42,14 +43,11 @@ class ERC20ContractApi {
                 spenderAddress,
                 amount);
 
-            const gasEstimated = await method.estimateGas({
-                from: senderAddress
-            });
-
-            const gasPrice = await this.getGasPrice();
+            const gasEstimated = await utilsContractApi.estimateGas(method, senderAddress);
+            const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
-                gasEstimated: new BigNumber(gasEstimated),
+                gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
                     key: 'transactionCreatedTitleApproveTokenDonate'
@@ -117,11 +115,6 @@ class ERC20ContractApi {
 
     async getERC20Contract(address) {
         return new this.web3.eth.Contract(ERC20Abi, address);
-    }
-
-    async getGasPrice() {
-        const gasPrice = await this.web3.eth.getGasPrice();
-        return new BigNumber(gasPrice);
     }
 }
 

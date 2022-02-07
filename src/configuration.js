@@ -1,3 +1,5 @@
+import Web3Utils from "lib/blockchain/Web3Utils";
+
 const {
   REACT_APP_ENVIRONMENT = 'localhost', // optional
   REACT_APP_DECIMALS = 8, // optional
@@ -5,6 +7,7 @@ const {
   REACT_APP_FEATHERJS_USERS_CONNECTION_URL,
   REACT_APP_NODE_CONNECTION_URL,
   REACT_APP_AVALDAO_ADDRESS,
+  REACT_APP_ADMIN_CONTRACT_ADDRESS,
   REACT_APP_AVALDAO_CONTRACT_ADDRESS,
   REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS,
   REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS,
@@ -259,6 +262,7 @@ const config = Object.assign({}, configurations[REACT_APP_ENVIRONMENT]);
 
 // Overwrite the environment values with parameters
 config.avaldaoAddress = REACT_APP_AVALDAO_ADDRESS || config.avaldaoAddress;
+config.adminContractAddress = REACT_APP_ADMIN_CONTRACT_ADDRESS || config.adminContractAddress;
 config.avaldaoContractAddress = REACT_APP_AVALDAO_CONTRACT_ADDRESS || config.avaldaoContractAddress;
 config.fondoGarantiaVaultContractAddress = REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS || config.fondoGarantiaVaultContractAddress;
 config.exchangeRateProviderContractAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS || config.exchangeRateProviderContractAddress;
@@ -283,6 +287,46 @@ config.ipfsPinningEnabled = (REACT_APP_IPFS_PINNING_ENABLED !== undefined) ? (RE
 
 config.anonymousDonationThreshold = REACT_APP_ANONYMOUS_DONATION_THRESHOLD ||  config.anonymousDonationThreshold;
 
+// Definición de Roles
+
+config.ADMIN_ROLE = "ADMIN_ROLE";
+config.AVALDAO_ROLE = "AVALDAO_ROLE";
+config.SOLICITANTE_ROLE = "SOLICITANTE_ROLE";
+config.COMERCIANTE_ROLE = "COMERCIANTE_ROLE";
+config.AVALADO_ROLE = "AVALADO_ROLE";
+
+config.roles = [
+  {
+      value: config.ADMIN_ROLE,
+      hash: Web3Utils.toKeccak256(config.ADMIN_ROLE),
+      label: 'Admin',
+      app: config.adminContractAddress
+  },
+  {
+      value: config.AVALDAO_ROLE,
+      hash: Web3Utils.toKeccak256(config.AVALDAO_ROLE),
+      label: 'Avaldao',
+      app: config.avaldaoContractAddress
+  },
+  {
+      value: config.SOLICITANTE_ROLE,
+      hash: Web3Utils.toKeccak256(config.SOLICITANTE_ROLE),
+      label: 'Solicitante',
+      app: config.avaldaoContractAddress
+  },
+  {
+      value: config.COMERCIANTE_ROLE,
+      hash: Web3Utils.toKeccak256(config.COMERCIANTE_ROLE),
+      label: 'Comerciante',
+      app: config.avaldaoContractAddress
+  },
+  {
+      value: config.AVALADO_ROLE,
+      hash: Web3Utils.toKeccak256(config.AVALADO_ROLE),
+      label: 'Avalado',
+      app: config.avaldaoContractAddress
+  }
+];
 
 //config.sendErrors = ['develop', 'release', 'beta', 'rsk_testnet'].includes(REACT_APP_ENVIRONMENT);
 

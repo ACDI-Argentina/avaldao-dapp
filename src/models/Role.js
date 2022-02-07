@@ -11,13 +11,15 @@ class Role extends Model {
     const {
       value,
       hash,
-      label
+      label,
+      app
     } = data;
 
     if (data) {
       this._value = value;
       this._hash = hash;
       this._label = label;
+      this._app = app;
     }
   }
 
@@ -28,7 +30,8 @@ class Role extends Model {
     return {
       value: this._value,
       hash: this._hash,
-      label: this._label
+      label: this._label,
+      app: this._app
     }
   }
 
@@ -55,11 +58,14 @@ class Role extends Model {
   set label(value) {
     this._label = value;
   }
+
+  get app() {
+    return this._app;
+  }
+
+  set app(value) {
+    this._app = value;
+  }
 }
 
 export default Role;
-
-export const AVALDAO_ROLE = "AVALDAO_ROLE";
-export const SOLICITANTE_ROLE = "SOLICITANTE_ROLE";
-export const COMERCIANTE_ROLE = "COMERCIANTE_ROLE";
-export const AVALADO_ROLE = "AVALADO_ROLE";
