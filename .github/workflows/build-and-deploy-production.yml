@@ -43,7 +43,7 @@ jobs:
           remote_user: ${{ secrets.PRODUCTION_DEPLOY_USER }}
           remote_key: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
       - name: update symbolic link
-          run: ssh prod 'ln -snf ${{ secrets.PRODUCTION_DEPLOY_PATH }}/${{ github.sha }}/ /var/www/html/dapp'
+        run: ssh prod 'ln -snf ${{ secrets.PRODUCTION_DEPLOY_PATH }}/${{ github.sha }}/ /var/www/html/dapp'
 
 
 
