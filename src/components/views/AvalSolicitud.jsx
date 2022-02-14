@@ -23,8 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 const avalSchema = Yup.object({
   proyecto: Yup.string().trim().required('required'),
-  proposito: Yup.string().trim().max(100).required('required'),
-  causa: Yup.string().trim().max(100).required('required'),
+  objetivo: Yup.string().trim().max(500).required('required'),
   adquisicion: Yup.string().trim().max(100).required('required'),
   beneficiarios: Yup.string().trim().max(100).required('required'),
   montoFiat: Yup.number().required('required').positive('montoError').typeError('montoError'),

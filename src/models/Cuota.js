@@ -83,6 +83,18 @@ class Cuota {
     return this.status.name === Cuota.PENDIENTE.name;
   }
 
+  isPagada() {
+    return this.status.name === Cuota.PAGADA.name;
+  }
+
+  isReintegrada() {
+    return this.status.name === Cuota.REINTEGRADA.name;
+  }
+
+  isVencida() {
+    return this.timestampVencimiento * 1000 <= Date.now();
+  }
+
   get clientId() {
     return this._clientId;
   }

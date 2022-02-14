@@ -1,11 +1,8 @@
 import React from 'react'
-
 import DateUtils from 'utils/DateUtils';
 import FiatUtils from '../../../utils/FiatUtils';
-
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-
 import { makeStyles, Typography } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +12,8 @@ import StatusIndicator from 'components/StatusIndicator';
 import Grid from '@material-ui/core/Grid';
 import CheckOutlinedIcon from '@material-ui/icons/CheckOutlined';
 import DoneAllOutlinedIcon from '@material-ui/icons/DoneAllOutlined';
+import Chip from '@material-ui/core/Chip';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const useStyles = makeStyles({
   root: {
@@ -36,6 +35,12 @@ const useStyles = makeStyles({
   },
   green: {
     backgroundColor: green[800]
+  },
+  red: {
+    backgroundColor: red[800]
+  },
+  vencida: {
+    marginTop: '0.5em'
   }
 });
 
@@ -44,12 +49,22 @@ const CuotaCard = ({ cuota }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
+  // Cuota Pendiente
   let avatarClass = classes.yellow;
   let avatarIcon = (<CheckOutlinedIcon />);
-  if(!cuota.isPendiente()) {
+
+  // Cuota Pagada
+  if (cuota.isPagada()) {
     avatarClass = classes.green;
     avatarIcon = (<DoneAllOutlinedIcon />);
   }
+
+  // Cuota Reintegrada
+  if (cuota.isReintegrada()) {
+    avatarClass = classes.red;
+    avatarIcon = (<DoneAllOutlinedIcon />);
+  }
+
   const numero = '#' + cuota.numero;
 
   const montoFiatStr = FiatUtils.format(cuota?.montoFiat);
@@ -76,7 +91,7 @@ const CuotaCard = ({ cuota }) => {
             <Typography variant="body2" color="textSecondary" component="p">{montoFiatStr}</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary" component="p">{t('avalCuotaDueDate')}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p">{t('avalCuotaVencimientoDate')}</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="textSecondary" component="p">{vencimiento}</Typography>
@@ -87,8 +102,17 @@ const CuotaCard = ({ cuota }) => {
           <Grid item xs={6}>
             <Typography variant="body2" color="textSecondary" component="p">{desbloqueo}</Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <StatusIndicator status={cuota?.status}></StatusIndicator>
+          </Grid>
+          <Grid item xs={6}>
+            {cuota.isPendiente() && cuota.isVencida() &&
+              <Chip size="small"
+                label={t('avalCuotaVencida')}
+                color="secondary"
+                icon={<AccessTimeIcon />}
+                className={classes.vencida}
+              />}
           </Grid>
         </Grid>
       </CardContent>

@@ -21,24 +21,14 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
+        <Grid item xs={12}>
           <TextField
-            id="propositoTextField"
-            value={aval.proposito}
-            label={t('avalProposito')}
+            id="objetivoTextField"
+            value={aval.objetivo}
+            label={t('avalObjetivo')}
             fullWidth
             margin="normal"
-            InputLabelProps={{ shrink: true }}
-            readOnly
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={6}>
-          <TextField
-            id="causaTextField"
-            value={aval.causa}
-            label={t('avalCausa')}
-            fullWidth
-            margin="normal"
+            multiline
             InputLabelProps={{ shrink: true }}
             readOnly
           />

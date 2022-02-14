@@ -52,8 +52,7 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
   const formik = useFormik({
     initialValues: {
       proyecto: '',
-      proposito: '',
-      causa: '',
+      objetivo: '',
       adquisicion: '',
       beneficiarios: '',
       montoFiat: 1000, //in usd
@@ -104,20 +103,13 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
             readOnly={readonly}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <FormikInput
-            id="proposito"
-            label={t('avalProposito')}
+            id="objetivo"
+            label={t('avalObjetivo')}
             formik={formik}
             readOnly={readonly}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <FormikInput
-            id="causa"
-            label={t('avalCausa')}
-            formik={formik}
-            readOnly={readonly}
+            multiline
           />
         </Grid>
         <Grid item xs={12} md={3}>

@@ -17,8 +17,7 @@ class Aval {
       address,
       infoCid = '',
       proyecto = '',
-      proposito = '',
-      causa = '',
+      objetivo = '',
       adquisicion = '',
       beneficiarios = '',
       montoFiat = new BigNumber(0),
@@ -42,8 +41,7 @@ class Aval {
     this._address = address;
     this._infoCid = infoCid;
     this._proyecto = proyecto;
-    this._proposito = proposito;
-    this._causa = causa;
+    this._objetivo = objetivo;
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
     this._montoFiat = new BigNumber(montoFiat);
@@ -78,8 +76,7 @@ class Aval {
     return {
       id: this._id,
       proyecto: this._proyecto,
-      proposito: this._proposito,
-      causa: this._causa,
+      objetivo: this._objetivo,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
       montoFiat: this._montoFiat,
@@ -91,8 +88,7 @@ class Aval {
     return {
       _id: this._id,
       proyecto: this._proyecto,
-      proposito: this._proposito,
-      causa: this._causa,
+      objetivo: this._objetivo,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
       montoFiat: this._montoFiat,
@@ -129,8 +125,7 @@ class Aval {
       address: this._address,
       infoCid: this._infoCid,
       proyecto: this._proyecto,
-      proposito: this._proposito,
-      causa: this._causa,
+      objetivo: this._objetivo,
       adquisicion: this._adquisicion,
       beneficiarios: this._beneficiarios,
       montoFiat: this._montoFiat,
@@ -484,20 +479,12 @@ class Aval {
     this._proyecto = value;
   }
 
-  get proposito() {
-    return this._proposito;
+  get objetivo() {
+    return this._objetivo;
   }
 
-  set proposito(value) {
-    this._proposito = value;
-  }
-
-  get causa() {
-    return this._causa;
-  }
-
-  set causa(value) {
-    this._causa = value;
+  set objetivo(value) {
+    this._objetivo = value;
   }
 
   get adquisicion() {
