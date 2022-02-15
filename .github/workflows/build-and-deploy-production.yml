@@ -2,7 +2,7 @@ name: Build and deploy dapp - production
 
 on:
   push:
-    tags: [ '[0-9]+.[0-9]+.[0-9]+' ]
+    branches: [production]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,12 +17,33 @@ jobs:
       - run: npm run build:production
       - name: generate version file
         run: echo $(date +"%Y-%m-%dT%H:%M:%S%z") - ${{env.RELEASE_VERSION}} - ${{ github.sha }}  > build/version.html
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/prod.key
+          chmod 600 ~/.ssh/prod.key
+          cat >>~/.ssh/config <<END
+          Host prod
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/prod.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.PRODUCTION_DEPLOY_USER }}
+          SSH_KEY: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
+          SSH_HOST: ${{ secrets.PRODUCTION_DEPLOY_HOST }}
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
           switches: -avzr --delete
           path: build/
-          remote_path: /home/deployer/${{env.RELEASE_VERSION}}
+          remote_path: ${{ secrets.PRODUCTION_DEPLOY_PATH }}/${{ github.sha }} 
           remote_host: ${{ secrets.PRODUCTION_DEPLOY_HOST }}
           remote_user: ${{ secrets.PRODUCTION_DEPLOY_USER }}
           remote_key: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
+      - name: update symbolic link
+        run: ssh prod 'ln -snf ${{ secrets.PRODUCTION_DEPLOY_PATH }}/${{ github.sha }}/ /var/www/html/dapp'
+
+
+
