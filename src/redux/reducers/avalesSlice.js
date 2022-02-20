@@ -133,13 +133,20 @@ export const {
   updateAvalById,
   rollbackAvalStatus } = avalesSlice.actions;
 
-export const selectRawAvales = state => state.avales;
-
 export const selectAvales = state => {
-  return state.avales.filter(aval => aval?.status?.name !== "Error").map(function (avalStore) {
+  return state.avales.map(function (avalStore) {
     return new Aval(avalStore);
   });
 }
+
+export const selectAvalesWithTask = (state, user) => {
+  return state.avales
+    .map(function (avalStore) {
+      return new Aval(avalStore);
+    }).
+    filter(aval => aval.getTaskCode(user) !== null);
+}
+
 export const selectAvalByClientId = (state, clientId) => {
   const avalStore = state.avales.find(a => a.clientId === clientId);
   if (avalStore) {

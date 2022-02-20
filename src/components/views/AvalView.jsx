@@ -10,11 +10,25 @@ import SignaturesSection from 'components/aval/sections/SignaturesSection';
 import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
 import StatusIndicator from 'components/StatusIndicator';
+import Alert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core';
+import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
+import { useTranslation } from 'react-i18next';
+
+const useStyles = makeStyles((theme) => ({
+  alert: {
+    width: '100%',
+    marginTop: theme.spacing(2)
+  }
+}));
 
 const AvalView = (props) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const avalId = props.match.params.avalId;
   const aval = useSelector(state => selectAvalById(state, avalId));
+  const currentUser = useSelector(state => selectCurrentUser(state));
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -24,11 +38,18 @@ const AvalView = (props) => {
     return <Page />;
   }
 
+  const taskCode = aval.getTaskCode(currentUser);
+
   return (
     <Page>
       <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
         <StatusIndicator status={aval.status} />
       </Flex>
+      {taskCode && (
+        <div className={classes.alert}>
+          <Alert severity="info">{t(taskCode)}</Alert>
+        </div>
+      )}
       <AvalGeneralSection aval={aval} />
       <SignaturesSection aval={aval} />
       <CuotasSection aval={aval} />

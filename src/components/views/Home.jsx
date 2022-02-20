@@ -11,6 +11,7 @@ import Page from './Page';
 import Button from "components/CustomButtons/Button.js";
 import { withStyles } from '@material-ui/core/styles'
 import { history } from '../../lib/helpers'
+import AvalTaskList from './AvalTaskList';
 
 /**
  * Pantalla Home.
@@ -59,6 +60,13 @@ class Home extends Component {
 
     const allowSolicitar = currentUser.isSolicitante();
 
+    let showAvalTaskList = false;
+    let avalTableWidthMd = 12;
+    if (currentUser.authenticated) {
+      showAvalTaskList = true;
+      avalTableWidthMd = 9;
+    }
+
     return (
       <Page>
         <Grid container spacing={3}>
@@ -78,7 +86,12 @@ class Home extends Component {
               </Button>
             </Grid>
           </Grid>
-          <Grid item xs={12}>
+          {showAvalTaskList && (
+            <Grid item sm={12} md={3}>
+              <AvalTaskList user={currentUser} />
+            </Grid>
+          )}
+          <Grid item sm={12} md={avalTableWidthMd}>
             <AvalTable />
           </Grid>
         </Grid>
