@@ -75,6 +75,11 @@
     "avalSolicitadoBy":"Este aval ha sido solicitado por el usuario",
     "avalSolicitadoTo":"El mismo se encuentra pendiente de aceptación por parte del usuario",
 
+    "avalTaskList": "Tareas pendientes",
+    "avalTaskAnalizarAceptacion": "Requiere análisis de aceptación",
+    "avalTaskFirmar": "Requiere firmarse",
+    "avalTaskReintegrar": "Requiere reintegrarse",
+
     "atDay":"el día",
     "atHour":"a las",
     

@@ -17,7 +17,7 @@ import TableRow from '@material-ui/core/TableRow';
 /**
  * Row de un Aval
  */
-class AvalItem extends Component {
+class AvalRow extends Component {
 
   constructor(props) {
     super(props);
@@ -25,10 +25,6 @@ class AvalItem extends Component {
 
     };
     this.goVisualizar = this.goVisualizar.bind(this);
-  }
-
-  componentDidMount() {
-
   }
 
   goVisualizar() {
@@ -83,7 +79,7 @@ class AvalItem extends Component {
   }
 }
 
-AvalItem.contextType = Web3AppContext;
+AvalRow.contextType = Web3AppContext;
 
 const styles = theme => ({
 
@@ -100,5 +96,5 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(AvalItem)))
+  withTranslation()(AvalRow)))
 );

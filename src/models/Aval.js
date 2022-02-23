@@ -439,6 +439,28 @@ class Aval {
       this.avaladoSignature !== undefined;
   }
 
+  /**
+   * Determina si el aval requiere una tarea del usuario.
+   * @param user usuario que realiza la tarea.
+   * @returns código i18n de la tarea a realizar, o <code>null</code> si no se requiere tarea.
+   */
+  getTaskCode(user) {
+    if (this.allowAceptar(user) || this.allowRechazar(user)) {
+      // Se requiere que el usuario acepte o rechace el eval.
+      return 'avalTaskAnalizarAceptacion';
+    }
+    if (this.allowFirmar(user)) {
+      // Se requiere que el usuario firme el aval.
+      return 'avalTaskFirmar';
+    }
+    if (this.allowReintegrar(user)) {
+      // Se requiere que el usuario firme el aval.
+      return 'avalTaskReintegrar';
+    }
+    // No se requiere de ninguna tarea.
+    return null;
+  }
+
   get id() {
     return this._id;
   }
