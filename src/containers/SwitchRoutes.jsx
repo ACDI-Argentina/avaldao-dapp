@@ -11,6 +11,7 @@ import Home from 'components/views/Home'
 import AvalSolicitud from 'components/views/AvalSolicitud'
 import UsersPage from 'components/views/UsersPage'
 import UserEditPage from 'components/UserEditPage'
+import Workspace from 'components/views/Workspace'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -71,6 +72,10 @@ const SwitchRoutes = ({ currentUser }) => (
                 />
             )}
         />
+        <Route path="/workspace"
+            render={props =>
+                <Workspace {...props} />
+            } />
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"
             render={props => <Home

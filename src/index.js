@@ -28,7 +28,7 @@ try {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FF5D49'
+      main: '#7868E5'
     },
     fontFamily: '"Encode Sans", "Helvetica", "Arial", sans-serif'
   }

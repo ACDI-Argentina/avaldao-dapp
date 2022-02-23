@@ -4,16 +4,20 @@ import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
+import FondoGarantia from './FondoGarantia'
+import AvalTable from './AvalTable'
+import Divider from '@material-ui/core/Divider'
 import Page from './Page'
+import Button from "components/CustomButtons/Button.js"
 import { withStyles } from '@material-ui/core/styles'
 import { history } from '../../lib/helpers'
-import PlatformFeatures from './PlatformFeatures'
+import AvalTaskList from './AvalTaskList'
 
 /**
- * Pantalla Home.
+ * Pantalla de espacio de trabajo.
  * 
  */
-class Home extends Component {
+class Workspace extends Component {
 
   constructor(props) {
     super(props);
@@ -67,7 +71,29 @@ class Home extends Component {
       <Page>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <PlatformFeatures />
+            <FondoGarantia></FondoGarantia>
+          </Grid>
+          <Grid item xs={12}>
+            <Divider />
+          </Grid>
+          <Grid item xs={12} style={{ padding: "0px" }}>
+            <Grid container justifyContent="flex-end">
+              <Button color="primary"
+                round
+                className="btn btn-info"
+                disabled={!allowSolicitar}
+                onClick={this.goSolicitarAval}>
+                {t("avalSolicitarBtn")}
+              </Button>
+            </Grid>
+          </Grid>
+          {showAvalTaskList && (
+            <Grid item sm={12} md={3}>
+              <AvalTaskList user={currentUser} />
+            </Grid>
+          )}
+          <Grid item sm={12} md={avalTableWidthMd}>
+            <AvalTable />
           </Grid>
         </Grid>
       </Page>
@@ -75,7 +101,7 @@ class Home extends Component {
   }
 }
 
-Home.contextType = Web3AppContext;
+Workspace.contextType = Web3AppContext;
 
 const styles = theme => ({
 
@@ -89,5 +115,5 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(Home)))
+  withTranslation()(Workspace)))
 );

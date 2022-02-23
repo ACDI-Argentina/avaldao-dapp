@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import IconButton from '@material-ui/core/IconButton'
-import PageviewIcon from '@material-ui/icons/Pageview'
+import SearchIcon from '@material-ui/icons/Search'
 
 /**
  * Item de un tarea sobre un aval.
@@ -42,7 +42,7 @@ class AvalTaskItem extends Component {
             aria-label="visualizar"
             color="primary"
             onClick={this.goVisualizar}>
-            <PageviewIcon />
+            <SearchIcon />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>

@@ -4,15 +4,15 @@ import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import StatusIndicator from 'components/StatusIndicator'
-import PageviewIcon from '@material-ui/icons/Pageview'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
 import { history } from 'lib/helpers'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import FiatAmount from 'components/FiatAmount'
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell'
+import TableRow from '@material-ui/core/TableRow'
+import SearchIcon from '@material-ui/icons/Search'
 
 /**
  * Row de un Aval
@@ -70,7 +70,7 @@ class AvalRow extends Component {
               aria-label="visualizar"
               color="primary"
               onClick={this.goVisualizar}>
-              <PageviewIcon />
+              <SearchIcon />
             </IconButton>
           </Tooltip>
         </TableCell>
