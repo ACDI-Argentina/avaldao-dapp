@@ -41,7 +41,8 @@ class MainMenu extends Component {
       welcome: t('menuWelcome'),
       profile: t('menuProfile'),
       signup: t('menuSignup'),
-      aboutUs: t('aboutUs')
+      aboutUs: t('aboutUs'),
+      users: t('usersTitle')
     }
 
     let buttonText;
@@ -68,8 +69,19 @@ class MainMenu extends Component {
       </div>
     );
 
+    const users = (
+      <div
+        className={classes.dropdownLink}
+        onClick={() => {
+          history.push(`/users`);
+        }}>
+        {labels.users}
+      </div>
+    );  
+
     let dropdownList = [
-      aboutUs
+      aboutUs,
+      users
     ]
     if (currentUser?.address) {
       dropdownList = [

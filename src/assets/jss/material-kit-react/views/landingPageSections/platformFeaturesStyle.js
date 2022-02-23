@@ -13,7 +13,7 @@ const platformFeaturesStyle = {
     ...title,
     minHeight: "32px",
     textDecoration: "none",
-    color: "#000",
+    color: "#1B1E63",
     width: "50%",
     margin: "0 auto 0.5em auto"
   },
@@ -30,6 +30,7 @@ const platformFeaturesStyle = {
   sectionTitle: {
     color: primaryColor,
     fontWeight: "bold",
+    fontSize: "1.4em",
     marginBottom: "1em",
     "@media (max-width: 600px)": {
       maxWidth: "60%",

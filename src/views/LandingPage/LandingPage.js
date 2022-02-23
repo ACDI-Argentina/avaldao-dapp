@@ -5,7 +5,6 @@ import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import Parallax from "components/Parallax/Parallax.js";
 import PlatformFeatures from "components/views/PlatformFeatures.jsx";
 import BlockchainBenefits from "components/views/BlockchainBenefits.jsx";
 import JoinGivethCommunity from 'components/JoinGivethCommunity.jsx';
@@ -29,20 +28,6 @@ export default withTranslation()(function LandingPage(props) {
         rightLinks={<MainMenu />}
         {...rest}
       />
-      <Parallax image={require("assets/img/landing-bg.jpg")}>
-        <div className={classes.container}>
-          <GridContainer justify="center">
-            <GridItem xs={12} sm={12} md={8}>
-              <div className={classes.titleContainer}>
-                <h2 className={classes.title}>{t('landingPageTitle')}</h2>
-                <h4 className={classes.subtitle}>
-                  {t('landingPagesSubtitle1')}<span>{t('landingPagesSubtitle2')}</span>{t('landingPagesSubtitle3')}
-                </h4>
-              </div>
-            </GridItem>
-          </GridContainer>
-        </div>
-      </Parallax>
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className={classes.container}>
           <img src={require("assets/img/icons/separator.png")} alt="" className={classes.topSeparator} />

@@ -3,7 +3,6 @@ import { selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
-import Parallax from "components/Parallax/Parallax.js";
 import MainMenu from 'components/MainMenu';
 import Grid from '@material-ui/core/Grid';
 import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
@@ -57,7 +56,7 @@ class UsersPage extends Component {
       <div className={classes.root}>
         <Header
           color="white"
-          brand={<img src={require("assets/img/logos/give4forest.png")}
+          brand={<img src={require("assets/img/logos/avaldao.svg")}
             alt={t('give4forest')}
             className={classes.dappLogo} />}
           rightLinks={<MainMenu />}
@@ -68,7 +67,6 @@ class UsersPage extends Component {
           }}
           {...rest}
         />
-        <Parallax small image={require("assets/img/profile-default-bg.jpg")} />
 
         <div className={classes.panel}>
 
@@ -109,23 +107,15 @@ const styles = theme => ({
     position: "relative",
     zIndex: "3"
   },
-  mainRaised: {
-    margin: "-60px 30px 0px",
-    borderRadius: "6px",
-    boxShadow:
-      "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
-  },
   panel: {
     background: "#FFFFFF",
     position: "relative",
     zIndex: "3",
-    margin: "-60px 30px 0px",
-    borderRadius: "6px",
-    boxShadow:
-      "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
-
+    margin: "0px 30px 0px",
     padding: '2em',
-    flexGrow: 1
+    flexGrow: 1,
+    minHeight: "75vh",
+    margin: "100px auto 0px",
   },
   socials: {
     marginTop: "0",

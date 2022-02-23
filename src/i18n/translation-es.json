@@ -112,39 +112,18 @@
     "landingPageFinanceProject": "Financia tu proyecto",
     "landingPageMakeDonation": "Haz tu donación",
 
-    "platformFeaturesTitle1": "El ",
-    "platformFeaturesTitle2": "crecimiento sostenible",
-    "platformFeaturesTitle3": " necesita una ",
-    "platformFeaturesTitle4": "",
-    "platformFeaturesTitle5": "revolución",
-    "platformFeaturesTitle6": " tecnológica y una ",
-    "platformFeaturesTitle7": "",
-    "platformFeaturesTitle8": "evolución",
-    "platformFeaturesTitle9": " humana",
+    "platformFeaturesTitle1": "Qué es AvalDAO",
 
-    "platformFeaturesDescription1": "Avaldao activa innovaciones tecnológicas en las comunidades que viven en los bosques. Con mejores tecnologías ",
-    "platformFeaturesDescription2": "ellas podrán cuidar mejor a los bosques ",
-    "platformFeaturesDescription3": "y ",
-    "platformFeaturesDescription4": "los bosques seguirán cuidando de todos nosotros. ",
+    "platformFeaturesDescription1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, massa nunc, nullam donec aliquam enim amet arcu. Lacus, placerat eros, nibh parturient at at magna. Sed aliquet mattis quis consectetur lobortis tincidunt. Tellus tempor, quam pellentesque quisque egestas arcu id.",
 
-    "colaboration": "Colaboración",
-    "colaborationDescription1": "Unimos fuerzas en una red ",
-    "colaborationDescription2": "descentralizada",
-    "colaborationDescription3": " para la construcción y cuidado de los bienes comunes.",
+    "transparency": "Transparencia",
+    "transparencyDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir",
 
-    "connection": "Conexión",
-    "connectionDescription1": "Conectamos ",
-    "connectionDescription2": "activos digitales",
-    "connectionDescription3": " con el ",
-    "connectionDescription4": "crecimiento sostenible",
-    "connectionDescription5": " de nuestro planeta.",
+    "autonomy": "Autonomía",
+    "autonomyDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir ",
 
-    "intimacy": "Intimidad",
-    "intimacyDescription1": "Creamos espacios de ",
-    "intimacyDescription2": "pensamiento",
-    "intimacyDescription3": " y ",
-    "intimacyDescription4": "conciencia",
-    "intimacyDescription5": " que nos conectan con la naturaleza.",
+    "security": "Seguridad",
+    "securityDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir ",
 
     "blockchainBenefitsTitle": "Beneficios de blockchain en la recolección de fondos para el Desarrollo",
 
@@ -166,7 +145,7 @@
     
     "iniciativeOf": "Con la colaboración de: ",
     "argentina": "ARGENTINA ",
-    "disclaimer": "Copyright 2021 | RSK - El futuro está en el monte | Todos los derechos reservados. ",
+    "disclaimer": "2021 © Todos los derechos reservados.",
     "termsAndConditions": "Terminos y condiciones. ",
     "dataHandlingPolicy": "Política de tratamiento de datos. ",
 

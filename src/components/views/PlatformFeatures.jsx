@@ -4,6 +4,7 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/plat
 import classNames from "classnames";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import Button from "components/CustomButtons/Button.js";
 
 /**
  * The PlatformFeatures section
@@ -17,68 +18,52 @@ class PlatformFeatures extends Component {
       <div className={classes.section}>
         <h2 className={classes.title}>
           {t('platformFeaturesTitle1')}
-          <span className={classes.underlineHighlight}>{t('platformFeaturesTitle2')}</span>
-          {t('platformFeaturesTitle3')}
-          {t('platformFeaturesTitle4')}
-          <span className={classes.colorHighlight}>{t('platformFeaturesTitle5')}</span>
-          {t('platformFeaturesTitle6')}
-          {t('platformFeaturesTitle7')}
-          <span className={classes.colorHighlight}>{t('platformFeaturesTitle8')}</span>
-          {t('platformFeaturesTitle9')}
         </h2>
         <h6 className={classes.description}>
           {t('platformFeaturesDescription1')}
-          <span className={classes.boldText}>{t('platformFeaturesDescription2')}</span>
-          {t('platformFeaturesDescription3')}
-          <span className={classNames(classes.boldText, classes.italicText)}>{t('platformFeaturesDescription4')}</span>
         </h6>
-        {
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="flex-start"
-            spacing={10}
-          >
-            <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
-              <div>
-                <img src={require("assets/img/icons/colaboracion.png")} alt={t('colaboration')} className={classes.image} />
-              </div>
-              <div className={classes.sectionTitle}>{t('colaboration')}</div>
-              <h6 className={classes.sectionDescription}>
-                {t('colaborationDescription1')}
-                <span className={classes.boldText}>{t('colaborationDescription2')}</span>
-                {t('colaborationDescription3')}
-              </h6>
+          <Grid>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="flex-start"
+              spacing={10}
+              style={{ marginTop: '3em', marginBottom: '3em'}}
+            >
+              <Button color="primary" round
+                className="btn btn-info">
+                Conocer más
+              </Button>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
-              <div>
-                <img src={require("assets/img/icons/conexion.png")} alt={t('connection')} className={classes.image} />
-              </div>
-              <div className={classes.sectionTitle}>{t('connection')}</div>
-              <h6 className={classes.sectionDescription}>
-                {t('connectionDescription1')}
-                <span className={classes.boldText}>{t('connectionDescription2')}</span>
-                {t('connectionDescription3')}
-                <span className={classes.boldText}>{t('connectionDescription4')}</span>
-                {t('connectionDescription5')}
-              </h6>
+
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="flex-start"
+              spacing={10}
+            >
+              <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
+                <div className={classes.sectionTitle}>{t('transparency')}</div>
+                <h6 className={classes.sectionDescription}>
+                  {t('transparencyDescription')}
+                </h6>
+              </Grid>
+              <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
+                <div className={classes.sectionTitle}>{t('autonomy')}</div>
+                <h6 className={classes.sectionDescription}>
+                  {t('autonomyDescription')}
+                </h6>
+              </Grid>
+              <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
+                <div className={classes.sectionTitle}>{t('security')}</div>
+                <h6 className={classes.sectionDescription}>
+                  {t('securityDescription')}
+                </h6>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
-              <div>
-                <img src={require("assets/img/icons/intimidad.png")} alt={t('intimacy')} className={classes.image} />
-              </div>
-              <div className={classes.sectionTitle}>{t('intimacy')}</div>
-              <h6 className={classes.sectionDescription}>
-                {t('intimacyDescription1')}
-                <span className={classes.boldText}>{t('intimacyDescription2')}</span>
-                {t('intimacyDescription3')}
-                <span className={classes.boldText}>{t('intimacyDescription4')}</span>
-                {t('intimacyDescription5')}
-              </h6>
-            </Grid>              
           </Grid>
-        }
       </div>
     )
   }

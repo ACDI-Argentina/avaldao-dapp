@@ -62,13 +62,13 @@ const card = {
 };
 
 const defaultFont = {
-  fontFamily: '"Raleway", "Roboto", "Helvetica", "Arial", sans-serif',
+  fontFamily: '"Encode Sans", "Helvetica", "Arial", sans-serif',
   fontWeight: "300",
   lineHeight: "1.5em"
 };
 
 /*const primaryColor = "#17A2B8";*/
-const primaryColor = "#FF5D49";
+const primaryColor = "#7868E5";
 const warningColor = "#ff9800";
 const dangerColor = "#f44336";
 const successColor = "#4caf50";

@@ -110,35 +110,24 @@
     "landingPageFinanceProject": "Finance your project",
     "landingPageMakeDonation": "Make your donation",
 
-    "platformFeaturesTitle1": "",
-    "platformFeaturesTitle2": "Sustainable development",
-    "platformFeaturesTitle3": " needs a ",
-    "platformFeaturesTitle4": "technological ",
-    "platformFeaturesTitle5": "revolution",
-    "platformFeaturesTitle6": " and a ",
-    "platformFeaturesTitle7": "human",
-    "platformFeaturesTitle8": " evolution",
-    "platformFeaturesTitle9": "",
-    
-    "platformFeaturesDescription1": "Avaldao activates technological innovations in the communities that live in the forests. With better technologies, ",
-    "platformFeaturesDescription2": "they will be able to take better care of the forests ",
-    "platformFeaturesDescription3": "and ",
-    "platformFeaturesDescription4": "the forests will continue taking care of us all. ",
+    "platformFeaturesTitle1": "Qué es AvalDAO",
 
-    "colaboration": "Collaboration",
-    "colaborationDescription1": "We join forces in a ",
+    "platformFeaturesDescription1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, massa nunc, nullam donec aliquam enim amet arcu. Lacus, placerat eros, nibh parturient at at magna. Sed aliquet mattis quis consectetur lobortis tincidunt. Tellus tempor, quam pellentesque quisque egestas arcu id.",
+
+    "transparency": "Collaboration",
+    "transparencyDescription": "We join forces in a ",
     "colaborationDescription2": "decentralized",
     "colaborationDescription3": " network for the construction and care of common goods.",
 
-    "connection": "Connection",
-    "connectionDescription1": "We connect ",
+    "autonomy": "autonomy",
+    "autonomyDescription": "We connect ",
     "connectionDescription2": "digital assets",
     "connectionDescription3": " with the ",
     "connectionDescription4": "sustainable development",
     "connectionDescription5": " of our planet.",
 
-    "intimacy": "Intimacy",
-    "intimacyDescription1": "We create spaces for ",
+    "security": "security",
+    "securityDescription": "We create spaces for ",
     "intimacyDescription2": "thinking",
     "intimacyDescription3": " and ",
     "intimacyDescription4": "awareness",
@@ -164,7 +153,7 @@
 
     "iniciativeOf": "A collaboration of: ",
     "argentina": "ARGENTINA ",
-    "disclaimer": "Copyright 2021 | RSK - The future is in the forest | All rights reserved. ",
+    "disclaimer": "2021 © All rights reserved.",
     "termsAndConditions": "Terms and conditions. ",
     "dataHandlingPolicy": "Data handling policy. ",
 

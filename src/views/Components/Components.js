@@ -12,7 +12,6 @@ import Footer from "components/Footer/Footer.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
-import Parallax from "components/Parallax/Parallax.js";
 // sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import SectionBasics from "./Sections/SectionBasics.js";
@@ -40,7 +39,7 @@ export default function Components(props) {
   return (
     <div>
       <Header
-        brand={<img src={require("assets/img/logos/avaldao.png")}
+        brand={<img src={require("assets/img/logos/avaldao.svg")}
         alt={t('give4forest')}
         className={classes.dappLogo}/>}
         rightLinks={<HeaderLinks />}
@@ -52,21 +51,6 @@ export default function Components(props) {
         }}
         {...rest}
       />
-      <Parallax image={require("assets/img/bg4.jpg")}>
-        <div className={classes.container}>
-          <GridContainer>
-            <GridItem>
-              <div className={classes.brand}>
-                <h1 className={classes.title}>Avaldao</h1>
-                <h3 className={classes.subtitle}>
-                  Introducción...
-                </h3>
-              </div>
-            </GridItem>
-          </GridContainer>
-        </div>
-      </Parallax>
-
       <div className={classNames(classes.main, classes.mainRaised)}>
         <SectionBasics />
         <SectionNavbars />

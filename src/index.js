@@ -30,7 +30,7 @@ const theme = createTheme({
     primary: {
       main: '#FF5D49'
     },
-    fontFamily: '"Raleway", "Roboto", "Helvetica", "Arial", sans-serif'
+    fontFamily: '"Encode Sans", "Helvetica", "Arial", sans-serif'
   }
 });
 

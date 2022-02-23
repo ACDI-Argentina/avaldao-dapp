@@ -1,7 +1,6 @@
 import React from 'react'
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
-import Parallax from "components/Parallax/Parallax.js";
 import { makeStyles } from "@material-ui/core";
 import MainMenu from 'components/MainMenu';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +10,7 @@ const Page = ({ children, ...props }) => {
   const { t } = useTranslation();
 
   //TODO: allow overwrite by props
-  const brandSource = require("assets/img/logos/give4forest.png");
-  const parallaxSource = require("assets/img/profile-default-bg.jpg");
+  const brandSource = require("assets/img/logos/avaldao.svg");
 
   return (
 
@@ -30,8 +28,6 @@ const Page = ({ children, ...props }) => {
         }}
         {...props}
       />
-      <Parallax small image={parallaxSource} />
-
       <div className={classes.panel}>
         {children}
       </div>
@@ -53,16 +49,11 @@ const styles = theme => ({
     background: "#FFFFFF",
     position: "relative",
     zIndex: "3",
-    margin: "-60px 30px 0px",
-    borderRadius: "6px",
-    boxShadow:
-      "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
+    margin: "0px 30px 0px",
     padding: '2em',
     flexGrow: 1,
     minHeight: "75vh",
-    /* maxWidth:"1300px",
-    margin: "-60px auto 0px", */
-
+    margin: "100px auto 0px",
   },
 
   dappLogo: {

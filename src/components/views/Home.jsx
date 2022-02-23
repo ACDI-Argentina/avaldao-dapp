@@ -11,6 +11,7 @@ import Page from './Page';
 import Button from "components/CustomButtons/Button.js";
 import { withStyles } from '@material-ui/core/styles'
 import { history } from '../../lib/helpers'
+import PlatformFeatures from './PlatformFeatures';
 
 /**
  * Pantalla Home.
@@ -63,6 +64,9 @@ class Home extends Component {
       <Page>
         <Grid container spacing={3}>
           <Grid item xs={12}>
+            <PlatformFeatures />
+          </Grid>
+        {/**<Grid item xs={12}>
             <FondoGarantia></FondoGarantia>
           </Grid>
           <Grid item xs={12}>
@@ -80,7 +84,7 @@ class Home extends Component {
           </Grid>
           <Grid item xs={12}>
             <AvalTable />
-          </Grid>
+          </Grid>*/}
         </Grid>
       </Page>
     );

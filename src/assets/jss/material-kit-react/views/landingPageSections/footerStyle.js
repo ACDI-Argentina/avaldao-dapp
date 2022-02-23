@@ -1,3 +1,5 @@
+import { fontSize } from "styled-system";
+
 const footerStyle = {
 
   color: "#999",
@@ -6,16 +8,16 @@ const footerStyle = {
     color: "#000",
     padding: "0",
     textAlign: "left",
-    marginTop: "2em"
+    marginTop: "2em",
+    backgroundColor: "#7868E5"
   },
   dappLogo: {
-    padding: "1em 1em 1em 0em",
+    padding: "1em",
     width: "100%",
     textAlign: "left",
-    maxWidth: "300px"
+    maxHeight: "80px"
   },
   leftSection: {
-    textAlign: "right",
     "@media (max-width: 600px)": {
       textAlign: "left"
     }
@@ -41,10 +43,12 @@ const footerStyle = {
     margin: "0"
   },
   disclaimer: {
-    color: "#000",
+    color: "#FFF",
     fontWeight: "normal",
-    margin: "0",
-    textAlign: "center"
+    padding: "1em",
+    textAlign: "center",
+    fontSize: ".8em",
+    margin: "0px"
   },
   logo: {
     width: "75%",

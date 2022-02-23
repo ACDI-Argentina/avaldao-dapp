@@ -5,7 +5,6 @@ import { saveUser } from '../redux/reducers/usersSlice'
 import { withStyles } from '@material-ui/core/styles'
 import Header from "components/Header/Header.js"
 import Footer from "components/Footer/Footer.js"
-import Parallax from "components/Parallax/Parallax.js"
 import MainMenu from 'components/MainMenu'
 import Grid from '@material-ui/core/Grid'
 import { Typography } from '@material-ui/core'
@@ -279,7 +278,7 @@ class UserEditPage extends Component {
       <div className={classes.root}>
         <Header
           color="white"
-          brand={<img src={require("assets/img/logos/give4forest.png")}
+          brand={<img src={require("assets/img/logos/avaldao.svg")}
             alt={t('give4forest')}
             className={classes.dappLogo} />}
           rightLinks={<MainMenu />}
@@ -290,8 +289,6 @@ class UserEditPage extends Component {
           }}
           {...rest}
         />
-        <Parallax small image={require("assets/img/profile-default-bg.jpg")} />
-
         <div className={classNames(classes.main, classes.mainRaised)}>
           <form onSubmit={this.handleSubmit}
             className={classes.form}
@@ -490,13 +487,13 @@ const styles = theme => ({
     zIndex: "3"
   },
   mainRaised: {
-    margin: "-60px 80px 0px",
+    /*margin: "-60px 80px 0px",
     borderRadius: "6px",
     boxShadow:
       "0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)",
     "@media (max-width: 900px)": {
       margin: "-60px 20px 0px",
-    }
+    }*/
   },
   socials: {
     marginTop: "0",

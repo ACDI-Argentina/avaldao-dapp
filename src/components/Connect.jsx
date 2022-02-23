@@ -45,14 +45,14 @@ const AddressLabel = styled.div`
 const ConnectButton = styled.button`
   font-size: 16px;
   margin: 10px;
-  background-color: #53a653;
+  background-color: #7868E5;
   cursor: pointer;
-  padding: 3px 20px;
-  border-radius: 24px;
+  padding: 10px 30px;
+  border-radius: 40px;
   border: 0px;
   color: white;
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: 500;
 
   transition: 0.3s;
 

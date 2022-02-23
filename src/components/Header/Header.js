@@ -7,8 +7,6 @@ import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
 import Hidden from "@material-ui/core/Hidden"
 import Drawer from "@material-ui/core/Drawer"
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import styles from "assets/jss/material-kit-react/components/headerStyle.js"
 import { NavLink } from "react-router-dom"
 import Connect from "components/Connect"
@@ -86,24 +84,6 @@ export default function Header(props) {
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
 
-        <IconButton edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          aria-label="menu"
-          aria-controls="menu"
-          onClick={handleMenuClick}>
-          <MenuIcon />
-        </IconButton>
-        <Menu
-          id="menu"
-          anchorEl={menuAnchorEl}
-          keepMounted
-          open={Boolean(menuAnchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={goUsers}>{t('usersTitle')}</MenuItem>
-        </Menu>
-
         {leftLinks !== undefined ? brandComponent : null}
         {<div className={classes.flex}>
           {leftLinks !== undefined ? (
@@ -115,12 +95,9 @@ export default function Header(props) {
           )}
         </div>}
 
-        <LanguageSelector></LanguageSelector>
-
         <Connect />
 
         <Hidden smDown implementation="css">
-
           {rightLinks}
         </Hidden>
         <Hidden mdUp>
@@ -133,6 +110,7 @@ export default function Header(props) {
           </IconButton>
         </Hidden>
 
+        <LanguageSelector></LanguageSelector>
       </Toolbar>
 
       <Hidden mdUp implementation="js">
