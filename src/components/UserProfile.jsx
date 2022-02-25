@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import classNames from "classnames";
 import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
-import Header from "components/Header/Header.js";
-import Footer from "components/Footer/Footer.js";
-import MainMenu from 'components/MainMenu';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
-import imagesStyle from "assets/jss/material-kit-react/imagesStyles.js";
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import { Button } from '@material-ui/core';
+import Button from "components/CustomButtons/Button.js"
 import User from 'models/User';
 import TextField from '@material-ui/core/TextField';
 import { history } from 'lib/helpers';
@@ -20,6 +15,7 @@ import Avatar from './Avatar/Avatar';
 import LoadingOverlay from './Loading/LoadingOverlay';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Page from './views/Page'
 
 /**
  * Formulario de perfil de usuario.
@@ -116,12 +112,12 @@ class UserProfile extends Component {
     const wasSaving = prevProps.currentUser?.status?.name === "Registering";
     const isRegistered = this.props.currentUser?.status?.name === "Registered";
 
-    if(wasSaving && isRegistered){
+    if (wasSaving && isRegistered) {
       setTimeout(() => history.push("/"), 1000);
     }
 
 
-    
+
 
     if (userHasUpdated) {
       console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
@@ -238,7 +234,7 @@ class UserProfile extends Component {
   }
 
   async handleSubmit(event) {
-    
+
     event.preventDefault();
 
     const { currentUser } = this.props;
@@ -278,35 +274,21 @@ class UserProfile extends Component {
     const { currentUser, classes, t, ...rest } = this.props;
 
     return (
-      <div className={classes.root}>
-        <Header
-          color="white"
-          brand={<img src={require("assets/img/logos/avaldao.svg")}
-            alt={t('give4forest')}
-            className={classes.dappLogo} />}
-          rightLinks={<MainMenu />}
-          fixed
-          changeColorOnScroll={{
-            height: 0,
-            color: "white"
-          }}
-          {...rest}
-        />
+      <Page>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Typography variant="h5" component="h5">
+              {t('userProfileTitle')}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <form onSubmit={this.handleSubmit}
+              noValidate
+              autoComplete="off" >
 
-        <div className={classNames(classes.main, classes.mainRaised)}>
-          <form onSubmit={this.handleSubmit}
-            className={classes.form}
-            noValidate
-            autoComplete="off" >
+              <Grid container spacing={1} style={{ margin: "0px" }}>
 
-            <Grid container spacing={2} style={{ margin: "0px" }}>
-              <Grid item xs={12}>
-                <Typography variant="h5" component="h5">
-                  {t('userProfileTitle')}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={5}>  
-                <div className={classes.avatarContainer}>
+                <Grid item xs={12} md={5}>
                   <Avatar
                     imageSrc={avatarImg}
                     onCropped={(cropped) => {
@@ -314,115 +296,107 @@ class UserProfile extends Component {
                       this.setFormValid();
                     }}
                     labels={{
-                      choose:t('userAvatarChoose')
+                      choose: t('userAvatarChoose')
                     }}
                   />
+                </Grid>
 
-                </div>
-              </Grid>
-              <Grid container item spacing={3} xs={12} md={7}>
-              <Grid item xs={12}>
-                  <TextField
-                    id="addressTextField"
-                    value={this.state.user.address}
-                    label={t('userAddress')}
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    disabled
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountBalanceWalletIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                <Grid container spacing={1} xs={12} md={7}>
+                  <Grid item xs={12}>
+                    <TextField
+                      id="addressTextField"
+                      value={this.state.user.address}
+                      label={t('userAddress')}
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      disabled
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AccountBalanceWalletIcon />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      id="nameTextField"
+                      value={this.state.name}
+                      onChange={this.handleChangeName}
+                      label={t('userName')}
+                      helperText={nameHelperText}
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      error={nameError}
+                      required
+                      inputProps={{ maxLength: 42 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField id="emailTextField"
+                      value={this.state.email}
+                      onChange={this.handleChangeEmail}
+                      label={t('userEmail')}
+                      helperText={emailHelperText}
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      error={emailError}
+                      required
+                      inputProps={{ maxLength: 42 }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField id="urlTextField"
+                      value={this.state.url}
+                      onChange={this.handleChangeUrl}
+                      label={t('userUrl')}
+                      helperText={urlHelperText}
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      error={urlError}
+                      required
+                      inputProps={{ maxLength: 42 }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="nameTextField"
-                    value={this.state.name}
-                    onChange={this.handleChangeName}
-                    label={t('userName')}
-                    helperText={nameHelperText}
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={nameError}
-                    required
-                    inputProps={{ maxLength: 42 }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField id="emailTextField"
-                    value={this.state.email}
-                    onChange={this.handleChangeEmail}
-                    label={t('userEmail')}
-                    helperText={emailHelperText}
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={emailError}
-                    required
-                    inputProps={{ maxLength: 42 }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField id="urlTextField"
-                    value={this.state.url}
-                    onChange={this.handleChangeUrl}
-                    label={t('userUrl')}
-                    helperText={urlHelperText}
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={urlError}
-                    required
-                    inputProps={{ maxLength: 42 }}
-                  />
-                </Grid>
-              </Grid>
 
-              <Grid
-                container
-                item
-                xs={12}
-                md={4}
-                justifyContent={"center"}
-              >
-                <div style={{ paddingTop: "25px", display: "flex", alignItems: "center" }}>
-                    <LoadingOverlay loading={isSaving}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        disabled={!formValid || isSaving}
-                        className={classes.button}>
-                        {t('save')}
-                      </Button>
-                    </LoadingOverlay>
-                  <Button
-                    onClick={this.cancel}
-                    className={classes.button}>
-                    {t('cancel')}
+                <Grid container xs={12} justifyContent="flex-end">
+
+                  <LoadingOverlay loading={isSaving}>
+                    <Button color="primary"
+                      round
+                      className="btn btn-info"
+                      type="submit"
+                      disabled={!formValid || isSaving}>
+                      {t("save")}
+                    </Button>
+                  </LoadingOverlay>
+
+                  <Button color="secondary"
+                    round
+                    className="btn btn-info"
+                    onClick={this.cancel}>
+                    {t("cancel")}
                   </Button>
-                </div>
+                </Grid>
               </Grid>
-            </Grid>
-
-          </form>
-        </div>
-        <Footer />
-      </div>
+            </form>
+          </Grid>
+        </Grid>
+      </Page >
     );
   }
 }
@@ -430,73 +404,7 @@ class UserProfile extends Component {
 UserProfile.contextType = Web3AppContext;
 
 const styles = theme => ({
-  root: {
-    overflowX: "hidden",
-  },
-  form: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-    padding: '2em',
-    flexGrow: 1
-  },
-  description: {
-    margin: "1.071rem auto 0",
-    maxWidth: "600px",
-    color: "#999",
-    textAlign: "center !important"
-  },
-  name: {
-    marginTop: "-80px"
-  },
-  ...imagesStyle,
-  main: {
-    background: "#FFFFFF",
-    position: "relative",
-    zIndex: "3"
-  },
-  socials: {
-    marginTop: "0",
-    width: "100%",
-    transform: "none",
-    left: "0",
-    top: "0",
-    height: "100%",
-    lineHeight: "41px",
-    fontSize: "20px",
-    color: "#999"
-  },
-  navWrapper: {
-    margin: "20px auto 50px auto",
-    textAlign: "center"
-  },
-  dappLogo: {
-    maxHeight: "4em",
-    "@media (max-width: 800px)": {
-      maxHeight: "3em"
-    },
-    "@media (max-width: 600px)": {
-      maxHeight: "2em"
-    }
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '25ch',
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  avatarContainer: {
-    width: "100%",
-    height: "100%",
-    minHeight: "325px",
 
-    "@media (max-width: 950px)": {
-      display: "flex",
-      justifyContent: "center",
-    }
-  }
 });
 
 const mapStateToProps = (state, ownProps) => {

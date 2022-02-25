@@ -18,16 +18,13 @@ const AvatarWrapper = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
-  margin: 15px 0px;
+  margin: auto;
   min-height: 340px;
 
 `
 const AvatarContainer = styled.div`
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0px;
+
   width: 340px;
   height: 340px;
 `
