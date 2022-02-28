@@ -27,7 +27,7 @@ class HomeCarousel extends Component {
       <Slider {...settings}>
         <div>
           <HomeCarouselItem
-            bkg={require("assets/img/carousel/slideBg1.png")}
+            bkg={require("assets/img/carousel/slideBg1.jpg")}
             title={t('homeCarousel1Title')}
             description={t('homeCarousel1Description')}
             btnLabel={t('homeCarousel1BtnLabel')}
@@ -36,7 +36,7 @@ class HomeCarousel extends Component {
         </div>
         <div>
           <HomeCarouselItem
-            bkg={require("assets/img/carousel/slideBg2.png")}
+            bkg={require("assets/img/carousel/slideBg2.jpg")}
             title={t('homeCarousel2Title')}
             description={t('homeCarousel2Description')}
             btnLabel={t('homeCarousel2BtnLabel')}
@@ -45,7 +45,7 @@ class HomeCarousel extends Component {
         </div>
         <div>
           <HomeCarouselItem
-            bkg={require("assets/img/carousel/slideBg3.png")}
+            bkg={require("assets/img/carousel/slideBg3.jpg")}
             title={t('homeCarousel3Title')}
             description={t('homeCarousel3Description')}
             btnLabel={t('homeCarousel3BtnLabel')}
