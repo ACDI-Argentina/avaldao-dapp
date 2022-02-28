@@ -6,7 +6,7 @@ import { Web3AppContext } from 'lib/blockchain/Web3App';
 import AccountDetailsModal from 'components/Dialogs/AccountDetailsModal';
 
 import { withTranslation } from 'react-i18next';
-
+import Button from "components/CustomButtons/Button.js";
 
 const Wrapper = styled.div``;
 
@@ -20,11 +20,24 @@ const WalletIndicator = styled.div`
 `;
 
 const AddressLabel = styled.div`
-  font-weight: bold;
+
+  @media (max-width: 500px) {
+    font-size: 12px;
+    margin: 0px;
+    padding: 3px 10px;
+    margin: 5px;
+    border-radius: 14px;
+  }
+
+  :hover{
+    box-shadow: 0 4px 2px 0 rgba(0,0,0,0.2);
+  }
+
+  font-weight: 500;
   font-size: 16px;
   cursor: pointer;
-  padding: 3px 20px;
-  border-radius: 24px;
+  padding: 10px 30px;
+  border-radius: 40px;
 
   ${(props) =>
     props.success &&
@@ -41,36 +54,6 @@ const AddressLabel = styled.div`
     border: 1px solid #ffc107;
     background-color: #ffc10738;
   `}
-`;
-const ConnectButton = styled.button`
-  font-size: 16px;
-  margin: 10px;
-  background-color: #7868E5;
-  cursor: pointer;
-  padding: 10px 30px;
-  border-radius: 40px;
-  border: 0px;
-  color: white;
-  text-transform: capitalize;
-  font-weight: 500;
-
-  transition: 0.3s;
-
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-              0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-
-  @media (max-width: 500px) {
-    font-size: 12px;
-    margin: 0px;
-    padding: 3px 10px;
-    margin: 5px;
-    border-radius: 14px;
-  }
-
-  :hover{
-    box-shadow: 0 4px 2px 0 rgba(0,0,0,0.2);
-  }
 `;
 
 const Connect = (props) => {
@@ -119,7 +102,10 @@ const Connect = (props) => {
           </AddressWrapper>
         )}
         {!currentUser.address && (
-          <ConnectButton onClick={() => loginAccount()}>{t('connectWallet')}</ConnectButton>
+          <Button color="primary" round
+                className="btn btn-info" onClick={() => loginAccount()}>
+                {t('connectWallet')}
+          </Button>
         )}
       </Wrapper>
 

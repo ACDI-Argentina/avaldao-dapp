@@ -35,6 +35,10 @@ const buttonStyle = {
     verticalAlign: "middle",
     touchAction: "manipulation",
     cursor: "pointer",
+    "@media (max-width: 500px)": {
+      fontSize: "12px",
+      padding: "6px 15px"
+    },
     "&:hover,&:focus": {
       color: "#FFFFFF",
       backgroundColor: grayColor,
@@ -320,9 +324,8 @@ const buttonStyle = {
       }
     },
     "@media (max-width: 500px)": {
-      height: "20px",
+      height: "20px"
     }
-
   }
 };
 
