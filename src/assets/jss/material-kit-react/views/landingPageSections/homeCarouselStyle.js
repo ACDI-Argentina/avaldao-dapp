@@ -1,13 +1,13 @@
 import { title, primaryColor } from "assets/jss/material-kit-react.js";
 
-const platformFeaturesStyle = {
+const homeCarouselStyle = {
 
   color: "#999",
 
   section: {
     padding: "0",
     textAlign: "center",
-    padding: "3em 2em"
+    marginTop: "3em"
   },
   title: {
     ...title,
@@ -65,4 +65,4 @@ const platformFeaturesStyle = {
   }
 };
 
-export default platformFeaturesStyle;
+export default homeCarouselStyle;

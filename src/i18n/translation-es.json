@@ -117,6 +117,18 @@
     "landingPageFinanceProject": "Financia tu proyecto",
     "landingPageMakeDonation": "Haz tu donación",
 
+    "homeCarousel1Title": "Crecé con AvalDAO",
+    "homeCarousel1Description": "Formá parte de nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir y emprender, con quienes necesitan mejorar sus condiciones crediticias.",
+    "homeCarousel1BtnLabel": "Conocer más",
+
+    "homeCarousel2Title": "Confiamos en vos",
+    "homeCarousel2Description": "Acompañamos a emprendedoras y emprendedores para que puedan acceder a las mejores líneas de crédito.",
+    "homeCarousel2BtnLabel": "Conocer más",
+
+    "homeCarousel3Title": "Sé parte",
+    "homeCarousel3Description": "Impulsá la revolución financiera invertiendo en finanzas descentralizadas con la garantía de la blockchain de bitcoin. Ayudá invirtiendo en un negocio seguro.",
+    "homeCarousel3BtnLabel": "Comenzar",
+
     "platformFeaturesTitle1": "Qué es AvalDAO",
 
     "platformFeaturesDescription1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, massa nunc, nullam donec aliquam enim amet arcu. Lacus, placerat eros, nibh parturient at at magna. Sed aliquet mattis quis consectetur lobortis tincidunt. Tellus tempor, quam pellentesque quisque egestas arcu id.",
@@ -125,10 +137,10 @@
     "transparencyDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir",
 
     "autonomy": "Autonomía",
-    "autonomyDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir ",
+    "autonomyDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir",
 
     "security": "Seguridad",
-    "securityDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir ",
+    "securityDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir",
 
     "blockchainBenefitsTitle": "Beneficios de blockchain en la recolección de fondos para el Desarrollo",
 

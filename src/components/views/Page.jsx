@@ -49,11 +49,12 @@ const styles = theme => ({
     background: "#FFFFFF",
     position: "relative",
     zIndex: "3",
-    margin: "0px 30px 0px",
-    padding: '2em',
+    margin: "100px auto 0",
+    padding: '1em 0',
     flexGrow: 1,
     minHeight: "75vh",
-    margin: "100px auto 0px",
+    width: "100vw"
+
   },
 
   dappLogo: {

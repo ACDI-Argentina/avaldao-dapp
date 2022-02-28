@@ -117,18 +117,30 @@
     "landingPageFinanceProject": "Finance your project",
     "landingPageMakeDonation": "Make your donation",
 
-    "platformFeaturesTitle1": "Qué es AvalDAO",
+    "homeCarousel1Title": "Grow with AvalDAO",
+    "homeCarousel1Description": "Be part of a new type of organization designed to connect those who want to support the effort of producing and undertaking, with those who need to improve their credit conditions.",
+    "homeCarousel1BtnLabel": "Learn more",
+
+    "homeCarousel2Title": "We trust you",
+    "homeCarousel2Description": "We help entrepreneurs so that they can access the best lines of credit.",
+    "homeCarousel2BtnLabel": "Apply for",
+
+    "homeCarousel3Title": "Be part",
+    "homeCarousel3Description": "Drive the financial revolution by investing in decentralized finance with the guarantee of the bitcoin blockchain. Help by investing in a safe business.",
+    "homeCarousel3BtnLabel": "Start",
+
+    "platformFeaturesTitle1": "What is AvalDAO",
 
     "platformFeaturesDescription1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, massa nunc, nullam donec aliquam enim amet arcu. Lacus, placerat eros, nibh parturient at at magna. Sed aliquet mattis quis consectetur lobortis tincidunt. Tellus tempor, quam pellentesque quisque egestas arcu id.",
 
     "transparency": "Collaboration",
-    "transparencyDescription": "Collaboration description...",
+    "transparencyDescription": "We are a new type of organization designed to connect those who want to support the effort of producing",
 
     "autonomy": "Autonomy",
-    "autonomyDescription": "Autonomy description...",
+    "autonomyDescription": "We are a new type of organization designed to connect those who want to support the effort of producing",
 
     "security": "Security",
-    "securityDescription": "Security description...",
+    "securityDescription": "We are a new type of organization designed to connect those who want to support the effort of producing",
 
     "blockchainBenefitsTitle": "Blockchain benefits in fundraising for Development",
 
