@@ -42,11 +42,14 @@
     "avalReclamarTitle": "Reclamar",
     "avalReintegrarTitle": "Reintegrar",
     "avalSolicitar": "Solicitar",
+    "avalActualizar": "Actualizar",
     "avalCancelar": "Cancelar",
 
     "avalSolicitadoSuccess": "El aval ha sido solicitado. Se encuentra pendiente de aprobación por parte de AvalDAO.",
+    "avalActualizadoSuccess": "El aval ha sido actualizado exitosamente.",
     "avalSolicitadoError": "Ha ocurrido un error al solicitar el aval.",
     "avalSolicitadoErrorNoAutorizado":"Usuario no autorizado.",
+    "avalActualizadoError": "Ha ocurrido un error al actualizar el aval.",
 
     "avalProyecto": "Proyecto",
     "avalObjetivo": "Objetivo",
@@ -71,6 +74,7 @@
 
     "avalAceptar":"Aceptar",
     "avalRechazar":"Rechazar",
+    "avalEditar":"Editar",
 
     "avalSolicitadoBy":"Este aval ha sido solicitado por el usuario",
     "avalSolicitadoTo":"El mismo se encuentra pendiente de aceptación por parte del usuario",

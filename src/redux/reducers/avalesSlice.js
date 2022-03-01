@@ -42,6 +42,18 @@ export const avalesSlice = createSlice({
       state.push(avalStore);
       return state;
     },
+
+    actualizarAval: (state, action) => {
+      const aval = action.payload;
+      aval.statusPrev = aval.status;
+      aval.status = Aval.ACTUALIZANDO;
+      const avalStore = aval.toStore();
+      const index = state.findIndex(a => a.id === avalStore.id);
+      if (index >= 0) {
+        state[index] = avalStore;
+      }
+      return state;
+    },
     aceptarAval: (state, action) => {
       let aval = action.payload;
       aval.statusPrev = aval.status;
@@ -123,6 +135,7 @@ export const {
   fetchAval,
   resetAvales,
   solicitarAval,
+  actualizarAval,
   aceptarAval,
   rechazarAval,
   firmarAval,

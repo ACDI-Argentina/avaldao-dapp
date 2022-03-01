@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Page from './Page';
 import { Flex } from './styled';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +14,13 @@ import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { useTranslation } from 'react-i18next';
+import AvalForm from './AvalForm';
+
+import Aval from 'models/Aval';
+import { actualizarAval } from 'redux/reducers/avalesSlice';
+import useUpdatingAval from 'hooks/useUpdatingAval';
+import messageUtils from 'redux/utils/messageUtils';
+
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -29,6 +36,23 @@ const AvalView = (props) => {
   const aval = useSelector(state => selectAvalById(state, avalId));
   const currentUser = useSelector(state => selectCurrentUser(state));
   const { t } = useTranslation();
+  const [editing, setEditing] = useState(false);
+
+  async function onSuccess() {
+    messageUtils.addMessageSuccess({
+      text: t('avalActualizadoSuccess')
+    });
+    setEditing(false);
+  }
+
+  async function onError(error) {
+    messageUtils.addMessageError({
+      text: t('avalActualizadoError')
+    });
+  }
+
+  const { loading } = useUpdatingAval(avalId, onSuccess, onError);
+
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -40,6 +64,24 @@ const AvalView = (props) => {
 
   const taskCode = aval.getTaskCode(currentUser);
 
+  async function handleSubmit(values) {
+
+    if (!currentUser?.address) {
+      console.log(`Usuario no conectado`);
+      return;
+    } else {
+      console.log(`Submit values with solicitante: ${currentUser?.address}`);
+    }
+
+    dispatch(actualizarAval(new Aval({
+      ...values,
+      id: aval.id,
+      solicitanteAddress: currentUser?.address
+    })
+    ));
+  }
+
+
   return (
     <Page>
       <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
@@ -50,12 +92,31 @@ const AvalView = (props) => {
           <Alert severity="info">{t(taskCode)}</Alert>
         </div>
       )}
-      <AvalGeneralSection aval={aval} />
-      <SignaturesSection aval={aval} />
-      <CuotasSection aval={aval} />
-      <ReclamosSection aval={aval} />
+
+      {editing ? (
+        <AvalForm
+          aval={aval}
+          loading={loading}
+          submitText={t("avalActualizar")}
+          onSubmit={handleSubmit}
+          onCancel={() => setEditing(false)}
+        />
+      ) : (
+        <>
+          <AvalGeneralSection aval={aval} />
+          <SignaturesSection aval={aval} />
+          <CuotasSection aval={aval} />
+          <ReclamosSection aval={aval} />
+        </>
+      )}
+
       <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-        <AvalActions aval={aval} />
+        <AvalActions 
+          aval={aval}
+          editing={editing} 
+          setEditing={setEditing}
+          
+        />
       </Flex>
     </Page>
   )
