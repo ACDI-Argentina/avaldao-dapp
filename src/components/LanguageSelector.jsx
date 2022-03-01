@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import config from '../configuration';
+import classNames from "classnames";
 
 import styled from 'styled-components';
 import Button from 'components/CustomButtons/Button.js';
 import styles from 'assets/jss/material-kit-react/components/headerLinksStyle.js';
 import { withStyles } from '@material-ui/core/styles';
-import Flag from 'react-flagkit';
 
-const ActiveIndicator = styled.div`
-  border: 1px solid #53a653;
-  backGround-color: #53a653;
-  box-sizing: border-box;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`;
 const FlagContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,8 +63,9 @@ class LanguageSelector extends Component {
           onClick={() => this.changeValue(language.key)}
         >
           <FlagContainer>
-            <Flag country={language.flag} value={language.key} />
-            {currentValue === language.key && <ActiveIndicator />}
+            <img src={require('assets/img/roundedFlags/' + language.flag + '.svg')}
+              className={classNames(classes.flag, (currentValue === language.key ? classes.activeFlag : classes.inactiveFlag))}>
+            </img>
           </FlagContainer>
         </Button>
     ));
