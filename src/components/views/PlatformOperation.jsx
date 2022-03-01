@@ -1,0 +1,96 @@
+import React, { Component } from 'react';
+import styles from "assets/jss/material-kit-react/views/landingPageSections/platformOperationStyle.js";
+import { withTranslation } from 'react-i18next';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card'
+import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from '@material-ui/core/CardContent'
+import { Grid } from '@material-ui/core';
+import Button from "components/CustomButtons/Button.js";
+
+/**
+ * The PlatformOperation section
+ */
+class PlatformOperation extends Component {
+
+  render() {
+    const { classes, t, } = this.props;
+
+    return (
+      <div className={classes.section}>
+        {/*<img className={classes.donut} src={require("assets/img/donut.png")}></img>*/}
+        <div className={classes.sectionGlass}>
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <h2 className={classes.title}>
+                {t('platformOperationTitle')}
+              </h2>
+            </Grid>
+            <Grid item xs={12}>
+              <div className={classes.operationDescription}>
+              </div>
+            </Grid>
+            <Grid item xs={6}>
+              <Card className={classes.root}>
+                <CardMedia
+                  className={classes.cardMedia}
+                  image={require("assets/img/inversorCardAvatar.jpg")}>
+                </CardMedia>
+                <CardContent className={classes.cardContent}>
+                  <Grid container spacing={1} align="left">
+                    <Grid item xs={12} className={classes.cardTitle}>
+                      {t('investorCardTitle')}
+                    </Grid>
+                    <Grid item xs={12} className={classes.cardDescription}>
+                      {t('investorCardDescription')}
+                    </Grid>
+                    <Grid item xs={12} className={classes.cardQuestion}>
+                      {t('investorCardQuestion')}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button style={{margin: "1.5em 0"}} color="primary" round
+                        className="btn btn-info">
+                        {t('investorCardBtnLabel')}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={6}>
+              <Card className={classes.root}>
+                <CardMedia
+                  className={classes.cardMedia}
+                  image={require("assets/img/solicitanteCardAvatar.jpg")}>
+                </CardMedia>
+                <CardContent className={classes.cardContent}>
+                  <Grid container spacing={1} align="left">
+                    <Grid item xs={12} className={classes.cardTitle}>
+                      {t('applicantCardTitle')}
+                    </Grid>
+                    <Grid item xs={12} className={classes.cardDescription}>
+                      {t('applicantCardDescription')}
+                    </Grid>
+                    <Grid item xs={12} className={classes.cardQuestion}>
+                      {t('applicantCardQuestion')}
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Button style={{margin: "1.5em 0"}} color="primary" round
+                        className="btn btn-info">
+                        {t('applicantCardBtnLabel')}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </div>
+      </div>
+    )
+  }
+}
+
+PlatformOperation.propTypes = {};
+
+export default withTranslation()((withStyles(styles)(PlatformOperation)))

@@ -142,6 +142,18 @@
     "security": "Seguridad",
     "securityDescription": "Somos un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir",
 
+    "platformOperationTitle": "Cómo funciona",
+
+    "investorCardTitle": "Soy inversor",
+    "investorCardDescription": "Descripción breve de los beneficios. Ayuda invertiendo en finanzas descentralizadas con la garantía de la blockchain de bitcoin.",
+    "investorCardQuestion": "¿Querés ayudar mientras invertís?",
+    "investorCardBtnLabel": "Conocer más",
+
+    "applicantCardTitle": "Solicito un garante",
+    "applicantCardDescription": "Descripción breve de las tareas que realizamos. Obtené financiación para tus compras o para tus emprendimientos.",
+    "applicantCardQuestion": "¿Necesitás financiar tu proyecto?",
+    "applicantCardBtnLabel": "Solicitar aval",
+
     "blockchainBenefitsTitle": "Beneficios de blockchain en la recolección de fondos para el Desarrollo",
 
     "blockchainHelpBenefitTitle": "Ayuda sin fonteras",

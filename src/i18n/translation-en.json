@@ -142,6 +142,18 @@
     "security": "Security",
     "securityDescription": "We are a new type of organization designed to connect those who want to support the effort of producing",
 
+    "platformOperationTitle": "How does it work",
+
+    "investorCardTitle": "I am an investor",
+    "investorCardDescription": "Brief description of the benefits. Help by investing in decentralized finance with the guarantee of the bitcoin blockchain.",
+    "investorCardQuestion": "Do you want to help while you invest?",
+    "investorCardBtnLabel": "Learn more",
+
+    "applicantCardTitle": "I request a guarantor",
+    "applicantCardDescription": "Brief description of the tasks we perform. Obtain financing for your purchases or for your ventures.",
+    "applicantCardQuestion": "Do you need to finance your project?",
+    "applicantCardBtnLabel": "Request endorsement",
+
     "blockchainBenefitsTitle": "Blockchain benefits in fundraising for Development",
 
     "blockchainHelpBenefitTitle": "Help without borders",

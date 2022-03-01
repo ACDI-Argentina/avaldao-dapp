@@ -8,6 +8,7 @@ import Page from './Page'
 import { withStyles } from '@material-ui/core/styles'
 import { history } from '../../lib/helpers'
 import PlatformFeatures from './PlatformFeatures'
+import PlatformOperation from './PlatformOperation'
 import HomeCarousel from './HomeCarousel'
 
 /**
@@ -72,6 +73,9 @@ class Home extends Component {
           </Grid>
           <Grid item xs={12}>
             <PlatformFeatures />
+          </Grid>
+          <Grid item xs={12}>
+            <PlatformOperation />
           </Grid>
         </Grid>
       </Page>
