@@ -272,5 +272,7 @@
      "menuProfile":"Profile", 
      "menuSignup":"Sign up" ,
 
-     "aboutUs":"About us"
-}
+     "aboutUs":"About us",
+
+     "workspaceTitle":"My workspace"
+    }

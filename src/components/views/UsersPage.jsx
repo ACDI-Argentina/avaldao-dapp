@@ -52,7 +52,7 @@ class UsersPage extends Component {
 
     return (
       <Page>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} style={{ padding: "2em" }}>
           <Grid item xs={12}>
             <Typography variant="h5" component="h5">
               {t('usersTitle')}

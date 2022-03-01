@@ -275,7 +275,7 @@ class UserProfile extends Component {
 
     return (
       <Page>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} style={{ padding: "2em" }}>
           <Grid item xs={12}>
             <Typography variant="h5" component="h5">
               {t('userProfileTitle')}

@@ -42,7 +42,8 @@ class MainMenu extends Component {
       profile: t('menuProfile'),
       signup: t('menuSignup'),
       aboutUs: t('aboutUs'),
-      users: t('usersTitle')
+      users: t('usersTitle'),
+      workspace: t('workspaceTitle')
     }
 
     let buttonText;
@@ -79,13 +80,24 @@ class MainMenu extends Component {
       </div>
     );  
 
+    const workspace = (
+      <div
+        className={classes.dropdownLink}
+        onClick={() => {
+          history.push(`/workspace`);
+        }}>
+        {labels.workspace}
+      </div>
+    );  
+
     let dropdownList = [
-      aboutUs,
-      users
+      aboutUs
     ]
     if (currentUser?.address) {
       dropdownList = [
         profileLink,
+        workspace,
+        users,
         aboutUs
       ]
     }
