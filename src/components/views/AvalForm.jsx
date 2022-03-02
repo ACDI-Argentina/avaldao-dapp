@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import LoadingOverlay from 'components/Loading/LoadingOverlay';
 import config from 'configuration';
+import avalSchema from 'schemas/AvalSchema';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -47,22 +48,22 @@ const FormikInput = ({ formik, id, ...props }) => {
 }
 
 
-const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, showAddress, validationSchema, solicitanteAddress, defaultAvaldaoAddress }) => {
-
+const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loading = false, solicitanteAddress, defaultAvaldaoAddress }) => {
+  
   const formik = useFormik({
     initialValues: {
-      proyecto: '',
-      objetivo: '',
-      adquisicion: '',
-      beneficiarios: '',
-      montoFiat: 1000, //in usd
-      cuotasCantidad: 6,
-      solicitanteAddress: solicitanteAddress,
-      avaldaoAddress: defaultAvaldaoAddress,
-      comercianteAddress: '',
-      avaladoAddress: ''
+      proyecto: aval?.proyecto || '',
+      objetivo: aval?.objetivo || '',
+      adquisicion: aval?.adquisicion || '',
+      beneficiarios: aval?.beneficiarios || '',
+      montoFiat: (aval?.montoFiat / 100) || 1000, //in usd
+      cuotasCantidad: aval?.cuotasCantidad || 6,
+      solicitanteAddress: aval?.solicitanteAddress || solicitanteAddress,
+      avaldaoAddress: aval?.avaldaoAddress || defaultAvaldaoAddress,
+      comercianteAddress: aval?.comercianteAddress || '',
+      avaladoAddress: aval?.avaladoAddress || ''
     },
-    validationSchema: validationSchema,
+    validationSchema: avalSchema,
 
     onSubmit: values => {
       const montoFiatInCents = values.montoFiat * 100;
@@ -157,7 +158,6 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
 
         <Grid item xs={12} md={6}>
           <FormikInput /* required */
-            value={solicitanteAddress}
             id="solicitanteAddress"
             label={t('avalSolicitanteAddress')}
             placeholder="0x..."
@@ -233,14 +233,17 @@ const AvalForm = ({ submitText, onSubmit: onSubmitHandler, loading = false, show
               variant="contained"
               color="primary"
               type="submit"
-              disabled={loading || !formik.isValid || !formik.dirty}  //Habilitarlo pero que en el click solamente maneje el submit si el form es valido
+              disabled={loading || !formik.isValid || !formik.dirty} 
               className={classes.button}>
-              {submitText}
+              {submitText || t("avalSolicitar")}
             </Button>
           </LoadingOverlay>
 
           <Button
-            onClick={formik.resetForm}
+            onClick={() => {
+              formik.resetForm();
+              typeof onCancel === "function" && onCancel();
+            }}
             className={classes.button}>
             {t('avalCancelar')}
           </Button>

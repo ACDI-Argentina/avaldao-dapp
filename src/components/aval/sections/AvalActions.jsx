@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const AvalActions = ({ aval }) => {
+const AvalActions = ({ aval, editing,  setEditing }) => {
   //const classes = useStyles();
   const dispatch = useDispatch();
   //const [loading, setLoading] = useState(false);
@@ -95,6 +95,7 @@ const AvalActions = ({ aval }) => {
   }
 
   //const isAvaladao = aval?.isAvaldao(currentUser);
+  const allowEditar = aval.allowEditar(currentUser);
   const allowAceptar = aval.allowAceptar(currentUser);
   const allowRechazar = aval.allowRechazar(currentUser);
   const allowFirmar = aval.allowFirmar(currentUser);
@@ -102,7 +103,7 @@ const AvalActions = ({ aval }) => {
   const allowReclamar = aval.allowReclamar(currentUser);
   const allowReintegrar = aval.allowReintegrar(currentUser);
 
-  const hasAction = allowAceptar || allowRechazar || allowFirmar || allowDesbloquear || allowReclamar || allowReintegrar;
+  const hasAction = allowEditar || allowAceptar || allowRechazar || allowFirmar || allowDesbloquear || allowReclamar || allowReintegrar;
 
   return (
     <React.Fragment>
@@ -111,6 +112,13 @@ const AvalActions = ({ aval }) => {
 
       <ButtonGroup variant="text" color="primary">
 
+
+        {allowEditar && !editing && (
+          <Button onClick={() => setEditing(true)}>
+            {t("avalEditar")}
+          </Button>
+        )}
+        
         {allowAceptar &&
           <Button
             onClick={async () => {
