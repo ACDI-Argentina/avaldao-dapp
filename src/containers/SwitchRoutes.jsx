@@ -12,6 +12,7 @@ import AvalSolicitud from 'components/views/AvalSolicitud'
 import UsersPage from 'components/views/UsersPage'
 import UserEditPage from 'components/UserEditPage'
 import Workspace from 'components/views/Workspace'
+import AvalEdit from 'components/views/AvalEdit'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -57,6 +58,16 @@ const SwitchRoutes = ({ currentUser }) => (
             path="/aval/:avalId/view"
             render={props => (
                 <AvalView
+                    key={currentUser ? currentUser.id : 0}
+                    {...props}
+                />
+            )}
+        />
+        <Route
+            exact
+            path="/aval/:avalId/edit"
+            render={props => (
+                <AvalEdit
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
