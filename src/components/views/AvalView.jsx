@@ -11,7 +11,7 @@ import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
 import StatusIndicator from 'components/StatusIndicator';
 import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { useTranslation } from 'react-i18next';
 import AvalForm from './AvalForm';
@@ -84,40 +84,42 @@ const AvalView = (props) => {
 
   return (
     <Page>
-      <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-        <StatusIndicator status={aval.status} />
-      </Flex>
-      {taskCode && (
-        <div className={classes.alert}>
-          <Alert severity="info">{t(taskCode)}</Alert>
-        </div>
-      )}
+      <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
+        <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
+          <StatusIndicator status={aval.status} />
+        </Flex>
+        {taskCode && (
+          <div className={classes.alert}>
+            <Alert severity="info">{t(taskCode)}</Alert>
+          </div>
+        )}
 
-      {editing ? (
-        <AvalForm
-          aval={aval}
-          loading={loading}
-          submitText={t("avalActualizar")}
-          onSubmit={handleSubmit}
-          onCancel={() => setEditing(false)}
-        />
-      ) : (
-        <>
-          <AvalGeneralSection aval={aval} />
-          <SignaturesSection aval={aval} />
-          <CuotasSection aval={aval} />
-          <ReclamosSection aval={aval} />
-        </>
-      )}
+        {editing ? (
+          <AvalForm
+            aval={aval}
+            loading={loading}
+            submitText={t("avalActualizar")}
+            onSubmit={handleSubmit}
+            onCancel={() => setEditing(false)}
+          />
+        ) : (
+          <>
+            <AvalGeneralSection aval={aval} />
+            <SignaturesSection aval={aval} />
+            <CuotasSection aval={aval} />
+            <ReclamosSection aval={aval} />
+          </>
+        )}
 
-      <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-        <AvalActions 
-          aval={aval}
-          editing={editing} 
-          setEditing={setEditing}
-          
-        />
-      </Flex>
+        <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
+          <AvalActions
+            aval={aval}
+            editing={editing}
+            setEditing={setEditing}
+
+          />
+        </Flex>
+      </Grid>
     </Page>
   )
 }
