@@ -14,7 +14,7 @@ import {
   ResponsiveImg,
   SCommitIcon,
   CloseContainer,
-} from './aboutUs/styled';
+} from './about/styled';
 
 
 const {
@@ -22,7 +22,7 @@ const {
   REACT_APP_BUILD_COMMIT,
 } = process.env;
 
-const AboutUs = ({ onClose, ...props }) => {
+const About = ({ onClose, ...props }) => {
   const { version } = packageJson;
   const repoUrl = 'https://github.com/ACDI-Argentina/avaldao-dapp';
 
@@ -68,4 +68,4 @@ const AboutUs = ({ onClose, ...props }) => {
   );
 };
 
-export default AboutUs;
+export default About;

@@ -268,12 +268,10 @@
     "requestConnectionCancel":"Quizás en otro momento",
     "requestConnectionOk": "De acuerdo, conectar",  
 
-    
-     "menuWelcome":"¡Hola!",
-     "menuProfile":"Perfil",
-     "menuSignup":"Regístrate",
-
-     "aboutUs":"Acerca de",
-
-     "workspaceTitle":"Mi espacio de trabajo"
+    "menuWelcome":"¡Hola!",
+    "menuProfile":"Perfil",
+    "menuSignup":"Regístrate",
+    "aboutTitle": "Acerca de",
+    "workspaceTitle":"Mi espacio de trabajo",
+    "logoutTitle": "Salir"
 }

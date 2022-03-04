@@ -8,7 +8,6 @@ import GridItem from "components/Grid/GridItem.js";
 import PlatformFeatures from "components/views/PlatformFeatures.jsx";
 import BlockchainBenefits from "components/views/BlockchainBenefits.jsx";
 import JoinGivethCommunity from 'components/JoinGivethCommunity.jsx';
-import MainMenu from "components/MainMenu.jsx";
 import styles from "assets/jss/material-kit-react/views/landingPage.js";
 import { withTranslation } from 'react-i18next';
 
@@ -25,7 +24,6 @@ export default withTranslation()(function LandingPage(props) {
         brand={<img src={require("assets/img/logos/avaldao.png")}
           alt={t('give4forest')}
           className={classes.dappLogo} />}
-        rightLinks={<MainMenu />}
         {...rest}
       />
       <div className={classNames(classes.main, classes.mainRaised)}>

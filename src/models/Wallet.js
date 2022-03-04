@@ -30,7 +30,7 @@ class Wallet {
   }
 
   get logo() {
-    return this._logoUrl;
+    return this._logo;
   }
 
   set logo(value) {

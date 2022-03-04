@@ -2,7 +2,6 @@ import React from 'react'
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
 import { makeStyles } from "@material-ui/core";
-import MainMenu from 'components/MainMenu';
 import { useTranslation } from 'react-i18next';
 
 const Page = ({ children, ...props }) => {
@@ -20,7 +19,6 @@ const Page = ({ children, ...props }) => {
         brand={<img src={brandSource}
           alt={t('give4forest')}
           className={classes.dappLogo} />}
-        rightLinks={<MainMenu />}
         fixed
         changeColorOnScroll={{
           height: 0,

@@ -9,7 +9,7 @@ import Hidden from "@material-ui/core/Hidden"
 import Drawer from "@material-ui/core/Drawer"
 import styles from "assets/jss/material-kit-react/components/headerStyle.js"
 import { NavLink } from "react-router-dom"
-import Connect from "components/Connect"
+import ConnectButton from "components/ConnectButton"
 import LanguageSelector from "components/LanguageSelector"
 import MenuIcon from '@material-ui/icons/Menu'
 import { history } from 'lib/helpers'
@@ -95,11 +95,10 @@ export default function Header(props) {
           )}
         </div>}
 
-        <Connect />
+        <LanguageSelector></LanguageSelector>
 
-        <Hidden smDown implementation="css">
-          {rightLinks}
-        </Hidden>
+        <ConnectButton />
+ 
         <Hidden mdUp>
           <IconButton
             color="inherit"
@@ -109,8 +108,6 @@ export default function Header(props) {
             {/*<Menu />*/}
           </IconButton>
         </Hidden>
-
-        <LanguageSelector></LanguageSelector>
       </Toolbar>
 
       <Hidden mdUp implementation="js">

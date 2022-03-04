@@ -145,7 +145,7 @@ class Web3Manager {
     // Propiedades propias de una wallet.
     web3.wallet = new Wallet({
       name: "WalletConnect",
-      logoUrl: ipfsService.resolveUrl('/ipfs/QmdgSn7DszmWnF7RWukPQjNYv4SN2qFwxMhrtJ8NYWqRxX'),
+      logo: ipfsService.resolveUrl('/ipfs/QmdgSn7DszmWnF7RWukPQjNYv4SN2qFwxMhrtJ8NYWqRxX'),
       networkId: walletNetworkId
     });
     web3.walletBrowserRequired = walletBrowserRequired;

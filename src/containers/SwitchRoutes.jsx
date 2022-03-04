@@ -5,7 +5,7 @@ import TermsAndConditions from '../components/views/TermsAndConditions'
 import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
-import UserProfile from 'components/UserProfile'
+import UserProfilePage from 'components/UserProfilePage'
 import AvalView from 'components/views/AvalView';
 import Home from 'components/views/Home'
 import AvalSolicitud from 'components/views/AvalSolicitud'
@@ -29,7 +29,7 @@ const SwitchRoutes = ({ currentUser }) => (
             exact
             path="/profile"
             render={props => (
-                <UserProfile />
+                <UserProfilePage />
             )}
         />
         <Route

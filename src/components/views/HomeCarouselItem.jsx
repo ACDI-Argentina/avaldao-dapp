@@ -16,7 +16,6 @@ class HomeCarouselItem extends Component {
 
     return (
       <Grid container
-      xs={12} sm={12}
       spacing={0}
       direction="row"
       justify="center"

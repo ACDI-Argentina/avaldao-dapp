@@ -271,7 +271,7 @@ class UserEditPage extends Component {
 
     return (
       <Page>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} style={{ padding: "2em" }}>
           <Grid item xs={12}>
             <Typography variant="h5" component="h5">
               {t('userEditTitle')}
@@ -296,8 +296,6 @@ class UserEditPage extends Component {
                         choose: t('userAvatarChoose')
                       }}
                     />
-          
-
                 </Grid>
 
                 <Grid container spacing={1} xs={12} md={7}>

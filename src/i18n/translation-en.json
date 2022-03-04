@@ -268,11 +268,10 @@
     "requestConnectionCancel":"Maybe later",
     "requestConnectionOk": "Ok, connect",
 
-     "menuWelcome":"Welcome!",
-     "menuProfile":"Profile", 
-     "menuSignup":"Sign up" ,
-
-     "aboutUs":"About us",
-
-     "workspaceTitle":"My workspace"
-    }
+    "menuWelcome":"Welcome!",
+    "menuProfile":"Profile", 
+    "menuSignup":"Sign up" ,
+    "aboutTitle": "About",
+    "workspaceTitle":"My workspace",
+    "logoutTitle": "Logout"
+}

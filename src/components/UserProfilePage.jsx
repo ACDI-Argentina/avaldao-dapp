@@ -21,7 +21,7 @@ import Page from './views/Page'
  * Formulario de perfil de usuario.
  * 
  */
-class UserProfile extends Component {
+class UserProfilePage extends Component {
 
   constructor(props) {
     super(props);
@@ -115,9 +115,6 @@ class UserProfile extends Component {
     if (wasSaving && isRegistered) {
       setTimeout(() => history.push("/"), 1000);
     }
-
-
-
 
     if (userHasUpdated) {
       console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
@@ -248,7 +245,7 @@ class UserProfile extends Component {
     user.avatar = this.state.avatarPreview;
 
     this.setState({ isSaving: true, user: user }, () => {
-      console.log(`[UserProfile] handleSubmit`, user)
+      console.log(`[UserProfilePage] handleSubmit`, user)
       this.props.registerCurrentUser(this.state.user);
       //history.push(`/`);
     });
@@ -401,7 +398,7 @@ class UserProfile extends Component {
   }
 }
 
-UserProfile.contextType = Web3AppContext;
+UserProfilePage.contextType = Web3AppContext;
 
 const styles = theme => ({
 
@@ -415,5 +412,5 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = { registerCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(UserProfile)))
+  withTranslation()(UserProfilePage)))
 );
