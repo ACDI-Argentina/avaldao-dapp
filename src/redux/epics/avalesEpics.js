@@ -48,6 +48,19 @@ export const solicitarAvalEpic = action$ => action$.pipe(
   }))
 )
 
+export const actualizarAvalEpic = action$ => action$.pipe(
+  ofType('avales/actualizarAval'),
+  mergeMap(action => avalService.actualizarAval(action.payload)),
+  map(aval => ({
+    type: 'avales/updateAvalByClientId',
+    payload: aval
+  })),
+  catchError(error => of({
+    type: "avales/rollbackAvalStatus",
+    payload: error
+  }))
+)
+
 export const aceptarAvalEpic = action$ => action$.pipe(
   ofType('avales/aceptarAval'),
   mergeMap(action => avalService.aceptarAval(action.payload)),

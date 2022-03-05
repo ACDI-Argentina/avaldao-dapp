@@ -25,7 +25,8 @@ import {
   firmarAvalEpic,
   desbloquearAvalEpic,
   reclamarAvalEpic,
-  reintegrarAvalEpic
+  reintegrarAvalEpic,
+  actualizarAvalEpic
 } from './epics/avalesEpics'
 import {
   fetchUsersEpic,
@@ -43,6 +44,7 @@ const rootEpic = combineEpics(
   fetchAvalesOnChainEpic,
   fetchAvalesOffChainEpic,
   solicitarAvalEpic,
+  actualizarAvalEpic,
   aceptarAvalEpic,
   rechazarAvalEpic,
   firmarAvalEpic,

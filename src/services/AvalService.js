@@ -178,6 +178,45 @@ class AvalService {
         });
     }
 
+     /**
+     * Actualiza un aval.
+     */
+        actualizarAval(aval) {
+
+        return new Observable(async subscriber => {
+            const clientId = aval.clientId;
+            try {
+                const avalData = await feathersClient.service('avales').update(aval.id, {
+                    ...aval.toFeathers(),
+                    status: Aval.SOLICITADO.id,
+                });
+
+                const avalActualizado = this.offChainAvalToAval(avalData);
+                avalActualizado.clientId = clientId;
+                console.log('[AvalService] Aval actualizado en Feathers.', avalActualizado);
+                subscriber.next(avalActualizado);
+            } catch (error) {
+                console.error("[AvalService] Error actualizando aval off chain.", error);
+                subscriber.error({
+                    aval: aval,
+                    error: error
+                });
+                
+                let cause = error?.message || "";
+                if(["Unauthorized", "Forbidden"].includes(error.name)){
+                    cause = i18n.t("avalActualizadoErrorNoAutorizado");
+                }
+                
+                messageUtils.addMessageError({
+                    text: [i18n.t('avalActualizadoError'), cause].join("\n"),
+                    error: error
+                });
+            }
+        });
+    }
+    
+    
+
     /**
      * Acepta un aval, almacenándolo on chain.
      */
@@ -334,6 +373,7 @@ class AvalService {
             avaladoSignature: avalData.avaladoSignature,
             status: Aval.mapAvalStatus(parseInt(avalData.status)),
             createdAt: avalData.createdAt,
+            updatedAt: avalData.updatedAt,
         });
     }
 }

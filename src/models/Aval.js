@@ -33,7 +33,8 @@ class Aval {
       comercianteSignature,
       avaladoSignature,
       status = Aval.SOLICITADO.toStore(),
-      createdAt
+      createdAt,
+      updatedAt
     } = data;
     this._id = id;
     // ID utilizado solamente del lado cliente
@@ -67,6 +68,7 @@ class Aval {
     this._status = StatusUtils.build(status.id, status.name, status.isLocal);
     this._statusPrev = null;
     this._createdAt = createdAt && new Date(createdAt);
+    this._updatedAt = updatedAt && new Date(updatedAt);
   }
 
   /**
@@ -143,6 +145,7 @@ class Aval {
       status: this._status.toStore(),
       statusPrev: this._statusPrev,
       createdAt: this._createdAt,
+      updatedAt: this._updatedAt,
     };
   }
 
@@ -193,6 +196,27 @@ class Aval {
   static get FINALIZADO() {
     return StatusUtils.build(4, 'Finalizado', false);
   }
+
+  /**
+ * Determina si el Aval puede ser editado o no.
+ * @param user usuario que edita el aval.
+ */
+  allowEditar(user) {
+    if (this.status.name !== Aval.SOLICITADO.name) {
+      // Solo un aval solicitado puede ser editado.
+      return false;
+    }
+    if (!user.authenticated) {
+      // El usuario no está autenticado.
+      return false;
+    }
+    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+      // Solo el solicitante puede aceptar el aval
+      return true;
+    }
+    return false;
+  }
+
 
   /**
    * Determina si el Aval puede ser aceptado o no.
@@ -643,6 +667,14 @@ class Aval {
 
   set createdAt(value) {
     this._createdAt = value;
+  }
+
+  get updatedAt() {
+    return this._updatedAt;
+  }
+
+  set updatedAt(value) {
+    this._updatedAt = value;
   }
 
   isSolicitado() {
