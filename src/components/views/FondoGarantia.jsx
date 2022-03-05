@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import FiatAmount from 'components/FiatAmount'
 import { selectTokenBalances, selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
+import styles from "assets/jss/material-kit-react/views/landingPageSections/fondoGarantiaStyle.js";
 import { Typography } from '@material-ui/core'
 import TokenBalanceCard from 'components/TokenBalanceCard'
 
@@ -17,36 +18,36 @@ import TokenBalanceCard from 'components/TokenBalanceCard'
 class FondoGarantia extends Component {
 
   render() {
-    const { tokenBalances, fondoGarantiaBalanceFiat, t } = this.props;
+    const { classes, tokenBalances, fondoGarantiaBalanceFiat, t } = this.props;
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h5">
-            {t('fondoGarantia')}
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="subtitle1">
-            <FiatAmount amount={fondoGarantiaBalanceFiat}></FiatAmount>
-          </Typography>
+      <div>
+        <h3 className={classes.subtitle}>
+          {t('fondoGarantia')}
+        </h3>
+        <h4 className={classes.description}>
           {t('fondoGarantiaExplain')}
-        </Grid>
-        {tokenBalances.map(tb => (
-          <Grid item sm={12} md={4} key={tb.address}>
-            <TokenBalanceCard tokenBalance={tb} />
+        </h4>
+        <h3 className={classes.subtitle}>
+          <FiatAmount amount={fondoGarantiaBalanceFiat}></FiatAmount>
+        </h3>
+        <Grid container justify="space-between">
+          <Grid container sm={12} md={8} spacing={3}>
+            {tokenBalances.map(tb => (
+              <Grid item sm={12} md={6} key={tb.address}>
+                <TokenBalanceCard tokenBalance={tb} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+          <Grid item sm={12} md={4} align="center" justify="center" margin={5}>
+            <img src={require("assets/img/fondoGarantiaImg.png")} className={classes.rightImage} />
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }
 
 FondoGarantia.contextType = Web3AppContext;
-
-const styles = theme => ({
-
-
-});
 
 const mapStateToProps = (state, ownProps) => {
   return {

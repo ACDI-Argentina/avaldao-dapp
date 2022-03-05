@@ -10,6 +10,7 @@ import { history } from '../../lib/helpers'
 import PlatformFeatures from './PlatformFeatures'
 import PlatformOperation from './PlatformOperation'
 import HomeCarousel from './HomeCarousel'
+import Cifras from './Cifras'
 
 /**
  * Pantalla Home.
@@ -76,6 +77,9 @@ class Home extends Component {
           </Grid>
           <Grid item xs={12}>
             <PlatformOperation />
+          </Grid>
+          <Grid item xs={12}>
+            <Cifras />
           </Grid>
         </Grid>
       </Page>

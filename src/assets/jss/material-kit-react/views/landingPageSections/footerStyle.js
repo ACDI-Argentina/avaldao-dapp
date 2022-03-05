@@ -8,7 +8,6 @@ const footerStyle = {
     color: "#000",
     padding: "0",
     textAlign: "left",
-    marginTop: "2em",
     backgroundColor: "#7868E5"
   },
   dappLogo: {

@@ -22,6 +22,7 @@
     "userRoles": "Roles",
     "userNotRegistered": "Not registered",
     
+    "fondoGarantiaHomeTitle": "Numbers",
     "fondoGarantia": "Guarantee fund",
     "fondoGarantiaExplain": "The guarantee fund is made up of tokens from the RSK blockchain and serves as backing for the guarantees.",
 
@@ -138,7 +139,7 @@
 
     "platformFeaturesTitle1": "What is AvalDAO",
 
-    "platformFeaturesDescription1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vitae, massa nunc, nullam donec aliquam enim amet arcu. Lacus, placerat eros, nibh parturient at at magna. Sed aliquet mattis quis consectetur lobortis tincidunt. Tellus tempor, quam pellentesque quisque egestas arcu id.",
+    "platformFeaturesDescription1": "AvalDAO is a new type of organization designed to connect those who want to support the effort to produce and undertake with those who need to improve their credit conditions before financial entities or their suppliers of goods and services.",
 
     "transparency": "Collaboration",
     "transparencyDescription": "We are a new type of organization designed to connect those who want to support the effort of producing",

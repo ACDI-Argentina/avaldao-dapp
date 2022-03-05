@@ -24,6 +24,7 @@ class TokenBalanceCard extends Component {
           title={symbol}
           subheader={
             <CryptoAmount
+              classes={classes}
               tokenAddress={tokenBalance.address}
               amount={tokenBalance.amount}>
             </CryptoAmount>
@@ -39,10 +40,19 @@ class TokenBalanceCard extends Component {
 
 const styles = theme => ({
   root: {
-
+    border: '1px solid #DDD',
+    borderRadius: '10px',
+    padding: ".5em",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backdropFilter: "blur(5px)",
+    color: "#FFF"
+  },
+  amount: {
+    color: "#FFF",
   },
   inline: {
     display: 'inline',
+    fontWeight: "bold"
   }
 });
 

@@ -12,7 +12,7 @@ import Button from "components/CustomButtons/Button.js";
 class HomeCarouselItem extends Component {
 
   render() {
-    const { classes, t, btnLabel, bkg, title, description, onClick} = this.props;
+    const { classes, btnLabel, bkg, title, description } = this.props;
 
     return (
       <Grid container

@@ -48,7 +48,7 @@ const styles = theme => ({
     position: "relative",
     zIndex: "3",
     margin: "100px auto 0",
-    padding: '1em 0',
+    padding: '0',
     flexGrow: 1,
     minHeight: "75vh",
     width: "100vw"

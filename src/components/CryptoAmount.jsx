@@ -1,5 +1,5 @@
 
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import config from '../configuration';
@@ -12,7 +12,8 @@ import TokenUtils from 'utils/TokenUtils';
 class CryptoAmount extends Component {
 
     render() {
-        return TokenUtils.format(this.props.tokenAddress, this.props.amount)
+        const { classes } = this.props;
+        return <span className={classes.amount}>{TokenUtils.format(this.props.tokenAddress, this.props.amount)}</span>
     }
 }
 
