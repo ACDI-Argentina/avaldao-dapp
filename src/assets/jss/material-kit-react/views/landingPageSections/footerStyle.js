@@ -11,15 +11,18 @@ const footerStyle = {
     backgroundColor: "#7868E5"
   },
   dappLogo: {
-    padding: "1em",
-    width: "100%",
-    textAlign: "left",
+    padding: "1em 0",
     maxHeight: "80px"
   },
   leftSection: {
     "@media (max-width: 600px)": {
       textAlign: "left"
     }
+  },
+  socialMediaIcon: {
+    maxWidth: "30px",
+    maxHeight: "30px",
+    marginLeft: "10px"
   },
   rightSection: {
     borderLeft: "2px solid #999",
@@ -46,8 +49,9 @@ const footerStyle = {
     fontWeight: "normal",
     padding: "1em",
     textAlign: "center",
-    fontSize: ".8em",
-    margin: "0px"
+    fontSize: ".7em",
+    margin: "0",
+    borderTop: "1px solid rgba(255, 255, 255, .54)"
   },
   logo: {
     width: "75%",

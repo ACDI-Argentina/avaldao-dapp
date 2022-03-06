@@ -45,6 +45,7 @@ const styles = theme => ({
     padding: ".5em",
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     backdropFilter: "blur(5px)",
+    boxShadow: "0px 4px 25px 2px rgba(0, 0, 0, 0.15), inset -5px -5px 0px -10px rgba(255, 255, 255, 0.1), inset 5px 5px 10px rgba(255, 255, 255, 0.1)",
     color: "#FFF"
   },
   amount: {

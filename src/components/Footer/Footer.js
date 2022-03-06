@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import styles from "assets/jss/material-kit-react/views/landingPageSections/footerStyle.js";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { SocialIcon } from 'react-social-icons';
 
 /**
  * The Footer section
@@ -22,13 +22,20 @@ class Footer extends Component {
           alignItems="left"
           spacing={0}
         >
-          <Grid item xs={8} sm={6}>
+          <Grid item xs={8}>
             <img src={require("assets/img/logos/avaldao-alt.svg")} alt={t('give4forest')} className={classes.dappLogo} />
           </Grid>
+          <Grid item xs={8} spacing={5} style={{marginBottom: "1em", textAlign: "right"}}>
+            <SocialIcon url="http://github.com/mackiedrew" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
+            <SocialIcon url="https://twitter.com/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
+            <SocialIcon url="https://www.instagram.com/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
+          </Grid>
+          <Grid item xs={8}>
+            <h6 className={classes.disclaimer}>
+              {t('disclaimer')}
+            </h6>
+          </Grid>
         </Grid>
-        <h6 className={classes.disclaimer}>
-            {t('disclaimer')}
-        </h6>
       </div>
     )
   }
