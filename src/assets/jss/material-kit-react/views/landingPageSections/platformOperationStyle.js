@@ -86,6 +86,9 @@ const platformOperationStyle = {
       maxWidth: "60%",
       marginLeft: "20%"
     }
+  },
+  disabledCard: {
+    color: "#AAA",
   }
 };
 

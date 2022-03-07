@@ -26,7 +26,7 @@ class Footer extends Component {
             <img src={require("assets/img/logos/avaldao-alt.svg")} alt={t('give4forest')} className={classes.dappLogo} />
           </Grid>
           <Grid item xs={8} spacing={5} style={{marginBottom: "1em", textAlign: "right"}}>
-            <SocialIcon url="http://github.com/mackiedrew" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
+            <SocialIcon url="https://web.telegram.org/k/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
             <SocialIcon url="https://twitter.com/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
             <SocialIcon url="https://www.instagram.com/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
           </Grid>

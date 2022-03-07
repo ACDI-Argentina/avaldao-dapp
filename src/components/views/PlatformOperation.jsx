@@ -7,6 +7,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from '@material-ui/core/CardContent'
 import { Grid } from '@material-ui/core';
 import Button from "components/CustomButtons/Button.js";
+import classNames from "classnames";
+
 
 /**
  * The PlatformOperation section
@@ -36,7 +38,7 @@ class PlatformOperation extends Component {
                   className={classes.cardMedia}
                   image={require("assets/img/inversorCardAvatar.jpg")}>
                 </CardMedia>
-                <CardContent className={classes.cardContent}>
+                <CardContent className={classNames(classes.cardContent, classes.disabledCard)}>
                   <Grid container spacing={1} align="left">
                     <Grid item xs={12} className={classes.cardTitle}>
                       {t('investorCardTitle')}
@@ -48,7 +50,7 @@ class PlatformOperation extends Component {
                       {t('investorCardQuestion')}
                     </Grid>
                     <Grid item xs={12}>
-                      <Button style={{margin: "1.5em 0"}} color="primary" round
+                      <Button style={{margin: "1.5em 0"}} color="primary" disabled round
                         className="btn btn-info">
                         {t('investorCardBtnLabel')}
                       </Button>
