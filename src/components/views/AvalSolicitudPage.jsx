@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AvalSolicitud = () => {
+const AvalSolicitudPage = () => {
   const history = useHistory();
   const { t } = useTranslation();
   const classes = useStyles();
@@ -93,4 +93,4 @@ const AvalSolicitud = () => {
   )
 }
 
-export default AvalSolicitud;
+export default AvalSolicitudPage;

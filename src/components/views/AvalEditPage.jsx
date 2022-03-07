@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const AvalEdit = (props) => {
+const AvalEditPage = (props) => {
   const history = useHistory();
 
   const classes = useStyles();
@@ -119,4 +119,4 @@ const AvalEdit = (props) => {
   )
 }
 
-export default AvalEdit;
+export default AvalEditPage;

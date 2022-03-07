@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const AvalView = (props) => {
+const AvalViewPage = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const avalId = props.match.params.avalId;
@@ -66,4 +66,4 @@ const AvalView = (props) => {
   )
 }
 
-export default AvalView;
+export default AvalViewPage;

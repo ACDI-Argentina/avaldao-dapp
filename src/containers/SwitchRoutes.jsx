@@ -6,13 +6,14 @@ import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
 import UserProfilePage from 'components/UserProfilePage'
-import AvalView from 'components/views/AvalView';
+
 import Home from 'components/views/Home'
-import AvalSolicitud from 'components/views/AvalSolicitud'
+import AvalSolicitudPage from 'components/views/AvalSolicitudPage'
+import AvalViewPage from 'components/views/AvalViewPage';
+import AvalEditPage from 'components/views/AvalEditPage'
 import UsersPage from 'components/views/UsersPage'
 import UserEditPage from 'components/UserEditPage'
 import Workspace from 'components/views/Workspace'
-import AvalEdit from 'components/views/AvalEdit'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -57,7 +58,7 @@ const SwitchRoutes = ({ currentUser }) => (
             exact
             path="/aval/:avalId/view"
             render={props => (
-                <AvalView
+                <AvalViewPage
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
@@ -67,7 +68,7 @@ const SwitchRoutes = ({ currentUser }) => (
             exact
             path="/aval/:avalId/edit"
             render={props => (
-                <AvalEdit
+                <AvalEditPage
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
@@ -77,7 +78,7 @@ const SwitchRoutes = ({ currentUser }) => (
             exact
             path="/aval/solicitud"
             render={props => (
-                <AvalSolicitud
+                <AvalSolicitudPage
                     key={currentUser ? currentUser.id : 0}
                     {...props}
                 />
