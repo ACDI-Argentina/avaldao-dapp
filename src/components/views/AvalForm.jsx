@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik';
-import { Button, Grid, InputAdornment, makeStyles, TextField } from "@material-ui/core";
+import { Grid, InputAdornment, makeStyles, TextField } from "@material-ui/core";
+import Button from "components/CustomButtons/Button.js"
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useTranslation } from "react-i18next";
 
@@ -49,7 +50,7 @@ const FormikInput = ({ formik, id, ...props }) => {
 
 
 const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loading = false, solicitanteAddress, defaultAvaldaoAddress }) => {
-  
+
   const formik = useFormik({
     initialValues: {
       proyecto: aval?.proyecto || '',
@@ -226,20 +227,24 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid container item xs={12} justifyContent="flex-end">
 
           <LoadingOverlay loading={loading}>
             <Button
-              variant="contained"
               color="primary"
+              round
+              className="btn btn-info"
               type="submit"
-              disabled={loading || !formik.isValid || !formik.dirty} 
+              disabled={loading || !formik.isValid || !formik.dirty}
               className={classes.button}>
               {submitText || t("avalSolicitar")}
             </Button>
           </LoadingOverlay>
 
           <Button
+            color="secondary"
+            round
+            className="btn btn-info"
             onClick={() => {
               formik.resetForm();
               typeof onCancel === "function" && onCancel();
