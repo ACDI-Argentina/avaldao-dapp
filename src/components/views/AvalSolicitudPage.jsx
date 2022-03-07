@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AvalSolicitud = () => {
+const AvalSolicitudPage = () => {
   const history = useHistory();
   const { t } = useTranslation();
   const classes = useStyles();
@@ -73,22 +73,24 @@ const AvalSolicitud = () => {
 
   return (
     <Page>
+      <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
 
-      <Grid item xs={12} className={classes.title}>
-        <Typography variant="h5" component="h5">
-          {t('avalSolicitudTitle')}
-        </Typography>
+        <Grid item xs={12} className={classes.title}>
+          <Typography variant="h5" component="h5">
+            {t('avalSolicitudTitle')}
+          </Typography>
+        </Grid>
+
+        <AvalForm
+          onSubmit={handleSubmit}
+          submitText={t("avalSolicitar")}
+          loading={loading}
+          solicitanteAddress={currentUser.address}
+          defaultAvaldaoAddress={config.avaldaoAddress}
+        />
       </Grid>
-
-      <AvalForm
-        onSubmit={handleSubmit}
-        submitText={t("avalSolicitar")}
-        loading={loading}
-        solicitanteAddress={currentUser.address}
-        defaultAvaldaoAddress={config.avaldaoAddress}
-      />
     </Page>
   )
 }
 
-export default AvalSolicitud;
+export default AvalSolicitudPage;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import moment from 'moment';
 import { Button, ButtonGroup, makeStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next'
@@ -10,46 +11,15 @@ import { fetchUserByAddress } from 'redux/reducers/usersSlice';
 import { Link } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 
-const useStyles = makeStyles((theme) => ({
-  alert: {
-    lineHeight: "1.5rem"
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  button: {
-    margin: "10px 10px 0px 0px",
-  },
-  danger: {
 
-  },
-  progress: {
-    marginLeft: "10px",
-    marginTop: "5px"
-  },
-  centered: {
-    display: "flex",
-    alignItems: "center"
-  },
-  actionContainer: {
-    minHeight: "50px",
-    display: "flex",
-    alignItems: "center"
-  }
-}));
+const AvalActions = ({ aval }) => {
 
-
-const AvalActions = ({ aval, editing,  setEditing }) => {
-  //const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
-  //const [loading, setLoading] = useState(false);
+
   const { currentUser } = useWeb3Account();
   const { t } = useTranslation();
 
-  //TODO: check for error
-  /*useEffect(() => {
-    setLoading(aval?.isUpdating());
-  }, [aval?.isUpdating()])*/
 
   useEffect(() => {
     if (aval?.solicitanteAddress) {
@@ -70,8 +40,6 @@ const AvalActions = ({ aval, editing,  setEditing }) => {
   let solicitanteElement = null;
   let avaldaoElement = null;
   let dateElement = null;
-
-  /* TODO: recuperar el usuario para ese address */
 
   solicitanteElement = (
     <span>
@@ -113,16 +81,16 @@ const AvalActions = ({ aval, editing,  setEditing }) => {
       <ButtonGroup variant="text" color="primary">
 
 
-        {allowEditar && !editing && (
-          <Button onClick={() => setEditing(true)}>
+        { allowEditar && (
+          <Button onClick={() => history.push(`/aval/${aval.id}/edit`)}>
             {t("avalEditar")}
           </Button>
         )}
-        
+
         {allowAceptar &&
           <Button
             onClick={async () => {
-                dispatch(aceptarAval(aval));
+              dispatch(aceptarAval(aval));
             }}
           >
             {t("avalAceptar")}
@@ -132,7 +100,7 @@ const AvalActions = ({ aval, editing,  setEditing }) => {
         {allowRechazar &&
           <Button
             onClick={async () => {
-                dispatch(rechazarAval(aval));
+              dispatch(rechazarAval(aval));
             }}
           >
             {t("avalRechazar")}
