@@ -19,13 +19,12 @@ class Footer extends Component {
           container
           direction="row"
           justifyContent="center"
-          alignItems="left"
           spacing={0}
         >
           <Grid item xs={8}>
             <img src={require("assets/img/logos/avaldao-alt.svg")} alt={t('give4forest')} className={classes.dappLogo} />
           </Grid>
-          <Grid item xs={8} spacing={5} style={{marginBottom: "1em", textAlign: "right"}}>
+          <Grid item xs={8} style={{marginBottom: "1em", textAlign: "right"}}>
             <SocialIcon url="https://web.telegram.org/k/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
             <SocialIcon url="https://twitter.com/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>
             <SocialIcon url="https://www.instagram.com/" className={classes.socialMediaIcon} bgColor="#FFF" color="#7868E5"/>

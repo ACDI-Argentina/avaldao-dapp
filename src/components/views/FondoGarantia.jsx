@@ -30,15 +30,17 @@ class FondoGarantia extends Component {
         <h3 className={classes.subtitle}>
           <FiatAmount amount={fondoGarantiaBalanceFiat}></FiatAmount>
         </h3>
-        <Grid container justify="space-between">
-          <Grid container sm={12} md={8} spacing={3}>
-            {tokenBalances.map(tb => (
-              <Grid item sm={12} md={6} key={tb.address}>
-                <TokenBalanceCard tokenBalance={tb} />
-              </Grid>
-            ))}
+        <Grid container justifyContent="space-between">
+          <Grid item sm={12} md={8}>
+            <Grid container spacing={3}>
+              {tokenBalances.map(tb => (
+                <Grid item sm={12} md={6} key={tb.address}>
+                  <TokenBalanceCard tokenBalance={tb} />
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
-          <Grid item sm={12} md={4} align="center" justify="center" margin={5}>
+          <Grid item sm={12} md={4} align="center" margin={5}>
             <img src={require("assets/img/fondoGarantiaImg.png")} className={classes.rightImage} />
           </Grid>
         </Grid>

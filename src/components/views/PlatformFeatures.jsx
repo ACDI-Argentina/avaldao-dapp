@@ -26,7 +26,7 @@ class PlatformFeatures extends Component {
           <Grid
             container
             direction="row"
-            justify="center"
+            justifyContent="center"
             alignItems="flex-start"
             spacing={10}
             style={{ marginTop: '3em', marginBottom: '3em' }}
@@ -40,7 +40,7 @@ class PlatformFeatures extends Component {
           <Grid
             container
             direction="row"
-            justify="center"
+            justifyContent="center"
             alignItems="flex-start"
             spacing={10}
           >

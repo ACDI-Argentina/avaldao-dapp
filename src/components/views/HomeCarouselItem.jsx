@@ -18,7 +18,7 @@ class HomeCarouselItem extends Component {
       <Grid container
       spacing={0}
       direction="row"
-      justify="center"
+      justifyContent="center"
       alignItems="center"
       className={classes.homeCarouselItem} style={{backgroundImage: `url(${bkg})`}}>
         <Grid item xs={12} sm={12}>
