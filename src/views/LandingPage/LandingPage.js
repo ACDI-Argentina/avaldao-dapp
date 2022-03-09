@@ -3,8 +3,6 @@ import classNames from "classnames";
 import { makeStyles } from "@material-ui/core/styles";
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
 import PlatformFeatures from "components/views/PlatformFeatures.jsx";
 import BlockchainBenefits from "components/views/BlockchainBenefits.jsx";
 import JoinGivethCommunity from 'components/JoinGivethCommunity.jsx';

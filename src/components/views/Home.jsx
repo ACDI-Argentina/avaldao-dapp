@@ -10,7 +10,7 @@ import { history } from '../../lib/helpers'
 import PlatformFeatures from './PlatformFeatures'
 import PlatformOperation from './PlatformOperation'
 import HomeCarousel from './HomeCarousel'
-import Cifras from './Cifras'
+import FondoGarantia from './FondoGarantia'
 
 /**
  * Pantalla Home.
@@ -55,17 +55,6 @@ class Home extends Component {
 
   render() {
 
-    const { currentUser, t } = this.props;
-
-    const allowSolicitar = currentUser.isSolicitante();
-
-    let showAvalTaskList = false;
-    let avalTableWidthMd = 12;
-    if (currentUser.authenticated) {
-      showAvalTaskList = true;
-      avalTableWidthMd = 9;
-    }
-
     return (
       <Page>
         <Grid container spacing={0}>
@@ -76,10 +65,10 @@ class Home extends Component {
             <PlatformFeatures />
           </Grid>
           <Grid item xs={12}>
-            <PlatformOperation />
+            <PlatformOperation {...this.props} />
           </Grid>
           <Grid item xs={12}>
-            <Cifras />
+            <FondoGarantia />
           </Grid>
         </Grid>
       </Page>

@@ -5,7 +5,6 @@ const platformFeaturesStyle = {
   color: "#999",
 
   section: {
-    padding: "0",
     textAlign: "center",
     padding: "3em 2em"
   },

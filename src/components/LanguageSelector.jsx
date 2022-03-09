@@ -63,7 +63,7 @@ class LanguageSelector extends Component {
           onClick={() => this.changeValue(language.key)}
         >
           <FlagContainer>
-            <img src={require('assets/img/roundedFlags/' + language.flag + '.svg')}
+            <img alt={language.key} src={require('assets/img/roundedFlags/' + language.flag + '.svg')}
               className={classNames(classes.flag, (currentValue === language.key ? classes.activeFlag : classes.inactiveFlag))}>
             </img>
           </FlagContainer>

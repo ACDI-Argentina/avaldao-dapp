@@ -22,7 +22,6 @@
     "userRoles": "Roles",
     "userNotRegistered": "No registrado",
     
-    "fondoGarantiaHomeTitle": "Cifras",
     "fondoGarantia": "Fondo de garantía",
     "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
 
@@ -150,12 +149,12 @@
     "platformOperationTitle": "Cómo funciona",
 
     "investorCardTitle": "Soy inversor",
-    "investorCardDescription": "Descripción breve de los beneficios. Ayuda invertiendo en finanzas descentralizadas con la garantía de la blockchain de bitcoin.",
+    "investorCardDescription": "Ayuda invirtiendo en finanzas descentralizadas con la garantía de la blockchain de bitcoin.",
     "investorCardQuestion": "¿Querés ayudar mientras invertís?",
     "investorCardBtnLabel": "Conocer más",
 
-    "applicantCardTitle": "Solicito un garante",
-    "applicantCardDescription": "Descripción breve de las tareas que realizamos. Obtené financiación para tus compras o para tus emprendimientos.",
+    "applicantCardTitle": "Solicito un aval",
+    "applicantCardDescription": "Obtené financiación para tus compras o para tus emprendimientos.",
     "applicantCardQuestion": "¿Necesitás financiar tu proyecto?",
     "applicantCardBtnLabel": "Solicitar aval",
 

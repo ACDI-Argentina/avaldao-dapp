@@ -7,7 +7,6 @@ const platformOperationStyle = {
   color: "#999",
 
   section: {
-    padding: "0",
     textAlign: "center",
     padding: "4em",
     backgroundImage: "url(" + bkgImg + ")",
@@ -45,8 +44,11 @@ const platformOperationStyle = {
     maxWidth: "15%",
   },
   operationDescription: {
-    minHeight: "300px",
-    backgroundColor: "#F5F5F5"
+    backgroundColor: "#FFF",
+  },
+  operationDescriptionImg: {
+    maxWidth: "90%",
+    height: "auto"
   },
   cardMedia: {
     height: "200px",

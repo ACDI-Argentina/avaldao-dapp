@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent'
 import { Grid } from '@material-ui/core';
 import Button from "components/CustomButtons/Button.js";
 import classNames from "classnames";
+import { history } from '../../lib/helpers'
 
 
 /**
@@ -15,12 +16,17 @@ import classNames from "classnames";
  */
 class PlatformOperation extends Component {
 
+  goSolicitarAval() {
+    history.push(`/aval/solicitud`);
+  }
+
   render() {
-    const { classes, t, } = this.props;
+    const { currentUser, classes, t, } = this.props;
+
+    const allowSolicitar = currentUser.isSolicitante();
 
     return (
       <div className={classes.section}>
-        {/*<img className={classes.donut} src={require("assets/img/donut.png")}></img>*/}
         <div className={classes.sectionGlass}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
@@ -30,6 +36,7 @@ class PlatformOperation extends Component {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.operationDescription}>
+                <img className={classes.operationDescriptionImg} src={require("assets/img/diagramaFuncionamiento.jpg")}></img>
               </div>
             </Grid>
             <Grid item xs={6}>
@@ -78,7 +85,9 @@ class PlatformOperation extends Component {
                     </Grid>
                     <Grid item xs={12}>
                       <Button style={{margin: "1.5em 0"}} color="primary" round
-                        className="btn btn-info">
+                        className="btn btn-info"
+                        disabled={!allowSolicitar}
+                        onClick={this.goSolicitarAval}>
                         {t('applicantCardBtnLabel')}
                       </Button>
                     </Grid>

@@ -1,4 +1,4 @@
-import { title, primaryColor } from "assets/jss/material-kit-react.js";
+import { title } from "assets/jss/material-kit-react.js";
 
 const homeCarouselStyle = {
 
@@ -10,7 +10,6 @@ const homeCarouselStyle = {
     backgroundPosition: "center center",
     backgroundSize: "cover",
     paddingLeft: "15%",
-    /*paddingTop: "5em"*/
   },
   title: {
     ...title,

@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import config from '../configuration';
 import TokenUtils from 'utils/TokenUtils';
 
+const defaultColor = 'rgba(0, 0, 0, 0.54)';
 /**
  * Presenta una cantidad de dinero crypto.
  * 
@@ -12,8 +13,8 @@ import TokenUtils from 'utils/TokenUtils';
 class CryptoAmount extends Component {
 
     render() {
-        const { classes } = this.props;
-        return <span className={classes.amount}>{TokenUtils.format(this.props.tokenAddress, this.props.amount)}</span>
+        const color = this.props.color || defaultColor;
+        return <span style={{ color: color }}>{TokenUtils.format(this.props.tokenAddress, this.props.amount)}</span>
     }
 }
 

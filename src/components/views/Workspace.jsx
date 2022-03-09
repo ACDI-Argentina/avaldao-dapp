@@ -69,31 +69,35 @@ class Workspace extends Component {
 
     return (
       <Page>
-        <Grid container spacing={3} style={{ padding: "2em" }}>
+        <Grid container>
           <Grid item xs={12}>
             <FondoGarantia></FondoGarantia>
           </Grid>
           <Grid item xs={12}>
-            <Divider />
-          </Grid>
-          <Grid item xs={12} style={{ padding: "0px" }}>
-            <Grid container justifyContent="flex-end">
-              <Button color="primary"
-                round
-                className="btn btn-info"
-                disabled={!allowSolicitar}
-                onClick={this.goSolicitarAval}>
-                {t("avalSolicitarBtn")}
-              </Button>
+            <Grid container spacing={3} style={{ padding: "2em" }}>
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+              <Grid item xs={12} style={{ padding: "0px" }}>
+                <Grid container justifyContent="flex-end">
+                  <Button color="primary"
+                    round
+                    className="btn btn-info"
+                    disabled={!allowSolicitar}
+                    onClick={this.goSolicitarAval}>
+                    {t("avalSolicitarBtn")}
+                  </Button>
+                </Grid>
+              </Grid>
+              {showAvalTaskList && (
+                <Grid item sm={12} md={3}>
+                  <AvalTaskList user={currentUser} />
+                </Grid>
+              )}
+              <Grid item sm={12} md={avalTableWidthMd}>
+                <AvalTable />
+              </Grid>
             </Grid>
-          </Grid>
-          {showAvalTaskList && (
-            <Grid item sm={12} md={3}>
-              <AvalTaskList user={currentUser} />
-            </Grid>
-          )}
-          <Grid item sm={12} md={avalTableWidthMd}>
-            <AvalTable />
           </Grid>
         </Grid>
       </Page>

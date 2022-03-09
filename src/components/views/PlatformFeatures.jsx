@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid'
 import styles from "assets/jss/material-kit-react/views/landingPageSections/platformFeaturesStyle.js";
-import classNames from "classnames";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import Button from "components/CustomButtons/Button.js";
