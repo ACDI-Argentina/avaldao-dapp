@@ -33,7 +33,7 @@
     "comerciante": "Comerciante",
     "avalado": "Avalado",
 
-    "avalesTitle": "Avales", 
+    "miAvalTitle": "Mi aval",
     "avalVisualizarTitle": "Visualizar aval",
     "avalSolicitudTitle": "Solicitud de aval",
     "avalSolicitarBtn": "Solicitar aval",
@@ -79,7 +79,7 @@
     "avalSolicitadoBy":"Este aval ha sido solicitado por el usuario",
     "avalSolicitadoTo":"El mismo se encuentra pendiente de aceptación por parte del usuario",
 
-    "avalTaskList": "Tareas pendientes",
+    "avalTaskList": "Acciones",
     "avalTaskAnalizarAceptacion": "Requiere análisis de aceptación",
     "avalTaskFirmar": "Requiere firmarse",
     "avalTaskReintegrar": "Requiere reintegrarse",
@@ -276,6 +276,6 @@
     "menuProfile":"Perfil",
     "menuSignup":"Regístrate",
     "aboutTitle": "Acerca de",
-    "workspaceTitle":"Mi espacio de trabajo",
+    "misAvalesTitle":"Mis avales",
     "logoutTitle": "Salir"
 }

@@ -152,6 +152,14 @@ export const selectAvales = state => {
   });
 }
 
+export const selectUserAvales = (state, user) => {
+  return state.avales
+    .map(function (avalStore) {
+      return new Aval(avalStore);
+    }).
+    filter(aval => aval.isParticipant(user) === true);
+}
+
 export const selectAvalesWithTask = (state, user) => {
   return state.avales
     .map(function (avalStore) {

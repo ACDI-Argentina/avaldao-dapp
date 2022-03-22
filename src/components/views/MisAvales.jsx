@@ -6,18 +6,18 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import FondoGarantia from './FondoGarantia'
 import AvalTable from './AvalTable'
-import Divider from '@material-ui/core/Divider'
 import Page from './Page'
-import Button from "components/CustomButtons/Button.js"
 import { withStyles } from '@material-ui/core/styles'
 import { history } from '../../lib/helpers'
 import AvalTaskList from './AvalTaskList'
+import { selectUserAvales } from '../../redux/reducers/avalesSlice'
+import { Typography } from '@material-ui/core'
 
 /**
- * Pantalla de espacio de trabajo.
+ * Pantalla de Avales del usuario.
  * 
  */
-class Workspace extends Component {
+class MisAvales extends Component {
 
   constructor(props) {
     super(props);
@@ -56,68 +56,57 @@ class Workspace extends Component {
 
   render() {
 
-    const { currentUser, t } = this.props;
-
-    const allowSolicitar = currentUser.isSolicitante();
+    const { avales, currentUser, t } = this.props;
 
     let showAvalTaskList = false;
     let avalTableWidthMd = 12;
-    if (currentUser.authenticated) {
+    if (currentUser && currentUser.authenticated) {
       showAvalTaskList = true;
       avalTableWidthMd = 9;
     }
 
     return (
       <Page>
-        <Grid container>
+        <Grid container spacing={1} style={{ padding: "2em" }}>
           <Grid item xs={12}>
-            <FondoGarantia></FondoGarantia>
+            <Typography variant="h5" component="h5">
+              {t('misAvalesTitle')}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Grid container spacing={3} style={{ padding: "2em" }}>
-              <Grid item xs={12}>
-                <Divider />
-              </Grid>
-              <Grid item xs={12} style={{ padding: "0px" }}>
-                <Grid container justifyContent="flex-end">
-                  <Button color="primary"
-                    round
-                    className="btn btn-info"
-                    disabled={!allowSolicitar}
-                    onClick={this.goSolicitarAval}>
-                    {t("avalSolicitarBtn")}
-                  </Button>
-                </Grid>
+            <Grid container spacing={3} style={{ marginTop: "1em", marginBottom: "1em"}}>
+              <Grid item sm={12} md={avalTableWidthMd}>
+                <AvalTable avales={avales}/>
               </Grid>
               {showAvalTaskList && (
                 <Grid item sm={12} md={3}>
                   <AvalTaskList user={currentUser} />
                 </Grid>
               )}
-              <Grid item sm={12} md={avalTableWidthMd}>
-                <AvalTable />
-              </Grid>
             </Grid>
           </Grid>
         </Grid>
+        <FondoGarantia></FondoGarantia>
       </Page>
     );
   }
 }
 
-Workspace.contextType = Web3AppContext;
+MisAvales.contextType = Web3AppContext;
 
 const styles = theme => ({
 
 });
 
 const mapStateToProps = (state, ownProps) => {
+  const currentUser = selectCurrentUser(state);
   return {
-    currentUser: selectCurrentUser(state)
+    currentUser: currentUser,
+    avales: selectUserAvales(state, currentUser)
   };
 }
 const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(Workspace)))
+  withTranslation()(MisAvales)))
 );
