@@ -44,6 +44,12 @@ class PlatformFeatures extends Component {
             spacing={10}
           >
             <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
+              <div className={classes.sectionTitle}>{t('security')}</div>
+              <h6 className={classes.sectionDescription}>
+                {t('securityDescription')}
+              </h6>
+            </Grid>
+            <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
               <div className={classes.sectionTitle}>{t('transparency')}</div>
               <h6 className={classes.sectionDescription}>
                 {t('transparencyDescription')}
@@ -53,12 +59,6 @@ class PlatformFeatures extends Component {
               <div className={classes.sectionTitle}>{t('autonomy')}</div>
               <h6 className={classes.sectionDescription}>
                 {t('autonomyDescription')}
-              </h6>
-            </Grid>
-            <Grid item xs={12} sm={4} md={4} lg={3} xl={3} className={classes.featureSection}>
-              <div className={classes.sectionTitle}>{t('security')}</div>
-              <h6 className={classes.sectionDescription}>
-                {t('securityDescription')}
               </h6>
             </Grid>
           </Grid>
