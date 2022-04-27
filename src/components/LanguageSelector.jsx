@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Button from 'components/CustomButtons/Button.js';
 import styles from 'assets/jss/material-kit-react/components/headerLinksStyle.js';
 import { withStyles } from '@material-ui/core/styles';
+import { IconButton } from '@material-ui/core';
 
 const FlagContainer = styled.div`
   display: flex;
@@ -75,3 +76,7 @@ class LanguageSelector extends Component {
   }
 }
 export default withTranslation()(withStyles(styles)(LanguageSelector));
+
+const FlagButton = styled(Button)({
+});
+

@@ -287,8 +287,8 @@ const buttonStyle = {
     }
   },
   justIcon: {
-    paddingLeft: "12px",
-    paddingRight: "12px",
+    padding: "0px",
+    margin: '0px',
     fontSize: "20px",
     height: "41px",
     minWidth: "41px",
@@ -325,6 +325,9 @@ const buttonStyle = {
     },
     "@media (max-width: 500px)": {
       height: "20px"
+    },
+    "&:hover,&:focus": {
+      outlineWidth: "0px"
     }
   }
 };

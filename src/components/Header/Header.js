@@ -12,8 +12,12 @@ import { NavLink } from "react-router-dom"
 import ConnectButton from "components/ConnectButton"
 import LanguageSelector from "components/LanguageSelector"
 import MenuIcon from '@material-ui/icons/Menu'
+import InfoIcon from '@material-ui/icons/Info';
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import { history } from 'lib/helpers'
 import { useTranslation } from 'react-i18next';
+import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core"
+import { styled } from "@material-ui/styles"
 
 const useStyles = makeStyles(styles);
 
@@ -21,14 +25,25 @@ export default function Header(props) {
   const classes = useStyles();
   const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+  const [setMenuAnchorEl] = React.useState(null);
 
-  const handleMenuClick = (event) => {
-    setMenuAnchorEl(event.currentTarget);
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [setAnchorElUser] = React.useState(null);
+
+  const handleClickAbout = () => {
+    history.push(`/about`);
   };
 
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
+  const handleClickFAQ = () => {
+    history.push(`/faq`);
+  };
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
   };
 
   const goUsers = () => {
@@ -79,35 +94,108 @@ export default function Header(props) {
     {brand}
   </NavLink>;
 
-  return (    
+  return (
 
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
 
-        {leftLinks !== undefined ? brandComponent : null}
-        {<div className={classes.flex}>
-          {leftLinks !== undefined ? (
-            <Hidden smDown implementation="css">
-              {leftLinks}
-            </Hidden>
-          ) : (
-            brandComponent
-          )}
-        </div>}
+        <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+          {leftLinks !== undefined ? brandComponent : null}
+          {<div className={classes.flex}>
+            {leftLinks !== undefined ? (
+              <Hidden smDown implementation="css">
+                {leftLinks}
+              </Hidden>
+            ) : (
+              brandComponent
+            )}
+          </div>}
+        </Box>
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box m={1}>
+            <HeaderButton
+              variant="text"
+              size="small"
+              onClick={handleClickAbout}
+              sx={{ m: 2, color: 'white', display: 'block' }}
+            >
+              {t('aboutAvalDAOTitle')}
+            </HeaderButton>
+          </Box>
+          <Box m={1}>
+            <HeaderButton
+              variant="text"
+              size="small"
+              onClick={handleClickFAQ}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              {t('faqTitle')}
+            </HeaderButton>
+          </Box>
+        </Box>
 
         <LanguageSelector></LanguageSelector>
 
         <ConnectButton />
- 
-        <Hidden mdUp>
+
+        {/*<Hidden mdUp>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerToggle}
           >
-            {/*<Menu />*/}
+            {<Menu />}
           </IconButton>
-        </Hidden>
+        </Hidden>*/}
+
+        <Box sx={{mr: 2, display: { xs: 'flex', md: 'none' } }}>
+          <IconButton
+            size="small"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleOpenNavMenu}
+            color="inherit"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorElNav}
+            getContentAnchorEl={null}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            open={Boolean(anchorElNav)}
+            onClose={handleCloseNavMenu}
+            sx={{
+              display: { xs: 'block', md: 'none' },
+            }}
+          >
+            <MenuItem onClick={
+              handleClickAbout
+            }>
+              <ListItemIcon>
+                <InfoIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('aboutAvalDAOTitle')} />
+            </MenuItem>
+            <MenuItem onClick={
+              handleClickFAQ
+            }>
+              <ListItemIcon>
+                <LiveHelpIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('faqTitle')} />
+            </MenuItem>
+          </Menu>
+        </Box>
+
       </Toolbar>
 
       <Hidden mdUp implementation="js">
@@ -133,6 +221,16 @@ export default function Header(props) {
 Header.defaultProp = {
   color: "white"
 };
+
+const HeaderButton = styled(Button)({
+  textTransform: 'none',
+  borderBottom: '1px solid #FFF',
+  borderRadius: '0px',
+  '&:hover': {
+    backgroundColor: '#FFFFFF',
+    borderBottom: '1px solid #CCC',
+  },
+});
 
 Header.propTypes = {
   color: PropTypes.oneOf([

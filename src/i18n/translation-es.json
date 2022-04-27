@@ -276,6 +276,8 @@
     "menuProfile":"Perfil",
     "menuSignup":"Regístrate",
     "aboutTitle": "Acerca de",
+    "aboutAvalDAOTitle": "¿Qué es AvalDAO?",
+    "faqTitle": "FAQ",
     "workspaceTitle":"Mi espacio de trabajo",
     "logoutTitle": "Salir"
 }
