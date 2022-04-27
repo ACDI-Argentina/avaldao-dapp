@@ -31,7 +31,11 @@ const theme = createTheme({
       main: '#7868E5'
     },
     fontFamily: '"Encode Sans", "Helvetica", "Arial", sans-serif'
-  }
+  },
+  typography: {
+    "fontFamily": '"Encode Sans", "Helvetica", "Arial", sans-serif'
+   }
+
 });
 
 ReactDOM.render(
