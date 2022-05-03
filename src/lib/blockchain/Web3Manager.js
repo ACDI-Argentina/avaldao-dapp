@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs'
 import config from '../../configuration'
 import ipfsService from '../../ipfs/IpfsService'
 import Wallet from 'models/Wallet'
+import { history } from '../../lib/helpers'
 
 //TODO: determinar cuales es el mejor lugar para posicionar esto, creo que web3manager
 const providerOptions = {
@@ -187,6 +188,8 @@ class Web3Manager {
       // No se encontró forma de desconectar una wallet browser.
     }
     console.log('[Setup Web3] Desconectado.');
+    // Se redirecciona el usuario al home.
+    history.push(``);
     this.connectWeb3ByHttp();
   }
 

@@ -33,7 +33,7 @@
     "comerciante": "Seller",
     "avalado": "Endorsed",
 
-    "avalesTitle": "Avales",    
+    "miAvalTitle": "My aval",  
     "avalVisualizarTitle": "View aval",
     "avalSolicitudTitle": "Request aval",
     "avalSolicitarBtn": "Request aval",
@@ -82,7 +82,7 @@
     "avalSolicitadoBy":"This guarantee has been requested by the user",
     "avalSolicitadoTo":"It is pending acceptance by the user",
 
-    "avalTaskList": "Pending tasks",
+    "avalTaskList": "Actions",
     "avalTaskAnalizarAceptacion": "Requires acceptance analysis",
     "avalTaskFirmar": "Requires signing",
     "avalTaskReintegrar": "Requires reintegration",
@@ -281,6 +281,6 @@
     "aboutTitle": "About",
     "aboutAvalDAOTitle": "What is AvalDAO?",
     "faqTitle": "FAQ",
-    "workspaceTitle":"My workspace",
+    "misAvalesTitle":"My avales",
     "logoutTitle": "Logout"
 }

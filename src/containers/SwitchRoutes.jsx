@@ -13,8 +13,8 @@ import AvalViewPage from 'components/views/AvalViewPage';
 import AvalEditPage from 'components/views/AvalEditPage'
 import UsersPage from 'components/views/UsersPage'
 import UserEditPage from 'components/UserEditPage'
-import Workspace from 'components/views/Workspace'
 import AboutPage from 'components/views/AboutPage'
+import MisAvales from 'components/views/MisAvales'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -92,9 +92,9 @@ const SwitchRoutes = ({ currentUser }) => (
                 />
             )}
         />
-        <Route path="/workspace"
+        <Route path="/mis-avales"
             render={props =>
-                <Workspace {...props} />
+                <MisAvales {...props} />
             } />
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"

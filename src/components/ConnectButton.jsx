@@ -57,8 +57,8 @@ const ConnectButton = (props) => {
     history.push(`/profile`);
   };
 
-  const handleClickWorkspace = () => {
-    history.push(`/workspace`);
+  const handleClickMisAvales = () => {
+    history.push(`/mis-avales`);
   };
 
   const handleClickUsers = () => {
@@ -71,7 +71,6 @@ const ConnectButton = (props) => {
   };
 
   const handleClickLogout = () => {
-    history.push(``);
     logoutAccount();
     setMenuAnchorEl(null);
   };
@@ -128,12 +127,12 @@ const ConnectButton = (props) => {
         </MenuItem>
         {isUserRegistered &&
           <MenuItem onClick={
-            handleClickWorkspace
+            handleClickMisAvales
           }>
             <ListItemIcon>
               <ListAltIcon />
             </ListItemIcon>
-            <ListItemText primary={t('workspaceTitle')} />
+            <ListItemText primary={t('misAvalesTitle')} />
           </MenuItem>}
         {isUserAdmin &&
           <MenuItem onClick={

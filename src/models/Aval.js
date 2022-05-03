@@ -485,6 +485,21 @@ class Aval {
     return null;
   }
 
+  /**
+   * Determina si el aval tiene la participación del usuario.
+   * @param user usuario que participa o no en el aval.
+   * @returns <code>true</code> si participa. <code>false</code> si no participa.
+   */
+  isParticipant(user) {
+    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress) ||
+      Web3Utils.addressEquals(user.address, this.solicitanteAddress) ||
+      Web3Utils.addressEquals(user.address, this.comercianteAddress) ||
+      Web3Utils.addressEquals(user.address, this.avaladoAddress)) {
+      return true;
+    }
+    return false;
+  }
+
   get id() {
     return this._id;
   }

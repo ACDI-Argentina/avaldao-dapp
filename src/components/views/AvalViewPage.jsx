@@ -11,12 +11,15 @@ import CuotasSection from 'components/aval/sections/CuotasSection';
 import ReclamosSection from 'components/aval/sections/ReclamosSection';
 import StatusIndicator from 'components/StatusIndicator';
 import Alert from '@material-ui/lab/Alert';
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { useTranslation } from 'react-i18next';
 
 
 const useStyles = makeStyles((theme) => ({
+  title: {
+    padding: '1em',
+  },
   alert: {
     width: '100%',
     marginTop: theme.spacing(2)
@@ -44,6 +47,13 @@ const AvalViewPage = (props) => {
   return (
     <Page>
       <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
+
+        <Grid item xs={12} className={classes.title}>
+          <Typography variant="h5" component="h5">
+            {t('miAvalTitle')}
+          </Typography>
+        </Grid>
+
         <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
           <StatusIndicator status={aval.status} />
         </Flex>

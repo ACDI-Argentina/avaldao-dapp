@@ -7,6 +7,11 @@ import { Typography } from '@material-ui/core'
 import AvalTaskItem from './AvalTaskItem'
 import List from '@material-ui/core/List';
 import { selectAvalesWithTask } from '../../redux/reducers/avalesSlice'
+import Fab from '@material-ui/core/Fab';
+import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
+import { history } from '../../lib/helpers'
+import CardMembershipIcon from '@material-ui/icons/CardMembership';
+import { right } from 'styled-system'
 
 /**
  * Lista de tareas de avales.
@@ -15,7 +20,13 @@ import { selectAvalesWithTask } from '../../redux/reducers/avalesSlice'
 class AvalTaskList extends Component {
 
   render() {
-    const { avales, user, classes, t } = this.props;
+    const { currentUser, avales, user, classes, t } = this.props;
+    const allowSolicitar = currentUser.isSolicitante();
+
+    const goSolicitarAval = function () {
+      history.push(`/aval/solicitud`);
+    };
+
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -32,6 +43,16 @@ class AvalTaskList extends Component {
               </AvalTaskItem>
             ))}
           </List>
+          {allowSolicitar &&
+            <Fab color="primary"
+              variant="extended"
+              size="medium"
+              onClick={goSolicitarAval}
+              className={classes.solicitarAval}>
+              <CardMembershipIcon className={classes.extendedIcon}/>
+              {t("avalSolicitarBtn")}
+            </Fab>
+          }
         </Grid>
       </Grid>
     );
@@ -44,10 +65,17 @@ const styles = theme => ({
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
+  solicitarAval: {
+    float: 'right'
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  }
 });
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    currentUser: selectCurrentUser(state),
     avales: selectAvalesWithTask(state, ownProps.user)
   };
 }
