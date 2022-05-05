@@ -6,7 +6,6 @@ import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
 import UserProfilePage from 'components/UserProfilePage'
-
 import Home from 'components/views/Home'
 import AvalSolicitudPage from 'components/views/AvalSolicitudPage'
 import AvalViewPage from 'components/views/AvalViewPage';
@@ -14,11 +13,12 @@ import AvalEditPage from 'components/views/AvalEditPage'
 import UsersPage from 'components/views/UsersPage'
 import UserEditPage from 'components/UserEditPage'
 import AboutPage from 'components/views/AboutPage'
-import MisAvales from 'components/views/MisAvales'
+import MisAvalesPage from 'components/views/MisAvalesPage'
+import MisInversionesPage from 'components/views/MisInversionesPage'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
-        <Route
+        <Route 
             exact
             path="/termsandconditions"
             render={props => <TermsAndConditions {...props} />}
@@ -94,7 +94,11 @@ const SwitchRoutes = ({ currentUser }) => (
         />
         <Route path="/mis-avales"
             render={props =>
-                <MisAvales {...props} />
+                <MisAvalesPage {...props} />
+            } />
+        <Route path="/mis-inversiones"
+            render={props =>
+                <MisInversionesPage {...props} />
             } />
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"

@@ -125,13 +125,13 @@
     "homeCarousel1Description": "Garantías crediticias rápidas,seguras y transparentes gracias a la aplicación de la revolucionaria tecnología de blockchain.",
     "homeCarousel1BtnLabel": "Conocer más",
 
-    "homeCarousel2Title": "Confiamos en vos",
-    "homeCarousel2Description": "Acompañamos a emprendedoras y emprendedores para que puedan acceder a las mejores líneas de crédito.",
-    "homeCarousel2BtnLabel": "Conocer más",
+    "homeCarousel2Title": "En vos confiamos",
+    "homeCarousel2Description": "En dos clicks tenés la garantía que necesitás para tu crédito.",
+    "homeCarousel2BtnLabel": "Tus garantías",
 
-    "homeCarousel3Title": "Sé parte",
-    "homeCarousel3Description": "Unite a un nuevo tipo de empresa, más abierta y transparente, donde el control lo tienen quienes la usan y contribuyen.",
-    "homeCarousel3BtnLabel": "Comenzar",
+    "homeCarousel3Title": "Sumate a la comunidad AvalDAO",
+    "homeCarousel3Description": "Únete a un nuevo tipo de empresa, más abierta y transparente, donde el control lo tienen quienes la usan y contribuyen.",
+    "homeCarousel3BtnLabel": "Sumate",
 
     "platformFeaturesTitle1": "Qué es AvalDAO",
 
@@ -148,15 +148,14 @@
 
     "platformOperationTitle": "Cómo funciona",
 
-    "investorCardTitle": "Soy inversor",
-    "investorCardDescription": "Ayuda invirtiendo en finanzas descentralizadas con la garantía de la blockchain de bitcoin.",
-    "investorCardQuestion": "¿Querés ayudar mientras invertís?",
-    "investorCardBtnLabel": "Conocer más",
+    "inversorCardTitle": "Quiero invertir",
+    "inversorCardDescription": "¿Quieres que tu inversión genere rentabilidad al mismo tiempo que ayudas a otras personas a cumplir sus sueños?",
+    "inversorCardBtnLabel": "Tus inversiones",
 
-    "applicantCardTitle": "Solicito un aval",
-    "applicantCardDescription": "Obtené financiación para tus compras o para tus emprendimientos.",
-    "applicantCardQuestion": "¿Necesitás financiar tu proyecto?",
-    "applicantCardBtnLabel": "Solicitar aval",
+    "solicitanteCardTitle": "Quiero un aval",
+    "solicitanteCardDescription1": "¿Tienes un comercio y quieres ampliar tus clientes?",
+    "solicitanteCardDescription2": "¿Tienes un emprendimiento y necesitas una aval para obtener un crédito comercial?",
+    "solicitanteCardBtnLabel": "Tus garantías",
 
     "blockchainBenefitsTitle": "Beneficios de blockchain en la recolección de fondos para el Desarrollo",
 
@@ -178,7 +177,7 @@
     
     "iniciativeOf": "Con la colaboración de: ",
     "argentina": "ARGENTINA ",
-    "disclaimer": "2021 © Todos los derechos reservados.",
+    "disclaimer": "2022 © Todos los derechos reservados.",
     "termsAndConditions": "Terminos y condiciones. ",
     "dataHandlingPolicy": "Política de tratamiento de datos. ",
 
@@ -279,5 +278,19 @@
     "aboutAvalDAOTitle": "¿Qué es AvalDAO?",
     "faqTitle": "FAQ",
     "misAvalesTitle":"Mis avales",
-    "logoutTitle": "Salir"
+    "logoutTitle": "Salir",
+
+    "misInversionesTitle": "Mis inversiones",
+    "misInversionesDescription": "Apertura abierta a inversores prevista para Marzo 2023. Para más información contáctenos a invest@avaldao.com.",
+
+    "sponsorTap1Title": "Asociaciones",
+    "sponsorTap2Title": "Inversores",
+    "sponsorTap3Title": "Wallets",
+
+    "sponsorAcdi": "ACDI",
+    "sponsorElFuturoEstaEnElMonte": "El Futuro está en el Monte",
+    "sponsorRsk": "RSK",
+    "sponsorIovlabs": "IOVlabs",
+    "sponsorBidlab": "BID Lab",
+    "sponsorMetamask": "Metamask"
 }

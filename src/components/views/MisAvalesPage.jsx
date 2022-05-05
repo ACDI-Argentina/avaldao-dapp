@@ -17,7 +17,7 @@ import { Typography } from '@material-ui/core'
  * Pantalla de Avales del usuario.
  * 
  */
-class MisAvales extends Component {
+class MisAvalesPage extends Component {
 
   constructor(props) {
     super(props);
@@ -92,7 +92,7 @@ class MisAvales extends Component {
   }
 }
 
-MisAvales.contextType = Web3AppContext;
+MisAvalesPage.contextType = Web3AppContext;
 
 const styles = theme => ({
 
@@ -108,5 +108,5 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(MisAvales)))
+  withTranslation()(MisAvalesPage)))
 );

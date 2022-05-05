@@ -11,6 +11,7 @@ import PlatformFeatures from './PlatformFeatures'
 import PlatformOperation from './PlatformOperation'
 import HomeCarousel from './HomeCarousel'
 import FondoGarantia from './FondoGarantia'
+import Sponsors from './Sponsors'
 
 /**
  * Pantalla Home.
@@ -69,6 +70,9 @@ class Home extends Component {
           </Grid>
           <Grid item xs={12}>
             <FondoGarantia />
+          </Grid>
+          <Grid item xs={12}>
+            <Sponsors />
           </Grid>
         </Grid>
       </Page>

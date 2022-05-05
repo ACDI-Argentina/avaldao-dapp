@@ -4,6 +4,9 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import HomeCarouselItem from './HomeCarouselItem';
 import Slider from "react-slick";
+import { history } from '../../lib/helpers';
+import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
+import { connect } from 'react-redux'
 
 /**
  * The HomeCarousel section
@@ -18,8 +21,10 @@ class HomeCarousel extends Component {
       slidesToShow: 1,
       slidesToScroll: 1
     };
-  
-    const { t } = this.props;
+
+    const { currentUser, t } = this.props;
+
+    const isUserRegistered = currentUser?.registered || false;
 
     return (
       <Slider {...settings}>
@@ -29,7 +34,7 @@ class HomeCarousel extends Component {
             title={t('homeCarousel1Title')}
             description={t('homeCarousel1Description')}
             btnLabel={t('homeCarousel1BtnLabel')}
-            onClick={() => {}}>
+            onClick={() => { }}>
           </HomeCarouselItem>
         </div>
         <div>
@@ -38,7 +43,10 @@ class HomeCarousel extends Component {
             title={t('homeCarousel2Title')}
             description={t('homeCarousel2Description')}
             btnLabel={t('homeCarousel2BtnLabel')}
-            onClick={() => {}}>
+            btnOnClick={() => {
+              history.push(`/mis-avales`);
+            }}
+            btnDisabled={!isUserRegistered}>
           </HomeCarouselItem>
         </div>
         <div>
@@ -47,7 +55,12 @@ class HomeCarousel extends Component {
             title={t('homeCarousel3Title')}
             description={t('homeCarousel3Description')}
             btnLabel={t('homeCarousel3BtnLabel')}
-            onClick={() => {}}>
+            btnOnClick={() => {
+              history.push({
+                pathname: "/",
+                hash: "#funcionamiento"
+              });
+            }}>
           </HomeCarouselItem>
         </div>
       </Slider>
@@ -57,4 +70,16 @@ class HomeCarousel extends Component {
 
 HomeCarousel.propTypes = {};
 
-export default withTranslation()((withStyles(styles)(HomeCarousel)))
+const mapStateToProps = (state, props) => {
+  return {
+    currentUser: selectCurrentUser(state)
+  }
+}
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(
+    withTranslation()(HomeCarousel)
+  )
+);

@@ -128,13 +128,13 @@
     "homeCarousel1Description": "Fast, secure and transparent credit guarantees thanks to the application of the revolutionary blockchain technology.",
     "homeCarousel1BtnLabel": "Learn more",
 
-    "homeCarousel2Title": "We trust you",
-    "homeCarousel2Description": "We help entrepreneurs so that they can access the best lines of credit.",
-    "homeCarousel2BtnLabel": "Apply for",
+    "homeCarousel2Title": "In you we trust",
+    "homeCarousel2Description": "In two clicks you have the guarantee you need for your credit.",
+    "homeCarousel2BtnLabel": "Your guarantees",
 
-    "homeCarousel3Title": "Be part",
+    "homeCarousel3Title": "Join the AvalDAO community",
     "homeCarousel3Description": "Join a new kind of company, more open and transparent, where those who use and contribute are in control.",
-    "homeCarousel3BtnLabel": "Start",
+    "homeCarousel3BtnLabel": "Join",
 
     "platformFeaturesTitle1": "What is AvalDAO",
 
@@ -151,15 +151,14 @@
 
     "platformOperationTitle": "How does it work",
 
-    "investorCardTitle": "I am an investor",
-    "investorCardDescription": "Brief description of the benefits. Help by investing in decentralized finance with the guarantee of the bitcoin blockchain.",
-    "investorCardQuestion": "Do you want to help while you invest?",
-    "investorCardBtnLabel": "Learn more",
+    "inversorCardTitle": "I want to invest",
+    "inversorCardDescription": "Do you want your investment to generate returns while helping other people fulfill their dreams?",
+    "inversorCardBtnLabel": "Your investments",
 
-    "applicantCardTitle": "I request an endorsement",
-    "applicantCardDescription": "Brief description of the tasks we perform. Obtain financing for your purchases or for your ventures.",
-    "applicantCardQuestion": "Do you need to finance your project?",
-    "applicantCardBtnLabel": "Request endorsement",
+    "solicitanteCardTitle": "I want a guarantee",
+    "solicitanteCardDescription1": "Do you have a business and want to expand your customers?",
+    "solicitanteCardDescription2": "Do you have a entrepreneurship and need a guarantee to obtain a business loan?",
+    "solicitanteCardBtnLabel": "Your guarantees",
 
     "blockchainBenefitsTitle": "Blockchain benefits in fundraising for Development",
 
@@ -181,7 +180,7 @@
 
     "iniciativeOf": "A collaboration of: ",
     "argentina": "ARGENTINA ",
-    "disclaimer": "2021 © All rights reserved.",
+    "disclaimer": "2022 © All rights reserved.",
     "termsAndConditions": "Terms and conditions. ",
     "dataHandlingPolicy": "Data handling policy. ",
 
@@ -282,5 +281,19 @@
     "aboutAvalDAOTitle": "What is AvalDAO?",
     "faqTitle": "FAQ",
     "misAvalesTitle":"My avales",
-    "logoutTitle": "Logout"
+    "logoutTitle": "Logout",
+
+    "misInversionesTitle": "My investments",
+    "misInversionesDescription": "Opening open to investors scheduled for March 2023. For more information, contact us at invest@avaldao.com.",
+
+    "sponsorTap1Title": "Partnerships",
+    "sponsorTap2Title": "Investors",
+    "sponsorTap3Title": "Wallets",
+
+    "sponsorAcdi": "ACDI",
+    "sponsorElFuturoEstaEnElMonte": "El Futuro está en el Monte",
+    "sponsorRsk": "RSK",
+    "sponsorIovlabs": "IOVlabs",
+    "sponsorBidlab": "BID Lab",
+    "sponsorMetamask": "Metamask"
 }

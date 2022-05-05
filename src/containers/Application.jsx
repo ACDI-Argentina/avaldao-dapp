@@ -23,6 +23,7 @@ import TransactionViewer from 'components/TransactionViewer';
 import Web3Banner from 'lib/blockchain/Web3Banner';
 import Web3App from 'lib/blockchain/Web3App';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
+import navigateAnchor from './navigateAnchor';
 
 /* global document */
 /**
@@ -68,9 +69,10 @@ class Application extends Component {
     initExchangeRateListener();
   }
 
-
   render() {
     const { currentUser } = this.props;
+    
+    navigateAnchor(history);
     
     return (
       <ErrorBoundary>
@@ -84,7 +86,7 @@ class Application extends Component {
               <>
                 <TransactionViewer />
                 <MessageViewer />
-                <Router history={history}>
+                <Router history={history} >
                   <ScrollToTop />
                   <div>
                     {GA.init() && <GA.RouteTracker />}

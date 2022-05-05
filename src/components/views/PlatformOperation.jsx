@@ -16,14 +16,18 @@ import { history } from '../../lib/helpers'
  */
 class PlatformOperation extends Component {
 
-  goSolicitarAval() {
-    history.push(`/aval/solicitud`);
+  goMisInversiones() {
+    history.push(`/mis-inversiones`);
+  }
+
+  goMisAvales() {
+    history.push(`/mis-avales`);
   }
 
   render() {
     const { currentUser, classes, t, } = this.props;
 
-    const allowSolicitar = currentUser.isSolicitante();
+    const isUserRegistered = currentUser?.registered || false;
 
     return (
       <div className={classes.section}>
@@ -34,39 +38,39 @@ class PlatformOperation extends Component {
                 {t('platformOperationTitle')}
               </h2>
             </Grid>
-            <Grid item xs={12}>
+            <Grid id="funcionamiento" item xs={12}>
               <div className={classes.operationDescription}>
                 <img className={classes.operationDescriptionImg} src={require("assets/img/diagramaFuncionamiento.jpg")}></img>
               </div>
             </Grid>
-            <Grid item xs={6}>
+            <Grid id="soy_inversor" item xs={6}>
               <Card className={classes.root}>
                 <CardMedia
                   className={classes.cardMedia}
                   image={require("assets/img/inversorCardAvatar.jpg")}>
                 </CardMedia>
-                <CardContent className={classNames(classes.cardContent, classes.disabledCard)}>
+                <CardContent className={classes.cardContent}>
                   <Grid container spacing={1} align="left">
                     <Grid item xs={12} className={classes.cardTitle}>
-                      {t('investorCardTitle')}
+                      {t('inversorCardTitle')}
                     </Grid>
                     <Grid item xs={12} className={classes.cardDescription}>
-                      {t('investorCardDescription')}
-                    </Grid>
-                    <Grid item xs={12} className={classes.cardQuestion}>
-                      {t('investorCardQuestion')}
+                      {t('inversorCardDescription')}
                     </Grid>
                     <Grid item xs={12}>
-                      <Button style={{margin: "1.5em 0"}} color="primary" disabled round
-                        className="btn btn-info">
-                        {t('investorCardBtnLabel')}
+                      <Button style={{ margin: "1.5em 0" }}
+                        color="primary"
+                        round
+                        className="btn btn-info"
+                        onClick={this.goMisInversiones}>
+                        {t('inversorCardBtnLabel')}
                       </Button>
                     </Grid>
                   </Grid>
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={6}>
+            <Grid id="soy_solicitante" item xs={6}>
               <Card className={classes.root}>
                 <CardMedia
                   className={classes.cardMedia}
@@ -75,20 +79,20 @@ class PlatformOperation extends Component {
                 <CardContent className={classes.cardContent}>
                   <Grid container spacing={1} align="left">
                     <Grid item xs={12} className={classes.cardTitle}>
-                      {t('applicantCardTitle')}
+                      {t('solicitanteCardTitle')}
                     </Grid>
                     <Grid item xs={12} className={classes.cardDescription}>
-                      {t('applicantCardDescription')}
+                      {t('solicitanteCardDescription1')}
                     </Grid>
-                    <Grid item xs={12} className={classes.cardQuestion}>
-                      {t('applicantCardQuestion')}
+                    <Grid item xs={12} className={classes.cardDescription}>
+                      {t('solicitanteCardDescription2')}
                     </Grid>
                     <Grid item xs={12}>
-                      <Button style={{margin: "1.5em 0"}} color="primary" round
+                      <Button style={{ margin: "1.5em 0" }} color="primary" round
                         className="btn btn-info"
-                        disabled={!allowSolicitar}
-                        onClick={this.goSolicitarAval}>
-                        {t('applicantCardBtnLabel')}
+                        disabled={!isUserRegistered}
+                        onClick={this.goMisAvales}>
+                        {t('solicitanteCardBtnLabel')}
                       </Button>
                     </Grid>
                   </Grid>
