@@ -22,8 +22,13 @@
     "userRoles": "Roles",
     "userNotRegistered": "No registrado",
     
-    "fondoGarantia": "Fondo de garantía",
-    "fondoGarantiaExplain": "El fondo de garantía está constituido por tokens de la blockchain RSK y sirve como respaldo de los avales.",
+    "dashboardTitle": "Dashboard",
+    "dashboardExplain": "AvalDAO es transparente. Puedes conocer el estado de su economía interna en tiempo real.",
+    "dashboardFondoGarantia": "Fondo de Garantía",
+
+    "statisticsAvalesVigentes": "Avales vigentes",
+    "statisticsAvalesFinalizados": "Avales finalizados",
+    "statisticsFondoGarantiaComposicion": "Composición del Fondo de Garantía",
 
     "notSigned": "Sin firmar",
     "signed": "Firmado",

@@ -197,6 +197,14 @@ class Aval {
     return StatusUtils.build(4, 'Finalizado', false);
   }
 
+  isVigente() {
+    return this.status.name === Aval.VIGENTE.name;
+  }
+
+  isFinalizado() {
+    return this.status.name === Aval.FINALIZADO.name;
+  }
+
   /**
  * Determina si el Aval puede ser editado o no.
  * @param user usuario que edita el aval.

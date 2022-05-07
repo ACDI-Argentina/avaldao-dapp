@@ -5,6 +5,9 @@
   "main": "src/index.js",
   "dependencies": {
     "@acdi/avaldao-contract": "1.0.1",
+    "@devexpress/dx-react-chart": "^2.7.6",
+    "@devexpress/dx-react-chart-material-ui": "^2.7.6",
+    "@devexpress/dx-react-core": "^2.7.6",
     "@feathersjs/authentication-client": "^1.0.11",
     "@feathersjs/client": "^3.7.8",
     "@feathersjs/commons": "^4.0.0",

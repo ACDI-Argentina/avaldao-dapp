@@ -3,7 +3,7 @@ import { title } from "assets/jss/material-kit-react.js";
 const color = "#FFF";
 const bkgImg = require("assets/img/fondoGarantiaBg.png");
 
-const fondoGarantiaStyle = {
+const dashboardStyle = {
 
   section: {
     textAlign: "left",
@@ -42,4 +42,4 @@ const fondoGarantiaStyle = {
   }
 };
 
-export default fondoGarantiaStyle;
+export default dashboardStyle;

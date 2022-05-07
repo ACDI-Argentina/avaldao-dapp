@@ -22,9 +22,14 @@
     "userRoles": "Roles",
     "userNotRegistered": "Not registered",
     
-    "fondoGarantia": "Guarantee fund",
-    "fondoGarantiaExplain": "The guarantee fund is made up of tokens from the RSK blockchain and serves as backing for the guarantees.",
+    "dashboardTitle": "Dashboard",
+    "dashboardExplain": "AvalDAO is transparent. You can know the state of its internal economy in real time.",
+    "dashboardFondoGarantia": "Guarantee Fund",
 
+    "statisticsAvalesVigentes": "Current guarantees",
+    "statisticsAvalesFinalizados": "Finalized guarantees",
+    "statisticsFondoGarantiaComposicion": "Composition of the Guarantee Fund",
+    
     "notSigned": "Not signed",
     "signed": "Signed",
 

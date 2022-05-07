@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
-import FondoGarantia from './FondoGarantia'
+import Dashboard from './Dashboard'
 import AvalTable from './AvalTable'
 import Page from './Page'
 import { withStyles } from '@material-ui/core/styles'
@@ -86,7 +86,7 @@ class MisAvalesPage extends Component {
             </Grid>
           </Grid>
         </Grid>
-        <FondoGarantia></FondoGarantia>
+        <Dashboard></Dashboard>
       </Page>
     );
   }

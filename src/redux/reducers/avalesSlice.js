@@ -168,6 +168,22 @@ export const selectAvalesWithTask = (state, user) => {
     filter(aval => aval.getTaskCode(user) !== null);
 }
 
+export const selectAvalesVigentes = (state) => {
+  return state.avales
+    .map(function (avalStore) {
+      return new Aval(avalStore);
+    }).
+    filter(aval => aval.isVigente() === true);
+}
+
+export const selectAvalesFinalizados = (state) => {
+  return state.avales
+    .map(function (avalStore) {
+      return new Aval(avalStore);
+    }).
+    filter(aval => aval.isFinalizado() === true);
+}
+
 export const selectAvalByClientId = (state, clientId) => {
   const avalStore = state.avales.find(a => a.clientId === clientId);
   if (avalStore) {

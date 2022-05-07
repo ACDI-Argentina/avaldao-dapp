@@ -10,7 +10,7 @@ import { history } from '../../lib/helpers'
 import PlatformFeatures from './PlatformFeatures'
 import PlatformOperation from './PlatformOperation'
 import HomeCarousel from './HomeCarousel'
-import FondoGarantia from './FondoGarantia'
+import Dashboard from './Dashboard'
 import Sponsors from './Sponsors'
 
 /**
@@ -69,7 +69,7 @@ class Home extends Component {
             <PlatformOperation {...this.props} />
           </Grid>
           <Grid item xs={12}>
-            <FondoGarantia />
+            <Dashboard />
           </Grid>
           <Grid item xs={12}>
             <Sponsors />
