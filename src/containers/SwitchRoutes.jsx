@@ -15,6 +15,7 @@ import UserEditPage from 'components/UserEditPage'
 import AboutPage from 'components/views/AboutPage'
 import MisAvalesPage from 'components/views/MisAvalesPage'
 import MisInversionesPage from 'components/views/MisInversionesPage'
+import FaqPage from 'components/views/FaqPage'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>
@@ -33,6 +34,13 @@ const SwitchRoutes = ({ currentUser }) => (
             path="/about"
             render={props => (
                 <AboutPage/>
+            )}
+        />
+        <Route
+            exact
+            path="/faq"
+            render={props => (
+                <FaqPage/>
             )}
         />
         <Route

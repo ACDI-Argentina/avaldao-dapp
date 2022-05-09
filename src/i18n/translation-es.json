@@ -281,7 +281,7 @@
     "menuSignup":"Regístrate",
     "aboutTitle": "Acerca de",
     "aboutAvalDAOTitle": "¿Qué es AvalDAO?",
-    "faqTitle": "FAQ",
+ 
     "misAvalesTitle":"Mis avales",
     "logoutTitle": "Salir",
 
@@ -297,5 +297,9 @@
     "sponsorRsk": "RSK",
     "sponsorIovlabs": "IOVlabs",
     "sponsorBidlab": "BID Lab",
-    "sponsorMetamask": "Metamask"
+    "sponsorMetamask": "Metamask",
+
+    "faqTitle": "FAQ",
+    "faqQuestion1": "En construcción",
+    "faqResponse1": ""
 }
