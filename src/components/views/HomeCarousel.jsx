@@ -34,7 +34,10 @@ class HomeCarousel extends Component {
             title={t('homeCarousel1Title')}
             description={t('homeCarousel1Description')}
             btnLabel={t('homeCarousel1BtnLabel')}
-            onClick={() => { }}>
+            btnOnClick={() => {
+              history.push(`/mis-avales`);
+            }}
+            btnDisabled={!isUserRegistered}>
           </HomeCarouselItem>
         </div>
         <div>
@@ -44,7 +47,7 @@ class HomeCarousel extends Component {
             description={t('homeCarousel2Description')}
             btnLabel={t('homeCarousel2BtnLabel')}
             btnOnClick={() => {
-              history.push(`/mis-avales`);
+              /* TODO: Implementar */
             }}
             btnDisabled={!isUserRegistered}>
           </HomeCarouselItem>
@@ -56,10 +59,7 @@ class HomeCarousel extends Component {
             description={t('homeCarousel3Description')}
             btnLabel={t('homeCarousel3BtnLabel')}
             btnOnClick={() => {
-              history.push({
-                pathname: "/",
-                hash: "#funcionamiento"
-              });
+              history.push(`/about`);
             }}>
           </HomeCarouselItem>
         </div>

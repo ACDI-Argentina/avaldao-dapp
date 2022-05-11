@@ -35,6 +35,13 @@ const platformOperationStyle = {
     textAlign: "justify",
     color: "#FFF"
   },
+  bottomLink: {
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "#FFF",
+    padding: "0em",
+    paddingTop: "2em"
+  },
   operationDescription: {
     backgroundColor: "#FFF",
   },

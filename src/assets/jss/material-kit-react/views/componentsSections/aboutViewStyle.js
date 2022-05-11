@@ -9,6 +9,14 @@ const aboutViewStyle = {
     textAlign: "left",
     marginTop: "5em"
   },
+  titleLeftBar: {
+    marginBottom: "2em"
+  },
+  pageTitle: {
+    color: "#7868E5",
+    fontWeight: "bold",
+    padding: "1em 2em",
+  },
   leftTitle: {
     color: "#7868E5",
     fontWeight: "bold",
@@ -24,9 +32,26 @@ const aboutViewStyle = {
     fontSize: "0.9em",
     lineHeight: "2",
     marginBottom: "4em",
-    textAlign: "justify",
+    textAlign: "justify"
   },
-
+  roadMapCard: {
+    border: "1px solid #7868E5",
+    borderRadius: "8px",
+    padding: "1em 1.5em",
+    margin: "1em"
+  },
+  roadMapTitle: {
+    fontWeight: "bold",
+    fontSize: ".9em"
+  },
+  roadMapText: {
+    fontSize: ".8em"
+  },
+  roadMapCurrentText: {
+    fontWeight: "bold",
+    color: "#7868E5",
+    textTransform: "uppercase",
+  },
   image: {
     width: "20%",
     maxWidth: "80px",

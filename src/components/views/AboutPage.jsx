@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import Page from './Page'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Link, Typography } from '@material-ui/core'
 import styles from "assets/jss/material-kit-react/views/componentsSections/aboutViewStyle.js";
 import classNames from "classnames";
 import Sponsors from './Sponsors'
@@ -33,38 +33,96 @@ class AboutPage extends Component {
             justifyContent="left"
             alignItems="top"
             spacing={2} style={{ padding: "2em" }}>
-            <Grid className={classes.leftBar} item xs={4}>
-              <div className={classes.leftTitle}>AvalDAO es la primera Sociedad de Garantía Recíproca (SGR) descentralizada</div>
-            </Grid>
-            <Grid item xs={8}>
-              <div className={classes.paragraphText}>Una solución WEB3 que otorga garantías a individuos y microempresas no bancarizada, sin historial crediticio o con garantía insuficiente (undercollateralized lending) para que puedan acceder a créditos convenientes, en particular, créditos comerciales.
-              Nuestra DAO permite desbloquear el crédito hacia personas excluidas del sistema financiero, otorgando garantías en función de la reputación, y no por estereotipos que hoy están discriminando el acceso al crédito (género, edad, rasgos étnicos, etc).</div>
+            <Grid className={classes.titleLeftBar} item xs={12}>
+              <h3 className={classes.pageTitle}>{t('aboutAvalDAOTitle')}</h3>
             </Grid>
             <Grid className={classes.leftBar} item xs={4}>
-              <div className={classes.leftTitle}>Por qué construimos sobre blockchain</div>
+              <div className={classes.leftTitle}>{t('aboutAvalDAOSGRTitle')}</div>
             </Grid>
             <Grid item xs={8}>
-              <div className={classes.paragraphText}><b>Porque</b> permite a las personas y empresas ir creando sobre una identidad digital auto-soberana una reputación generada a partir de credenciales inmutables otorgadas por terceras partes
-              <br/><b>Porque</b> nos permite a través de smart contract generar contratos autónomos que bloquean fondos y ejecuta las garantías sin intermediarios.
-              <br/><b>Porque</b> nos pemite programar y transparentar la economía de avalDAO y los niveles de riegos que se asumen.
-              <br/><b>Porque</b> creemos que el futuro de las finanzas son las organizaciones autónomas descentralizadas (DAO). Una nueva generación de empresas propiedad de la comunidad a la cual le aporta valor, de acceso abierto y global.</div>
+              <div className={classes.paragraphText}>
+                <span>{t('aboutAvalDAOSGRText1')}</span><br /><span>{t('aboutAvalDAOSGRText2')}</span>
+              </div>
+            </Grid>
+            <Grid className={classes.leftBar} item xs={4}>
+              <div className={classes.leftTitle}>{t('aboutAvalDAOWhyBlockchainTitle')}</div>
+            </Grid>
+            <Grid item xs={8}>
+              <div className={classes.paragraphText}>
+              <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText1')}</span><span>{t('aboutAvalDAOWhyBlockchainText2')}</span><br />
+                <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText3')}</span><span>{t('aboutAvalDAOWhyBlockchainText4')}</span><br />
+                <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText5')}</span><span>{t('aboutAvalDAOWhyBlockchainText6')}</span><br />
+                <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText7')}</span><span>{t('aboutAvalDAOWhyBlockchainText8')}</span>
+              </div>
             </Grid>
             <Grid className={classes.leftTitle} item xs={12}>
-              Background
+              {t('aboutAvalDAOBackgroundTitle')}
             </Grid>
             <Grid className={classes.paragraphText} item xs={12}>
-              AVALDAO es una iniciativa de ACDI, una organización argentina de la sociedad civil que promueve el desarrollo social integral teniendo como centro a la persona y como método la innovación y el partnership.<br/>ACDI en alianza con el BID Lab viene acompañando un proceso de desarrollo de las comunidades más vulnerables de la región del Gran Chaco llamado “The Furute is in the Forest”, introduciendo innovaciones tecnológicas y generando a estas poblaciones oportunidades sostenibles para la superación de su situación de pobreza al mismo tiempo que se conservan los recursos naturales de esta gran región de importancia global para la lucha contra el cambio climático.
-              ACDI, a partir de la alianza con RSK-IOV Lab, ha comenzado en el 2020 el desarrollo una serie de soluciones financieras basadas en la infraestructura RSK con la finalidad de conectar la “economía real” con la “economía on-chain” en favor de las comunidades que están fuera del sistema financiero tradicional, sin acceso al crédito ni a soluciones de ahorro e inversión.
+              <span>{t('aboutAvalDAOBackgroundText1')}</span><br />
+              <span>{t('aboutAvalDAOBackgroundText2')}</span>
             </Grid>
             <Grid className={classes.leftTitle} item xs={12}>
-              Alianzas
+              {t('aboutAvalDAOTitleAlliances')}
             </Grid>
-            <Sponsors/>
+            <Sponsors />
           </Grid>
           <Grid item xs={0} md={2}></Grid>
         </Grid>
         <Grid item xs={12}>
-          <DetailedPlatformOperation/>
+          <DetailedPlatformOperation />
+        </Grid>
+
+        <Grid container xs={12}>
+          <Grid item xs={0} md={2}></Grid>
+          <Grid xs={12} md={8}
+            container
+            direction="row"
+            justifyContent="left"
+            alignItems="top"
+            spacing={2} style={{ padding: "2em" }}>
+            <Grid className={classes.leftTitle} item xs={12}>
+              {t('aboutAvalDAORoadmap')}
+            </Grid>
+            <Grid container
+              direction="row"
+              justifyContent="center"
+              alignItems="stretch"
+              xs={12} spacing={5} style={{ padding: "2em" }}>
+              <Grid className={classes.roadMapCard} item xs={5}>
+                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap1Title')}</div>
+                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap1Text')}</div>
+              </Grid>
+              <Grid className={classes.roadMapCard} item xs={5}>
+                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap2Title')}</div>
+                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap2Text')}</div>
+              </Grid>
+              <Grid className={classes.roadMapCard} item xs={5}>
+                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap3Title')}</div>
+                <div className={classNames(classes.roadMapText, classes.roadMapCurrentText)}>{t('aboutAvalDAORoadMap3Text')}</div>
+              </Grid>
+              <Grid className={classes.roadMapCard} item xs={5}>
+                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap4Title')}</div>
+                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap4Text')}</div>
+              </Grid>
+              <Grid className={classes.roadMapCard} item xs={5}>
+                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap5Title')}</div>
+                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap5Text')}</div>
+              </Grid>
+              <Grid className={classes.roadMapCard} item xs={5}>
+                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap6Title')}</div>
+              </Grid>
+            </Grid>
+            <Grid style={{marginTop: "2em"}} className={classes.leftTitle} item xs={12}>
+              {t('aboutAvalDAORepositoryTitle')}
+            </Grid>
+            <Grid item xs={12}>
+              <div><b>{t('aboutAvalDAORepositoryText')}</b></div>
+              <Link href={t('aboutAvalDAORepositoryLink')} target="_blank" underline="none">
+                {t('aboutAvalDAORepositoryLink')}
+              </Link>
+            </Grid>
+          </Grid>
         </Grid>
       </Page>
     );
