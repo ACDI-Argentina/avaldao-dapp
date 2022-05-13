@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
-import { withTranslation } from 'react-i18next'
+import { withTranslation, Trans } from 'react-i18next'
 import Page from './Page'
 import { Grid, Link, Typography } from '@material-ui/core'
 import styles from "assets/jss/material-kit-react/views/componentsSections/aboutViewStyle.js";
