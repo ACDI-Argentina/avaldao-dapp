@@ -7,11 +7,26 @@ import Slider from "react-slick";
 import { history } from '../../lib/helpers';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { connect } from 'react-redux'
+import { Web3AppContext } from 'lib/blockchain/Web3App';
 
 /**
  * The HomeCarousel section
  */
 class HomeCarousel extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.start = this.start.bind(this);
+  }
+
+  async start() {
+    const isUserConnected = this.props.currentUser?.address || false;
+    if (isUserConnected == false) {
+      await this.context.loginAccount();
+    }
+    history.push(`/mis-avales`);
+  }
 
   render() {
     var settings = {
@@ -22,9 +37,7 @@ class HomeCarousel extends Component {
       slidesToScroll: 1
     };
 
-    const { currentUser, t } = this.props;
-
-    const isUserRegistered = currentUser?.registered || false;
+    const { t } = this.props;
 
     return (
       <Slider {...settings}>
@@ -34,10 +47,8 @@ class HomeCarousel extends Component {
             title={t('homeCarousel1Title')}
             description={t('homeCarousel1Description')}
             btnLabel={t('homeCarousel1BtnLabel')}
-            btnOnClick={() => {
-              history.push(`/mis-avales`);
-            }}
-            btnDisabled={!isUserRegistered}>
+            btnOnClick={this.start}
+            btnDisabled={false}>
           </HomeCarouselItem>
         </div>
         <div>
@@ -47,9 +58,9 @@ class HomeCarousel extends Component {
             description={t('homeCarousel2Description')}
             btnLabel={t('homeCarousel2BtnLabel')}
             btnOnClick={() => {
-              /* TODO: Implementar */
+              history.push(`/about`);
             }}
-            btnDisabled={!isUserRegistered}>
+            btnDisabled={false}>
           </HomeCarouselItem>
         </div>
         <div>
@@ -59,7 +70,10 @@ class HomeCarousel extends Component {
             description={t('homeCarousel3Description')}
             btnLabel={t('homeCarousel3BtnLabel')}
             btnOnClick={() => {
-              history.push(`/about`);
+              history.push({
+                pathname: ``,
+                hash: `#soy_inversor`
+              });
             }}>
           </HomeCarouselItem>
         </div>
@@ -67,6 +81,8 @@ class HomeCarousel extends Component {
     )
   }
 }
+
+HomeCarousel.contextType = Web3AppContext;
 
 HomeCarousel.propTypes = {};
 
