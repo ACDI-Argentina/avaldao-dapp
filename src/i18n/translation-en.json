@@ -141,9 +141,9 @@
     "homeCarousel3Description": "Join a new kind of company, more open and transparent, where those who use and contribute are in control.",
     "homeCarousel3BtnLabel": "Join",
 
-    "platformFeaturesTitle1": "What is AvalDAO",
-
-    "platformFeaturesDescription1": "AvalDAO is a new type of organization designed to connect those who want to support the effort to produce and undertake with those who need to improve their credit conditions before financial entities or their suppliers of goods and services.",
+    "platformFeaturesTitle": "What is AvalDAO",
+    "platformFeaturesDescription": "AvalDAO is the first decentralized Mutual Guarantee Company. A WEB3 solution that grants guarantees to unbanked individuals and micro-enterprises or without a credit history, so that they can access convenient commercial credits.",
+    "platformFeaturesBtn": "Learn more",
 
     "transparency": "Collaboration",
     "transparencyDescription": "All the organization's finances are visible, with information and statistics published in real time",

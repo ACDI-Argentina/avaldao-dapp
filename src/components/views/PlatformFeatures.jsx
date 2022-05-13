@@ -4,6 +4,7 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/plat
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import Button from "components/CustomButtons/Button.js";
+import { history } from '../../lib/helpers';
 
 /**
  * The PlatformFeatures section
@@ -16,10 +17,10 @@ class PlatformFeatures extends Component {
     return (
       <div className={classes.section}>
         <h2 className={classes.title}>
-          {t('platformFeaturesTitle1')}
+          {t('platformFeaturesTitle')}
         </h2>
         <h6 className={classes.description}>
-          {t('platformFeaturesDescription1')}
+          {t('platformFeaturesDescription')}
         </h6>
         <Grid>
           <Grid
@@ -30,9 +31,13 @@ class PlatformFeatures extends Component {
             spacing={10}
             style={{ marginTop: '3em', marginBottom: '3em' }}
           >
-            <Button color="primary" round
-              className="btn btn-info">
-              Conocer más
+            <Button color="primary"
+              round
+              className="btn btn-info"
+              onClick={() => {
+                history.push(`/about`);
+              }}>
+              {t('platformFeaturesBtn')}
             </Button>
           </Grid>
 

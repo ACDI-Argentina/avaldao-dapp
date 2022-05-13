@@ -138,9 +138,9 @@
     "homeCarousel3Description": "Únete a un nuevo tipo de empresa, más abierta y transparente, donde el control lo tienen quienes la usan y contribuyen.",
     "homeCarousel3BtnLabel": "Sumate",
 
-    "platformFeaturesTitle1": "Qué es AvalDAO",
-
-    "platformFeaturesDescription1": "AvalDAO es un nuevo tipo de organización pensada para conectar a quienes quieren apoyar el esfuerzo de producir y emprender con quienes necesitan mejorar sus condiciones crediticias ante entidades financieras o sus proveedores de bienes y servicios.",
+    "platformFeaturesTitle": "Qué es AvalDAO",
+    "platformFeaturesDescription": "AvalDAO es la primera Sociedad de Garantía Recíproca (SGR) descentralizada. Una solución WEB3 que otorga garantías a los individuos y microempresas no bancarizadas o sin historial crediticio, para que puedan acceder a créditos comerciales convenientes.",
+    "platformFeaturesBtn": "Conocer más",
 
     "transparency": "Transparencia",
     "transparencyDescription": "Toda la economía de la organización está a la vista, con información y estadísticas publicadas en tiempo real",
