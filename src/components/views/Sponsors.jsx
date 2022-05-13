@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
+import Sponsor from './Sponsor';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,10 +48,11 @@ const useStyles = makeStyles((theme) => ({
     /*color: "#000",
     backgroundColor: "#7868E5"*/
   },
-  tap: {
-
+  tapPaper: {
+    padding: '1em 0',
+    boxShadow: 'rgb(0 0 0 / 45%) 25px 0px 20px -25px, rgb(0 0 0 / 45%) -25px 0px 20px -25px'
   },
-  logoGrid: {
+  sponsorGrid: {
     textAlign: "center"
   },
   logo: {
@@ -82,8 +84,7 @@ export default function Sponsors() {
         indicatorColor="primary"
         textColor="primary"
         aria-label="full width tabs example"
-        centered
-      >
+        centered>
         <Tab label={t('sponsorTap1Title')} {...a11yProps(0)} className={classes.tap} />
         <Tab label={t('sponsorTap2Title')} {...a11yProps(1)} className={classes.tap} />
         <Tab label={t('sponsorTap3Title')} {...a11yProps(2)} className={classes.tap} />
@@ -96,58 +97,72 @@ export default function Sponsors() {
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
           <Grid container
-            spacing={3}
-            justifyContent="space-evenly"
+            spacing={0}
+            justifyContent="center"
             alignItems="center">
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://www.acdi.org.ar" target="_blank">
-                <img src={require("assets/img/logos/acdi.png")} alt={t('sponsorAcdi')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://www.acdi.org.ar"
+                logoPath={require("assets/img/logos/acdi.png")}
+                name={t('sponsorAcdi')}
+                shadowLeft={true}>
+              </Sponsor>
             </Grid>
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://elfuturoestaenelmonte.org" target="_blank">
-                <img src={require("assets/img/logos/el-futuro-esta-en-el-monte.png")} alt={t('sponsorElFuturoEstaEnElMonte')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://elfuturoestaenelmonte.org"
+                logoPath={require("assets/img/logos/el-futuro-esta-en-el-monte.png")}
+                name={t('sponsorElFuturoEstaEnElMonte')}>
+              </Sponsor>
             </Grid>
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://bidlab.org" target="_blank">
-                <img src={require("assets/img/logos/IDB-Lab.gif")} alt={t('sponsorBidlab')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://bidlab.org"
+                logoPath={require("assets/img/logos/IDB-Lab.gif")}
+                name={t('sponsorBidlab')}>
+              </Sponsor>
             </Grid>
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://www.rsk.co/" target="_blank">
-                <img src={require("assets/img/logos/rsk.svg")} alt={t('sponsorRsk')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://www.rsk.co"
+                logoPath={require("assets/img/logos/rsk.svg")}
+                name={t('sponsorRsk')}
+                shadowRight={true}>
+              </Sponsor>
             </Grid>
           </Grid>
         </TabPanel>
 
         <TabPanel value={value} index={1} dir={theme.direction}>
           <Grid container
-            spacing={3}
-            justifyContent="space-evenly"
+            spacing={0}
+            justifyContent="center"
             alignItems="center">
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://bidlab.org" target="_blank">
-                <img src={require("assets/img/logos/IDB-Lab.gif")} alt={t('sponsorBidlab')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://bidlab.org"
+                logoPath={require("assets/img/logos/IDB-Lab.gif")}
+                name={t('sponsorBidlab')}
+                shadowLeft={true}>
+              </Sponsor>
             </Grid>
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://www.iovlabs.org/" target="_blank">
-                <img src={require("assets/img/logos/iovlabs.jpg")} alt={t('sponsorIovlabs')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://www.iovlabs.org"
+                logoPath={require("assets/img/logos/iovlabs.jpg")}
+                name={t('sponsorIovlabs')}
+                shadowRight={true}>
+              </Sponsor>
             </Grid>
           </Grid>
         </TabPanel>
+
         <TabPanel value={value} index={2} dir={theme.direction}>
           <Grid container
-            spacing={3}
-            justifyContent="space-evenly"
+            spacing={0}
+            justifyContent="center"
             alignItems="center">
-            <Grid item xs={12} sm={6} md={3} className={classes.logoGrid}>
-              <a href="https://metamask.io" target="_blank">
-                <img src={require("assets/img/logos/metamask.svg")} alt={t('sponsorMetamask')} className={classes.logo} />
-              </a>
+            <Grid item xs={12} sm={6} md={3} className={classes.sponsorGrid}>
+              <Sponsor url="https://metamask.io"
+                logoPath={require("assets/img/logos/metamask.svg")}
+                name={t('sponsorMetamask')}
+                shadowLeft={true}
+                shadowRight={true}>
+              </Sponsor>
             </Grid>
           </Grid>
         </TabPanel>
