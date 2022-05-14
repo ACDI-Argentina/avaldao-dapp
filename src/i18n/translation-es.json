@@ -298,18 +298,6 @@
     "aboutAvalDAOBackgroundText1": "AVALDAO es una iniciativa de ACDI, una organización que trabaja para poner en movimiento la libertad de las personas para que sean protagonistas de su crecimiento personal y comunitario.",
     "aboutAvalDAOBackgroundText2": "ACDI cuenta con una Cooperación Técnica con BID Lab y una alianza con RSK-IOV Lab para construir la base tecnológica de aplicaciones descentralizadas digitales que soporten los procesos de gobernanza de los bienes comunes, alinee incentivos y canalicen recursos globales hacia las iniciativas locales que permitan traccionar más inversión y crédito hacia modelos de negocios y emprendimientos que impulsen una economía baja en carbono.",
     "aboutAvalDAOTitleAlliances": "Alianzas",
-    "aboutAvalDAORoadmap": "Roadmap",
-    "aboutAvalDAORoadMap1Title": "Julio 2021: Ideación y prueba de concepto",
-    "aboutAvalDAORoadMap1Text": "Construcción del protocolo para generación de Avales (MVP)",
-    "aboutAvalDAORoadMap2Title": "Septiembre 2022: Ideación y prueba de concepto",
-    "aboutAvalDAORoadMap2Text": "Slate helps you see how many more days work to reach.",
-    "aboutAvalDAORoadMap3Title": "Marzo 2022: Dapp operativa en mainnet Testing",
-    "aboutAvalDAORoadMap3Text": "Actualmente",
-    "aboutAvalDAORoadMap4Title": "Marzo 2023: Lanzamiento del programa de incentivos",
-    "aboutAvalDAORoadMap4Text": "Desarrollo del sistema de Gobernanza.",
-    "aboutAvalDAORoadMap5Title": "Julio 2022: Lanzamiento comercial para early adopters",
-    "aboutAvalDAORoadMap5Text": "Construcción del protocolo para generación de reputación.",
-    "aboutAvalDAORoadMap6Title": "Marzo 2024: Gobierno de la comunidad",
     "aboutAvalDAORepositoryTitle": "Repositorio",
     "aboutAvalDAORepositoryText": "avalDAO es un software de código abierto con licencia MIT.",
     "aboutAvalDAORepositoryLink": "https://github.com/ACDI-Argentina/avaldao/wiki",
@@ -343,5 +331,31 @@
 
     "faqTitle": "FAQ",
     "faqQuestion1": "En construcción",
-    "faqResponse1": ""
+    "faqResponse1": "",
+
+    "roadmapTitle": "Roadmap",
+
+    "roadmapStep1Title": "Julio 2021",
+    "roadmapStep1Subtitle": "Ideación y prueba de concepto",
+    "roadmapStep1Description": "Construcción del protocolo para generación de Avales (MVP)",
+
+    "roadmapStep2Title": "Marzo 2022",
+    "roadmapStep2Subtitle": "Dapp operativa en mainnet Testing",
+    "roadmapStep2Description": "",
+
+    "roadmapStep3Title": "Julio 2022",
+    "roadmapStep3Subtitle": "Lanzamiento comercial para early adopters",
+    "roadmapStep3Description": "Construcción del protocolo para generación de reputación.",
+
+    "roadmapStep4Title": "Septiembre 2022",
+    "roadmapStep4Subtitle": "Sistema de reputación sobre identidad auto-soberana disponible",
+    "roadmapStep4Description": "Desarrollo de la economía de token",
+
+    "roadmapStep5Title": "Marzo 2023",
+    "roadmapStep5Subtitle": "Lanzamiento del programa de incentivos",
+    "roadmapStep5Description": "Desarrollo del sistema de Gobernanza.",
+
+    "roadmapStep6Title": "Marzo 2024",
+    "roadmapStep6Subtitle": "Gobierno de la comunidad",
+    "roadmapStep6Description": ""
 }

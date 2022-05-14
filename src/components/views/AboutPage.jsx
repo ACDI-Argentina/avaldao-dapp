@@ -8,6 +8,7 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/about
 import classNames from "classnames";
 import Sponsors from './Sponsors'
 import DetailedPlatformOperation from './DetailedPlatformOperation'
+import Roadmap from './Roadmap'
 
 /**
  * Pantalla de Usuarios.
@@ -49,10 +50,10 @@ class AboutPage extends Component {
             </Grid>
             <Grid item xs={8}>
               <div className={classes.paragraphText}>
-              <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText1')}</span><span>{t('aboutAvalDAOWhyBlockchainText2')}</span><br />
-                <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText3')}</span><span>{t('aboutAvalDAOWhyBlockchainText4')}</span><br />
-                <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText5')}</span><span>{t('aboutAvalDAOWhyBlockchainText6')}</span><br />
-                <span style={{fontWeight: "bold"}}>{t('aboutAvalDAOWhyBlockchainText7')}</span><span>{t('aboutAvalDAOWhyBlockchainText8')}</span>
+                <span style={{ fontWeight: "bold" }}>{t('aboutAvalDAOWhyBlockchainText1')}</span><span>{t('aboutAvalDAOWhyBlockchainText2')}</span><br />
+                <span style={{ fontWeight: "bold" }}>{t('aboutAvalDAOWhyBlockchainText3')}</span><span>{t('aboutAvalDAOWhyBlockchainText4')}</span><br />
+                <span style={{ fontWeight: "bold" }}>{t('aboutAvalDAOWhyBlockchainText5')}</span><span>{t('aboutAvalDAOWhyBlockchainText6')}</span><br />
+                <span style={{ fontWeight: "bold" }}>{t('aboutAvalDAOWhyBlockchainText7')}</span><span>{t('aboutAvalDAOWhyBlockchainText8')}</span>
               </div>
             </Grid>
             <Grid className={classes.leftTitle} item xs={12}>
@@ -82,38 +83,12 @@ class AboutPage extends Component {
             alignItems="top"
             spacing={2} style={{ padding: "2em" }}>
             <Grid className={classes.leftTitle} item xs={12}>
-              {t('aboutAvalDAORoadmap')}
+              {t('roadmapTitle')}
             </Grid>
-            <Grid container
-              direction="row"
-              justifyContent="center"
-              alignItems="stretch"
-              xs={12} spacing={5} style={{ padding: "2em" }}>
-              <Grid className={classes.roadMapCard} item xs={5}>
-                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap1Title')}</div>
-                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap1Text')}</div>
-              </Grid>
-              <Grid className={classes.roadMapCard} item xs={5}>
-                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap2Title')}</div>
-                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap2Text')}</div>
-              </Grid>
-              <Grid className={classes.roadMapCard} item xs={5}>
-                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap3Title')}</div>
-                <div className={classNames(classes.roadMapText, classes.roadMapCurrentText)}>{t('aboutAvalDAORoadMap3Text')}</div>
-              </Grid>
-              <Grid className={classes.roadMapCard} item xs={5}>
-                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap4Title')}</div>
-                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap4Text')}</div>
-              </Grid>
-              <Grid className={classes.roadMapCard} item xs={5}>
-                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap5Title')}</div>
-                <div className={classes.roadMapText}>{t('aboutAvalDAORoadMap5Text')}</div>
-              </Grid>
-              <Grid className={classes.roadMapCard} item xs={5}>
-                <div className={classes.roadMapTitle}>{t('aboutAvalDAORoadMap6Title')}</div>
-              </Grid>
+            <Grid item xs={12}>
+              <Roadmap></Roadmap>
             </Grid>
-            <Grid style={{marginTop: "2em"}} className={classes.leftTitle} item xs={12}>
+            <Grid style={{ marginTop: "2em" }} className={classes.leftTitle} item xs={12}>
               {t('aboutAvalDAORepositoryTitle')}
             </Grid>
             <Grid item xs={12}>

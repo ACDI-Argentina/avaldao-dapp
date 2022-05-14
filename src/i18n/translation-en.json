@@ -301,18 +301,6 @@
     "aboutAvalDAOBackgroundText1": "AVALDAO is an initiative of ACDI, an organization that works to set people's freedom in motion so that they can be the protagonists of their personal and community growth.",
     "aboutAvalDAOBackgroundText2": "ACDI has a Technical Cooperation with IDB Lab and an alliance with RSK-IOV Lab to build the technological base of decentralized digital applications that support the processes of governance of common goods, align incentives and channel global resources towards local initiatives that allow drive more investment and credit towards business models and ventures that promote a low-carbon economy.",
     "aboutAvalDAOTitleAlliances": "Alliances",
-    "aboutAvalDAORoadmap": "Roadmap",
-    "aboutAvalDAORoadMap1Title": "July 2021: Ideation and proof of concept",
-    "aboutAvalDAORoadMap1Text": "Construction of the protocol for the generation of Guarantees (MVP)",
-    "aboutAvalDAORoadMap2Title": "September 2022: Ideation and proof of concept",
-    "aboutAvalDAORoadMap2Text": "",
-    "aboutAvalDAORoadMap3Title": "March 2022: Dapp operational on mainnet Testing",
-    "aboutAvalDAORoadMap3Text": "Now",
-    "aboutAvalDAORoadMap4Title": "March 2023: Launch of the incentive program",
-    "aboutAvalDAORoadMap4Text": "Development of the governance system.",
-    "aboutAvalDAORoadMap5Title": "Julio 2022: Lanzamiento comercial para early adopters",
-    "aboutAvalDAORoadMap5Text": "July 2022: Commercial launch for early adopters",
-    "aboutAvalDAORoadMap6Title": "March 2024: Community Government",
     "aboutAvalDAORepositoryTitle": "Repository",
     "aboutAvalDAORepositoryText": "avalDAO is open source software licensed under the MIT license.",
     "aboutAvalDAORepositoryLink": "https://github.com/ACDI-Argentina/avaldao/wiki",
@@ -346,5 +334,31 @@
 
     "faqTitle": "FAQ",
     "faqQuestion1": "In construction",
-    "faqResponse1": ""
+    "faqResponse1": "",
+
+    "roadmapTitle": "Roadmap",
+
+    "roadmapStep1Title": "July 2021",
+    "roadmapStep1Subtitle": "Ideation and proof of concept",
+    "roadmapStep1Description": "Construction of the protocol for the generation of Guarantees (MVP)",
+
+    "roadmapStep2Title": "March 2022",
+    "roadmapStep2Subtitle": "Dapp operational on mainnet Testing",
+    "roadmapStep2Description": "",
+
+    "roadmapStep3Title": "July 2022",
+    "roadmapStep3Subtitle": "Commercial launch for early adopters",
+    "roadmapStep3Description": "Construction of the protocol for generating reputation.",
+
+    "roadmapStep4Title": "September 2022",
+    "roadmapStep4Subtitle": "Self-sovereign identity reputation system available",
+    "roadmapStep4Description": "Development of the token economy",
+
+    "roadmapStep5Title": "March 2023",
+    "roadmapStep5Subtitle": "Launch of the incentive program",
+    "roadmapStep5Description": "Development of the governance system.",
+
+    "roadmapStep6Title": "March 2024",
+    "roadmapStep6Subtitle": "Community Government",
+    "roadmapStep6Description": ""
 }
