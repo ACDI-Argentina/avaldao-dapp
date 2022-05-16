@@ -3,9 +3,8 @@ import { withStyles } from '@material-ui/core/styles'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation, Trans } from 'react-i18next'
 import Page from './Page'
-import { Grid, Link, Typography } from '@material-ui/core'
+import { Grid, Link } from '@material-ui/core'
 import styles from "assets/jss/material-kit-react/views/componentsSections/aboutViewStyle.js";
-import classNames from "classnames";
 import Sponsors from './Sponsors'
 import DetailedPlatformOperation from './DetailedPlatformOperation'
 import Roadmap from './Roadmap'
@@ -60,8 +59,18 @@ class AboutPage extends Component {
               {t('aboutAvalDAOBackgroundTitle')}
             </Grid>
             <Grid className={classes.paragraphText} item xs={12}>
-              <span>{t('aboutAvalDAOBackgroundText1')}</span><br />
-              <span>{t('aboutAvalDAOBackgroundText2')}</span>
+              <Trans i18nKey="aboutAvalDAOBackgroundText1"
+                components={{
+                  link1: <Link href={"http://www.acdi.org.ar"}>ACDI</Link>
+                }}>
+              </Trans>
+              <br/>
+              <Trans i18nKey="aboutAvalDAOBackgroundText2"
+                components={{
+                  link1: <Link href={"https://bidlab.org/en"}>BID Lab</Link>,
+                  link2: <Link href={"https://www.iovlabs.org"}>RSK-IOV Lab</Link>
+                }}>
+              </Trans>
             </Grid>
             <Grid className={classes.leftTitle} item xs={12}>
               {t('aboutAvalDAOTitleAlliances')}
