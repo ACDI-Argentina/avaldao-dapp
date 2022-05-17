@@ -14,8 +14,8 @@ const aboutViewStyle = {
   },
   pageTitle: {
     color: "#7868E5",
-    fontWeight: "bold",
-    padding: "1em 2em",
+    /*fontWeight: "bold",
+    padding: "1em 2em",*/
   },
   leftTitle: {
     color: "#7868E5",

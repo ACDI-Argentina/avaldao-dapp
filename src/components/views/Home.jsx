@@ -58,7 +58,10 @@ class Home extends Component {
 
     return (
       <Page>
-        <Grid container spacing={0}>
+        <Grid container
+          spacing={0}
+          justifyContent="center"
+          alignItems="center">
           <Grid item xs={12}>
             <HomeCarousel />
           </Grid>
@@ -71,7 +74,7 @@ class Home extends Component {
           <Grid item xs={12}>
             <Dashboard />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={8}>
             <Sponsors />
           </Grid>
         </Grid>

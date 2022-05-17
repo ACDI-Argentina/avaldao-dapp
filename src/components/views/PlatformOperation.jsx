@@ -9,6 +9,7 @@ import { Grid } from '@material-ui/core';
 import Button from "components/CustomButtons/Button.js";
 import classNames from "classnames";
 import { history } from '../../lib/helpers'
+import HowDoesItWorkDiagram from './HowDoesItWorkDiagram';
 
 
 /**
@@ -39,9 +40,7 @@ class PlatformOperation extends Component {
               </h2>
             </Grid>
             <Grid id="funcionamiento" item xs={12}>
-              <div className={classes.operationDescription}>
-                <img className={classes.operationDescriptionImg} src={require("assets/img/diagramaFuncionamiento.jpg")}></img>
-              </div>
+              <HowDoesItWorkDiagram></HowDoesItWorkDiagram>
             </Grid>
             <Grid id="soy_inversor" item xs={6}>
               <Card className={classes.root}>

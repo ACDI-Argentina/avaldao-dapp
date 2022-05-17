@@ -5,7 +5,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
 import Sponsor from './Sponsor';
@@ -76,8 +75,7 @@ export default function Sponsors() {
   };
 
   return (
-    <Paper className={classes.root}>
-
+    <React.Fragment>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -167,6 +165,6 @@ export default function Sponsors() {
           </Grid>
         </TabPanel>
       </SwipeableViews>
-    </Paper>
+    </React.Fragment>
   );
 }
