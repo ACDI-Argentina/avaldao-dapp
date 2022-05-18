@@ -154,15 +154,12 @@
     "security": "Security",
     "securityDescription": "Endorsed people and companies have an immutable reputation, created by trusted third parties",
 
-    "platformOperationTitle": "How does it work",
-
     "inversorCardTitle": "I want to invest",
     "inversorCardDescription": "Do you want your investment to generate returns while helping other people fulfill their dreams?",
     "inversorCardBtnLabel": "Your investments",
 
     "solicitanteCardTitle": "I want a guarantee",
-    "solicitanteCardDescription1": "Do you have a business and want to expand your customers?",
-    "solicitanteCardDescription2": "Do you have a entrepreneurship and need a guarantee to obtain a business loan?",
+    "solicitanteCardDescription": "Do you have a business and want to expand your customers?<br/>Do you have a entrepreneurship and need a guarantee to obtain a business loan?",
     "solicitanteCardBtnLabel": "Your guarantees",
 
     "blockchainBenefitsTitle": "Blockchain benefits in fundraising for Development",

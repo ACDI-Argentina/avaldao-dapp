@@ -50,27 +50,6 @@ const platformOperationStyle = {
     maxWidth: "90%",
     height: "auto"
   },
-  cardMedia: {
-    height: "200px",
-    "@media (max-width: 1200px)": {
-      height: "100px",
-    }
-  },
-  cardContent: {
-    padding: "2em",
-    minHeight: "150px"
-  },
-  cardTitle: {
-    fontWeight: "bold",
-    fontSize: "1.1em"
-  },
-  cardDescription: {
-    fontSize: ".9em"
-  },
-  cardQuestion: {
-    fontWeight: "bold",
-    fontSize: ".9em",
-  },
   sectionTitle: {
     color: primaryColor,
     fontWeight: "bold",

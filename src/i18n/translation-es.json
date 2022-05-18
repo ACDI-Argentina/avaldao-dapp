@@ -151,15 +151,12 @@
     "security": "Seguridad",
     "securityDescription": "Las personas y empresas avaladas cuentan con una reputación inmutable, creada por terceras partes de confianza",
 
-    "platformOperationTitle": "Cómo funciona",
-
     "inversorCardTitle": "Quiero invertir",
     "inversorCardDescription": "¿Quieres que tu inversión genere rentabilidad al mismo tiempo que ayudas a otras personas a cumplir sus sueños?",
     "inversorCardBtnLabel": "Tus inversiones",
 
     "solicitanteCardTitle": "Quiero un aval",
-    "solicitanteCardDescription1": "¿Tienes un comercio y quieres ampliar tus clientes?",
-    "solicitanteCardDescription2": "¿Tienes un emprendimiento y necesitas una aval para obtener un crédito comercial?",
+    "solicitanteCardDescription": "¿Tienes un comercio y quieres ampliar tus clientes?<br/>¿Tienes un emprendimiento y necesitas una aval para obtener un crédito comercial?",
     "solicitanteCardBtnLabel": "Tus garantías",
 
     "blockchainBenefitsTitle": "Beneficios de blockchain en la recolección de fondos para el Desarrollo",
@@ -291,7 +288,7 @@
     "aboutAvalDAOParagraph7": "<strong>Background</strong><br/><br/>AVALDAO es una iniciativa de <linkAcdi>ACDI</linkAcdi>, una organización que se enfoca en poner en movimiento a las personas en libertad para que sean protagonistas de su crecimiento personal y comunitario.<br/><br/>ACDI tiene una Cooperación Técnica con <linkBidLab>IDB Lab</linkBidLab> y una alianza con <linkRskIovLab>RSK-IOV Lab</linkRskIovLab> para construir las bases tecnológicas de aplicaciones digitales descentralizadas que promuevan los procesos de gobernanza de los bienes comunes, alineen incentivos y canalicen recursos globales hacia iniciativas locales que permitan atraer más inversión y crédito hacia negocios y emprendimientos que promuevan una economía baja en carbono.",
     "aboutAvalDAOParagraph8": "<strong>Repositorio</strong><br/><br/>Esta etapa de desarrollo está abierta al público y está documentada en <linkGithub>Github</linkGithub>.",
 
-    "howDoesItWorkTitle": "Cómo funciona",
+    "howDoesItWorkTitle": "¿Cómo funciona?",
     "howDoesItWorkDescription": "<strong>¿Cómo funciona?</strong><br/><br/><ol><li>Los donantes y los inversores de impacto aportan criptocapital al Fondo de garantía para proporcionar crecimiento social y sostenibilidad económica. El capital se mantiene rentable a través de diferentes instrumentos de inversión en finanzas descentralizadas.</li><li>Los solicitantes de avales construyen su reputación sobre su identidad digital a través de credenciales otorgadas por emisores que acreditan aspectos como responsabilidad, conocimiento y productividad, entre otros.</li><li>Los comercios ofrecen condiciones crediticias para la compra de sus bienes y servicios a quienes cuenten con documentos de garantía aprobados por AVALDAO.</li><li>Las partes firman contratos utilizando sus cuentas privadas de billeteras digitales y los contratos inteligentes procesan la operación, bloqueando fondos a favor del negocio y desbloqueando fondos dependiendo si se cumplen o no los compromisos programados.</li></ol>",
     "howDoesItWorkLearnMore": "Conocer más en <linkGithub>Github</linkGithub>.",
     
