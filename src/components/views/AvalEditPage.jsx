@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Page from './Page';
+import Page from '../pages/Page';
 import { Flex } from './styled';
 import Alert from '@material-ui/lab/Alert';
 import { Grid, makeStyles } from '@material-ui/core';

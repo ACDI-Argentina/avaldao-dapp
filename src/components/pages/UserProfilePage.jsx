@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { registerCurrentUser, selectCurrentUser } from '../redux/reducers/currentUserSlice';
+import { registerCurrentUser, selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
@@ -9,15 +9,15 @@ import { withTranslation } from 'react-i18next';
 import User from 'models/User';
 import { history } from 'lib/helpers';
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
-import Avatar from './Avatar/Avatar';
+import Avatar from '../Avatar/Avatar';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import Page from './views/Page'
-import Background from './views/Background'
-import InputField from './InputField';
+import Page from 'components/pages/Page'
+import Background from 'components/views/Background'
+import InputField from 'components/InputField';
 import Paper from '@material-ui/core/Paper';
-import SecondaryButton from './CustomButtons/SecondaryButton';
-import PrimaryButton from './CustomButtons/PrimaryButton';
+import SecondaryButton from 'components/CustomButtons/SecondaryButton';
+import PrimaryButton from 'components/CustomButtons/PrimaryButton';
 
 /**
  * Formulario de perfil de usuario.

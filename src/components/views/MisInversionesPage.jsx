@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
-import Page from './Page'
+import Page from '../pages/Page'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 

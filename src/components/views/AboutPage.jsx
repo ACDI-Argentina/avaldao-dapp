@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation, Trans } from 'react-i18next'
-import Page from './Page'
+import Page from '../pages/Page'
 import { Grid, Link } from '@material-ui/core'
 import styles from "assets/jss/material-kit-react/views/componentsSections/aboutViewStyle.js";
 import Sponsors from './Sponsors'

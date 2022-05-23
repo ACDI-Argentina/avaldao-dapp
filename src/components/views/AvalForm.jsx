@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik';
-import { Grid, InputAdornment, makeStyles, TextField } from "@material-ui/core";
+import { Grid, InputAdornment, makeStyles } from "@material-ui/core";
 import Button from "components/CustomButtons/Button.js"
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,9 @@ import { useTranslation } from "react-i18next";
 import LoadingOverlay from 'components/Loading/LoadingOverlay';
 import config from 'configuration';
 import avalSchema from 'schemas/AvalSchema';
+import InputField from 'components/InputField';
+import SecondaryButton from 'components/CustomButtons/SecondaryButton';
+import PrimaryButton from 'components/CustomButtons/PrimaryButton';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -19,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Input = ({ ...props }) => (
-  <TextField
+  <InputField
     fullWidth
     margin="normal"
     InputLabelProps={{ shrink: true }}
@@ -168,7 +171,7 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountBalanceWalletIcon />
+                  <AccountBalanceWalletIcon color="primary" />
                 </InputAdornment>
               ),
             }}
@@ -185,7 +188,7 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountBalanceWalletIcon />
+                  <AccountBalanceWalletIcon color="primary" />
                 </InputAdornment>
               ),
             }}
@@ -203,7 +206,7 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountBalanceWalletIcon />
+                  <AccountBalanceWalletIcon color="primary" />
                 </InputAdornment>
               ),
             }}
@@ -220,7 +223,7 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountBalanceWalletIcon />
+                  <AccountBalanceWalletIcon color="primary" />
                 </InputAdornment>
               ),
             }}
@@ -228,33 +231,21 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
         </Grid>
 
         <Grid container item xs={12} justifyContent="flex-end">
-
-          <LoadingOverlay loading={loading}>
-            <Button
-              color="primary"
-              round
-              className="btn btn-info"
-              type="submit"
-              disabled={loading || !formik.isValid || !formik.dirty}
-              className={classes.button}>
-              {submitText || t("avalSolicitar")}
-            </Button>
-          </LoadingOverlay>
-
-          <Button
-            color="secondary"
-            round
-            className="btn btn-info"
+          <SecondaryButton
             onClick={() => {
               formik.resetForm();
               typeof onCancel === "function" && onCancel();
-            }}
-            className={classes.button}>
+            }}>
             {t('avalCancelar')}
-          </Button>
+          </SecondaryButton>
+          <PrimaryButton
+            type="submit"
+            disabled={loading || !formik.isValid || !formik.dirty}
+            isWorking={loading}>
+            {submitText || t("avalSolicitar")}
+          </PrimaryButton>
         </Grid>
       </Grid>
-
     </form>
   )
 }

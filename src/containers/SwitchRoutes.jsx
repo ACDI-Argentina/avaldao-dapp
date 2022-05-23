@@ -5,17 +5,17 @@ import TermsAndConditions from '../components/views/TermsAndConditions'
 import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
-import UserProfilePage from 'components/UserProfilePage'
+import UserProfilePage from 'components/pages/UserProfilePage'
 import Home from 'components/views/Home'
-import AvalSolicitudPage from 'components/views/AvalSolicitudPage'
+import AvalSolicitudPage from 'components/pages/AvalSolicitudPage'
 import AvalViewPage from 'components/views/AvalViewPage';
 import AvalEditPage from 'components/views/AvalEditPage'
 import UsersPage from 'components/views/UsersPage'
-import UserEditPage from 'components/UserEditPage'
+import UserEditPage from 'components/pages/UserEditPage'
 import AboutPage from 'components/views/AboutPage'
 import MisAvalesPage from 'components/views/MisAvalesPage'
 import MisInversionesPage from 'components/views/MisInversionesPage'
-import FaqPage from 'components/views/FaqPage'
+import FaqPage from 'components/pages/FaqPage'
 
 const SwitchRoutes = ({ currentUser }) => (
     <Switch>

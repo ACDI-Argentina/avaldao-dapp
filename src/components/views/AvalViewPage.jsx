@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import Page from './Page';
+import Page from '../pages/Page';
 import { Flex } from './styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAvalById } from 'redux/reducers/avalesSlice';

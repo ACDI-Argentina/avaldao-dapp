@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import UserTable from './UserTable'
-import Page from './Page'
+import Page from '../pages/Page'
 import { Typography } from '@material-ui/core'
 
 /**
