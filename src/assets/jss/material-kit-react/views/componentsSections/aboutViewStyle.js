@@ -89,14 +89,6 @@ const aboutViewStyle = {
   },
   italicText: {
     fontStyle: "italic"
-  },
-  sectionGlass: {
-    border: '1px solid #FFF',
-    borderRadius: '5px',
-    padding: "2em",
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    backdropFilter: "blur(5px)"
-
   }
 };
 

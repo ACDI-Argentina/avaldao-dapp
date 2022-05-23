@@ -6,7 +6,7 @@ import { Grid } from '@material-ui/core';
 import HowDoesItWorkResume from './HowDoesItWorkResume';
 import InversorCard from './InversorCard';
 import SolicitanteCard from './SolicitanteCard';
-
+import Background from './Background';
 
 /**
  * The PlatformOperation section
@@ -16,21 +16,19 @@ class PlatformOperation extends Component {
   render() {
     const { classes, t, } = this.props;
     return (
-      <div className={classes.section}>
-        <div className={classes.sectionGlass}>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <HowDoesItWorkResume></HowDoesItWorkResume>
-            </Grid>
-            <Grid id="soy_inversor" item xs={12} md={6}>
-              <InversorCard></InversorCard>
-            </Grid>
-            <Grid id="soy_solicitante" item xs={12} md={6}>
-              <SolicitanteCard></SolicitanteCard>
-            </Grid>
+      <Background>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <HowDoesItWorkResume></HowDoesItWorkResume>
           </Grid>
-        </div>
-      </div>
+          <Grid id="soy_inversor" item xs={12} md={6}>
+            <InversorCard></InversorCard>
+          </Grid>
+          <Grid id="soy_solicitante" item xs={12} md={6}>
+            <SolicitanteCard></SolicitanteCard>
+          </Grid>
+        </Grid>
+      </Background>
     )
   }
 }

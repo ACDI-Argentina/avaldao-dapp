@@ -94,6 +94,15 @@ const Avatar = ({ imageSrc, onCropped, onEditingChange }) => {
             }} />
           <Absolute top="55px" right="10px">
             <IconButton
+              style={{
+                container: {
+                  backgroundColor: "#7868E5",
+                  boxShadow: "1px 1px 10px 1px #7868E5"
+                },
+                icon: {
+                  color: "#EEEEEE"
+                }
+              }}
               icon={faCheck}
               title="Ok"
               onClick={() => {
@@ -105,6 +114,15 @@ const Avatar = ({ imageSrc, onCropped, onEditingChange }) => {
           </Absolute>
           <Absolute top="100px" right="10px">
             <IconButton
+              style={{
+                container: {
+                  backgroundColor: "#7868E5",
+                  boxShadow: "1px 1px 10px 1px #7868E5"
+                },
+                icon: {
+                  color: "#EEEEEE"
+                }
+              }}
               icon={faTimes}
               title="Cancelar"
               onClick={() => {
@@ -138,8 +156,8 @@ const Avatar = ({ imageSrc, onCropped, onEditingChange }) => {
               <IconButton
                 style={{
                   container: {
-                    backgroundColor: "#737373",
-                    boxShadow: "1px 1px 10px 1px #737373"
+                    backgroundColor: "#7868E5",
+                    boxShadow: "1px 1px 10px 1px #7868E5"
                   },
                   icon: {
                     color: "#EEEEEE"

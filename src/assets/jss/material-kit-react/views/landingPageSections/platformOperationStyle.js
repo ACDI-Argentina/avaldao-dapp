@@ -1,27 +1,9 @@
 import { title, primaryColor } from "assets/jss/material-kit-react.js";
 
-import bkgImg from "assets/img/operationBg.jpg";
+import bkgImg from "assets/img/background.jpg";
 
 const platformOperationStyle = {
-
   color: "#999",
-
-  section: {
-    textAlign: "center",
-    padding: "4em",
-    backgroundImage: "url(" + bkgImg + ")",
-    backgroundRepeat: 'repeat',
-    backgroundPosition: 'center center',
-    backgroundSize: '10%'
-  },
-  sectionGlass: {
-    border: '1px solid #FFF',
-    borderRadius: '5px',
-    padding: "2em",
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    backdropFilter: "blur(5px)"
-
-  },
   title: {
     ...title,
     minHeight: "32px",
