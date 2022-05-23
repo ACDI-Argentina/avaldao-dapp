@@ -7,13 +7,10 @@ import { Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
-import Button from "components/CustomButtons/Button.js"
 import User from 'models/User'
-import TextField from '@material-ui/core/TextField'
 import { history } from 'lib/helpers'
 import validatorUtils from 'lib/blockchain/ValidatorUtils'
 import Avatar from './Avatar/Avatar'
-import LoadingOverlay from './Loading/LoadingOverlay'
 import { selectUserByAddress } from 'redux/reducers/usersSlice'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
@@ -25,6 +22,11 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import RoleChip from './RoleChip'
 import Page from './views/Page'
+import Background from './views/Background'
+import InputField from './InputField';
+import Paper from '@material-ui/core/Paper';
+import SecondaryButton from './CustomButtons/SecondaryButton';
+import PrimaryButton from './CustomButtons/PrimaryButton';
 
 /**
  * Edición de usuario.
@@ -271,161 +273,160 @@ class UserEditPage extends Component {
 
     return (
       <Page>
-        <Grid container spacing={1} style={{ padding: "2em" }}>
-          <Grid item xs={12}>
-            <Typography variant="h5" component="h5">
-              {t('userEditTitle')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <form onSubmit={this.handleSubmit}
-              noValidate
-              autoComplete="off" >
-
-              <Grid container spacing={1} style={{ margin: "0px" }}>
-
-                <Grid item xs={12} md={5}>
-                  
-                    <Avatar
-                      imageSrc={avatarImg}
-                      onCropped={(cropped) => {
-                        this.setState({ avatarPreview: cropped })
-                        this.setFormValid();
-                      }}
-                      labels={{
-                        choose: t('userAvatarChoose')
-                      }}
-                    />
-                </Grid>
-
-                <Grid container spacing={1} xs={12} md={7}>
-                  <Grid item xs={12}>
-                    <TextField
-                      id="addressTextField"
-                      value={this.state.user.address}
-                      label={t('userAddress')}
-                      fullWidth
-                      margin="normal"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      disabled
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <AccountBalanceWalletIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      id="nameTextField"
-                      value={this.state.name}
-                      onChange={this.handleChangeName}
-                      label={t('userName')}
-                      helperText={nameHelperText}
-                      fullWidth
-                      margin="normal"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      error={nameError}
-                      required
-                      inputProps={{ maxLength: 42 }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField id="emailTextField"
-                      value={this.state.email}
-                      onChange={this.handleChangeEmail}
-                      label={t('userEmail')}
-                      helperText={emailHelperText}
-                      fullWidth
-                      margin="normal"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      error={emailError}
-                      required
-                      inputProps={{ maxLength: 42 }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField id="urlTextField"
-                      value={this.state.url}
-                      onChange={this.handleChangeUrl}
-                      label={t('userUrl')}
-                      helperText={urlHelperText}
-                      fullWidth
-                      margin="normal"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      error={urlError}
-                      required
-                      inputProps={{ maxLength: 42 }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="rolesLabel">
-                        {t('userRoles')}
-                      </InputLabel>
-                      <Select
-                        id="roles"
-                        labelId="rolesLabel"
-                        multiple
-                        value={rolesSelected}
-                        onChange={this.handleChangeRoles}
-                        input={<Input id="rolesInput" />}
-                        renderValue={(rolesSelected) => (
-                          <div className={classes.chips}>
-                            {rolesSelected.map((roleSelected) => (
-                              <RoleChip key={roleSelected.value} role={roleSelected} />
-                            ))}
-                          </div>
-                        )}
-                        MenuProps={MenuProps}
-                      >
-                        {roles.map((role) => (
-                          <MenuItem key={role.value}
-                            value={role}
-                            style={this.getStyles(role, rolesSelected, theme)}>
-                            {role.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-
-                </Grid>
-
-                <Grid container xs={12} justifyContent="flex-end">
-
-                  <LoadingOverlay loading={isSaving}>
-                    <Button color="primary"
-                      round
-                      className="btn btn-info"
-                      type="submit"
-                      disabled={!formValid || isSaving}>
-                      {t("save")}
-                    </Button>
-                  </LoadingOverlay>
-
-                  <Button color="secondary"
-                    round
-                    className="btn btn-info"
-                    onClick={this.cancel}>
-                    {t("cancel")}
-                  </Button>
-                </Grid>
+        <Background>
+          <Paper>
+            <Grid container spacing={1} style={{ padding: "2em" }}>
+              <Grid item xs={12}>
+                <Typography variant="h5" component="h5">
+                  {t('userEditTitle')}
+                </Typography>
               </Grid>
-            </form>
-          </Grid>
-        </Grid>
+              <Grid item xs={12}>
+                <form onSubmit={this.handleSubmit}
+                  noValidate
+                  autoComplete="off" >
+
+                  <Grid container spacing={1} style={{ margin: "0px" }}>
+
+                    <Grid item xs={12} md={5}>
+
+                      <Avatar
+                        imageSrc={avatarImg}
+                        onCropped={(cropped) => {
+                          this.setState({ avatarPreview: cropped })
+                          this.setFormValid();
+                        }}
+                        labels={{
+                          choose: t('userAvatarChoose')
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid container spacing={1} xs={12} md={7}>
+                      <Grid item xs={12}>
+                        <InputField
+                          id="addressTextField"
+                          value={this.state.user.address}
+                          label={t('userAddress')}
+                          fullWidth
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          disabled
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <AccountBalanceWalletIcon />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <InputField
+                          id="nameTextField"
+                          value={this.state.name}
+                          onChange={this.handleChangeName}
+                          label={t('userName')}
+                          helperText={nameHelperText}
+                          fullWidth
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          error={nameError}
+                          required
+                          inputProps={{ maxLength: 42 }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <InputField id="emailTextField"
+                          value={this.state.email}
+                          onChange={this.handleChangeEmail}
+                          label={t('userEmail')}
+                          helperText={emailHelperText}
+                          fullWidth
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          error={emailError}
+                          required
+                          inputProps={{ maxLength: 42 }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <InputField id="urlTextField"
+                          value={this.state.url}
+                          onChange={this.handleChangeUrl}
+                          label={t('userUrl')}
+                          helperText={urlHelperText}
+                          fullWidth
+                          margin="normal"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          error={urlError}
+                          required
+                          inputProps={{ maxLength: 42 }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="rolesLabel">
+                            {t('userRoles')}
+                          </InputLabel>
+                          <Select
+                            id="roles"
+                            labelId="rolesLabel"
+                            multiple
+                            value={rolesSelected}
+                            onChange={this.handleChangeRoles}
+                            input={<Input id="rolesInput" />}
+                            renderValue={(rolesSelected) => (
+                              <div className={classes.chips}>
+                                {rolesSelected.map((roleSelected) => (
+                                  <RoleChip key={roleSelected.value} role={roleSelected} />
+                                ))}
+                              </div>
+                            )}
+                            MenuProps={MenuProps}
+                          >
+                            {roles.map((role) => (
+                              <MenuItem key={role.value}
+                                value={role}
+                                style={this.getStyles(role, rolesSelected, theme)}>
+                                {role.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+
+                    </Grid>
+
+                    <Grid container xs={12} justifyContent="flex-end">
+
+                      <SecondaryButton
+                        onClick={this.cancel}>
+                        {t("cancel")}
+                      </SecondaryButton>
+
+                      <PrimaryButton
+                        type="submit"
+                        disabled={!formValid || isSaving}
+                        isWorking={isSaving}>
+                        {t("save")}
+                      </PrimaryButton>
+                    </Grid>
+                  </Grid>
+                </form>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Background>
       </Page>
     );
   }
