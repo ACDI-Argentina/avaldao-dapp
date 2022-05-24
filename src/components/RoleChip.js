@@ -11,7 +11,7 @@ class RoleChip extends Component {
             <Chip label={role.label}
                 className={classes.chip}
                 size="small"
-                color="secondary"
+                color="primary"
                 icon={<AccountCircleIcon/>} />
         );
     }

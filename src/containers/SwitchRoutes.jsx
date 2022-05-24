@@ -10,7 +10,7 @@ import Home from 'components/views/Home'
 import AvalSolicitudPage from 'components/pages/AvalSolicitudPage'
 import AvalViewPage from 'components/views/AvalViewPage';
 import AvalEditPage from 'components/views/AvalEditPage'
-import UsersPage from 'components/views/UsersPage'
+import UsersPage from 'components/pages/UsersPage'
 import UserEditPage from 'components/pages/UserEditPage'
 import AboutPage from 'components/views/AboutPage'
 import MisAvalesPage from 'components/views/MisAvalesPage'
