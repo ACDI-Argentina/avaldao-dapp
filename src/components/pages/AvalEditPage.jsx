@@ -1,21 +1,20 @@
 import React, { useEffect } from 'react'
-import Page from '../pages/Page';
-import { Flex } from './styled';
+import Page from './Page';
+import { Flex } from 'components/views/styled';
 import Alert from '@material-ui/lab/Alert';
 import { Grid, makeStyles } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-
 import StatusIndicator from 'components/StatusIndicator';
-import AvalForm from './AvalForm';
+import AvalForm from 'components/views/AvalForm';
 import Aval from 'models/Aval';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { selectAvalById, actualizarAval } from 'redux/reducers/avalesSlice';
-
 import useUpdatingAval from 'hooks/useUpdatingAval';
 import messageUtils from 'redux/utils/messageUtils';
-
+import Background from 'components/views/Background'
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -38,7 +37,6 @@ const AvalEditPage = (props) => {
   function goToAvalView() {
     history.replace(`/aval/${avalId}/view`);
   }
-
 
   async function onSuccess() {
     await React.swal({
@@ -97,24 +95,27 @@ const AvalEditPage = (props) => {
 
   return (
     <Page>
-      <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
-        <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-          <StatusIndicator status={aval.status} />
-        </Flex>
-        {taskCode && (
-          <div className={classes.alert}>
-            <Alert severity="info">{t(taskCode)}</Alert>
-          </div>
-        )}
-
-        <AvalForm
-          aval={aval}
-          loading={loading}
-          submitText={t("avalActualizar")}
-          onSubmit={handleSubmit}
-          onCancel={goToAvalView}
-        />
-      </Grid>
+      <Background>
+        <Paper>
+          <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
+            <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
+              <StatusIndicator status={aval.status} />
+            </Flex>
+            {taskCode && (
+              <div className={classes.alert}>
+                <Alert severity="info">{t(taskCode)}</Alert>
+              </div>
+            )}
+            <AvalForm
+              aval={aval}
+              loading={loading}
+              submitText={t("avalActualizar")}
+              onSubmit={handleSubmit}
+              onCancel={goToAvalView}
+            />
+          </Grid>
+        </Paper>
+      </Background>
     </Page >
   )
 }

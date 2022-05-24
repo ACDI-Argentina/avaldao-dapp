@@ -6,15 +6,15 @@ import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
 import LoginPage from "views/LoginPage/LoginPage.js"
 import UserProfilePage from 'components/pages/UserProfilePage'
-import Home from 'components/views/Home'
+import HomePage from 'components/pages/HomePage'
 import AvalSolicitudPage from 'components/pages/AvalSolicitudPage'
-import AvalViewPage from 'components/views/AvalViewPage';
-import AvalEditPage from 'components/views/AvalEditPage'
+import AvalViewPage from 'components/pages/AvalViewPage';
+import AvalEditPage from 'components/pages/AvalEditPage'
 import UsersPage from 'components/pages/UsersPage'
 import UserEditPage from 'components/pages/UserEditPage'
-import AboutPage from 'components/views/AboutPage'
-import MisAvalesPage from 'components/views/MisAvalesPage'
-import MisInversionesPage from 'components/views/MisInversionesPage'
+import AboutPage from 'components/pages/AboutPage'
+import MisAvalesPage from 'components/pages/MisAvalesPage'
+import MisInversionesPage from 'components/pages/MisInversionesPage'
 import FaqPage from 'components/pages/FaqPage'
 
 const SwitchRoutes = ({ currentUser }) => (
@@ -110,7 +110,7 @@ const SwitchRoutes = ({ currentUser }) => (
             } />
         {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"
-            render={props => <Home
+            render={props => <HomePage
                 key={currentUser ? currentUser.id : 0}
                 {...props}
             />} />

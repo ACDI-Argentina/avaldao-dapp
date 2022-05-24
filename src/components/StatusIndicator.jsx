@@ -22,7 +22,6 @@ class StatusIndicator extends Component {
         return (
             <Chip className={classes.root}
                 size="small"
-                variant="outlined"
                 label={status.name}
                 color="primary"
                 icon={icon}
@@ -41,7 +40,10 @@ StatusIndicator.defaultProps = {
 
 const styles = theme => ({
     root: {
-        marginTop: '0.5em'
+        marginTop: '0.5em',
+        color: '#52D681',
+        borderColor: '#52D681',
+        backgroundColor: '#E0FFEB'
     }
   });
 

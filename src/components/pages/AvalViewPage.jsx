@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import Page from '../pages/Page';
-import { Flex } from './styled';
+import Page from './Page';
+import { Flex } from 'components/views/styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAvalById } from 'redux/reducers/avalesSlice';
 import { fetchUsers } from 'redux/reducers/usersSlice';
@@ -14,7 +14,8 @@ import Alert from '@material-ui/lab/Alert';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { useTranslation } from 'react-i18next';
-
+import Background from 'components/views/Background'
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -46,32 +47,36 @@ const AvalViewPage = (props) => {
 
   return (
     <Page>
-      <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
+      <Background>
+        <Paper>
+          <Grid direction="column" container spacing={3} style={{ padding: "2em" }}>
 
-        <Grid item xs={12} className={classes.title}>
-          <Typography variant="h5" component="h5">
-            {t('miAvalTitle')}
-          </Typography>
-        </Grid>
+            <Grid item xs={12} className={classes.title}>
+              <Typography variant="h5" component="h5">
+                {t('miAvalTitle')}
+              </Typography>
+            </Grid>
 
-        <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-          <StatusIndicator status={aval.status} />
-        </Flex>
-        {taskCode && (
-          <div className={classes.alert}>
-            <Alert severity="info">{t(taskCode)}</Alert>
-          </div>
-        )}
-        
-        <AvalGeneralSection aval={aval} />
-        <SignaturesSection aval={aval} />
-        <CuotasSection aval={aval} />
-        <ReclamosSection aval={aval} />
+            <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
+              <StatusIndicator status={aval.status} />
+            </Flex>
+            {taskCode && (
+              <div className={classes.alert}>
+                <Alert severity="info">{t(taskCode)}</Alert>
+              </div>
+            )}
 
-        <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
-          <AvalActions aval={aval} />
-        </Flex>
-      </Grid>
+            <AvalGeneralSection aval={aval} />
+            <SignaturesSection aval={aval} />
+            <CuotasSection aval={aval} />
+            <ReclamosSection aval={aval} />
+
+            <Flex row justify="flex-end" style={{ marginRight: "10px" }}>
+              <AvalActions aval={aval} />
+            </Flex>
+          </Grid>
+        </Paper>
+      </Background>
     </Page>
   )
 }

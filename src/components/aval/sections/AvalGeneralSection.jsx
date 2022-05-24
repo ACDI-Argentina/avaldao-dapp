@@ -1,8 +1,9 @@
 import React from 'react'
 import Section from './Section'
 import FiatUtils from 'utils/FiatUtils'
-import { Grid, TextField } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import InputField from 'components/InputField';
 
 const AvalGeneralSection = ({ aval }) => {
   const { t } = useTranslation();
@@ -11,7 +12,7 @@ const AvalGeneralSection = ({ aval }) => {
     <Section>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <TextField
+          <InputField
             id="proyectoTextField"
             value={aval.proyecto}
             label={t('avalProyecto')}
@@ -22,7 +23,7 @@ const AvalGeneralSection = ({ aval }) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <InputField
             id="objetivoTextField"
             value={aval.objetivo}
             label={t('avalObjetivo')}
@@ -34,7 +35,7 @@ const AvalGeneralSection = ({ aval }) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
-          <TextField
+          <InputField
             id="adquisicionTextField"
             value={aval.adquisicion}
             label={t('avalAdquisicion')}
@@ -45,7 +46,7 @@ const AvalGeneralSection = ({ aval }) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
-          <TextField
+          <InputField
             id="beneficiariosTextField"
             value={aval.beneficiarios}
             label={t('avalBeneficiarios')}
@@ -56,7 +57,7 @@ const AvalGeneralSection = ({ aval }) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
-          <TextField
+          <InputField
             id="montoTextField"
             value={FiatUtils.format(aval.montoFiat)}
             label={t('avalMonto')}
@@ -67,7 +68,7 @@ const AvalGeneralSection = ({ aval }) => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
-          <TextField
+          <InputField
             id="cuotasCantidadTextField"
             value={aval.cuotasCantidad}
             label={t('avalCuotasCantidad')}

@@ -81,21 +81,11 @@ const AvalActions = ({ aval }) => {
       <ButtonGroup variant="text" color="primary">
 
 
-        { allowEditar && (
+        {allowEditar && (
           <Button onClick={() => history.push(`/aval/${aval.id}/edit`)}>
             {t("avalEditar")}
           </Button>
         )}
-
-        {allowAceptar &&
-          <Button
-            onClick={async () => {
-              dispatch(aceptarAval(aval));
-            }}
-          >
-            {t("avalAceptar")}
-          </Button>
-        }
 
         {allowRechazar &&
           <Button
@@ -104,6 +94,16 @@ const AvalActions = ({ aval }) => {
             }}
           >
             {t("avalRechazar")}
+          </Button>
+        }
+
+        {allowAceptar &&
+          <Button
+            onClick={async () => {
+              dispatch(aceptarAval(aval));
+            }}
+          >
+            {t("avalAceptar")}
           </Button>
         }
 

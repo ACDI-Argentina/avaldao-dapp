@@ -4,20 +4,20 @@ import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
-import Dashboard from './Dashboard'
-import AvalTable from './AvalTable'
-import Page from '../pages/Page'
+import Page from './Page'
 import { withStyles } from '@material-ui/core/styles'
 import { history } from '../../lib/helpers'
-import AvalTaskList from './AvalTaskList'
-import { selectUserAvales } from '../../redux/reducers/avalesSlice'
-import { Typography } from '@material-ui/core'
+import PlatformFeatures from 'components/views/PlatformFeatures'
+import PlatformOperation from 'components/views/PlatformOperation'
+import HomeCarousel from 'components/views/HomeCarousel'
+import Dashboard from 'components/views/Dashboard'
+import Sponsors from 'components/views/Sponsors'
 
 /**
- * Pantalla de Avales del usuario.
+ * Pantalla Home.
  * 
  */
-class MisAvalesPage extends Component {
+class HomePage extends Component {
 
   constructor(props) {
     super(props);
@@ -56,57 +56,46 @@ class MisAvalesPage extends Component {
 
   render() {
 
-    const { avales, currentUser, t } = this.props;
-
-    let showAvalTaskList = false;
-    let avalTableWidthMd = 12;
-    if (currentUser && currentUser.authenticated) {
-      showAvalTaskList = true;
-      avalTableWidthMd = 9;
-    }
-
     return (
       <Page>
-        <Grid container spacing={1} style={{ padding: "2em" }}>
+        <Grid container
+          spacing={0}
+          justifyContent="center"
+          alignItems="center">
           <Grid item xs={12}>
-            <Typography variant="h5" component="h5">
-              {t('misAvalesTitle')}
-            </Typography>
+            <HomeCarousel />
           </Grid>
           <Grid item xs={12}>
-            <Grid container spacing={3} style={{ marginTop: "1em", marginBottom: "1em"}}>
-              <Grid item sm={12} md={avalTableWidthMd}>
-                <AvalTable avales={avales}/>
-              </Grid>
-              {showAvalTaskList && (
-                <Grid item sm={12} md={3}>
-                  <AvalTaskList user={currentUser} />
-                </Grid>
-              )}
-            </Grid>
+            <PlatformFeatures />
+          </Grid>
+          <Grid item xs={12}>
+            <PlatformOperation {...this.props} />
+          </Grid>
+          <Grid item xs={12}>
+            <Dashboard />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Sponsors />
           </Grid>
         </Grid>
-        <Dashboard></Dashboard>
       </Page>
     );
   }
 }
 
-MisAvalesPage.contextType = Web3AppContext;
+HomePage.contextType = Web3AppContext;
 
 const styles = theme => ({
 
 });
 
 const mapStateToProps = (state, ownProps) => {
-  const currentUser = selectCurrentUser(state);
   return {
-    currentUser: currentUser,
-    avales: selectUserAvales(state, currentUser)
+    currentUser: selectCurrentUser(state)
   };
 }
 const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(MisAvalesPage)))
+  withTranslation()(HomePage)))
 );
