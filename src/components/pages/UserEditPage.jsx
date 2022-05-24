@@ -25,8 +25,8 @@ import Page from './Page'
 import Background from 'components/views/Background'
 import InputField from 'components/InputField';
 import Paper from '@material-ui/core/Paper';
-import SecondaryButton from 'components/CustomButtons/SecondaryButton';
-import PrimaryButton from 'components/CustomButtons/PrimaryButton';
+import SecondaryButton from 'components/buttons/SecondaryButton';
+import PrimaryButton from 'components/buttons/PrimaryButton';
 
 /**
  * Edición de usuario.

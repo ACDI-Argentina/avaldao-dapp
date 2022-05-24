@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid'
 import styles from "assets/jss/material-kit-react/views/landingPageSections/homeCarouselItemStyle.js";
-import classNames from "classnames";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import Button from "components/CustomButtons/Button.js";
+import PrimaryButton from 'components/buttons/PrimaryButton';
 
 /**
  * The HomeCarousel section
@@ -24,13 +23,12 @@ class HomeCarouselItem extends Component {
         <Grid item xs={12} sm={12}>
           <div className={classes.title}>{title}</div>
           <div className={classes.description}>{description}</div>
-          <Button style={{ margin: "0px" }}
-            color="primary" round
-            className="btn btn-info"
+          <PrimaryButton
+            style={{ margin: "0px" }}
             onClick={btnOnClick}
             disabled={btnDisabled}>
             {btnLabel}
-          </Button>
+          </PrimaryButton>
         </Grid>
       </Grid>
     )

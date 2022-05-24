@@ -7,8 +7,8 @@ import Card from '@material-ui/core/Card'
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions';
-import Button from "components/CustomButtons/Button.js";
 import { history } from '../../lib/helpers'
+import SecondaryButton from 'components/buttons/SecondaryButton';
 
 const styles = {
   card: {
@@ -62,13 +62,11 @@ class InversorCard extends Component {
           </Grid>
         </CardContent>
         <CardActions className={classes.cardActions}>
-          <Button style={{ margin: "1.5em 0" }}
-            color="primary"
-            round
-            className="btn btn-info"
+          <SecondaryButton
+            style={{ margin: "1.5em 0" }}
             onClick={this.goMisInversiones}>
             {t('inversorCardBtnLabel')}
-          </Button>
+          </SecondaryButton>
         </CardActions>
       </Card>
     )

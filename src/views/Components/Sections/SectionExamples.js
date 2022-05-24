@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
-import Button from "components/CustomButtons/Button.js";
 
 import landing from "assets/img/landing.jpg";
 import profile from "assets/img/profile.jpg";
@@ -36,9 +35,7 @@ export default function SectionExamples() {
                   classes.imgFluid
                 }
               />
-              <Button color="primary" size="lg" simple>
-                View landing page
-              </Button>
+              
             </Link>
           </GridItem>
           <GridItem xs={12} sm={12} md={6}>
@@ -54,9 +51,6 @@ export default function SectionExamples() {
                   classes.imgFluid
                 }
               />
-              <Button color="primary" size="lg" simple>
-                View profile page
-              </Button>
             </Link>
           </GridItem>
         </GridContainer>

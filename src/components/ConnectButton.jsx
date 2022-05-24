@@ -3,7 +3,6 @@ import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { useSelector } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import Button from "components/CustomButtons/Button.js";
 import Web3Utils from 'lib/blockchain/Web3Utils';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core';
@@ -19,6 +18,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import About from './Dialogs/About';
+import PrimaryButton from './buttons/PrimaryButton';
 
 const useStyles = makeStyles({
   walletIcon: {
@@ -79,19 +79,16 @@ const ConnectButton = (props) => {
     <React.Fragment>
 
       {!isUserConnected && (
-        <Button color="primary"
-          round
-          className="btn btn-info"
+        <PrimaryButton
           style={{ width: '15em' }}
           onClick={() => loginAccount()}>
           {t('connectWallet')}
-        </Button>
+        </PrimaryButton>
       )}
 
       {isUserConnected && (
-        <Button color={isCorrectNetwork ? "success" : "warning"}
-          round
-          className="btn btn-info"
+        <PrimaryButton
+          color={isCorrectNetwork ? "success" : "warning"}
           style={{ width: '15em' }}
           onClick={handleOpenMenu}
           startIcon={
@@ -104,7 +101,7 @@ const ConnectButton = (props) => {
               <AccountBalanceWalletIcon />
           }>
           {Web3Utils.abbreviateAddress(currentUser?.address)}
-        </Button>
+        </PrimaryButton>
       )}
 
       <Menu

@@ -3,8 +3,8 @@ import Grid from '@material-ui/core/Grid'
 import styles from "assets/jss/material-kit-react/views/landingPageSections/platformFeaturesStyle.js";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import Button from "components/CustomButtons/Button.js";
 import { history } from '../../lib/helpers';
+import PrimaryButton from 'components/buttons/PrimaryButton';
 
 /**
  * The PlatformFeatures section
@@ -31,14 +31,12 @@ class PlatformFeatures extends Component {
             spacing={10}
             style={{ marginTop: '3em', marginBottom: '3em' }}
           >
-            <Button color="primary"
-              round
-              className="btn btn-info"
+            <PrimaryButton
               onClick={() => {
                 history.push(`/about`);
               }}>
               {t('platformFeaturesBtn')}
-            </Button>
+            </PrimaryButton>
           </Grid>
 
           <Grid

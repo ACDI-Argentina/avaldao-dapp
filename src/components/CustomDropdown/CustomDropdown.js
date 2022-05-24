@@ -15,8 +15,7 @@ import Divider from "@material-ui/core/Divider";
 import Icon from "@material-ui/core/Icon";
 import Popper from "@material-ui/core/Popper";
 
-// core components
-import Button from "components/CustomButtons/Button.js";
+import Button from "@material-ui/core/Button";
 
 import styles from "assets/jss/material-kit-react/components/customDropdownStyle.js";
 

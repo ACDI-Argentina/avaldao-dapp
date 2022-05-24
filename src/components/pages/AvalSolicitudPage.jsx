@@ -13,8 +13,8 @@ import useSavingAval from 'hooks/useSavingAval';
 import messageUtils from 'redux/utils/messageUtils';
 import Background from 'components/views/Background'
 import Paper from '@material-ui/core/Paper';
-import SecondaryButton from 'components/CustomButtons/SecondaryButton';
-import PrimaryButton from 'components/CustomButtons/PrimaryButton';
+import SecondaryButton from 'components/buttons/SecondaryButton';
+import PrimaryButton from 'components/buttons/PrimaryButton';
 
 const useStyles = makeStyles(theme => ({
   title: {

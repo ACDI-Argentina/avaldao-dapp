@@ -4,7 +4,6 @@ import NotFound from '../components/views/NotFound'
 import TermsAndConditions from '../components/views/TermsAndConditions'
 import PrivacyPolicy from '../components/views/PrivacyPolicy'
 import LandingPage from "views/LandingPage/LandingPage.js"
-import LoginPage from "views/LoginPage/LoginPage.js"
 import UserProfilePage from 'components/pages/UserProfilePage'
 import HomePage from 'components/pages/HomePage'
 import AvalSolicitudPage from 'components/pages/AvalSolicitudPage'
@@ -115,7 +114,6 @@ const SwitchRoutes = ({ currentUser }) => (
                 {...props}
             />} />
         <Route path="/landing-page" render={props => <LandingPage {...props} />} />
-        <Route path="/login-page" component={LoginPage} />
         <Route component={NotFound} />
     </Switch>
 );

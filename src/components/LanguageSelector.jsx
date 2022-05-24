@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import config from '../configuration';
 import classNames from "classnames";
-
 import styled from 'styled-components';
-import Button from 'components/CustomButtons/Button.js';
+import { Button } from '@material-ui/core';
 import styles from 'assets/jss/material-kit-react/components/headerLinksStyle.js';
 import { withStyles } from '@material-ui/core/styles';
-import { IconButton } from '@material-ui/core';
 
 const FlagContainer = styled.div`
   display: flex;

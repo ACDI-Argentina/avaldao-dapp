@@ -1,16 +1,13 @@
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik';
 import { Grid, InputAdornment, makeStyles } from "@material-ui/core";
-import Button from "components/CustomButtons/Button.js"
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useTranslation } from "react-i18next";
-
-import LoadingOverlay from 'components/Loading/LoadingOverlay';
 import config from 'configuration';
 import avalSchema from 'schemas/AvalSchema';
 import InputField from 'components/InputField';
-import SecondaryButton from 'components/CustomButtons/SecondaryButton';
-import PrimaryButton from 'components/CustomButtons/PrimaryButton';
+import SecondaryButton from 'components/buttons/SecondaryButton';
+import PrimaryButton from 'components/buttons/PrimaryButton';
 
 const useStyles = makeStyles(theme => ({
   form: {
