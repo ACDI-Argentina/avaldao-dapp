@@ -107,7 +107,6 @@ const SwitchRoutes = ({ currentUser }) => (
             render={props =>
                 <MisInversionesPage {...props} />
             } />
-        {/*<Route path="/" render={props => <LandingPage {...props} />} />*/}
         <Route path="/"
             render={props => <HomePage
                 key={currentUser ? currentUser.id : 0}

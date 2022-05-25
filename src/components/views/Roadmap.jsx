@@ -6,9 +6,9 @@ import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
-import RoomIcon from '@material-ui/icons/Room';
-import CheckBoxSharpIcon from '@material-ui/icons/CheckBoxSharp';
-import CheckBoxOutlineBlankSharpIcon from '@material-ui/icons/CheckBoxOutlineBlankSharp';
+import CheckboxCheckedIcon from 'components/icons/CheckboxCheckedIcon';
+import CheckboxUncheckedIcon from 'components/icons/CheckboxUncheckedIcon';
+import RocketIcon from 'components/icons/RocketIcon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,14 +20,13 @@ const useStyles = makeStyles((theme) => ({
 export default function Roadmap() {
   const classes = useStyles();
   const { t } = useTranslation();
-
   return (
     <React.Fragment>
       <Typography variant="h5">{t('roadmapTitle')}</Typography>
       <Stepper orientation="vertical">
         <Step expanded={true} completed={true}>
           <StepLabel icon={
-            <CheckBoxSharpIcon />
+            <CheckboxCheckedIcon />
           }>
             <Typography variant="h6">{t('roadmapStep1Title')}</Typography>
           </StepLabel>
@@ -38,7 +37,7 @@ export default function Roadmap() {
         </Step>
         <Step expanded={true} active={true}>
           <StepLabel icon={
-            <RoomIcon />
+            <RocketIcon />
           }>
             <Typography variant="h6">{t('roadmapStep2Title')}</Typography>
           </StepLabel>
@@ -49,7 +48,7 @@ export default function Roadmap() {
         </Step>
         <Step expanded={true}>
           <StepLabel icon={
-            <CheckBoxOutlineBlankSharpIcon />
+            <CheckboxUncheckedIcon />
           }>
             <Typography variant="h6">{t('roadmapStep3Title')}</Typography>
           </StepLabel>
@@ -60,7 +59,7 @@ export default function Roadmap() {
         </Step>
         <Step expanded={true}>
           <StepLabel icon={
-            <CheckBoxOutlineBlankSharpIcon />
+            <CheckboxUncheckedIcon />
           }>
             <Typography variant="h6">{t('roadmapStep4Title')}</Typography>
           </StepLabel>
@@ -71,7 +70,7 @@ export default function Roadmap() {
         </Step>
         <Step expanded={true}>
           <StepLabel icon={
-            <CheckBoxOutlineBlankSharpIcon />
+            <CheckboxUncheckedIcon />
           }>
             <Typography variant="h6">{t('roadmapStep5Title')}</Typography>
           </StepLabel>
@@ -82,7 +81,7 @@ export default function Roadmap() {
         </Step>
         <Step expanded={true}>
           <StepLabel icon={
-            <CheckBoxOutlineBlankSharpIcon />
+            <CheckboxUncheckedIcon />
           }>
             <Typography variant="h6">{t('roadmapStep6Title')}</Typography>
           </StepLabel>

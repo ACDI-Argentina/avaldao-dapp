@@ -34,7 +34,7 @@ const theme = createTheme({
   },
   typography: {
     "fontFamily": '"Encode Sans", "Helvetica", "Arial", sans-serif'
-   }
+  }
 
 });
 
