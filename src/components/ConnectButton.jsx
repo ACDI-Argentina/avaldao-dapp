@@ -19,6 +19,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import About from './Dialogs/About';
 import PrimaryButton from './buttons/PrimaryButton';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 const useStyles = makeStyles({
   walletIcon: {
@@ -99,6 +101,11 @@ const ConnectButton = (props) => {
                   alt="connect" />
               </Icon> :
               <AccountBalanceWalletIcon />
+          }
+          endIcon={
+            menuAnchorEl ?
+              <ExpandLessIcon></ExpandLessIcon> :
+              <ExpandMoreIcon></ExpandMoreIcon>
           }>
           {Web3Utils.abbreviateAddress(currentUser?.address)}
         </PrimaryButton>
