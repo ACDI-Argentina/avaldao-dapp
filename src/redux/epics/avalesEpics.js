@@ -120,9 +120,9 @@ export const reclamarAvalEpic = action$ => action$.pipe(
   }))
 )
 
-export const reintegrarAvalEpic = action$ => action$.pipe(
-  ofType('avales/reintegrarAval'),
-  mergeMap(action => avalService.reintegrarAval(
+export const ejecutarGarantiaEpic = action$ => action$.pipe(
+  ofType('avales/ejecutarGarantia'),
+  mergeMap(action => avalService.ejecutarGarantia(
     action.payload.aval
   )),
   map(aval => ({

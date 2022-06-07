@@ -59,8 +59,8 @@ const CuotaCard = ({ cuota }) => {
     avatarIcon = (<DoneAllOutlinedIcon />);
   }
 
-  // Cuota Reintegrada
-  if (cuota.isReintegrada()) {
+  // Cuota con Garantía Ejecutada
+  if (cuota.isGarantiaEjecutada()) {
     avatarClass = classes.red;
     avatarIcon = (<DoneAllOutlinedIcon />);
   }

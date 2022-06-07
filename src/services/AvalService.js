@@ -164,12 +164,12 @@ class AvalService {
                     aval: aval,
                     error: error
                 });
-                
+
                 let cause = error?.message || "";
-                if(["Unauthorized", "Forbidden"].includes(error.name)){
+                if (["Unauthorized", "Forbidden"].includes(error.name)) {
                     cause = i18n.t("avalSolicitadoErrorNoAutorizado");
                 }
-                
+
                 messageUtils.addMessageError({
                     text: [i18n.t('avalSolicitadoError'), cause].join("\n"),
                     error: error
@@ -178,10 +178,10 @@ class AvalService {
         });
     }
 
-     /**
-     * Actualiza un aval.
-     */
-        actualizarAval(aval) {
+    /**
+    * Actualiza un aval.
+    */
+    actualizarAval(aval) {
 
         return new Observable(async subscriber => {
             const clientId = aval.clientId;
@@ -201,12 +201,12 @@ class AvalService {
                     aval: aval,
                     error: error
                 });
-                
+
                 let cause = error?.message || "";
-                if(["Unauthorized", "Forbidden"].includes(error.name)){
+                if (["Unauthorized", "Forbidden"].includes(error.name)) {
                     cause = i18n.t("avalActualizadoErrorNoAutorizado");
                 }
-                
+
                 messageUtils.addMessageError({
                     text: [i18n.t('avalActualizadoError'), cause].join("\n"),
                     error: error
@@ -214,8 +214,8 @@ class AvalService {
             }
         });
     }
-    
-    
+
+
 
     /**
      * Acepta un aval, almacenándolo on chain.
@@ -337,17 +337,17 @@ class AvalService {
     }
 
     /**
-     * Reintegra los fondos de un aval al comerciante.
+     * Ejecuta la garantía de un aval.
      * 
-     * @param aval a reintegrar al comerciante
+     * @param aval para el cual se ejecuta la garantía.
      */
-    reintegrarAval(aval) {
+    ejecutarGarantia(aval) {
 
         return new Observable(async subscriber => {
 
-            avaldaoContractApi.reintegrarAval(aval).subscribe(aval => {
+            avaldaoContractApi.ejecutarGarantia(aval).subscribe(aval => {
 
-                console.log('[AvalService] Se reintegraron los fondos del aval.', aval);
+                console.log('[AvalService] Se ejecutó la garantía del aval.', aval);
                 subscriber.next(aval);
             });
         });

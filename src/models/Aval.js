@@ -341,12 +341,12 @@ class Aval {
   }
 
   /**
-   * Determina si el Aval pueden ser reintegrado o no.
-   * @param user usuario que reintegra el aval.
+   * Determina si puede ejecutarse la garantía del Aval.
+   * @param user usuario que ejecuta la garantíar del aval.
    */
-  allowReintegrar(user) {
+   allowEjecutarGarantia(user) {
     if (this.status.name !== Aval.VIGENTE.name) {
-      // Solo un aval Vigente puede ser reclamado.
+      // Solo sobre aval Vigente puede ejecutarse la garantía.
       return false;
     }
     if (!user.authenticated) {
@@ -485,9 +485,9 @@ class Aval {
       // Se requiere que el usuario firme el aval.
       return 'avalTaskFirmar';
     }
-    if (this.allowReintegrar(user)) {
-      // Se requiere que el usuario firme el aval.
-      return 'avalTaskReintegrar';
+    if (this.allowEjecutarGarantia(user)) {
+      // Se requiere que el usuario ejecute la garantía.
+      return 'avalTaskEjecutarGarantia';
     }
     // No se requiere de ninguna tarea.
     return null;

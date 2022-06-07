@@ -62,7 +62,7 @@ class Cuota {
     switch (status) {
       case 0: return Cuota.PENDIENTE;
       case 1: return Cuota.PAGADA;
-      case 2: return Cuota.REINTEGRADA;
+      case 2: return Cuota.GARANTIA_EJECUTADA;
       default: return null;
     }
   }
@@ -75,8 +75,8 @@ class Cuota {
     return StatusUtils.build(1, 'Pagada', false);
   }
 
-  static get REINTEGRADA() {
-    return StatusUtils.build(2, 'Reintegrada', false);
+  static get GARANTIA_EJECUTADA() {
+    return StatusUtils.build(2, 'Garantía ejecutada', false);
   }
 
   isPendiente() {
@@ -87,8 +87,8 @@ class Cuota {
     return this.status.name === Cuota.PAGADA.name;
   }
 
-  isReintegrada() {
-    return this.status.name === Cuota.REINTEGRADA.name;
+  isGarantiaEjecutada() {
+    return this.status.name === Cuota.GARANTIA_EJECUTADA.name;
   }
 
   isVencida() {

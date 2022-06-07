@@ -83,7 +83,7 @@ export const avalesSlice = createSlice({
     reclamarAval: (state, action) => {
 
     },
-    reintegrarAval: (state, action) => {
+    ejecutarGarantia: (state, action) => {
 
     },
     fetchAvalById: (state, action) => {
@@ -141,7 +141,7 @@ export const {
   firmarAval,
   desbloquearAval,
   reclamarAval,
-  reintegrarAval,
+  ejecutarGarantia,
   fetchAvalById,
   updateAvalById,
   rollbackAvalStatus } = avalesSlice.actions;

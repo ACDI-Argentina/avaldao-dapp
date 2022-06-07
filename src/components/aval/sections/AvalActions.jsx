@@ -4,7 +4,14 @@ import moment from 'moment';
 import { Button, ButtonGroup } from '@material-ui/core';
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { firmarAval, desbloquearAval, reclamarAval, reintegrarAval, aceptarAval, rechazarAval, } from 'redux/reducers/avalesSlice';
+import {
+  firmarAval,
+  desbloquearAval,
+  reclamarAval,
+  ejecutarGarantia,
+  aceptarAval,
+  rechazarAval,
+} from 'redux/reducers/avalesSlice';
 import useWeb3Account from 'hooks/useWeb3Account';
 import { selectUserByAddress } from 'redux/reducers/usersSlice';
 import { fetchUserByAddress } from 'redux/reducers/usersSlice';
@@ -69,9 +76,9 @@ const AvalActions = ({ aval }) => {
   const allowFirmar = aval.allowFirmar(currentUser);
   const allowDesbloquear = aval.allowDesbloquear(currentUser);
   const allowReclamar = aval.allowReclamar(currentUser);
-  const allowReintegrar = aval.allowReintegrar(currentUser);
+  const allowEjecutarGarantia = aval.allowEjecutarGarantia(currentUser);
 
-  const hasAction = allowEditar || allowAceptar || allowRechazar || allowFirmar || allowDesbloquear || allowReclamar || allowReintegrar;
+  const hasAction = allowEditar || allowAceptar || allowRechazar || allowFirmar || allowDesbloquear || allowReclamar || allowEjecutarGarantia;
 
   return (
     <React.Fragment>
@@ -134,12 +141,12 @@ const AvalActions = ({ aval }) => {
           </Button>
         }
 
-        {allowReintegrar &&
+        {allowEjecutarGarantia &&
           <Button
-            onClick={() => dispatch(reintegrarAval({
+            onClick={() => dispatch(ejecutarGarantia({
               aval: aval
             }))}>
-            {t('avalReintegrarTitle')}
+            {t('avalEjecutarGarantiaTitle')}
           </Button>
         }
 

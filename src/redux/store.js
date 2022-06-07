@@ -25,7 +25,7 @@ import {
   firmarAvalEpic,
   desbloquearAvalEpic,
   reclamarAvalEpic,
-  reintegrarAvalEpic,
+  ejecutarGarantiaEpic,
   actualizarAvalEpic
 } from './epics/avalesEpics'
 import {
@@ -50,7 +50,7 @@ const rootEpic = combineEpics(
   firmarAvalEpic,
   desbloquearAvalEpic,
   reclamarAvalEpic,
-  reintegrarAvalEpic,
+  ejecutarGarantiaEpic,
   saveUserEpic,
   fetchUsersEpic,
   fetchUserByAddressEpic,

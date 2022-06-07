@@ -145,7 +145,7 @@ class AvaldaoContractApi {
         return new Observable(async subscriber => {
 
             const currentUser = currentUserUtils.getCurrentUser();
-            
+
             try {
                 // Se almacena en IPFS toda la información del Aval.
                 let infoCid = await avalIpfsConnector.upload(aval);
@@ -529,25 +529,25 @@ class AvaldaoContractApi {
                 gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
-                    key: 'transactionCreatedTitleReclamarAval'
+                    key: 'transactionCreatedTitleReclamarGarantia'
                 },
                 createdSubtitle: {
-                    key: 'transactionCreatedSubtitleReclamarAval'
+                    key: 'transactionCreatedSubtitleReclamarGarantia'
                 },
                 pendingTitle: {
-                    key: 'transactionPendingTitleReclamarAval'
+                    key: 'transactionPendingTitleReclamarGarantia'
                 },
                 confirmedTitle: {
-                    key: 'transactionConfirmedTitleReclamarAval'
+                    key: 'transactionConfirmedTitleReclamarGarantia'
                 },
                 confirmedDescription: {
-                    key: 'transactionConfirmedDescriptionReclamarAval'
+                    key: 'transactionConfirmedDescriptionReclamarGarantia'
                 },
                 failuredTitle: {
-                    key: 'transactionFailuredTitleReclamarAval'
+                    key: 'transactionFailuredTitleReclamarGarantia'
                 },
                 failuredDescription: {
-                    key: 'transactionFailuredDescriptionReclamarAval'
+                    key: 'transactionFailuredDescriptionReclamarGarantia'
                 }
             });
 
@@ -588,11 +588,11 @@ class AvaldaoContractApi {
     }
 
     /**
-     * Reintegra los fondos de un aval al comerciante.
+     * Ejecuta la garantía de un aval.
      * 
-     * @param aval a reintegrar
+     * @param aval a para el cual se ejecuta la garantía
      */
-    reintegrarAval(aval) {
+    ejecutarGarantia(aval) {
 
         return new Observable(async subscriber => {
 
@@ -600,7 +600,7 @@ class AvaldaoContractApi {
 
             const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
 
-            const method = avalContract.methods.reintegrar();
+            const method = avalContract.methods.ejecutarGarantia();
 
             const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
             const gasPrice = await utilsContractApi.getGasPrice();
@@ -609,25 +609,25 @@ class AvaldaoContractApi {
                 gasEstimated: gasEstimated,
                 gasPrice: gasPrice,
                 createdTitle: {
-                    key: 'transactionCreatedTitleReintegrarAval'
+                    key: 'transactionCreatedTitleEjecutarGarantia'
                 },
                 createdSubtitle: {
-                    key: 'transactionCreatedSubtitleReintegrarAval'
+                    key: 'transactionCreatedSubtitleEjecutarGarantia'
                 },
                 pendingTitle: {
-                    key: 'transactionPendingTitleReintegrarAval'
+                    key: 'transactionPendingTitleEjecutarGarantia'
                 },
                 confirmedTitle: {
-                    key: 'transactionConfirmedTitleReintegrarAval'
+                    key: 'transactionConfirmedTitleEjecutarGarantia'
                 },
                 confirmedDescription: {
-                    key: 'transactionConfirmedDescriptionReintegrarAval'
+                    key: 'transactionConfirmedDescriptionEjecutarGarantia'
                 },
                 failuredTitle: {
-                    key: 'transactionFailuredTitleReintegrarAval'
+                    key: 'transactionFailuredTitleEjecutarGarantia'
                 },
                 failuredDescription: {
-                    key: 'transactionFailuredDescriptionReintegrarAval'
+                    key: 'transactionFailuredDescriptionEjecutarGarantia'
                 }
             });
 
@@ -661,7 +661,7 @@ class AvaldaoContractApi {
                 transactionStoreUtils.updateTransaction(transaction);
 
                 error.aval = aval;
-                console.error(`Error procesando transacción para reintegrar fondos de aval.`, error);
+                console.error(`Error procesando transacción para ejecutar garantía de aval.`, error);
                 subscriber.error(error);
             });
         });
