@@ -53,8 +53,8 @@ const CuotaCard = ({ cuota }) => {
   let avatarClass = classes.yellow;
   let avatarIcon = (<CheckOutlinedIcon />);
 
-  // Cuota Pagada
-  if (cuota.isPagada()) {
+  // Cuota con Garantía Cancelada
+  if (cuota.isGarantiaCancelada()) {
     avatarClass = classes.green;
     avatarIcon = (<DoneAllOutlinedIcon />);
   }

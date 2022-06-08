@@ -61,7 +61,7 @@ class Cuota {
   static mapCuotaStatus(status) {
     switch (status) {
       case 0: return Cuota.PENDIENTE;
-      case 1: return Cuota.PAGADA;
+      case 1: return Cuota.GARANTIA_CANCELADA;
       case 2: return Cuota.GARANTIA_EJECUTADA;
       default: return null;
     }
@@ -71,8 +71,8 @@ class Cuota {
     return StatusUtils.build(0, 'Pendiente', false);
   }
 
-  static get PAGADA() {
-    return StatusUtils.build(1, 'Pagada', false);
+  static get GARANTIA_CANCELADA() {
+    return StatusUtils.build(1, 'Garantía cancelada', false);
   }
 
   static get GARANTIA_EJECUTADA() {
@@ -83,8 +83,8 @@ class Cuota {
     return this.status.name === Cuota.PENDIENTE.name;
   }
 
-  isPagada() {
-    return this.status.name === Cuota.PAGADA.name;
+  isGarantiaCancelada() {
+    return this.status.name === Cuota.GARANTIA_CANCELADA.name;
   }
 
   isGarantiaEjecutada() {
