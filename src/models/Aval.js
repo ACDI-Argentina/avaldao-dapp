@@ -344,7 +344,7 @@ class Aval {
    * Determina si puede ejecutarse la garantía del Aval.
    * @param user usuario que ejecuta la garantíar del aval.
    */
-   allowEjecutarGarantia(user) {
+  allowEjecutarGarantia(user) {
     if (this.status.name !== Aval.VIGENTE.name) {
       // Solo sobre aval Vigente puede ejecutarse la garantía.
       return false;
@@ -353,8 +353,8 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (!Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
-      // Solo el usuario Avaldao puede desbloquear fondos el aval
+    if (!Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+      // Solo el usuario Solicitante puede ejecutar la garantía
       return false;
     }
     // El aval debe tener un reclamo en estado Vigente.
