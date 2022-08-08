@@ -4,6 +4,8 @@
   "private": true,
   "main": "src/index.js",
   "dependencies": {
+    "@acdi/efem-contract": "1.0.0-alpha.2",
+    "@acdi/efem-dapp": "^1.0.0-alpha.4",
     "@acdi/avaldao-contract": "1.0.1",
     "@devexpress/dx-react-chart": "^2.7.6",
     "@devexpress/dx-react-chart-material-ui": "^2.7.6",

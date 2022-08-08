@@ -8,7 +8,7 @@ import Dashboard from 'components/views/Dashboard'
 import AvalTable from 'components/views/AvalTable'
 import Page from './Page'
 import { withStyles } from '@material-ui/core/styles'
-import { history } from '../../lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import AvalTaskList from 'components/views/AvalTaskList'
 import { selectUserAvales } from '../../redux/reducers/avalesSlice'
 import { Typography } from '@material-ui/core'

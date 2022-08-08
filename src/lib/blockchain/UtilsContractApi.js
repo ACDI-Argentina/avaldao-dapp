@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import web3Manager from './Web3Manager'
+import { web3Manager } from 'commons'
 
 /**
  * Utilidades de APIs de Smart Contract.

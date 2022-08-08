@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import styles from "assets/jss/material-kit-react/views/landingPageSections/platformFeaturesStyle.js";
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
-import { history } from '../../lib/helpers';
+import { history } from '@acdi/efem-dapp';
 import PrimaryButton from 'components/buttons/PrimaryButton';
 
 /**

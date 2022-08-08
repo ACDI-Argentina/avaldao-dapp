@@ -13,6 +13,7 @@ import Chip from '@material-ui/core/Chip'
 import GestureIcon from '@material-ui/icons/Gesture';
 import { Grid } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
+import { ipfsService } from 'commons'
 
 class SignerCard extends Component {
 
@@ -34,7 +35,7 @@ class SignerCard extends Component {
         let userAvatar = (<Avatar src={require("assets/img/default-user-icon.png")} />);
         let userName = t('userNotRegistered');
         if (user && user.registered) {
-            userAvatar = (<Avatar src={user.avatarCidUrl} />);
+            userAvatar = (<Avatar src={ipfsService.resolveUrl(user.avatarCid)} />);
             userName = user.name;
         }
 

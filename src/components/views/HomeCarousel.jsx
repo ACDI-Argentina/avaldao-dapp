@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import HomeCarouselItem from './HomeCarouselItem';
 import Slider from "react-slick";
-import { history } from '../../lib/helpers';
+import { history } from '@acdi/efem-dapp';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App';

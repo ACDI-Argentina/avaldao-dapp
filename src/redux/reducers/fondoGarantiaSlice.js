@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import TokenBalance from 'models/TokenBalance';
+import { TokenBalance } from '@acdi/efem-dapp'
 import BigNumber from 'bignumber.js';
 
 export const fondoGarantiaSlice = createSlice({

@@ -6,7 +6,7 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import Page from './Page'
 import { withStyles } from '@material-ui/core/styles'
-import { history } from '../../lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import PlatformFeatures from 'components/views/PlatformFeatures'
 import PlatformOperation from 'components/views/PlatformOperation'
 import HomeCarousel from 'components/views/HomeCarousel'

@@ -7,7 +7,7 @@ import Card from '@material-ui/core/Card'
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions';
-import { history } from '../../lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { connect } from 'react-redux'
 import SecondaryButton from 'components/buttons/SecondaryButton';

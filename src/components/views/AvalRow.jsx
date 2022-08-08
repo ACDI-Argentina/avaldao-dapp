@@ -6,7 +6,7 @@ import { withTranslation } from 'react-i18next'
 import StatusIndicator from 'components/StatusIndicator'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
-import { history } from 'lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { selectFondoGarantiaBalanceFiat } from '../../redux/reducers/fondoGarantiaSlice'
 import FiatAmount from 'components/FiatAmount'

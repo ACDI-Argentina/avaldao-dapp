@@ -6,18 +6,19 @@ import { Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import User from 'models/User';
-import { history } from 'lib/helpers';
+import { User } from '@acdi/efem-dapp';
+import { history } from '@acdi/efem-dapp';
 import validatorUtils from 'lib/blockchain/ValidatorUtils';
 import Avatar from '../Avatar/Avatar';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Page from 'components/pages/Page'
 import Background from 'components/views/Background'
-import InputField from 'components/InputField';
+import { InputField } from '@acdi/efem-dapp';
 import Paper from '@material-ui/core/Paper';
 import SecondaryButton from 'components/buttons/SecondaryButton';
 import PrimaryButton from 'components/buttons/PrimaryButton';
+import { ipfsService } from 'commons';
 
 /**
  * Formulario de perfil de usuario.
@@ -37,8 +38,7 @@ class UserProfilePage extends Component {
       avatar: null,
       avatarPreview: null,
       user: new User(currentUser),
-      avatarImg: currentUser.avatarCidUrl,
-
+      avatarImg: ipfsService.resolveUrl(currentUser.avatarCid),
       registered: false,
       nameHelperText: '',
       nameError: false,
@@ -122,7 +122,7 @@ class UserProfilePage extends Component {
       console.log(`[User profile] Load current user addrss - ${this.props.currentUser?.address}`);
 
       const { name, email, url, registered } = this.props.currentUser;
-      const avatarCidUrl = this.props.currentUser?.avatarCidUrl;
+      const avatarCidUrl = ipfsService.resolveUrl(this.props.currentUser?.avatarCid);
 
       const state = {};
       if (name) {

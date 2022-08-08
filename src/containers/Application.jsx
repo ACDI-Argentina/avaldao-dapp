@@ -6,9 +6,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import Sweetalert from 'sweetalert';
 import GA from 'lib/GoogleAnalytics';
-import { ScrollToTop, history } from '../lib/helpers';
+import { ScrollToTop } from '../lib/helpers';
 import config from '../configuration';
-import ErrorBoundary from '../components/ErrorBoundary';
+import { ErrorBoundary, history } from '@acdi/efem-dapp';
 import '../lib/validators';
 import { connect } from 'react-redux'
 import { fetchAvalesOnChain, fetchAvalesOffChain } from '../redux/reducers/avalesSlice'

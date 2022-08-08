@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { goBackOnePath, history } from '../lib/helpers';
+import { goBackOnePath } from '../lib/helpers';
+import { history } from '@acdi/efem-dapp';
 import { Button } from '@material-ui/core';
 import { NavigateBefore } from '@material-ui/icons';
 

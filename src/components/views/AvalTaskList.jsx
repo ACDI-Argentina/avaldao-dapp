@@ -9,9 +9,10 @@ import List from '@material-ui/core/List';
 import { selectAvalesWithTask } from '../../redux/reducers/avalesSlice'
 import Fab from '@material-ui/core/Fab';
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
-import { history } from '../../lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import { right } from 'styled-system'
+import config from 'configuration'
 
 /**
  * Lista de tareas de avales.
@@ -21,7 +22,7 @@ class AvalTaskList extends Component {
 
   render() {
     const { currentUser, avales, user, classes, t } = this.props;
-    const allowSolicitar = currentUser.isSolicitante();
+    const allowSolicitar = currentUser.hasRole(config.SOLICITANTE_ROLE);
 
     const goSolicitarAval = function () {
       history.push(`/aval/solicitud`);

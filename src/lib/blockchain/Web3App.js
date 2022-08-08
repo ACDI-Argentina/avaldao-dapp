@@ -2,12 +2,9 @@ import React from "react";
 import ConnectionModalUtil from "./ConnectionModalsUtil";
 import config from '../../configuration';
 import BigNumber from 'bignumber.js';
-import { history } from '../helpers';
+import { history } from '@acdi/efem-dapp';
 import { utils } from 'web3';
-import web3Manager from "./Web3Manager";
-import networkManager from "./NetworkManager";
-import accountManager from "./AccountManager";
-import authService from "services/AuthService";
+import { web3Manager, networkManager, accountManager, authService } from "commons";
 
 export const Web3AppContext = React.createContext({
   contract: {},
@@ -156,7 +153,7 @@ class Web3App extends React.Component {
       const account = (await web3.eth.getAccounts())[0];
 
       return web3.isFallbackProvider ? false : account;
-      
+
     } catch (err) {
       console.log(err);
       return false;

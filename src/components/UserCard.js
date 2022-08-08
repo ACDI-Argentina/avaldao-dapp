@@ -9,6 +9,7 @@ import UserCardAnonymous from './UserCardAnonymous';
 import AddressLink from './AddressLink';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import { ipfsService } from 'commons';
 
 class UserCard extends Component {
 
@@ -37,7 +38,7 @@ class UserCard extends Component {
             <Card className={classes.root}>
                 <CardHeader
                     avatar={
-                        <Avatar src={user.avatarCidUrl} />
+                        <Avatar src={ipfsService.resolveUrl(user.avatarCid)} />
                     }
                     title={user.name}
                     subheader={

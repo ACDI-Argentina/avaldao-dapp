@@ -14,7 +14,7 @@ import LanguageSelector from "components/LanguageSelector"
 import MenuIcon from '@material-ui/icons/Menu'
 import InfoIcon from '@material-ui/icons/Info';
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
-import { history } from 'lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from "@material-ui/core"
 import { styled } from "@material-ui/styles"

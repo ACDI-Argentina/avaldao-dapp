@@ -4,14 +4,16 @@ import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import IconButton from '@material-ui/core/IconButton'
-import { history } from 'lib/helpers'
+import { history } from '@acdi/efem-dapp';
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import Avatar from '@material-ui/core/Avatar'
 import EditIcon from '@material-ui/icons/Edit'
 import AddressLink from '../AddressLink';
-import RoleChip from 'components/RoleChip'
+import { RoleChip } from '@acdi/efem-dapp'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import config from 'configuration'
+import { ipfsService } from 'commons'
 
 /**
  * Row de un Usuario
@@ -35,12 +37,12 @@ class UserRow extends Component {
 
     const { currentUser, user, classes } = this.props;
 
-    const editEnabled = currentUser.isAdmin();
+    const editEnabled = currentUser.hasRole(config.ADMIN_ROLE) || false;
 
     return (
       <TableRow>
         <TableCell>
-          <Avatar src={user.avatarCidUrl} />
+          <Avatar src={ipfsService.resolveUrl(user.avatarCid)} />
         </TableCell>
         <TableCell>
           {user.name}
@@ -79,9 +81,6 @@ const styles = theme => ({
   chips: {
     display: 'flex',
     flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
   }
 });
 

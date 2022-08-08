@@ -1,10 +1,9 @@
 import { Observable } from 'rxjs'
 import BigNumber from 'bignumber.js'
 import config from '../../configuration'
-import web3Manager from './Web3Manager'
+import { web3Manager } from 'commons'
 import { FondoGarantiaVaultAbi, ExchangeRateProviderAbi } from '@acdi/avaldao-contract'
-import TokenBalance from 'models/TokenBalance'
-import ExchangeRate from '../../models/ExchangeRate'
+import { ExchangeRate, TokenBalance } from '@acdi/efem-dapp'
 
 /**
  * API encargada de la interacción con el Fondo de Garantía Smart Contract.

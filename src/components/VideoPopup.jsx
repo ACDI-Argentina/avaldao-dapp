@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ipfsService from '../ipfs/IpfsService';
+import { ipfsService } from 'commons';
 import config from '../configuration';
 
 const Label = ({ children }) => (

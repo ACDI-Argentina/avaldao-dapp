@@ -5,7 +5,7 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useTranslation } from "react-i18next";
 import config from 'configuration';
 import avalSchema from 'schemas/AvalSchema';
-import InputField from 'components/InputField';
+import { InputField } from '@acdi/efem-dapp';
 import SecondaryButton from 'components/buttons/SecondaryButton';
 import PrimaryButton from 'components/buttons/PrimaryButton';
 

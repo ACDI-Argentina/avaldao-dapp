@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import User from "../models/User";
+import { User } from '@acdi/efem-dapp';
 
 const { Provider, Consumer } = React.createContext();
 export { Consumer };

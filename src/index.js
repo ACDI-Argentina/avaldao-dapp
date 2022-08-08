@@ -12,6 +12,10 @@ import './i18n/i18n';
 
 import "assets/scss/material-kit-react.scss?v=1.9.0";
 
+import AccountListener from 'redux/listeners/AccountListener';
+import TransactionsListener from 'redux/listeners/TransactionesListener';
+import MessageListener from 'redux/listeners/MessageListener';
+
 try {
   localForage
     .config({
@@ -37,6 +41,11 @@ const theme = createTheme({
   }
 
 });
+
+// Se inicializan listeners entre Managers comunes y Redux.
+new AccountListener();
+new MessageListener();
+new TransactionsListener();
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import BigNumber from 'bignumber.js';
-import User from '../../models/User';
-import Web3Utils from '../../lib/blockchain/Web3Utils';
+import { User } from '@acdi/efem-dapp';
+import { web3Utils } from 'commons';
 
 export const usersSlice = createSlice({
     name: 'users',
@@ -102,7 +102,7 @@ export const selectUsers = state => {
     });
 }
 export const selectUserByAddress = (state, address) => {
-    let userStore = state.users.find(u => Web3Utils.addressEquals(u.address, address));
+    let userStore = state.users.find(u => web3Utils.addressEquals(u.address, address));
     if (userStore) {
         return new User(userStore);
     }

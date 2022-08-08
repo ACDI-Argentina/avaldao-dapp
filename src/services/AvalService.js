@@ -1,6 +1,6 @@
 import Aval from 'models/Aval';
 import { Observable } from 'rxjs'
-import { feathersClient } from '../lib/feathersClient';
+import { feathersClient } from 'commons';
 import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
 import BigNumber from 'bignumber.js';
 import messageUtils from '../redux/utils/messageUtils'
@@ -40,7 +40,7 @@ class AvalService {
     getAvalesOffChain() {
         return new Observable(async subscriber => {
             try {
-                const response = await feathersClient.service('avales').find({ query: {/*blockchainId: undefined*/ } })
+                const response = await feathersClient.getClient().service('avales').find({ query: {/*blockchainId: undefined*/ } })
                 let avales = [];
                 for (let i = 0; i < response.data.length; i++) { //TODO: Add pagination
                     let avalData = response.data[i];
@@ -83,7 +83,7 @@ class AvalService {
 
         try {
 
-            let avalData = await feathersClient.service('avales').get(
+            let avalData = await feathersClient.getClient().service('avales').get(
                 aval.id,
                 {
                     query: {
@@ -128,7 +128,7 @@ class AvalService {
 
         return new Observable(async subscriber => {
 
-            feathersClient.service('avales').patch(
+            feathersClient.getClient().service('avales').patch(
                 aval.id,
                 {
                     /*blockchainId: aval.blockchainId,*/
@@ -150,7 +150,7 @@ class AvalService {
         return new Observable(async subscriber => {
             const clientId = aval.clientId;
             try {
-                const avalData = await feathersClient.service('avales').create({
+                const avalData = await feathersClient.getClient().service('avales').create({
                     ...aval.toFeathers(),
                     status: Aval.SOLICITADO.id,
                 });
@@ -186,7 +186,7 @@ class AvalService {
         return new Observable(async subscriber => {
             const clientId = aval.clientId;
             try {
-                const avalData = await feathersClient.service('avales').update(aval.id, {
+                const avalData = await feathersClient.getClient().service('avales').update(aval.id, {
                     ...aval.toFeathers(),
                     status: Aval.SOLICITADO.id,
                 });
@@ -245,7 +245,7 @@ class AvalService {
     rechazarAval(aval) {
         return new Observable(async subscriber => {
             try {
-                const response = await feathersClient.service('avales').patch(aval.id, { status: Aval.RECHAZADO.id });
+                const response = await feathersClient.getClient().service('avales').patch(aval.id, { status: Aval.RECHAZADO.id });
                 subscriber.next(this.offChainAvalToAval(response));
             } catch (error) {
                 console.error("[AvalService] Error rechando aval off chain.", error);
@@ -268,7 +268,7 @@ class AvalService {
 
             avaldaoContractApi.signAvalOffChain(aval).subscribe(aval => {
 
-                feathersClient.service('avales').patch(
+                feathersClient.getClient().service('avales').patch(
                     aval.id,
                     {
                         solicitanteSignature: aval.solicitanteSignature,

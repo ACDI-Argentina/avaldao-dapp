@@ -1,9 +1,10 @@
-import StatusUtils from '../utils/StatusUtils';
+import { StatusUtils } from '@acdi/efem-dapp';
 import { nanoid } from '@reduxjs/toolkit'
-import Web3Utils from 'lib/blockchain/Web3Utils';
+import { web3Utils } from "commons";
 import BigNumber from 'bignumber.js';
 import Cuota from './Cuota';
 import Reclamo from './Reclamo';
+import config from 'configuration';
 
 /**
  * Modelo de Aval.
@@ -218,7 +219,7 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+    if (web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // Solo el solicitante puede aceptar el aval
       return true;
     }
@@ -239,11 +240,11 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (!user.isAvaldao()) {
+    if (!user.hasRole(config.AVALDAO_ROLE)) {
       // El usuario no tiene el rol de Avaldao.
       return false;
     }
-    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+    if (web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // Solo el Avaldao puede aceptar el aval
       return true;
     }
@@ -263,11 +264,11 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (!user.isAvaldao()) {
+    if (!user.hasRole(config.AVALDAO_ROLE)) {
       // El usuario no tiene el rol de Avaldao.
       return false;
     }
-    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+    if (web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // Solo el Avaldao puede rechazar el aval
       return true;
     }
@@ -287,7 +288,7 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (!Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+    if (!web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // Solo el Solicitante puede desbloquear fondos el aval
       return false;
     }
@@ -307,7 +308,7 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (!Web3Utils.addressEquals(user.address, this.comercianteAddress)) {
+    if (!web3Utils.addressEquals(user.address, this.comercianteAddress)) {
       // Solo el Comerciante puede desbloquear fondos el aval
       return false;
     }
@@ -353,7 +354,7 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (!Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+    if (!web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // Solo el usuario Solicitante puede ejecutar la garantía
       return false;
     }
@@ -385,19 +386,19 @@ class Aval {
       // El usuario no está autenticado.
       return false;
     }
-    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+    if (web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       // El firmante es el Solicitante.
       return this.solicitanteSignature === undefined;
     }
-    if (Web3Utils.addressEquals(user.address, this.comercianteAddress)) {
+    if (web3Utils.addressEquals(user.address, this.comercianteAddress)) {
       // El firmante es el Comerciante.
       return this.comercianteSignature === undefined;
     }
-    if (Web3Utils.addressEquals(user.address, this.avaladoAddress)) {
+    if (web3Utils.addressEquals(user.address, this.avaladoAddress)) {
       // El firmante es el Avalado.
       return this.avaladoSignature === undefined;
     }
-    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+    if (web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       // El firmante es Avaldao.
       // Avaldao solo puede firmar una vez que el Solictante, Comerciante y Avalado hayan firmado.
       // En este punto el aval está Aceptado. 
@@ -427,14 +428,14 @@ class Aval {
    * @param user usuario a determinar si es Avaldao.
    */
   isAvaldao(user) {
-    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
+    if (web3Utils.addressEquals(user.address, this.avaldaoAddress)) {
       return true;
     }
     return false;
   }
 
   isSolicitante(user) {
-    if (Web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
+    if (web3Utils.addressEquals(user.address, this.solicitanteAddress)) {
       return true;
     }
     return false;
@@ -446,16 +447,16 @@ class Aval {
    * @param signature firma del usuario.
    */
   updateSignature(signerAddress, signature) {
-    if (Web3Utils.addressEquals(signerAddress, this.avaldaoAddress)) {
+    if (web3Utils.addressEquals(signerAddress, this.avaldaoAddress)) {
       // Firma del usuario Avaldao
       this.avaldaoSignature = signature;
-    } else if (Web3Utils.addressEquals(signerAddress, this.solicitanteAddress)) {
+    } else if (web3Utils.addressEquals(signerAddress, this.solicitanteAddress)) {
       // Firma del usuario Solictante
       this.solicitanteSignature = signature;
-    } else if (Web3Utils.addressEquals(signerAddress, this.comercianteAddress)) {
+    } else if (web3Utils.addressEquals(signerAddress, this.comercianteAddress)) {
       // Firma del usuario Comerciante
       this.comercianteSignature = signature;
-    } else if (Web3Utils.addressEquals(signerAddress, this.avaladoAddress)) {
+    } else if (web3Utils.addressEquals(signerAddress, this.avaladoAddress)) {
       // Firma del usuario Avalado
       this.avaladoSignature = signature;
     }
@@ -499,10 +500,10 @@ class Aval {
    * @returns <code>true</code> si participa. <code>false</code> si no participa.
    */
   isParticipant(user) {
-    if (Web3Utils.addressEquals(user.address, this.avaldaoAddress) ||
-      Web3Utils.addressEquals(user.address, this.solicitanteAddress) ||
-      Web3Utils.addressEquals(user.address, this.comercianteAddress) ||
-      Web3Utils.addressEquals(user.address, this.avaladoAddress)) {
+    if (web3Utils.addressEquals(user.address, this.avaldaoAddress) ||
+      web3Utils.addressEquals(user.address, this.solicitanteAddress) ||
+      web3Utils.addressEquals(user.address, this.comercianteAddress) ||
+      web3Utils.addressEquals(user.address, this.avaladoAddress)) {
       return true;
     }
     return false;

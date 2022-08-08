@@ -10,7 +10,7 @@ import TransactionProgressBanner from './components/TransactionProgressBanner';
 import { Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "assets/jss/material-kit-react/components/web3BannerStyle.js";
-import networkManager from './NetworkManager';
+import { networkManager } from 'commons';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 
 import Bounce from 'components/Animated/Bounce';

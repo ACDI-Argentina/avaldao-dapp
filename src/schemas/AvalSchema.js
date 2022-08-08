@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import Web3Utils from 'lib/blockchain/Web3Utils';
+import { web3Utils} from 'commons';
 
 const avalSchema = Yup.object({
   proyecto: Yup.string().trim().required('required'),
@@ -15,7 +15,7 @@ const avalSchema = Yup.object({
     function (value) {
       if (!value)
         return false;
-      return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
+      return web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
     }).required('required'),
   
     comercianteAddress: Yup.string().test(
@@ -24,7 +24,7 @@ const avalSchema = Yup.object({
     function (value) {
       if (!value)
         return false;
-      return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
+      return web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
     }).required('required'),
   
     avaladoAddress: Yup.string().test(
@@ -33,7 +33,7 @@ const avalSchema = Yup.object({
     function (value) {
       if (!value)
         return false;
-      return Web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
+      return web3Utils.isValidAddress(value?.toUpperCase()); //TODO: Comprobar el checksum
     }).required('required')
 });
 

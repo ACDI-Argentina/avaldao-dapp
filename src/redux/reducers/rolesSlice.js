@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Role from 'models/Role';
+import { Role } from '@acdi/efem-dapp';
 import config from 'configuration';
 
 export const rolesSlice = createSlice({

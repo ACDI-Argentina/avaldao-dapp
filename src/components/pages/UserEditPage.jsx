@@ -7,8 +7,6 @@ import { Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
-import User from 'models/User'
-import { history } from 'lib/helpers'
 import validatorUtils from 'lib/blockchain/ValidatorUtils'
 import Avatar from '../Avatar/Avatar'
 import { selectUserByAddress } from 'redux/reducers/usersSlice'
@@ -20,13 +18,13 @@ import InputLabel from '@material-ui/core/InputLabel'
 import { selectRoles } from 'redux/reducers/rolesSlice'
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import RoleChip from '../RoleChip'
 import Page from './Page'
 import Background from 'components/views/Background'
-import InputField from 'components/InputField';
+import { InputField, RoleChip, User, history } from '@acdi/efem-dapp';
 import Paper from '@material-ui/core/Paper';
 import SecondaryButton from 'components/buttons/SecondaryButton';
 import PrimaryButton from 'components/buttons/PrimaryButton';
+import { ipfsService } from 'commons'
 
 /**
  * Edición de usuario.
@@ -53,7 +51,7 @@ class UserEditPage extends Component {
       avatar: null,
       avatarPreview: null,
       user: new User(user),
-      avatarImg: user.avatarCidUrl,
+      avatarImg: ipfsService.resolveUrl(user.avatarCid),
       rolesSelected: rolesSelected,
       registered: false,
       nameHelperText: '',

@@ -1,4 +1,4 @@
-import StatusUtils from '../utils/StatusUtils';
+import { StatusUtils } from '@acdi/efem-dapp';
 import { nanoid } from '@reduxjs/toolkit'
 
 /**

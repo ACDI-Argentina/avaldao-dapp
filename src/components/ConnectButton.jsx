@@ -3,14 +3,14 @@ import { selectCurrentUser } from '../redux/reducers/currentUserSlice';
 import { useSelector } from 'react-redux';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { withTranslation } from 'react-i18next';
-import Web3Utils from 'lib/blockchain/Web3Utils';
+import { web3Utils } from 'commons';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { history } from '../lib/helpers';
+import { history } from '@acdi/efem-dapp';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import PeopleIcon from '@material-ui/icons/People';
@@ -21,6 +21,7 @@ import About from './Dialogs/About';
 import PrimaryButton from './buttons/PrimaryButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import config from 'configuration';
 
 const useStyles = makeStyles({
   walletIcon: {
@@ -44,7 +45,7 @@ const ConnectButton = (props) => {
 
   const isUserConnected = currentUser?.address || false;
   const isUserRegistered = currentUser?.registered || false;
-  const isUserAdmin = currentUser?.isAdmin() || false;
+  const isUserAdmin = currentUser?.hasRole(config.ADMIN_ROLE) || false;
   const isCorrectNetwork = network?.isCorrect || false;
 
   const handleOpenMenu = (event) => {
@@ -107,7 +108,7 @@ const ConnectButton = (props) => {
               <ExpandLessIcon></ExpandLessIcon> :
               <ExpandMoreIcon></ExpandMoreIcon>
           }>
-          {Web3Utils.abbreviateAddress(currentUser?.address)}
+          {web3Utils.abbreviateAddress(currentUser?.address)}
         </PrimaryButton>
       )}
 

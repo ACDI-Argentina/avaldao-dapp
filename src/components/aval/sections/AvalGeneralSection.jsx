@@ -3,7 +3,7 @@ import Section from './Section'
 import FiatUtils from 'utils/FiatUtils'
 import { Grid } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import InputField from 'components/InputField';
+import { InputField } from '@acdi/efem-dapp';
 
 const AvalGeneralSection = ({ aval }) => {
   const { t } = useTranslation();

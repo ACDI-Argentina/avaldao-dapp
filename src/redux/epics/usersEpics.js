@@ -1,6 +1,6 @@
 import { ofType } from 'redux-observable';
 import { map, mergeMap } from 'rxjs/operators'
-import userService from '../../services/UserService';
+import { userService } from 'commons';
 
 export const fetchUserByAddressEpic = action$ => action$.pipe(
   ofType('users/fetchUserByAddress'),

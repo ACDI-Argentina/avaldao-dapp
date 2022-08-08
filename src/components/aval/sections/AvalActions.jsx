@@ -69,7 +69,6 @@ const AvalActions = ({ aval }) => {
     dateElement = (<span>{t("atDay")} <b>{`${day}`}</b> {t("atHour")} <b>{`${hour}`}</b></span>);
   }
 
-  //const isAvaladao = aval?.isAvaldao(currentUser);
   const allowEditar = aval.allowEditar(currentUser);
   const allowAceptar = aval.allowAceptar(currentUser);
   const allowRechazar = aval.allowRechazar(currentUser);
