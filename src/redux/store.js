@@ -35,7 +35,6 @@ import {
 } from './epics/usersEpics';
 import { fetchExchangeRatesEpic } from './epics/exchangeRatesEpics'
 import { fetchFondoGarantiaEpic } from './epics/fondoGarantiaEpics'
-import AccountListener from './listeners/AccountListener';
 
 const rootEpic = combineEpics(
   loadCurrentUserEpic,
@@ -81,8 +80,5 @@ const rootReducer = combineReducers({
 export const store = createStore(rootReducer, undefined, composedEnhancers)
 
 epicMiddleware.run(rootEpic);
-
-// Se inicializa el listener 
-new AccountListener();
 
 console.log('Redux store configurado.');

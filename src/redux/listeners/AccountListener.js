@@ -22,6 +22,7 @@ class AccountListener {
     } else if (a.address !== this.accountAddress) {
       // Se definió una nueva cuenta.
       this.accountAddress = a.address;
+      
       currentUserUtils.loadCurrentUser(a.address);
     } else {
       // La cuenta cambió sus datos.
