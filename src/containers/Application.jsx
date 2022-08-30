@@ -8,7 +8,7 @@ import Sweetalert from 'sweetalert';
 import GA from 'lib/GoogleAnalytics';
 import { ScrollToTop } from '../lib/helpers';
 import config from '../configuration';
-import { ErrorBoundary, history } from '@acdi/efem-dapp';
+import { ErrorBoundary, history, NavigateAnchor } from '@acdi/efem-dapp';
 import '../lib/validators';
 import { connect } from 'react-redux'
 import { fetchAvalesOnChain, fetchAvalesOffChain } from '../redux/reducers/avalesSlice'
@@ -23,7 +23,6 @@ import TransactionViewer from 'components/TransactionViewer';
 import Web3Banner from 'lib/blockchain/Web3Banner';
 import Web3App from 'lib/blockchain/Web3App';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
-import navigateAnchor from './navigateAnchor';
 
 /* global document */
 /**
@@ -72,7 +71,7 @@ class Application extends Component {
   render() {
     const { currentUser } = this.props;
     
-    navigateAnchor(history);
+    NavigateAnchor(history);
     
     return (
       <ErrorBoundary>
