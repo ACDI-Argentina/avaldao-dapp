@@ -25,37 +25,17 @@ class Footer extends Component {
             <img src={require("assets/img/logos/avaldao-alt.svg")} alt={t('give4forest')} className={classes.dappLogo} />
           </Grid>
           <Grid item xs={8} style={{ marginBottom: "1em", textAlign: "right" }}>
-            {/*<SocialIcon url="https://www.facebook.com/ACDIargentina%20/"
-              className={classes.socialMediaIcon}
-              bgColor="#FFF"
-              color="#7868E5"
-              target="_blank" rel="noopener noreferrer" />*/}
-            {/*<SocialIcon url="https://www.instagram.com/acdiargentina/"
-              className={classes.socialMediaIcon}
-              bgColor="#FFF"
-              color="#7868E5"
-              target="_blank" rel="noopener noreferrer" />*/}
-            {/*<SocialIcon url="https://twitter.com/ACDIargentina"
-              className={classes.socialMediaIcon}
-              bgColor="#FFF"
-              color="#7868E5"
-              target="_blank" rel="noopener noreferrer" />*/}
-            {/*<SocialIcon url="https://www.linkedin.com/company/acdiargentina"
-              className={classes.socialMediaIcon}
-              bgColor="#FFF"
-              color="#7868E5"
-              target="_blank" rel="noopener noreferrer" />*/}
-            <SocialIcon url="https://twitter.com"
+            <SocialIcon url="https://twitter.com/DaoAval"
               className={classes.socialMediaIcon}
               bgColor="#FFF"
               color="#7868E5"
               target="_blank" rel="noopener noreferrer" />
-            <SocialIcon url="https://www.linkedin.com"
+            <SocialIcon url="https://www.linkedin.com/company/aval-dao"
               className={classes.socialMediaIcon}
               bgColor="#FFF"
               color="#7868E5"
               target="_blank" rel="noopener noreferrer" />
-            <SocialIcon url="https://telegram.org"
+            <SocialIcon url="https://medium.com/@avalDAO"
               className={classes.socialMediaIcon}
               bgColor="#FFF"
               color="#7868E5"
