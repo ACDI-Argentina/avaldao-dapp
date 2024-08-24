@@ -75,14 +75,14 @@ const configurations = {
         showDecimals: 5,
         donateStep: 0.00001
       },
-      rif: { // ERC677 Token
+      /*rif: { // ERC677 Token
         address: '0x1111111111111111111111111111111111111111',
         isNative: false,
         symbol: 'dRIF',
         logoCid: '/ipfs/QmcvQL7Yj4tryAmZPEB8qgeU1JwJNZAVN4zCcdWBNBkbQ9',
         showDecimals: 2,
         donateStep: 0.01
-      },
+      },*/
       doc: {
         address: '0x2222222222222222222222222222222222222222',
         isNative: false,
@@ -149,14 +149,14 @@ const configurations = {
         showDecimals: 5,
         donateStep: 0.00001
       },
-      rif: { // ERC677 Token
+      /*rif: { // ERC677 Token
         address: '0x19f64674d8a5b4e652319f5e239efd3bc969a1fe',
         isNative: false,
         symbol: 'tRIF',
         logoCid: '/ipfs/QmcvQL7Yj4tryAmZPEB8qgeU1JwJNZAVN4zCcdWBNBkbQ9',
         showDecimals: 2,
         donateStep: 0.01
-      },
+      },*/
       doc: {
         address: '0xCB46c0ddc60D18eFEB0E586C17Af6ea36452Dae0',
         isNative: false,
@@ -223,14 +223,14 @@ const configurations = {
         showDecimals: 5,
         donateStep: 0.00001
       },
-      rif: { // ERC677 Token
+      /*rif: { // ERC677 Token
         address: '0x2acc95758f8b5f583470ba265eb685a8f45fc9d5',
         isNative: false,
         symbol: 'RIF',
         logoCid: '/ipfs/QmcvQL7Yj4tryAmZPEB8qgeU1JwJNZAVN4zCcdWBNBkbQ9',
         showDecimals: 2,
         donateStep: 0.01
-      },
+      },*/
       doc: {
         address: '0xe700691dA7b9851F2F35f8b8182c69c53CcaD9Db',
         isNative: false,
@@ -265,7 +265,7 @@ config.avaldaoContractAddress = REACT_APP_AVALDAO_CONTRACT_ADDRESS || config.ava
 config.fondoGarantiaVaultContractAddress = REACT_APP_FONDO_GARANTIA_VAULT_CONTRACT_ADDRESS || config.fondoGarantiaVaultContractAddress;
 config.exchangeRateProviderContractAddress = REACT_APP_EXCHANGE_RATE_PROVIDER_CONTRACT_ADDRESS || config.exchangeRateProviderContractAddress;
 config.tokens.doc.address = REACT_APP_TOKEN_DOC_ADDRESS || config.tokens.doc.address;
-config.tokens.rif.address = REACT_APP_TOKEN_RIF_ADDRESS || config.tokens.rif.address;
+//config.tokens.rif.address = REACT_APP_TOKEN_RIF_ADDRESS || config.tokens.rif.address;
 config.tokenAddresses = REACT_APP_TOKEN_ADDRESSES
   ? JSON.parse(REACT_APP_TOKEN_ADDRESSES)
   : config.tokenAddresses;
