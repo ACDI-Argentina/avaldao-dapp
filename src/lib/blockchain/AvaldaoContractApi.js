@@ -185,7 +185,7 @@ class AvaldaoContractApi {
                 aval.id,
                 aval.infoCid,
                 users,
-                aval.montoFiat,
+                aval.montoFiat.toString(),
                 timestampCuotas);
 
             const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
