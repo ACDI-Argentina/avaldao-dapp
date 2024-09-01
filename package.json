@@ -29,7 +29,6 @@
     "@sweetalert/with-react": "^0.1.1",
     "@walletconnect/web3-provider": "^1.4.1",
     "axios": "^0.21.4",
-    "babel-preset-react": "^6.24.1",
     "bignumber.js": "^8.0.2",
     "bowser": "^2.11.0",
     "eth-contract-class": "^0.0.12",
@@ -115,7 +114,10 @@
     "prettier": "2.0.5",
     "react-app-rewired": "^2.1.8",
     "terser-webpack-plugin": "2.3.8",
-    "webpack": "4.42.0"
+    "webpack": "4.42.0",
+    "@babel/plugin-transform-nullish-coalescing-operator": "7.24.7",
+    "@babel/plugin-transform-optional-chaining": "7.24.8",
+    "customize-cra": "1.0.0"
   },
   "optionalDependencies": {
     "typescript": "3.9.3"
@@ -132,6 +134,7 @@
     "start:testing": "env-cmd -f -f envs/testing.env npm-run-all -p watch-css start-js",
     "build:localhost": "NODE_OPTIONS='--max-old-space-size=8192' env-cmd -f envs/localhost.env npm run build",
     "build:testing": "CI=false NODE_OPTIONS='--max-old-space-size=8192' env-cmd -f envs/testing.env npm run build",
+    "build:testingWin": "env-cmd -f envs/testing.env npm run build",
     "build:production": "CI=false NODE_OPTIONS='--max-old-space-size=8192' env-cmd -f envs/production.env npm run build",
     "serve:localhost": "pm2 serve --name efem-dapp --port 3012 ./build",
     "serve": "npm run build && pm2 serve -s build",
