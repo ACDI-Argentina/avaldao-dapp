@@ -24,12 +24,15 @@ class FondoGarantiaContractApi {
         return new Observable(async subscriber => {
             try {
                 let tokenBalances = [];
-                let tokens = await this.fondoGarantiaVault.methods.getTokens().call();
-                for (let i = 0; i < tokens.length; i++) {
+                //let tokens = await this.fondoGarantiaVault.methods.getTokens().call();
+                let tokenKeys = Object.keys(config.tokens);
+                for (let i = 0; i < tokenKeys.length; i++) {
+                    let tokenKey = tokenKeys[i];
+                    const tokenAddress = config.tokens[tokenKey].address;
                     let { token,
                         amount,
                         rate,
-                        amountFiat } = await this.fondoGarantiaVault.methods.getTokenBalance(tokens[i]).call();
+                        amountFiat } = await this.fondoGarantiaVault.methods.getTokenBalance(tokenAddress).call();
                     tokenBalances.push(new TokenBalance({
                         address: token,
                         amount: amount,
