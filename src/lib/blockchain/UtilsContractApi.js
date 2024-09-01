@@ -14,12 +14,12 @@ class UtilsContractApi {
 
     async estimateGas(method, from) {
         const estimateGas = await method.estimateGas({ from: from });
-        return new BigNumber(estimateGas);
+        return new BigNumber(estimateGas).toString();
     }
 
     async getGasPrice() {
         const gasPrice = await this.web3.eth.getGasPrice();
-        return new BigNumber(gasPrice);
+        return new BigNumber(gasPrice).toString();
     }
 }
 
