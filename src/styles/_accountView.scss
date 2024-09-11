@@ -29,7 +29,7 @@
     margin-bottom: 15px;
   }
 
-  a(:not(.btn)) {
+  a:not(.btn) {
     color: #007bff;
 
     &:hover {
