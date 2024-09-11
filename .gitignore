@@ -35,3 +35,5 @@ src/**/*.css
 
 # NCI does not work with lerna, no need to polute repo with lock file
 package-lock.json
+src/assets/scss/material-kit-react.css.map
+src/styles/application.css.map
