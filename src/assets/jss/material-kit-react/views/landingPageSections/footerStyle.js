@@ -1,4 +1,3 @@
-import { fontSize } from "styled-system";
 
 const footerStyle = {
 

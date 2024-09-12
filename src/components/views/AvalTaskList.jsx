@@ -11,7 +11,7 @@ import Fab from '@material-ui/core/Fab';
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { history } from '@acdi/efem-dapp';
 import CardMembershipIcon from '@material-ui/icons/CardMembership';
-import { right } from 'styled-system'
+
 import config from 'configuration'
 
 /**
