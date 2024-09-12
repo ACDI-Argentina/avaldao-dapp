@@ -1,25 +1,6 @@
-import Bowser from 'bowser';
 
 // Validates user's browser is web3 capable
 const funcs = {
-  browserIsWeb3Capable: () => {
-    // User Agent
-    const browser = Bowser.getParser(window.navigator.userAgent);
-    
-    const validBrowser = browser.satisfies({
-      desktop: {
-        chrome: '>49',
-        firefox: '>52',
-        opera: '>36',
-      },
-    })
-      ? true
-      : false;
-
-    const web3Capable = validBrowser || funcs.hasWeb3Available();
-
-    return web3Capable;
-  },
 
   // Current browser is detected as mobile
   isMobileDevice: () => {
