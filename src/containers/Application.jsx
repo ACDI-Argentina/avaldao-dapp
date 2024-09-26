@@ -41,6 +41,14 @@ React.swal.msg = reactNode => {
 // make toast globally available
 React.toast = toast;
 
+function hidePreloader() {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    preloader.style.display = 'none';
+  }
+}
+
+
 /**
  * This container holds the application and its routes.
  * It is also responsible for loading application persistent data.
@@ -60,6 +68,7 @@ class Application extends Component {
   }
 
   componentDidMount() {
+    hidePreloader();
     this.props.fetchAvalesOnChain();
     this.props.fetchAvalesOffChain();
     this.props.fetchUsers();
