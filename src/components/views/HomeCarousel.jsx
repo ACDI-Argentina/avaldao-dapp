@@ -9,6 +9,10 @@ import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { connect } from 'react-redux'
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 
+import image1 from "assets/img/carousel/slideBg1.jpg";
+import image2 from "assets/img/carousel/slideBg2.jpg";
+import image3 from "assets/img/carousel/slideBg3.jpg";
+
 /**
  * The HomeCarousel section
  */
@@ -34,7 +38,8 @@ class HomeCarousel extends Component {
       infinite: true,
       speed: 500,
       slidesToShow: 1,
-      slidesToScroll: 1
+      slidesToScroll: 1,
+      autoplay: true
     };
 
     const { t } = this.props;
@@ -43,7 +48,7 @@ class HomeCarousel extends Component {
       <Slider {...settings}>
         <div>
           <HomeCarouselItem
-            bkg={require("assets/img/carousel/slideBg1.jpg")}
+            bkg={image1}
             title={t('homeCarousel1Title')}
             description={t('homeCarousel1Description')}
             btnLabel={t('homeCarousel1BtnLabel')}
@@ -53,7 +58,7 @@ class HomeCarousel extends Component {
         </div>
         <div>
           <HomeCarouselItem
-            bkg={require("assets/img/carousel/slideBg2.jpg")}
+            bkg={image2}
             title={t('homeCarousel2Title')}
             description={t('homeCarousel2Description')}
             btnLabel={t('homeCarousel2BtnLabel')}
@@ -65,7 +70,7 @@ class HomeCarousel extends Component {
         </div>
         <div>
           <HomeCarouselItem
-            bkg={require("assets/img/carousel/slideBg3.jpg")}
+            bkg={image3}
             title={t('homeCarousel3Title')}
             description={t('homeCarousel3Description')}
             btnLabel={t('homeCarousel3BtnLabel')}
