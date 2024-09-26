@@ -16,7 +16,7 @@ import SectionTabs from "./Sections/SectionTabs.js";
 import SectionPills from "./Sections/SectionPills.js";
 import SectionNotifications from "./Sections/SectionNotifications.js";
 import SectionTypography from "./Sections/SectionTypography.js";
-import SectionCarousel from "./Sections/SectionCarousel.js";
+/* import SectionCarousel from "./Sections/SectionCarousel.js"; */
 import SectionCompletedExamples from "./Sections/SectionCompletedExamples.js";
 import SectionExamples from "./Sections/SectionExamples.js";
 
@@ -50,7 +50,7 @@ export default function Components(props) {
         <SectionPills />
         <SectionNotifications />
         <SectionTypography />
-        <SectionCarousel />
+     {/*    <SectionCarousel /> */}
         <SectionCompletedExamples />
         <SectionExamples />
       </div>

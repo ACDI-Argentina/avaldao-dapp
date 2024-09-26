@@ -78,6 +78,7 @@ const ConnectButton = (props) => {
     setMenuAnchorEl(null);
   };
 
+  
   return (
     <React.Fragment>
 
@@ -91,6 +92,7 @@ const ConnectButton = (props) => {
 
       {isUserConnected && (
         <PrimaryButton
+          title={web3.networkId == 31? "Rsk Testnet": web3.networkId == 30? "Rsk Mainnet": ""}
           color={isCorrectNetwork ? "success" : "warning"}
           style={{ width: '15em' }}
           onClick={handleOpenMenu}

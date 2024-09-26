@@ -223,7 +223,7 @@ class AvalService {
     aceptarAval(aval) {
         return new Observable(async subscriber => {
             const clientId = aval.clientId;
-            avaldaoContractApi.saveAval(aval).subscribe(
+            avaldaoContractApi.saveAval(aval).subscribe( //se crea el aval on-chain - called by avaldao role
                 aval => {
                     aval.clientId = clientId;
                     this.syncOffChainAvalWithOnChainData(aval).subscribe();

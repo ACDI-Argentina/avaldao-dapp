@@ -500,6 +500,7 @@ class Aval {
    * @returns <code>true</code> si participa. <code>false</code> si no participa.
    */
   isParticipant(user) {
+    if(!user.address) return false;
     if (web3Utils.addressEquals(user.address, this.avaldaoAddress) ||
       web3Utils.addressEquals(user.address, this.solicitanteAddress) ||
       web3Utils.addressEquals(user.address, this.comercianteAddress) ||

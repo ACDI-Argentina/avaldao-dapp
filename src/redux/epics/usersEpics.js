@@ -27,9 +27,15 @@ export const saveUserEpic = (action$) => action$.pipe(
 
 export const fetchUsersEpic = action$ => action$.pipe(
   ofType('users/fetchUsers'),
-  mergeMap(action => userService.loadUsers()),
-  map(users => ({
-    type: 'users/mergeUsers',
-    payload: users
-  }))
-)
+  mergeMap(action => {
+    console.log('Fetch Users Action:', action);
+    return userService.loadUsers();
+  }),
+  map(users => {
+    console.log('Loaded Users:', users);
+    return {
+      type: 'users/mergeUsers',
+      payload: users
+    };
+  })
+);
