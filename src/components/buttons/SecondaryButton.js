@@ -10,10 +10,10 @@ class SecondaryButton extends Component {
   }
 
   render() {
-    const { children, classes, isWorking } = this.props;
+    const { children, classes, isWorking,...buttonProps } = this.props;
     return (
       <LoadingOverlay loading={isWorking}>
-        <Button {...this.props}
+        <Button {...buttonProps}
           color="primary"
           className={classes.root}
           variant="text">

@@ -302,7 +302,7 @@ class UserProfilePage extends Component {
                       />
                     </Grid>
 
-                    <Grid container spacing={1} xs={12} md={7}>
+                    <Grid container item spacing={1} xs={12} md={7}>
                       <Grid item xs={12}>
                         <InputField
                           id="addressTextField"
@@ -374,7 +374,7 @@ class UserProfilePage extends Component {
                       </Grid>
                     </Grid>
 
-                    <Grid container xs={12} justifyContent="flex-end">
+                    <Grid container item xs={12} justifyContent="flex-end">
 
                       <SecondaryButton
                         onClick={this.cancel}>

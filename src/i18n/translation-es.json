@@ -179,7 +179,7 @@
     
     "iniciativeOf": "Con la colaboración de: ",
     "argentina": "ARGENTINA ",
-    "disclaimer": "2022 © Todos los derechos reservados.",
+    "disclaimer": "2024 © Todos los derechos reservados.",
     "termsAndConditions": "Terminos y condiciones. ",
     "dataHandlingPolicy": "Política de tratamiento de datos. ",
 
@@ -234,7 +234,7 @@
     "transactionConfirmedTitleSaveAval": "El aval ha sido creado",
     "transactionConfirmedDescriptionSaveAval": "El aval ha sido creado y está listo para firmarse.",
     "transactionFailuredTitleSaveAval": "No se creó el aval",
-    "transactionFailuredDescriptionSaveAval": "Ocurrió una falla creando de aval.",
+    "transactionFailuredDescriptionSaveAval": "Ocurrió una falla creando el aval.",
 
     "transactionCreatedTitleDesbloquearAval": "Confirma que desbloquea los fundos de cuota del aval en la billetera",
     "transactionCreatedSubtitleDesbloquearAval": "Verifique los detalles aquí - el desbloqueo de los fondos de cuota del aval no puede ser reembolsado.",

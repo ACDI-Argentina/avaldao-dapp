@@ -28,7 +28,6 @@ export default function Header(props) {
   const [setMenuAnchorEl] = React.useState(null);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [setAnchorElUser] = React.useState(null);
 
   const handleClickAbout = () => {
     history.push(`/about`);

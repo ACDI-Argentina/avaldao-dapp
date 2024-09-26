@@ -24,7 +24,7 @@ class HowDoesItWorkResume extends Component {
         justifyContent="center"
         alignItems="center"
         className={classes.root}>
-        <Grid xs={12} md={8}>
+        <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <Typography variant="subtitle1">

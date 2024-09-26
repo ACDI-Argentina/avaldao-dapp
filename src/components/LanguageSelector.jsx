@@ -56,8 +56,6 @@ class LanguageSelector extends Component {
           key={language.name}
           color={'primary'}
           title={language.name}
-          justIcon
-          link
           className={classes.margin5}
           onClick={() => this.changeValue(language.key)}
         >

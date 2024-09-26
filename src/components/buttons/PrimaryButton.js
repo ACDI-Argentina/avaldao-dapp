@@ -19,10 +19,11 @@ class PrimaryButton extends Component {
   }
 
   render() {
-    const { children, classes, isWorking, color } = this.props;
+    const { children, classes, isWorking, color,...buttonProps } = this.props;
     return (
       <LoadingOverlay loading={isWorking}>
-        <Button {...this.props}
+        <Button 
+          {...buttonProps}
           color="primary"
           className={classNames(classes.root, classes[color])}
           variant="contained">

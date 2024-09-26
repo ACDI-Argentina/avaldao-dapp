@@ -50,9 +50,6 @@ class HomePage extends Component {
     return confirm;
   }
 
-  goSolicitarAval() {
-    history.push(`/aval/solicitud`);
-  }
 
   render() {
 
@@ -74,7 +71,7 @@ class HomePage extends Component {
           <Grid item xs={12}>
             <Dashboard />
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12}>
             <Sponsors />
           </Grid>
         </Grid>

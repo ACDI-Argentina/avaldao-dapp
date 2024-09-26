@@ -52,9 +52,6 @@ class MisAvalesPage extends Component {
     return confirm;
   }
 
-  goSolicitarAval() {
-    history.push(`/aval/solicitud`);
-  }
 
   render() {
 
