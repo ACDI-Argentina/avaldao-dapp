@@ -157,7 +157,7 @@ export const selectUserAvales = (state, user) => {
     .map(function (avalStore) {
       return new Aval(avalStore);
     }).
-    filter(aval => aval.isParticipant(user) === true);
+    filter(aval => aval.isParticipant(user));
 }
 
 export const selectAvalesWithTask = (state, user) => {
