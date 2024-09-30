@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import Cuota from './Cuota';
 import Reclamo from './Reclamo';
 import config from 'configuration';
+import { days } from 'utils/DateUtils';
 
 /**
  * Modelo de Aval.
@@ -21,6 +22,9 @@ class Aval {
       objetivo = '',
       adquisicion = '',
       beneficiarios = '',
+      fechaInicio = '',
+      duracionCuotasDias = 30,
+      desbloqueoDias = 10,
       montoFiat = new BigNumber(0),
       cuotasCantidad = 1,
       cuotas = [],
@@ -37,6 +41,7 @@ class Aval {
       createdAt,
       updatedAt
     } = data;
+
     this._id = id;
     // ID utilizado solamente del lado cliente
     this._clientId = clientId;
@@ -46,6 +51,9 @@ class Aval {
     this._objetivo = objetivo;
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
+    this._fechaInicio = fechaInicio;
+    this._duracionCuotasDias = duracionCuotasDias;
+    this._desbloqueoDias = desbloqueoDias;
     this._montoFiat = new BigNumber(montoFiat);
     this._cuotasCantidad = cuotasCantidad;
     this._cuotas = [];
@@ -96,6 +104,8 @@ class Aval {
       beneficiarios: this._beneficiarios,
       montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad,
+      fechaInicio: this._fechaInicio,
+      duracionCuotaSeconds: this._duracionCuotasDias * 24 * 60 * 60,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -133,6 +143,9 @@ class Aval {
       beneficiarios: this._beneficiarios,
       montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad,
+      fechaInicio: this._fechaInicio,
+      duracionCuotasDias: this._duracionCuotasDias,
+      desbloqueoDias: this._desbloqueoDias,
       cuotas: cuotas,
       reclamos: reclamos,
       avaldaoAddress: this._avaldaoAddress,
@@ -149,6 +162,32 @@ class Aval {
       updatedAt: this._updatedAt,
     };
   }
+
+
+  //Solo para avales en estado inicial
+  getCuotasTimestamp() {
+    
+    let start = new Date();
+    if(this.fechaInicio !== null && this.fechaInicio.trim() !== ""){
+      if(new Date(this.fechaInicio) > new Date()){
+        start = new Date(this.fechaInicio)
+      }
+    }
+    
+    const startDateTs = Math.round(start.getTime() / 1000); // Timestamp actual medido en segundos.
+    const vencimientoRange = days(this.duracionCuotasDias ?? 30);
+    const desbloqueoRange = days(this.desbloqueoDias ?? 10);
+
+    const timestampCuotas = [];
+    for (let i = 1; i <= this.cuotasCantidad; i++) {
+      const timestampVencimiento = startDateTs + (i * vencimientoRange);
+      const timestampDesbloqueo = timestampVencimiento + desbloqueoRange;
+      timestampCuotas.push(timestampVencimiento);
+      timestampCuotas.push(timestampDesbloqueo);
+    }
+    return timestampCuotas; 
+  }
+
 
   /**
    * Realiza el mapping de los estados del aval en el
@@ -500,7 +539,7 @@ class Aval {
    * @returns <code>true</code> si participa. <code>false</code> si no participa.
    */
   isParticipant(user) {
-    if(!user.address) return false;
+    if (!user.address) return false;
     if (web3Utils.addressEquals(user.address, this.avaldaoAddress) ||
       web3Utils.addressEquals(user.address, this.solicitanteAddress) ||
       web3Utils.addressEquals(user.address, this.comercianteAddress) ||
@@ -590,6 +629,34 @@ class Aval {
     this._cuotasCantidad = value;
   }
 
+  get fechaInicio() {
+    return this._fechaInicio;
+  }
+
+  set fechaInicio(value) {
+    this._fechaInicio = value;
+  }
+
+
+  get duracionCuotasDias() {
+    return this._duracionCuotasDias;
+  }
+
+  set duracionCuotasDias(value) {
+    this._duracionCuotasDias = value;
+  }
+
+
+  get desbloqueoDias() {
+    return this._desbloqueoDias;
+  }
+
+  set desbloqueoDias(value) {
+    this._desbloqueoDias = value;
+  }
+
+
+  
   get cuotas() {
     return this._cuotas;
   }

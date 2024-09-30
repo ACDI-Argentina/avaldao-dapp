@@ -8,6 +8,8 @@ import avalSchema from 'schemas/AvalSchema';
 import { InputField } from '@acdi/efem-dapp';
 import SecondaryButton from 'components/buttons/SecondaryButton';
 import PrimaryButton from 'components/buttons/PrimaryButton';
+import DateUtils from 'utils/DateUtils';
+
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -49,7 +51,10 @@ const FormikInput = ({ formik, id, ...props }) => {
 }
 
 
-const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loading = false, solicitanteAddress, defaultAvaldaoAddress }) => {
+const AvalForm = (props) => {
+  const { aval, submitText, onSubmit: onSubmitHandler, onCancel, loading = false, solicitanteAddress, defaultAvaldaoAddress } = props;
+
+  const initialDate = aval?.fechaInicio ? DateUtils.formatDateYYYYMMDD(aval.fechaInicio) : DateUtils.formatDateYYYYMMDD(new Date());
 
   const formik = useFormik({
     initialValues: {
@@ -59,10 +64,12 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
       beneficiarios: aval?.beneficiarios || '',
       montoFiat: (aval?.montoFiat / 100) || 1000, //in usd
       cuotasCantidad: aval?.cuotasCantidad || 6,
+      fechaInicio: initialDate,
+      duracionCuotasDias: aval?.duracionCuotasDias || 30,
       solicitanteAddress: aval?.solicitanteAddress || solicitanteAddress,
       avaldaoAddress: aval?.avaldaoAddress || defaultAvaldaoAddress,
       comercianteAddress: aval?.comercianteAddress || '',
-      avaladoAddress: aval?.avaladoAddress || ''
+      avaladoAddress: aval?.avaladoAddress || '',
     },
     validationSchema: avalSchema,
 
@@ -114,7 +121,7 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             multiline
           />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <FormikInput
             id="adquisicion"
             label={t('avalAdquisicion')}
@@ -122,7 +129,7 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             readOnly={readonly}
           />
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={6}>
           <FormikInput
             id="beneficiarios"
             label={t('avalBeneficiarios')}
@@ -147,10 +154,31 @@ const AvalForm = ({ aval, submitText, onSubmit: onSubmitHandler, onCancel, loadi
             }}
           />
         </Grid>
+
         <Grid item xs={12} md={3}>
           <FormikInput
             id="cuotasCantidad"
             label={t('avalCuotasCantidad')}
+            formik={formik}
+            type="number"
+            readOnly={readonly}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={3}>
+          <FormikInput
+            id="fechaInicio"
+            type="date"
+            label={t('fechaInicio')}
+            formik={formik}
+            readOnly={readonly}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={3}>
+          <FormikInput
+            id="duracionCuotasDias"
+            label={t('avalDuracionCuotas')}
             formik={formik}
             type="number"
             readOnly={readonly}

@@ -137,6 +137,8 @@ class AvaldaoContractApi {
 
     /**
      * Almacena el aval en la blockchain.
+     * 
+     * Se despliega un contrato especifico para gestionar las cuotas del aval
      *  
      * @param aval a almacenar.
      */
@@ -163,24 +165,10 @@ class AvaldaoContractApi {
                 aval.avaladoAddress
             ];
 
-            // Tiemstamp actual medido en segundos.
-            const timestampCurrent = Math.round(Date.now() / 1000);
-            // Simulación de cuotas vencidas.
-            //const timestampCurrent = Math.round(Date.now() / 1000) - 100 * 24 * 60 * 60;
-            // Tiempo entre vencimientos de cuota medido en segundos.
-            // 30 días.
-            const vencimientoRange = 30 * 24 * 60 * 60;
-            // Tiempo de desbloqueo de fondos desde la fecha de venicmiento de una cuota medido en segundos.
-            // 10 días.
-            const desbloqueoRange = 10 * 24 * 60 * 60;
-            const timestampCuotas = [];
-            for (let cuotaNumero = 1; cuotaNumero <= aval.cuotasCantidad; cuotaNumero++) {
-                const timestampVencimiento = timestampCurrent + (cuotaNumero * vencimientoRange);
-                const timestampDesbloqueo = timestampVencimiento + desbloqueoRange;
-                timestampCuotas.push(utils.numberToHex(timestampVencimiento));
-                timestampCuotas.push(utils.numberToHex(timestampDesbloqueo));
-            }
+            const timestampCuotas = aval.getCuotasTimestamp().map(ts_seconds => utils.numberToHex(ts_seconds));
+           
 
+          
             const method = this.avaldao.methods.saveAval(
                 aval.id,
                 aval.infoCid,
@@ -230,6 +218,8 @@ class AvaldaoContractApi {
                 subscriber.next(aval);
 
             }).once('confirmation', (confNumber, receipt) => {
+
+                console.log("Transaction confirmed, receipt", receipt);
 
                 transaction.confirme();
                 transactionStoreUtils.updateTransaction(transaction);

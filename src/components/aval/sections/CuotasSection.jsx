@@ -5,6 +5,8 @@ import NoAvailable from './NoAvailable';
 import Section from './Section';
 import { makeStyles, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import CuotasTable from '../CuotasTable/CuotasTable';
+import Aval from 'models/Aval';
 
 const useStyles = makeStyles({
   root: {
@@ -18,6 +20,8 @@ const CuotasSection = ({ aval }) => {
   const { t } = useTranslation();
 
   const available = aval.showCuotas();
+  const avalCuotasTs = aval.getCuotasTimestamp().map(ts => new Date(ts * 1000));
+  const renderCuotas = aval.status?.id === 0 || aval.status?.id === 2 || aval.status?.name == "Actualizando";
 
   return (
     <Section>
@@ -30,8 +34,10 @@ const CuotasSection = ({ aval }) => {
             </Grid>
           ))}
         </Grid>
-        ) :
-        (<NoAvailable />)
+        ) : renderCuotas ?
+          <CuotasTable aval={aval} timestampCuotas={avalCuotasTs}/>
+          :
+          (<NoAvailable />)
       }
     </Section>
   )

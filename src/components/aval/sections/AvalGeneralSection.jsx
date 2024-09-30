@@ -4,9 +4,11 @@ import FiatUtils from 'utils/FiatUtils'
 import { Grid } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { InputField } from '@acdi/efem-dapp';
+import DateUtils from 'utils/DateUtils';
 
 const AvalGeneralSection = ({ aval }) => {
   const { t } = useTranslation();
+
 
   return (
     <Section>
@@ -34,7 +36,7 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={3}>
+        <Grid item xs={12} sm={12} md={6}>
           <InputField
             id="adquisicionTextField"
             value={aval.adquisicion}
@@ -45,7 +47,7 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={3}>
+        <Grid item xs={12} sm={12} md={6}>
           <InputField
             id="beneficiariosTextField"
             value={aval.beneficiarios}
@@ -56,7 +58,7 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <InputField
             id="montoTextField"
             value={FiatUtils.format(aval.montoFiat)}
@@ -67,7 +69,7 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <InputField
             id="cuotasCantidadTextField"
             value={aval.cuotasCantidad}
@@ -75,6 +77,32 @@ const AvalGeneralSection = ({ aval }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
+            readOnly
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <InputField
+            id="fechaInicio"
+            value={DateUtils.formatDateYYYYMMDD(aval.fechaInicio)}
+            type="date"
+            label={t('fechaInicio')}
+            margin="normal"
+            fullWidth
+            readOnly
+            InputLabelProps={{
+              shrink: true, // This ensures the label stays on top
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={3}>
+          <InputField
+            id="duracionCuotasDias"
+            value={aval.duracionCuotasDias}
+            label={t('avalDuracionCuotas')}
+            margin="normal"
+            fullWidth
+            type="number"
             readOnly
           />
         </Grid>

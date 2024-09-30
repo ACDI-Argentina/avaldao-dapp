@@ -1,0 +1,60 @@
+$hover-bg-color: #a29cf1; // Lighter purple hover color
+
+table {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+
+    th {
+        background-color: #f0f0ff;
+        color: #333;
+        text-align: left;
+        padding: 10px;
+    }
+
+    td {
+        padding: 10px;
+        text-align: left;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    tr {
+        &:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        &:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        &:hover {
+            background-color: $hover-bg-color; // Use the SCSS variable here
+            transition: background-color 0.3s ease;
+        }
+    }
+}
+
+.reclamos {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f4f4f8;
+    border-radius: 8px;
+    color: #666;
+}
+
+
+.caption {
+    font-size: 14px;
+    color: #666;
+    padding: 10px;
+    text-align: center;
+    font-weight: 500;
+    width: 100%;
+}
