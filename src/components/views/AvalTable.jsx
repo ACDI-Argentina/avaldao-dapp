@@ -29,6 +29,8 @@ class AvalTable extends Component {
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
+
+                  <TableCell>{t('avalApplicationDate')}</TableCell>
                   <TableCell>{t('avalProyecto')}</TableCell>
                   <TableCell>{t('avalMonto')}</TableCell>
                   <TableCell>{t('avalCuotasCantidad')}</TableCell>
@@ -37,7 +39,7 @@ class AvalTable extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {avales.map(aval => (
+                {avales.sort((a,b)=> b.createdAt - a.createdAt).map(aval => (
                   <AvalRow key={aval.id} aval={aval}></AvalRow>
                 ))}
               </TableBody>

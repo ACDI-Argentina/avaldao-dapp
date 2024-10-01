@@ -56,6 +56,7 @@
     "avalSolicitadoErrorNoAutorizado":"Usuario no autorizado.",
     "avalActualizadoError": "Ha ocurrido un error al actualizar el aval.",
 
+    "avalApplicationDate": "Fecha de solicitud",
     "avalProyecto": "Proyecto",
     "avalObjetivo": "Objetivo",
     "avalAdquisicion": "Adquisición",

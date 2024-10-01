@@ -33,7 +33,7 @@ const CuotasTable = ({ aval, timestampCuotas }) => {
 
   return (
     (<Grid container className={classes.root} spacing={1}>
-      <table>
+      <table className="cuotas-table">
         <thead>
           <tr>
             <th>Cuota</th>

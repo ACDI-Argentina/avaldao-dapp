@@ -1,9 +1,14 @@
 $hover-bg-color: #a29cf1; // Lighter purple hover color
 
-table {
-    margin-top: 20px;
-    width: 100%;
+
+table.cuotas-table{
     max-width: 1000px;
+    margin-top: 20px;
+  }
+
+
+table {
+    width: 100%;
     border-collapse: collapse;
     background-color: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);

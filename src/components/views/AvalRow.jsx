@@ -13,6 +13,7 @@ import FiatAmount from 'components/FiatAmount'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import SearchIcon from '@material-ui/icons/Search'
+import DateUtils from 'utils/DateUtils'
 
 /**
  * Row de un Aval
@@ -51,6 +52,9 @@ class AvalRow extends Component {
 
     return (
       <TableRow key={aval.id}>
+        <TableCell>
+          {aval.createdAt ? DateUtils.formatUTCDate(aval.createdAt): ""}
+        </TableCell>
         <TableCell>
           {aval.proyecto}
         </TableCell>
