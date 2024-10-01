@@ -94,7 +94,7 @@
     "typescript": "3.9.3"
   },
   "scripts": {
-    "build-css": "sass src/:src/ --watch",
+    "build-css": "sass src/:src/",
     "watch-css": "npm run build-css && sass --load-path=./src --load-path=./node_modules src/:src/ --watch",
     "start-js": "react-app-rewired start",
     "start": "env-cmd -f envs/hybrid.env npm-run-all -p watch-css start-js",
