@@ -24,7 +24,7 @@ class Aval {
       beneficiarios = '',
       fechaInicio = '',
       duracionCuotasDias = 30,
-      desbloqueoDias = 10,
+      desbloqueoSeconds = 864000,
       montoFiat = new BigNumber(0),
       cuotasCantidad = 1,
       cuotas = [],
@@ -53,7 +53,7 @@ class Aval {
     this._beneficiarios = beneficiarios;
     this._fechaInicio = fechaInicio;
     this._duracionCuotasDias = duracionCuotasDias;
-    this._desbloqueoDias = desbloqueoDias;
+    this._desbloqueoSeconds = desbloqueoSeconds;
     this._montoFiat = new BigNumber(montoFiat);
     this._cuotasCantidad = cuotasCantidad;
     this._cuotas = [];
@@ -145,7 +145,7 @@ class Aval {
       cuotasCantidad: this._cuotasCantidad,
       fechaInicio: this._fechaInicio,
       duracionCuotasDias: this._duracionCuotasDias,
-      desbloqueoDias: this._desbloqueoDias,
+      desbloqueoSeconds: this._desbloqueoSeconds,
       cuotas: cuotas,
       reclamos: reclamos,
       avaldaoAddress: this._avaldaoAddress,
@@ -176,8 +176,9 @@ class Aval {
     
     const startDateTs = Math.round(start.getTime() / 1000); // Timestamp actual medido en segundos.
     const vencimientoRange = days(this.duracionCuotasDias ?? 30);
-    const desbloqueoRange = days(this.desbloqueoDias ?? 10);
+    const desbloqueoRange = this.desbloqueoSeconds ?? days(10);
 
+    console.log("Using desbloqueo range: ", desbloqueoRange);
     const timestampCuotas = [];
     for (let i = 1; i <= this.cuotasCantidad; i++) {
       const timestampVencimiento = startDateTs + (i * vencimientoRange);
@@ -339,6 +340,7 @@ class Aval {
    * @param user usuario que reclama el aval.
    */
   allowReclamar(user) {
+    console.log("Checking allow reclamar")
     if (this.status.name !== Aval.VIGENTE.name) {
       // Solo un aval Vigente puede ser reclamado.
       return false;
@@ -349,6 +351,7 @@ class Aval {
     }
     if (!web3Utils.addressEquals(user.address, this.comercianteAddress)) {
       // Solo el Comerciante puede desbloquear fondos el aval
+      console.log("Solo el Comerciante puede desbloquear fondos el aval")
       return false;
     }
     // El aval no debe tener un reclamo en estado Vigente.
@@ -364,10 +367,12 @@ class Aval {
       return false;
     }
     // La fecha actual debe ser mayor a la fecha de vencimiento de la primera cuota Pendiente.
+    console.log("Checking if it has cuota pendiente. Cuotas:",this.cuotas);
     const timestampCurrent = Math.round(Date.now() / 1000);
     let hasCuotaPendienteVencida = false;
     for (let i = 0; i < this.cuotas.length; i++) {
       const cuota = this.cuotas[i];
+      console.log(cuota);
       if (cuota.status.name === Cuota.PENDIENTE.name &&
         cuota.timestampVencimiento <= timestampCurrent) {
         hasCuotaPendienteVencida = true;
@@ -647,12 +652,12 @@ class Aval {
   }
 
 
-  get desbloqueoDias() {
-    return this._desbloqueoDias;
+  get desbloqueoSeconds() {
+    return this._desbloqueoSeconds;
   }
 
-  set desbloqueoDias(value) {
-    this._desbloqueoDias = value;
+  set desbloqueoSeconds(value) {
+    this._desbloqueoSeconds = value;
   }
 
 
