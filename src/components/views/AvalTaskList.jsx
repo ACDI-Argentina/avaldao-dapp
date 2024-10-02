@@ -22,11 +22,7 @@ class AvalTaskList extends Component {
 
   render() {
     const { currentUser, avales, user, classes, t } = this.props;
-    const allowSolicitar = currentUser.hasRole(config.SOLICITANTE_ROLE);
-
-    const goSolicitarAval = function () {
-      history.push(`/aval/solicitud`);
-    };
+  
 
     return (
       <Grid container spacing={3}>
@@ -44,16 +40,7 @@ class AvalTaskList extends Component {
               </AvalTaskItem>
             ))}
           </List>
-          {allowSolicitar &&
-            <Fab color="primary"
-              variant="extended"
-              size="medium"
-              onClick={goSolicitarAval}
-              className={classes.solicitarAval}>
-              <CardMembershipIcon className={classes.extendedIcon}/>
-              {t("avalSolicitarBtn")}
-            </Fab>
-          }
+        
         </Grid>
       </Grid>
     );
@@ -66,12 +53,7 @@ const styles = theme => ({
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
-  solicitarAval: {
-    float: 'right'
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  }
+ 
 });
 
 const mapStateToProps = (state, ownProps) => {

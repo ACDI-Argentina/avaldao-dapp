@@ -18,6 +18,10 @@ const CuotasTable = ({ aval, timestampCuotas }) => {
   const classes = useStyles();
   const cuotas = [];
 
+  const showCaption =  aval.status?.id === 0 ;
+
+
+
   for (let i = 0; i < timestampCuotas.length / 2; i++) {
     const [due_date, unlock] = [timestampCuotas[i * 2], timestampCuotas[i * 2 + 1]];
 
@@ -55,9 +59,10 @@ const CuotasTable = ({ aval, timestampCuotas }) => {
           })}
         </tbody>
       </table>
-      <div className="caption">
+      {showCaption && <div className="caption">
         *Las fechas de las cuotas estarán confirmadas una vez almacenadas en la blockchain. Esto sucederá cuando AvalDAO acepte el aval.
-      </div>
+      </div>}
+
     </Grid>
     )
   );

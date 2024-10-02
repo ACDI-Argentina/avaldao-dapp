@@ -14,6 +14,9 @@ import { Typography } from '@material-ui/core'
 import Background from 'components/views/Background'
 import Paper from '@material-ui/core/Paper';
 
+import config from 'configuration';
+import CreateAvalButton from 'components/aval/CreateAvalButton'
+
 /**
  * Pantalla de Avales del usuario.
  * 
@@ -58,6 +61,9 @@ class MisAvalesPage extends Component {
 
     let showAvalTaskList = false;
     let avalTableWidthMd = 12;
+
+    const allowSolicitar = currentUser.hasRole(config.SOLICITANTE_ROLE);
+
     if (currentUser && currentUser.authenticated) {
       showAvalTaskList = true;
       avalTableWidthMd = 9;
@@ -74,8 +80,11 @@ class MisAvalesPage extends Component {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
+
                 <Grid container spacing={3} style={{ marginTop: "1em", marginBottom: "1em" }}>
+
                   <Grid item sm={12} md={avalTableWidthMd}>
+                  {allowSolicitar && <Grid item sm={12} > <CreateAvalButton /> </Grid>}
                     <AvalTable avales={avales} />
                   </Grid>
                   {showAvalTaskList && (
