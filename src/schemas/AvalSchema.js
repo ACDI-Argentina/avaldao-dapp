@@ -8,7 +8,7 @@ const avalSchema = Yup.object({
   beneficiarios: Yup.string().trim().max(2000).required('required'),
   montoFiat: Yup.number().required('required').positive('montoError').typeError('montoError'),
   cuotasCantidad: Yup.number().required('required').positive('cuotaError').integer('cuotaError').typeError('cuotaError'),
-  duracionCuotasDias: Yup.number().required('required').positive('cuotaError').integer('cuotaError').typeError('cuotaError'),
+  duracionCuotaDias: Yup.number().required('required').positive('cuotaError').integer('cuotaError').typeError('cuotaError'),
   fechaInicio: Yup.date().required('required'),
   
   avaldaoAddress: Yup.string().test(
