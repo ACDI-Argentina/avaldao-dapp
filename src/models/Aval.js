@@ -23,7 +23,7 @@ class Aval {
       adquisicion = '',
       beneficiarios = '',
       fechaInicio = '',
-      duracionCuotasDias = 30,
+      duracionCuotaSeconds = 2592000, //30 dias
       desbloqueoSeconds = 864000,
       montoFiat = new BigNumber(0),
       cuotasCantidad = 1,
@@ -52,7 +52,7 @@ class Aval {
     this._adquisicion = adquisicion;
     this._beneficiarios = beneficiarios;
     this._fechaInicio = fechaInicio;
-    this._duracionCuotasDias = duracionCuotasDias;
+    this._duracionCuotaSeconds = duracionCuotaSeconds;
     this._desbloqueoSeconds = desbloqueoSeconds;
     this._montoFiat = new BigNumber(montoFiat);
     this._cuotasCantidad = cuotasCantidad;
@@ -105,7 +105,7 @@ class Aval {
       montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad,
       fechaInicio: this._fechaInicio,
-      duracionCuotaSeconds: this._duracionCuotasDias * 24 * 60 * 60,
+      duracionCuotaSeconds: this._duracionCuotaSeconds,
       avaldaoAddress: this._avaldaoAddress,
       solicitanteAddress: this._solicitanteAddress,
       comercianteAddress: this._comercianteAddress,
@@ -144,7 +144,7 @@ class Aval {
       montoFiat: this._montoFiat,
       cuotasCantidad: this._cuotasCantidad,
       fechaInicio: this._fechaInicio,
-      duracionCuotasDias: this._duracionCuotasDias,
+      duracionCuotaSeconds: this._duracionCuotaSeconds,
       desbloqueoSeconds: this._desbloqueoSeconds,
       cuotas: cuotas,
       reclamos: reclamos,
@@ -175,10 +175,11 @@ class Aval {
     }
     
     const startDateTs = Math.round(start.getTime() / 1000); // Timestamp actual medido en segundos.
-    const vencimientoRange = days(this.duracionCuotasDias ?? 30);
+    const vencimientoRange = this.duracionCuotaSeconds ?? days(30);
     const desbloqueoRange = this.desbloqueoSeconds ?? days(10);
 
-    console.log("Using desbloqueo range: ", desbloqueoRange);
+    console.log("vencimientoRange: ", vencimientoRange);
+    
     const timestampCuotas = [];
     for (let i = 1; i <= this.cuotasCantidad; i++) {
       const timestampVencimiento = startDateTs + (i * vencimientoRange);
@@ -643,12 +644,12 @@ class Aval {
   }
 
 
-  get duracionCuotasDias() {
-    return this._duracionCuotasDias;
+  get duracionCuotaSeconds() {
+    return this._duracionCuotaSeconds;
   }
 
-  set duracionCuotasDias(value) {
-    this._duracionCuotasDias = value;
+  set duracionCuotaSeconds(value) {
+    this._duracionCuotaSeconds = value;
   }
 
 

@@ -97,8 +97,8 @@ const AvalGeneralSection = ({ aval }) => {
 
         <Grid item xs={12} sm={6} md={3}>
           <InputField
-            id="duracionCuotasDias"
-            value={aval.duracionCuotasDias}
+            id="duracionCuotaSeconds"
+            value={aval.duracionCuotaSeconds / (24 * 60 * 60)}
             label={t('avalDuracionCuotas')}
             margin="normal"
             fullWidth

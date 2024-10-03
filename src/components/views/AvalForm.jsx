@@ -65,7 +65,7 @@ const AvalForm = (props) => {
       montoFiat: (aval?.montoFiat / 100) || 1000, //in usd
       cuotasCantidad: aval?.cuotasCantidad || 6,
       fechaInicio: initialDate,
-      duracionCuotasDias: aval?.duracionCuotasDias || 30,
+      duracionCuotaDias: aval?.duracionCuotaSeconds / (24 * 60 * 60) || 30,
       solicitanteAddress: aval?.solicitanteAddress || solicitanteAddress,
       avaldaoAddress: aval?.avaldaoAddress || defaultAvaldaoAddress,
       comercianteAddress: aval?.comercianteAddress || '',
@@ -75,8 +75,10 @@ const AvalForm = (props) => {
 
     onSubmit: values => {
       const montoFiatInCents = values.montoFiat * 100;
+      const duracionCuotaSeconds = values.duracionCuotaDias * 24 * 60 * 60;
       typeof onSubmitHandler === "function" && onSubmitHandler({
         ...values,
+        duracionCuotaSeconds,
         montoFiat: montoFiatInCents,
       });
     },
@@ -177,7 +179,7 @@ const AvalForm = (props) => {
 
         <Grid item xs={12} md={3}>
           <FormikInput
-            id="duracionCuotasDias"
+            id="duracionCuotaDias"
             label={t('avalDuracionCuotas')}
             formik={formik}
             type="number"

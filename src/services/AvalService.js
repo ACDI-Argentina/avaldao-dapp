@@ -363,7 +363,7 @@ class AvalService {
             beneficiarios: avalData.beneficiarios,
             montoFiat: new BigNumber(avalData.montoFiat),
             cuotasCantidad: avalData.cuotasCantidad,
-            duracionCuotasDias: avalData.duracionCuotaSeconds !== undefined? parseInt(avalData.duracionCuotaSeconds / (24 * 60 * 60)): undefined,
+            duracionCuotaSeconds: avalData.duracionCuotaSeconds,
             fechaInicio: avalData.fechaInicio,
             desbloqueoSeconds: avalData.desbloqueoSeconds,
             avaldaoAddress: avalData.avaldaoAddress,
