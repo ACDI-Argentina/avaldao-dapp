@@ -9,7 +9,7 @@ import GA from 'lib/GoogleAnalytics';
 import { ScrollToTop } from '../lib/helpers';
 import config from '../configuration';
 import { ErrorBoundary, history, NavigateAnchor } from '@acdi/efem-dapp';
-import '../lib/validators';
+/* import '../lib/validators'; */
 import { connect } from 'react-redux'
 import { fetchAvalesOnChain, fetchAvalesOffChain } from '../redux/reducers/avalesSlice'
 import { fetchFondoGarantia } from '../redux/reducers/fondoGarantiaSlice'

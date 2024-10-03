@@ -341,7 +341,6 @@ class Aval {
    * @param user usuario que reclama el aval.
    */
   allowReclamar(user) {
-    console.log("Checking allow reclamar")
     if (this.status.name !== Aval.VIGENTE.name) {
       // Solo un aval Vigente puede ser reclamado.
       return false;
@@ -352,7 +351,6 @@ class Aval {
     }
     if (!web3Utils.addressEquals(user.address, this.comercianteAddress)) {
       // Solo el Comerciante puede desbloquear fondos el aval
-      console.log("Solo el Comerciante puede desbloquear fondos el aval")
       return false;
     }
     // El aval no debe tener un reclamo en estado Vigente.

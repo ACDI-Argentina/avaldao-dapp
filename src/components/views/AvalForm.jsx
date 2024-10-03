@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormik } from 'formik';
-import { Grid, InputAdornment, makeStyles } from "@material-ui/core";
+import { Grid, InputAdornment, makeStyles, IconButton } from "@material-ui/core";
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
 import { useTranslation } from "react-i18next";
 import config from 'configuration';
@@ -9,6 +9,15 @@ import { InputField } from '@acdi/efem-dapp';
 import SecondaryButton from 'components/buttons/SecondaryButton';
 import PrimaryButton from 'components/buttons/PrimaryButton';
 import DateUtils from 'utils/DateUtils';
+import DatePicker from 'react-datepicker';
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+
+import { CalendarToday } from '@material-ui/icons';
+
+import { es } from 'date-fns/locale/es';
+import "react-datepicker/dist/react-datepicker.css";
+
+setDefaultLocale('es', es);
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,6 +26,13 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(1),
+  },
+  iconButton: {
+    padding: 4,
+  },
+  calendarIcon: {
+    fontSize: '1rem',
+    color: 'black',
   },
 }));
 
@@ -53,6 +69,7 @@ const FormikInput = ({ formik, id, ...props }) => {
 
 const AvalForm = (props) => {
   const { aval, submitText, onSubmit: onSubmitHandler, onCancel, loading = false, solicitanteAddress, defaultAvaldaoAddress } = props;
+  const [startDate, setStartDate] = useState(new Date());
 
   const initialDate = aval?.fechaInicio ? DateUtils.formatDateYYYYMMDD(aval.fechaInicio) : DateUtils.formatDateYYYYMMDD(new Date());
 
@@ -80,6 +97,7 @@ const AvalForm = (props) => {
         ...values,
         duracionCuotaSeconds,
         montoFiat: montoFiatInCents,
+        fechaInicio: `${values.fechaInicio}T00:00:00`
       });
     },
 
@@ -168,13 +186,39 @@ const AvalForm = (props) => {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <FormikInput
-            id="fechaInicio"
-            type="date"
-            label={t('fechaInicio')}
-            formik={formik}
-            readOnly={readonly}
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => {
+              const year = date.getFullYear();
+              const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-indexed, so +1
+              const day = ('0' + date.getDate()).slice(-2);
+              
+              setStartDate(date);
+              formik.setFieldValue('fechaInicio', `${year}-${month}-${day}`);
+            }}
+
+            dateFormat="dd/MM/yyyy"
+            wrapperClassName="datepicker-full-width"
+
+            customInput={
+              <FormikInput
+                id="fechaInicio"
+                type="text"
+                label={t('fechaInicio')}
+                formik={formik}
+                readOnly={readonly}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <CalendarToday className={classes.calendarIcon} />
+                    </InputAdornment>
+                  ),
+                }}
+              />}
+
+
           />
+          {/* Tendriamos que ver aca que implica que le pase formik de esa forma, para mi va a obtener el values, quizas el error y el onchange */}
         </Grid>
 
         <Grid item xs={12} md={3}>

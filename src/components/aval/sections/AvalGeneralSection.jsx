@@ -1,14 +1,27 @@
 import React from 'react'
 import Section from './Section'
 import FiatUtils from 'utils/FiatUtils'
-import { Grid } from '@material-ui/core'
+import { Grid, InputAdornment, makeStyles } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import { InputField } from '@acdi/efem-dapp';
 import DateUtils from 'utils/DateUtils';
+import { CalendarToday } from '@material-ui/icons'
+
+
+const useStyles = makeStyles(theme => ({
+  calendarIcon: {
+    fontSize: '1rem',
+    color: 'black',
+  },
+}));
+
 
 const AvalGeneralSection = ({ aval }) => {
   const { t } = useTranslation();
 
+  const classes = useStyles();
+
+  console.log("aval fecha inicio?", aval.fechaInicio) //ts iso
 
   return (
     <Section>
@@ -83,12 +96,21 @@ const AvalGeneralSection = ({ aval }) => {
         <Grid item xs={12} sm={6} md={3}>
           <InputField
             id="fechaInicio"
-            value={DateUtils.formatDateYYYYMMDD(aval.fechaInicio)}
-            type="date"
+            value={DateUtils.formatLocalDate(aval.fechaInicio)}
+
             label={t('fechaInicio')}
             margin="normal"
             fullWidth
             readOnly
+
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <CalendarToday className={classes.calendarIcon} />
+                </InputAdornment>
+              ),
+            }}
+
             InputLabelProps={{
               shrink: true, // This ensures the label stays on top
             }}

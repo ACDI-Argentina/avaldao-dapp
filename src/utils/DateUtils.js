@@ -75,8 +75,8 @@ class DateUtils {
     return DateUtils.formatTimestampMilliseconds(timestampSeconds * 1000);
   }
 
-  static formatDateYYYYMMDD(date) {
-    const d = new Date(date);
+  static formatDateYYYYMMDD(dateStr) {
+    const d = new Date(dateStr);
     const year = d.getFullYear();
     const month = ('0' + (d.getMonth() + 1)).slice(-2); // Months are zero-indexed, so +1
     const day = ('0' + d.getDate()).slice(-2);

@@ -34,7 +34,7 @@ const CuotasTable = ({ aval, timestampCuotas }) => {
     })
   }
 
-  const includeTime = true;
+  const includeTime = aval.duracionCuotaSeconds < 24 * 60 * 60; //Only if the cuota lenght is less than one day
 
   return (
     (<Grid container className={classes.root} spacing={1}>
