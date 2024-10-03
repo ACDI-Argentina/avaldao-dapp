@@ -97,6 +97,11 @@ export const avalesSlice = createSlice({
       let avalStore = action.payload.toStore();
       let index = state.findIndex(a => a.id === avalStore.id);
       if (index !== -1) {
+        const createdAt = state[index].createdAt;
+        if(avalStore.createdAt === undefined){
+          avalStore.createdAt = createdAt; //patch value //TODO: check if another values are overriden with undefined
+        }
+
         state[index] = avalStore;
       } else {
         state.push(avalStore);

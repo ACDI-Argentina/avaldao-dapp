@@ -7,12 +7,7 @@ import { Typography } from '@material-ui/core'
 import AvalTaskItem from './AvalTaskItem'
 import List from '@material-ui/core/List';
 import { selectAvalesWithTask } from '../../redux/reducers/avalesSlice'
-import Fab from '@material-ui/core/Fab';
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
-import { history } from '@acdi/efem-dapp';
-import CardMembershipIcon from '@material-ui/icons/CardMembership';
-
-import config from 'configuration'
 
 /**
  * Lista de tareas de avales.

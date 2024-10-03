@@ -3,7 +3,7 @@
  * 
  */
 class DateUtils {
-  static formatUTCDate(dateStr) {
+  static formatUTCDate(dateStr, includeTime = false) {
     const date = new Date(dateStr);
 
     // Extract UTC date parts and format as dd/mm/yyyy
@@ -11,9 +11,39 @@ class DateUtils {
     const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
     const year = date.getUTCFullYear();
 
-    return `${day}/${month}/${year}`;
-}
+    let formattedDate = `${day}/${month}/${year}`;
 
+    if (includeTime) {
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      
+      formattedDate += ` ${hours}:${minutes}`;
+    }
+
+    return formattedDate;
+  }
+
+
+  static formatLocalDate(dateStr, includeTime = false) {
+    const date = new Date(dateStr);
+
+    // Extract local date parts and format as dd/mm/yyyy
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    let formattedDate = `${day}/${month}/${year}`;
+
+    // If includeTime is true, add the time (hours and minutes) in the local timezone
+    if (includeTime) {
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+
+      formattedDate += ` ${hours}:${minutes}`;
+    }
+
+    return formattedDate;
+  }
   /**
    * Formatea el timestamp medido en milisegundos.
    * 

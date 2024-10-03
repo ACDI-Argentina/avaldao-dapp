@@ -53,7 +53,7 @@ class AvalRow extends Component {
     return (
       <TableRow key={aval.id}>
         <TableCell>
-          {aval.createdAt ? DateUtils.formatUTCDate(aval.createdAt): ""}
+          {aval.createdAt ? DateUtils.formatLocalDate(aval.createdAt, true): ""}
         </TableCell>
         <TableCell>
           {aval.proyecto}
