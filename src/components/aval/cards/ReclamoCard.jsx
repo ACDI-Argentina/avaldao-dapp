@@ -46,6 +46,9 @@ const ReclamoCard = ({ reclamo }) => {
   const numero = '#' + reclamo.numero;
   const creacion = DateUtils.formatTimestampSeconds(reclamo.timestampCreacion);
 
+  const creacionISO = DateUtils.formatLocalDate(new Date(reclamo.timestampCreacion * 1000).toISOString(), true);
+
+
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -63,7 +66,7 @@ const ReclamoCard = ({ reclamo }) => {
             <Typography variant="body2" color="textSecondary" component="p">{t('avalReclamoCreacion')}</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary" component="p">{creacion}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p" title={creacionISO}>{creacion}</Typography>
           </Grid>
           <Grid item xs={12}>
             <StatusIndicator status={reclamo.status}></StatusIndicator>

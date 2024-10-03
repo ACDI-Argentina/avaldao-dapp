@@ -71,6 +71,9 @@ const CuotaCard = ({ cuota }) => {
   const vencimiento = DateUtils.formatTimestampSeconds(cuota.timestampVencimiento);
   const desbloqueo = DateUtils.formatTimestampSeconds(cuota.timestampDesbloqueo);
 
+  const vencimientoISO = DateUtils.formatLocalDate(new Date(cuota.timestampVencimiento * 1000).toISOString(), true);
+  const desbloqueoISO = DateUtils.formatLocalDate(new Date(cuota.timestampDesbloqueo * 1000).toISOString(), true);
+
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -94,13 +97,17 @@ const CuotaCard = ({ cuota }) => {
             <Typography variant="body2" color="textSecondary" component="p">{t('avalCuotaVencimientoDate')}</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary" component="p">{vencimiento}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p" title={vencimientoISO}>
+              {vencimiento}
+            </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="textSecondary" component="p">{t('avalCuotaUnlockDate')}</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary" component="p">{desbloqueo}</Typography>
+            <Typography variant="body2" color="textSecondary" component="p" title={desbloqueoISO}>
+              {desbloqueo}
+            </Typography>
           </Grid>
           <Grid item xs={6}>
             <StatusIndicator status={cuota?.status}></StatusIndicator>
