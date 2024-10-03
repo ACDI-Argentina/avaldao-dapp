@@ -588,7 +588,22 @@ class AvaldaoContractApi {
 
             const currentUser = currentUserUtils.getCurrentUser();
 
-            const avalContract = new this.web3.eth.Contract(AvalAbi, aval.address);
+            //TODO: La siguiente linea es un patch ya que en el abi presente en @acdi/avaldao-contract, no se encuenta
+            //el metodo, quizas falte desplegar una nueva version del modulo ya que en el repo en github si está presente
+            const abi = [
+                {
+                    "constant": false,
+                    "inputs": [],
+                    "name": "ejecutarGarantia",
+                    "outputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                  },
+            ];
+
+            const avalContract = new this.web3.eth.Contract(abi, aval.address);
+            console.log(`Aval address: ${aval.address} `)
 
             const method = avalContract.methods.ejecutarGarantia();
 
