@@ -10,14 +10,11 @@ import SecondaryButton from 'components/buttons/SecondaryButton';
 import PrimaryButton from 'components/buttons/PrimaryButton';
 import DateUtils from 'utils/DateUtils';
 import DatePicker from 'react-datepicker';
-import { registerLocale, setDefaultLocale } from "react-datepicker";
-
 import { CalendarToday } from '@material-ui/icons';
 
-import { es } from 'date-fns/locale/es';
 import "react-datepicker/dist/react-datepicker.css";
 
-setDefaultLocale('es', es);
+
 
 
 const useStyles = makeStyles(theme => ({
