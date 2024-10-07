@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { registerCurrentUser, selectCurrentUser } from '../../redux/reducers/currentUserSlice';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -70,27 +71,6 @@ class UserProfilePage extends Component {
   }
 
 
-  async requestConnection(translate) {
-
-    const labels = {
-      title: translate("requestConnectionTitle"),
-      text: translate("requestConnectionText"),
-      cancel: translate("requestConnectionCancel"),
-      ok: translate("requestConnectionOk"),
-    }
-
-    const confirm = await React.swal({
-      icon: 'info',
-      title: labels.title,
-      text: labels.text,
-
-      buttons: [labels.cancel, labels.ok],
-      closeOnClickOutside: false,
-    });
-
-    return confirm;
-
-  }
 
   async componentDidUpdate(prevProps, prevState) {
     const userHasUpdated = prevProps.currentUser !== this.props.currentUser;
@@ -337,7 +317,7 @@ class UserProfilePage extends Component {
                           }}
                           error={nameError}
                           required
-                          inputProps={{ maxLength: 42 }}
+                          inputProps={{ maxLength: 50 }}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -353,7 +333,7 @@ class UserProfilePage extends Component {
                           }}
                           error={emailError}
                           required
-                          inputProps={{ maxLength: 42 }}
+                          inputProps={{ maxLength: 50 }}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -369,7 +349,7 @@ class UserProfilePage extends Component {
                           }}
                           error={urlError}
                           required
-                          inputProps={{ maxLength: 42 }}
+                          inputProps={{ maxLength: 50 }}
                         />
                       </Grid>
                     </Grid>
