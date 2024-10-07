@@ -6,7 +6,6 @@ import { Web3AppContext } from 'lib/blockchain/Web3App'
 import { withTranslation } from 'react-i18next'
 import Page from './Page'
 import { withStyles } from '@material-ui/core/styles'
-import { history } from '@acdi/efem-dapp';
 import PlatformFeatures from 'components/views/PlatformFeatures'
 import PlatformOperation from 'components/views/PlatformOperation'
 import HomeCarousel from 'components/views/HomeCarousel'
@@ -29,26 +28,6 @@ class HomePage extends Component {
     };
   }
 
-  async requestConnection(translate) {
-
-    const labels = {
-      title: translate("requestConnectionTitle"),
-      text: translate("requestConnectionText"),
-      cancel: translate("requestConnectionCancel"),
-      ok: translate("requestConnectionOk"),
-    }
-
-    const confirm = await React.swal({
-      icon: 'info',
-      title: labels.title,
-      text: labels.text,
-
-      buttons: [labels.cancel, labels.ok],
-      closeOnClickOutside: false,
-    });
-
-    return confirm;
-  }
 
 
   render() {

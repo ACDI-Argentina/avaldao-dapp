@@ -1,92 +1,70 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import ErrorPopup from '../components/ErrorPopup';
-
+import showErrorPopup from '../components/ErrorPopup';
+import Swal from 'sweetalert2';
 import { Message, Severity } from '@acdi/efem-dapp';
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { selectNext, deleteMessage } from '../redux/reducers/messagesSlice';
 
-/**
- * Componente encargado de la visualización de mensajes.
- */
-class MessageViewer extends Component {
+const MessageViewer = () => {
+  const dispatch = useDispatch();
+  const message = useSelector(selectNext);
 
-  constructor() {
-    super();
-    this.state = {
-
-    };
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-
-    const { message } = this.props;
-
+  useEffect(() => {
     if (message) {
-
-      //console.log('Mensaje a visualizar', message);
-
+      // Display message based on severity
       if (message.severity === Severity.INFO) {
-
-        this.showMessageInfo(message);
-
+        showMessageInfo(message);
       } else if (message.severity === Severity.SUCCESS) {
-
-        this.showMessageSuccess(message);
-
+        showMessageSuccess(message);
       } else if (message.severity === Severity.WARN) {
-
-        this.showMessageWarn(message);
-
+        showMessageWarn(message);
       } else if (message.severity === Severity.ERROR) {
-
-        this.showMessageError(message);
+        showMessageError(message);
       }
 
-      // Una vez visualizado el mensaje, es eliminado.
-      this.props.deleteMessage(message);
+      // Once viewed, the message is deleted
+      dispatch(deleteMessage(message));
     }
-  }
+  }, [message, dispatch]);
 
-  showMessageInfo(message) {
+  const showMessageInfo = (message) => {
     React.toast.success(message.text);
-  }
+  };
 
-  showMessageSuccess(message) {
-    React.swal({
+  const showMessageSuccess = (message) => {
+    Swal.fire({
       title: message.title,
       text: message.text,
-      icon: "success",
+      icon: 'success',
     });
-  }
+  };
 
-  showMessageWarn(message) {
-    React.swal({
+  const showMessageWarn = (message) => {
+    Swal.fire({
       title: message.title,
       text: message.text,
-      icon: "warning",
+      icon: 'warning',
     });
-  }
+  };
 
-  showMessageError(message) {
-    ErrorPopup(message.text, message.error);
-  }
+  const showMessageError = (message) => {
+    if(message.error == null){
+      Swal.fire({
+        title: "Algo no ha salido bien",
+        text: message.text,
+        icon: "error"
+      });
+    } else {
+      showErrorPopup(message.text, message.error);
+    }
+  };
 
-  render() {
-    return null;
-  }
-}
-
-MessageViewer.propTypes = {
-  message: PropTypes.instanceOf(Message)
+  return null;
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    message: selectNext(state)
-  }
-}
+MessageViewer.propTypes = {
+  message: PropTypes.instanceOf(Message),
+};
 
-const mapDispatchToProps = { deleteMessage }
-
-export default connect(mapStateToProps, mapDispatchToProps)(MessageViewer)
+export default MessageViewer;

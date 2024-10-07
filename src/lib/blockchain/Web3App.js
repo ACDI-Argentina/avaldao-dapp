@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { history } from '@acdi/efem-dapp';
 import { utils } from 'web3';
 import { web3Manager, networkManager, accountManager, authService } from "commons";
+import Swal from "sweetalert2";
 
 export const Web3AppContext = React.createContext({
   contract: {},
@@ -421,13 +422,15 @@ class Web3App extends React.Component {
   checkProfile = async (currentUser) => {
     // already created a profile
     if (!currentUser || currentUser.name) return;
-    const redirect = await React.swal({
+    const result = await Swal.fire({
       title: 'Please Register!',
       text: 'It appears that you have not yet created your profile. In order to gain the trust of givers, we strongly recommend creating your profile!',
       icon: 'info',
-      buttons: ['Skip', 'Create My Profile!'],
+      confirmButtonText:'Create My Profile!',
+      denyButtonText: "Skip", 
+      showDenyButton: true,
     });
-    if (redirect) history.push('/profile');
+    if (result.isConfirmed) history.push('/profile');
   };
 
   checkBalance = (balance) => {
@@ -439,15 +442,13 @@ class Web3App extends React.Component {
       if (balance && balance.gte(minimumWalletBalanceInWei)) {
         resolve();
       } else {
-        React.swal({
+        Swal.fire({
           title: 'Insufficient wallet balance',
-          content: React.swal.msg(
-            <p>
-              Unfortunately you need at least {minimumWalletBalance} {config.nativeTokenName} in
-              your wallet to continue. Please transfer some ${config.nativeTokenName} to your wallet
-              first.
-            </p>,
-          ),
+          text:
+            `Unfortunately, you need at least ${minimumWalletBalance} ${config.nativeTokenName} in
+          your wallet to continue. Please transfer some ${config.nativeTokenName} to your wallet
+          first.
+        `,
           icon: 'warning',
         });
       }

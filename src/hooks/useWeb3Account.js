@@ -1,8 +1,8 @@
 import { Web3AppContext } from "lib/blockchain/Web3App";
 import React, { useContext } from "react";
+import Swal from 'sweetalert2';
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
-
 import { selectCurrentUser } from "redux/reducers/currentUserSlice";
 
 
@@ -41,16 +41,16 @@ function useWeb3Account(params) {
       ok: t("requestConnectionOk"),
     }
 
-    const confirm = await React.swal({
+    const result = await Swal.fire({
       icon: 'info',
       title: labels.title,
       text: labels.text,
-
-      buttons: [labels.cancel, labels.ok],
-      closeOnClickOutside: false,
+      confirmButtonText: labels.ok,
+      cancelButtonText: labels.cancel, 
+      showCancelButton: true,
     });
 
-    return confirm;
+    return result.isConfirmed;
 
   }
 

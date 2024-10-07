@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
@@ -27,26 +28,7 @@ class UsersPage extends Component {
     };
   }
 
-  async requestConnection(translate) {
 
-    const labels = {
-      title: translate("requestConnectionTitle"),
-      text: translate("requestConnectionText"),
-      cancel: translate("requestConnectionCancel"),
-      ok: translate("requestConnectionOk"),
-    }
-
-    const confirm = await React.swal({
-      icon: 'info',
-      title: labels.title,
-      text: labels.text,
-
-      buttons: [labels.cancel, labels.ok],
-      closeOnClickOutside: false,
-    });
-
-    return confirm;
-  }
 
   render() {
 

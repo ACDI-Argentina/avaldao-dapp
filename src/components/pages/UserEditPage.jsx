@@ -83,28 +83,6 @@ class UserEditPage extends Component {
     })
   }
 
-  async requestConnection(translate) {
-
-    const labels = {
-      title: translate("requestConnectionTitle"),
-      text: translate("requestConnectionText"),
-      cancel: translate("requestConnectionCancel"),
-      ok: translate("requestConnectionOk"),
-    }
-
-    const confirm = await React.swal({
-      icon: 'info',
-      title: labels.title,
-      text: labels.text,
-
-      buttons: [labels.cancel, labels.ok],
-      closeOnClickOutside: false,
-    });
-
-    return confirm;
-
-  }
-
   handleChangeName(event) {
     const { t } = this.props;
     let nameError = false;

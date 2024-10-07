@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+
 import { selectCurrentUser } from '../../redux/reducers/currentUserSlice'
 import Grid from '@material-ui/core/Grid'
 import { connect } from 'react-redux'
@@ -31,27 +32,6 @@ class MisAvalesPage extends Component {
       formIsValid: false,
       isBlocking: false
     };
-  }
-
-  async requestConnection(translate) {
-
-    const labels = {
-      title: translate("requestConnectionTitle"),
-      text: translate("requestConnectionText"),
-      cancel: translate("requestConnectionCancel"),
-      ok: translate("requestConnectionOk"),
-    }
-
-    const confirm = await React.swal({
-      icon: 'info',
-      title: labels.title,
-      text: labels.text,
-
-      buttons: [labels.cancel, labels.ok],
-      closeOnClickOutside: false,
-    });
-
-    return confirm;
   }
 
 

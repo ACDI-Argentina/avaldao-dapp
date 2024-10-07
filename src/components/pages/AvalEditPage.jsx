@@ -15,6 +15,7 @@ import useUpdatingAval from 'hooks/useUpdatingAval';
 import messageUtils from 'redux/utils/messageUtils';
 import Background from 'components/views/Background'
 import Paper from '@material-ui/core/Paper';
+import Swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -39,7 +40,7 @@ const AvalEditPage = (props) => {
   }
 
   async function onSuccess() {
-    await React.swal({
+    await Swal.fire({
       text: t('avalActualizadoSuccess'),
       icon: "success",
     });
