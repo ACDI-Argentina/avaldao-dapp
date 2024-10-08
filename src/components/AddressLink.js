@@ -25,11 +25,19 @@ const AddressLink = ({ address, showFullAddress, showCopy }) => {
         {showFullAddress ? address : web3Utils.abbreviateAddress(address)}
       </Link>
       {showCopy && (
-        <Tooltip title={copied ? "Copied!" : "Copy to clipboard"} arrow>
-          <div style={{ marginLeft: '8px', cursor: 'pointer' }} onClick={handleCopy}>
-            <FontAwesomeIcon icon={faClipboard} />
-          </div>
-        </Tooltip>
+      <Tooltip title={copied ? "Copied!" : "Copy to clipboard"} arrow>
+      <div 
+        style={{
+          marginLeft: '8px', 
+          cursor: 'pointer',
+          visibility: 'hidden',
+        }} 
+        onClick={handleCopy}
+        className="clipboard-icon-container"
+      >
+        <FontAwesomeIcon icon={faClipboard} />
+      </div>
+    </Tooltip>
       )}
     </div>
   );

@@ -5,56 +5,64 @@ import { web3Utils } from 'commons';
 
 export const usersSlice = createSlice({
     name: 'users',
-    initialState: [], //List of User instances with roles
+    initialState: {
+        users: [], // List of User instances with roles
+        loading: false, // Indicates loading state
+    },
     reducers: {
         fetchUserByAddress: (state, action) => {
             // Solo se obtiene el estado actual.
+            state.loading = true; 
         },
         /**
          * Almacena el user al estado global.
          */
         saveUser: (state, action) => {
             let userStore = action.payload.toStore();
-            let index = state.findIndex(u => u.address === userStore.address);
+            let index = state.users.findIndex(u => u.address === userStore.address);
             if (index !== -1) {
                 // El usuario ya existe localmente,
                 // por lo que se realiza un merge de sus datos con los actuales.
-                state[index] = merge(state[index], userStore);
+                state.users[index] = merge(state.users[index], userStore);
             } else {
                 // El usuario es nuevo localmente
-                state.push(userStore);
+                state.users.push(userStore);
             }
+            
         },
         /**
          * Actualiza el user al estado global.
          */
         mergeUser: (state, action) => {
             let userStore = action.payload.toStore();
-            let index = state.findIndex(u => u.address === userStore.address);
+            let index = state.users.findIndex(u => u.address === userStore.address);
             if (index !== -1) {
                 // El usuario ya existe localmente,
                 // por lo que se realiza un merge de sus datos con los actuales.
-                state[index] = merge(state[index], userStore);
+                state.users[index] = merge(state.users[index], userStore);
             } else {
                 // El usuario es nuevo localmente
-                state.push(userStore);
+                state.users.push(userStore);
             }
+           
         },
         fetchUsers: (state, action) => {
+            state.loading = true; 
             // Solo se obtiene el estado actual.
         },
-        mergeUsers: (state, action) => {
+        mergeUsers: (state, action) => { //this is triggered when all users are fetched?
             for (let i = 0; i < action.payload.length; i++) {
                 let userStore = action.payload[i].toStore();
-                let index = state.findIndex(u => u.address === userStore.address);
+                let index = state.users.findIndex(u => u.address === userStore.address);
                 if (index !== -1) {
                     // El usuario ya existe localmente,
                     // por lo que se realiza un merge de sus datos con los actuales.
-                    state[index] = merge(state[index], userStore);
+                    state.users[index] = merge(state.users[index], userStore);
                 } else {
                     // El usuario es nuevo localmente
-                    state.push(userStore);
+                    state.users.push(userStore);
                 }
+                state.loading = false; 
             }
         }
     },
@@ -97,19 +105,20 @@ export const {
     fetchUsers } = usersSlice.actions;
 
 export const selectUsers = state => {
-    return state.users.map(function (userStore) {
+    return state.users.users.map(function (userStore) {
         return new User(userStore);
     });
 }
 export const selectUserByAddress = (state, address) => {
-    let userStore = state.users.find(u => web3Utils.addressEquals(u.address, address));
+    let userStore = state.users.users.find(u => web3Utils.addressEquals(u.address, address));
     if (userStore) {
         return new User(userStore);
     }
     return undefined;
 }
 export const selectUsersByRoles = (state, roles) => {
-    return state.users.map(userStore => new User(userStore)).filter(user => user.hasAnyRoles(roles));
+    return state.users.users.map(userStore => new User(userStore)).filter(user => user.hasAnyRoles(roles));
 }
+export const selectLoading = state => state.users.loading;
 
 export default usersSlice.reducer;
