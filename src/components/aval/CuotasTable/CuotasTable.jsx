@@ -19,7 +19,7 @@ const CuotasTable = ({ aval, timestampCuotas }) => {
 
   const showCaption =  aval.status?.id === 0 ;
 
-  console.log(`Aval aval.duracionCuotaSeconds: ${aval.duracionCuotaSeconds} -  desbloqueo seconds: ${aval.desbloqueoSeconds}`); // if this is less than one day (24*60*60, we need to format the date with seconds)
+ // console.log(`Aval aval.duracionCuotaSeconds: ${aval.duracionCuotaSeconds} -  desbloqueo seconds: ${aval.desbloqueoSeconds}`); // if this is less than one day (24*60*60, we need to format the date with seconds)
 
   for (let i = 0; i < timestampCuotas.length / 2; i++) {
     const [due_date, unlock] = [timestampCuotas[i * 2], timestampCuotas[i * 2 + 1]];

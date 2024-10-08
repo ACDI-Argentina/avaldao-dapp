@@ -21,7 +21,7 @@ const AvalGeneralSection = ({ aval }) => {
 
   const classes = useStyles();
 
-  console.log("aval fecha inicio?", aval.fechaInicio) //ts iso
+  //console.log("aval fecha inicio?", aval.fechaInicio) //ts iso
 
   return (
     <Section>

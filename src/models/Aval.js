@@ -178,7 +178,7 @@ class Aval {
     const vencimientoRange = this.duracionCuotaSeconds ?? days(30);
     const desbloqueoRange = this.desbloqueoSeconds ?? days(10);
 
-    console.log("vencimientoRange: ", vencimientoRange);
+   // console.log("vencimientoRange: ", vencimientoRange);
     
     const timestampCuotas = [];
     for (let i = 1; i <= this.cuotasCantidad; i++) {
