@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Router } from 'react-router-dom';
 import localforage from 'localforage';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 import GoogleAnalytics from 'lib/GoogleAnalytics';
@@ -25,13 +25,6 @@ import Web3App from 'lib/blockchain/Web3App';
 import { Web3AppContext } from 'lib/blockchain/Web3App';
 import { Route } from 'react-router-dom';
 
-/* global document */
-/**
- * Here we hack to make stuff globally available
- */
-
-// make toast globally available
-React.toast = toast;
 
 function hidePreloader() {
   const preloader = document.getElementById('preloader');
@@ -39,7 +32,6 @@ function hidePreloader() {
     preloader.style.display = 'none';
   }
 }
-
 
 /**
  * This container holds the application and its routes.

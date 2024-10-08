@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { Message, Severity } from '@acdi/efem-dapp';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectNext, deleteMessage } from '../redux/reducers/messagesSlice';
+import { toast } from 'react-toastify';
+
 
 const MessageViewer = () => {
   const dispatch = useDispatch();
@@ -29,7 +31,7 @@ const MessageViewer = () => {
   }, [message, dispatch]);
 
   const showMessageInfo = (message) => {
-    React.toast.success(message.text);
+    toast.success(message.text);
   };
 
   const showMessageSuccess = (message) => {
