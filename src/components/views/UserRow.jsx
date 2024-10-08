@@ -14,6 +14,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import config from 'configuration'
 import { ipfsService } from 'commons'
+import "./UserTable.scss";
+
 
 /**
  * Row de un Usuario
@@ -50,8 +52,8 @@ class UserRow extends Component {
         <TableCell>
           {user.email}
         </TableCell>
-        <TableCell>
-          <AddressLink address={user.address} />
+        <TableCell className="address-container"> 
+          <AddressLink address={user.address} showFullAddress={true} showCopy={true}/>
         </TableCell>
         <TableCell>
           <div className={classes.chips}>
