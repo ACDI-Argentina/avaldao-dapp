@@ -93,6 +93,7 @@ class Application extends Component {
                       newestOnTop={false}
                       closeOnClick
                       pauseOnHover
+                      theme="colored"
                     />
                     <Web3Banner
                       currentNetwork={network.id}
