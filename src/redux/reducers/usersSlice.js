@@ -48,7 +48,6 @@ export const usersSlice = createSlice({
         },
         fetchUsers: (state, action) => {
             state.loading = true; 
-            // Solo se obtiene el estado actual.
         },
         mergeUsers: (state, action) => { //this is triggered when all users are fetched?
             for (let i = 0; i < action.payload.length; i++) {
@@ -64,6 +63,10 @@ export const usersSlice = createSlice({
                 }
                 state.loading = false; 
             }
+        },
+        fetchUsersFailed: (state,action) => {
+            console.log("Handle fetching users failed from slice");
+            state.loading = false;
         }
     },
 });

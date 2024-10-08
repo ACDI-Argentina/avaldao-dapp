@@ -1,6 +1,7 @@
 import { ofType } from 'redux-observable';
-import { map, mergeMap } from 'rxjs/operators'
+import { catchError, exhaustMap, map, mergeMap } from 'rxjs/operators'
 import { userService } from 'commons';
+import { of } from 'rxjs';
 
 export const fetchUserByAddressEpic = action$ => action$.pipe(
   ofType('users/fetchUserByAddress'),
@@ -25,17 +26,27 @@ export const saveUserEpic = (action$) => action$.pipe(
   )
 )
 
+
 export const fetchUsersEpic = action$ => action$.pipe(
   ofType('users/fetchUsers'),
-  mergeMap(action => {
+  exhaustMap(action => {
     console.log('Fetch Users Action:', action);
-    return userService.loadUsers();
-  }),
-  map(users => {
-    console.log('Loaded Users:', users);
-    return {
-      type: 'users/mergeUsers',
-      payload: users
-    };
+    return userService.loadUsers().pipe(
+      map(users => {
+        console.log('Loaded Users:', users);
+        return {
+          type: 'users/mergeUsers',
+          payload: users
+        };
+      }),
+      catchError(error => {
+        console.error('Error fetching users:', error);
+        return of({
+          type: 'users/fetchUsersFailed',
+          payload: error,
+          error: true
+        });
+      })
+    );
   })
 );
