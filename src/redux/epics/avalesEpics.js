@@ -1,22 +1,28 @@
 import { ofType } from 'redux-observable';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators'
+import { map, mergeMap, catchError, exhaustMap } from 'rxjs/operators'
 import avalService from 'services/AvalService';
 
 export const fetchAvalesOnChainEpic = action$ => action$.pipe(
   ofType('avales/fetchAvalesOnChain'),
-  mergeMap(action => avalService.getAvalesOnChain()),
-  map(avales => ({
-    type: 'avales/mergeAvales',
-    payload: avales
-  })),
-  catchError(error => of({
-    type: "avales/fetchAvalesOnChainError",
-    payload: error,
-    error: true
-  }))
-)
-
+  exhaustMap(action => {
+    console.log('Fetch Avales On Chain Action:', action);
+    return avalService.getAvalesOnChain().pipe(
+      map(avales => ({
+        type: 'avales/mergeAvales',
+        payload: avales
+      })),
+      catchError(error => {
+        console.error('Error fetching avales on-chain:', error);
+        return of({
+          type: "avales/fetchAvalesOnChainError",
+          payload: error,
+          error: true
+        });
+      })
+    );
+  })
+);
 export const fetchAvalByIdEpic = action$ => action$.pipe(
   ofType('avales/fetchAvalById'),
   mergeMap(action => avalService.getAvalById(action.payload)),
@@ -28,12 +34,24 @@ export const fetchAvalByIdEpic = action$ => action$.pipe(
 
 export const fetchAvalesOffChainEpic = action$ => action$.pipe(
   ofType('avales/fetchAvalesOffChain'),
-  mergeMap(action => avalService.getAvalesOffChain()),
-  map(avales => ({
-    type: 'avales/mergeAvales',
-    payload: avales
-  }))
-)
+  exhaustMap(action => {
+    console.log('Fetch Avales Off Chain Action:', action);
+    return avalService.getAvalesOffChain().pipe(
+      map(avales => ({
+        type: 'avales/mergeAvales',
+        payload: avales
+      })),
+      catchError(error => {
+        console.error('Error fetching avales off-chain:', error);
+        return of({
+          type: "avales/fetchAvalesOffChainError",
+          payload: error,
+          error: true
+        });
+      })
+    );
+  })
+);
 
 export const solicitarAvalEpic = action$ => action$.pipe(
   ofType('avales/solicitarAval'),

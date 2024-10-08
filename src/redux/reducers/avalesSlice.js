@@ -3,9 +3,10 @@ import Aval from 'models/Aval';
 
 export const avalesSlice = createSlice({
   name: 'avales',
-  initialState: [
-
-  ],
+  initialState: {
+    avales: [],
+    isLoading: false,
+  },
   reducers: {
     fetchAvalesOnChain: (state, action) => {
       // Solo se obtiene el estado actual.
@@ -17,24 +18,25 @@ export const avalesSlice = createSlice({
       // Solo se obtiene el estado actual.
     },
     resetAvales: (state, action) => {
-      state.splice(0, state.length);
+      state.avales.splice(0, state.avales.length);
       for (let i = 0; i < action.payload.length; i++) {
         let avalStore = action.payload[i].toStore();
-        state.push(avalStore);
+        state.avales.push(avalStore);
       }
     },
     mergeAvales: (state, action) => {
       for (let i = 0; i < action.payload.length; i++) {
         let avalStore = action.payload[i].toStore();
-        let index = state.findIndex(a => a.id === avalStore.id);
+        let index = state.avales.findIndex(a => a.id === avalStore.id);
         if (index !== -1) {
-          const createdAt = state[index].createdAt;
+          const createdAt = state.avales[index].createdAt;
+    
           if(avalStore.createdAt === undefined){
             avalStore.createdAt = createdAt; //patch value //TODO: check if another values are overriden with undefined
           }
-          state[index] = avalStore; 
+          state.avales[index] = avalStore; 
         } else {
-          state.push(avalStore);
+          state.avales.push(avalStore);
         }
       }
     },
@@ -43,7 +45,7 @@ export const avalesSlice = createSlice({
       aval.statusPrev = aval.status;
       aval.status = Aval.SOLICITANDO;
       const avalStore = aval.toStore();
-      state.push(avalStore);
+      state.avales.push(avalStore);
       return state;
     },
 
@@ -52,9 +54,9 @@ export const avalesSlice = createSlice({
       aval.statusPrev = aval.status;
       aval.status = Aval.ACTUALIZANDO;
       const avalStore = aval.toStore();
-      const index = state.findIndex(a => a.id === avalStore.id);
+      const index = state.avales.findIndex(a => a.id === avalStore.id);
       if (index >= 0) {
-        state[index] = avalStore;
+        state.avales[index] = avalStore;
       }
       return state;
     },
@@ -63,9 +65,9 @@ export const avalesSlice = createSlice({
       aval.statusPrev = aval.status;
       aval.status = Aval.ACTUALIZANDO;
       const avalStore = aval.toStore();
-      let index = state.findIndex(a => a.id === avalStore.id);
+      let index = state.avales.findIndex(a => a.id === avalStore.id);
       if (index !== -1) {
-        state[index] = avalStore;
+        state.avales[index] = avalStore;
       }
     },
     rechazarAval: (state, action) => {
@@ -73,12 +75,14 @@ export const avalesSlice = createSlice({
       aval.statusPrev = aval.status;
       aval.status = Aval.ACTUALIZANDO;
       const avalStore = aval.toStore();
-      let index = state.findIndex(a => a.id === avalStore.id);
+      let index = state.avales.findIndex(a => a.id === avalStore.id);
       if (index !== -1) {
-        state[index] = avalStore;
+        state.avales[index] = avalStore;
       }
     },
     firmarAval: (state, action) => {
+      const aval = action.payload.aval;
+      console.log(`Asking to sign aval. This aval has address?`,aval, aval?.address );
 
     },
     desbloquearAval: (state, action) => {
@@ -95,38 +99,38 @@ export const avalesSlice = createSlice({
     },
     updateAvalById: (state, action) => {
       let avalStore = action.payload.toStore();
-      let index = state.findIndex(a => a.id === avalStore.id);
+      let index = state.avales.findIndex(a => a.id === avalStore.id);
       if (index !== -1) {
-        const createdAt = state[index].createdAt;
+        const createdAt = state.avales[index].createdAt;
         if(avalStore.createdAt === undefined){
           avalStore.createdAt = createdAt; //patch value //TODO: check if another values are overriden with undefined
         }
 
-        state[index] = avalStore;
+        state.avales[index] = avalStore;
       } else {
-        state.push(avalStore);
+        state.avales.push(avalStore);
       }
     },
     updateAvalByClientId: (state, action) => {
       const avalStore = action.payload.toStore();
-      const index = state.findIndex(a => a.clientId === avalStore.clientId);
+      const index = state.avales.findIndex(a => a.clientId === avalStore.clientId);
       if (index !== -1) {
-        state[index] = avalStore;
+        state.avales[index] = avalStore;
       } else {
-        state.push(avalStore);
+        state.avales.push(avalStore);
       }
     },
     rollbackAvalStatus: (state, action) => {
       const avalStore = action.payload.aval.toStore();
       // Se busca por clientId porque no siempre el aval está identificado
       // por un id del backend. Por ejemplo en la solicitud.
-      const index = state.findIndex(a => a.clientId === avalStore.clientId);
+      const index = state.avales.findIndex(a => a.clientId === avalStore.clientId);
       if (index !== -1) {
-        if (state[index].statusPrev != null) {
+        if (state.avales[index].statusPrev != null) {
           // Se asigna el status anterior y se anula
           // para no volver a hacer un rollback.
-          state[index].status = state[index].statusPrev;
-          state[index].statusPrev = null;
+          state.avales[index].status = state.avales[index].statusPrev;
+          state.avales[index].statusPrev = null;
         }
       }
       return state;
@@ -156,13 +160,13 @@ export const {
   rollbackAvalStatus } = avalesSlice.actions;
 
 export const selectAvales = state => {
-  return state.avales.map(function (avalStore) {
+  return state.avales.avales.map(function (avalStore) {
     return new Aval(avalStore);
   });
 }
 
 export const selectUserAvales = (state, user) => {
-  return state.avales
+  return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
     }).
@@ -170,7 +174,7 @@ export const selectUserAvales = (state, user) => {
 }
 
 export const selectAvalesWithTask = (state, user) => {
-  return state.avales
+  return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
     }).
@@ -178,7 +182,7 @@ export const selectAvalesWithTask = (state, user) => {
 }
 
 export const selectAvalesVigentes = (state) => {
-  return state.avales
+  return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
     }).
@@ -186,7 +190,7 @@ export const selectAvalesVigentes = (state) => {
 }
 
 export const selectAvalesFinalizados = (state) => {
-  return state.avales
+  return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
     }).
@@ -194,21 +198,21 @@ export const selectAvalesFinalizados = (state) => {
 }
 
 export const selectAvalByClientId = (state, clientId) => {
-  const avalStore = state.avales.find(a => a.clientId === clientId);
+  const avalStore = state.avales.avales.find(a => a.clientId === clientId);
   if (avalStore) {
     return new Aval(avalStore);
   }
 }
 
 export const selectAvalById = (state, id) => {
-  let avalStore = state.avales.find(a => a.id === id);
+  let avalStore = state.avales.avales.find(a => a.id === id);
   if (avalStore) {
     return new Aval(avalStore);
   }
   return undefined;
 }
 export const selectAllAvales = state => {
-  return state.avales;
+  return state.avales.avales;
 }
 
 export default avalesSlice.reducer;

@@ -5,6 +5,9 @@ import { makeStyles, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import SignerCard from 'components/SignerCard';
 
+import { useDispatch } from 'react-redux';
+import { firmarAval } from 'redux/reducers/avalesSlice';
+
 const useStyles = makeStyles({
   root: {
     flexGrow: 1
@@ -13,6 +16,7 @@ const useStyles = makeStyles({
 
 const SignaturesSection = ({ aval }) => {
 
+  const dispatch = useDispatch();
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -21,7 +25,7 @@ const SignaturesSection = ({ aval }) => {
       title: t("avaldao"),
       address: aval?.avaldaoAddress,
       signature: aval?.avaldaoSignature,
-      
+
     },
     {
       title: t("solicitante"),
@@ -36,7 +40,7 @@ const SignaturesSection = ({ aval }) => {
     {
       title: t("avalado"),
       address: aval?.avaladoAddress,
-      signature: aval?.avaladoSignature      
+      signature: aval?.avaladoSignature
     }
   ];
 
@@ -49,7 +53,13 @@ const SignaturesSection = ({ aval }) => {
             <SignerCard
               title={signer.title}
               address={signer.address}
-              signature={signer.signature}>
+              signature={signer.signature}
+              requestSign={() => 
+                dispatch(firmarAval({
+                aval: aval
+              }))}
+            >
+
             </SignerCard>
           </Grid>
         ))}

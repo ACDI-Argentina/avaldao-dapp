@@ -1,0 +1,56 @@
+.custom-chip,
+.custom-chip-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 0.875rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #7868E5; /* Same color as primary variant of Chip */
+  border: none;
+  outline: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.custom-chip-button:hover {
+  background-color: #7868E5; /* Slightly darker on hover */
+}
+
+.custom-chip-button .icon,
+.custom-chip .icon {
+  margin-right: 8px;
+}
+
+.custom-chip-button {
+  border: none;
+  padding: 0 12px;
+
+  cursor: pointer;
+}
+
+.custom-chip-button:hover {
+  background-color: #7868E5;
+}
+
+.custom-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 0.875rem;
+  background-color: #7868E5;
+  color: white;
+  border-radius: 16px;
+}
+
+button.custom-chip-button {
+    height: 27px;
+}
+
+.custom-chip-button .icon {
+    font-size: 20px;
+}
