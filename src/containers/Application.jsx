@@ -55,7 +55,6 @@ class Application extends Component {
     hidePreloader();
     this.props.fetchAvalesOnChain();
     this.props.fetchAvalesOffChain();
-    this.props.fetchUsers();
     this.props.fetchExchangeRates();
     this.props.fetchFondoGarantia();
     initExchangeRateListener();

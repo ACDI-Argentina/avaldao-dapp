@@ -3,7 +3,6 @@ import Page from './Page';
 import { Flex } from 'components/views/styled';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAvalById } from 'redux/reducers/avalesSlice';
-import { fetchUsers } from 'redux/reducers/usersSlice';
 import AvalActions from 'components/aval/sections/AvalActions';
 import AvalGeneralSection from 'components/aval/sections/AvalGeneralSection';
 import SignaturesSection from 'components/aval/sections/SignaturesSection';
@@ -35,9 +34,6 @@ const AvalViewPage = (props) => {
   const currentUser = useSelector(state => selectCurrentUser(state));
   const { t } = useTranslation();
 
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, []);
 
   if (!aval) { //TODO: add skeleton
     return <Page />;
