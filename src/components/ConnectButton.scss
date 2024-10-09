@@ -1,0 +1,42 @@
+.connected-wrapper {}
+
+.connected-account {
+    line-height: 20px;
+    margin-left: 10px;
+
+}
+
+
+.connected-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+
+.connected-content img {
+    max-width: 25px;
+}
+
+.user-details {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.user-details-name {
+    display: inline-block;
+    font-size: small;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-transform: capitalize;
+}
+
+img.small-avatar {
+    max-width: 20px;
+    border-radius: 50%;
+    margin-right:5px;
+}
