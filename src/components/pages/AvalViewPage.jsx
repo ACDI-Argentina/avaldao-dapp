@@ -15,6 +15,7 @@ import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 import { useTranslation } from 'react-i18next';
 import Background from 'components/views/Background'
 import Paper from '@material-ui/core/Paper';
+import { fetchAvalById } from 'redux/reducers/avalesSlice';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -34,12 +35,24 @@ const AvalViewPage = (props) => {
   const currentUser = useSelector(state => selectCurrentUser(state));
   const { t } = useTranslation();
 
+  const taskCode = aval?.getTaskCode(currentUser);
+
+  //Fetch aval on demand
+  useEffect(() => {
+    if (!aval) return;
+    if (aval.isAceptado() || aval.isVigente() || aval.isFinalizado()) { //En todos estos casos el aval esta onchain
+      if (!aval.address) { //El aval no esta sincronizado
+        console.log(`Sync aval ${aval.id}`);
+        dispatch(fetchAvalById(aval.id));
+      }
+    }
+  }, [aval?.id]);
+
+
 
   if (!aval) { //TODO: add skeleton
     return <Page />;
   }
-
-  const taskCode = aval.getTaskCode(currentUser);
 
   return (
     <Page>

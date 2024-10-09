@@ -53,7 +53,7 @@ class Application extends Component {
 
   componentDidMount() {
     hidePreloader();
-    this.props.fetchAvalesOnChain();
+//    this.props.fetchAvalesOnChain();
     this.props.fetchAvalesOffChain();
     this.props.fetchExchangeRates();
     this.props.fetchFondoGarantia();

@@ -109,13 +109,13 @@ export const rechazarAvalEpic = action$ => action$.pipe(
 
 export const firmarAvalEpic = action$ => action$.pipe(
   ofType('avales/firmarAval'),
-  mergeMap(action => 
+  exhaustMap(action => 
     avalService.firmarAval(action.payload.aval).pipe(
       tap(() => {
-        toast.success(i18n.t()); //Aval has been successfully signed!
+        toast.success(i18n.t("avalFirmado")); 
       }),
       catchError(error => {
-        toast.error(`${i18n.t()} ${error.message || 'Unknown error'}`); //Error signing aval:
+        toast.error(`${i18n.t("avalFirmadoError")} ${error.message || 'Unknown error'}`); 
         return of({ type: 'avales/firmarAvalFailed', error }); 
       })
     )
