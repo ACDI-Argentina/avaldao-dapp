@@ -88,8 +88,7 @@ class Application extends Component {
                       position="top-right"
                       type="default"
                       autoClose={5000}
-                      hideProgressBar
-                      newestOnTop={false}
+                      newestOnTop={true}
                       closeOnClick
                       pauseOnHover
                       theme="colored"

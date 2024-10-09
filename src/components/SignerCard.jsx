@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SignerCard = ({ address, title, signature, requestSign }) => {
+const SignerCard = ({ address, title, signature, aval, requestSign }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ const SignerCard = ({ address, title, signature, requestSign }) => {
   const user = useSelector(state => selectUserByAddress(state, address));
   const currentUser = useSelector(selectCurrentUser);
 
-  const canSign = currentUser.authenticated && currentUser?.address !==null && currentUser?.address === user?.address;
+  const canSign = aval.isAceptado() && currentUser.authenticated && currentUser?.address !== null && currentUser?.address === user?.address;
 
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const SignerCard = ({ address, title, signature, requestSign }) => {
     userName = user.name;
   }
 
-  let signatureTooltip = canSign? t('avalFirmarTitle'):t('notSigned');
+  let signatureTooltip = canSign ? ((aval.address !== null ) ? t('avalFirmarTitle') : 'Aval is not synced') : t('notSigned');
   let signatureText = t('notSigned');
   let signatureVariant = 'outlined';
 
@@ -78,12 +78,12 @@ const SignerCard = ({ address, title, signature, requestSign }) => {
               {canSign && !signed ? (
                 <button
                   onClick={() => {
-                    if(typeof requestSign === "function"){
+                    if (typeof requestSign === "function") {
                       requestSign();
                     }
                   }}
                   className="custom-chip-button"
-  
+                  disabled={!aval?.address}
                 >
                   <GestureIcon className="icon" />
                   {t("avalFirmarTitle")}

@@ -114,9 +114,12 @@ const AvalActions = ({ aval }) => {
         }
 
         {allowFirmar &&
-          <Button onClick={() => dispatch(firmarAval({
-            aval: aval
-          }))}
+          <Button
+            disabled={!aval?.address}
+            title={!aval?.address ? "Aval is not synced " : ""}
+            onClick={() => dispatch(firmarAval({
+              aval: aval
+            }))}
           >
             {t('avalFirmarTitle')}
           </Button>

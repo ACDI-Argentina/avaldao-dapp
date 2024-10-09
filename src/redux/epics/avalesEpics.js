@@ -1,6 +1,7 @@
+import { toast } from 'react-toastify';
 import { ofType } from 'redux-observable';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError, exhaustMap } from 'rxjs/operators'
+import { map, mergeMap, catchError, exhaustMap, tap } from 'rxjs/operators'
 import avalService from 'services/AvalService';
 
 export const fetchAvalesOnChainEpic = action$ => action$.pipe(
@@ -107,14 +108,22 @@ export const rechazarAvalEpic = action$ => action$.pipe(
 
 export const firmarAvalEpic = action$ => action$.pipe(
   ofType('avales/firmarAval'),
-  mergeMap(action => avalService.firmarAval(
-    action.payload.aval
-  )),
+  mergeMap(action => 
+    avalService.firmarAval(action.payload.aval).pipe(
+      tap(() => {
+        toast.success('Aval has been successfully signed!');
+      }),
+      catchError(error => {
+        toast.error(`Error signing aval: ${error.message || 'Unknown error'}`);
+        return of({ type: 'avales/firmarAvalFailed', error }); 
+      })
+    )
+  ),
   map(aval => ({
     type: 'avales/updateAvalById',
     payload: aval
   }))
-)
+);
 
 export const desbloquearAvalEpic = action$ => action$.pipe(
   ofType('avales/desbloquearAval'),

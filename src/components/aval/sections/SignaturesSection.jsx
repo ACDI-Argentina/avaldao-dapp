@@ -54,6 +54,7 @@ const SignaturesSection = ({ aval }) => {
               title={signer.title}
               address={signer.address}
               signature={signer.signature}
+              aval={aval}
               requestSign={() => 
                 dispatch(firmarAval({
                 aval: aval

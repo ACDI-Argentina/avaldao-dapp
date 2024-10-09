@@ -1,10 +1,11 @@
 import Aval from 'models/Aval';
-import { Observable } from 'rxjs'
+import { from, Observable } from 'rxjs'
 import { feathersClient } from 'commons';
 import avaldaoContractApi from '../lib/blockchain/AvaldaoContractApi';
 import BigNumber from 'bignumber.js';
 import messageUtils from '../redux/utils/messageUtils'
 import i18n from "i18n/i18n";
+import { catchError } from 'rxjs/operators';
 
 class AvalService {
 
@@ -263,44 +264,43 @@ class AvalService {
      * @param aval a firmar
      */
     firmarAval(aval) {
-
-        return new Observable(async subscriber => {
-
-            avaldaoContractApi.signAvalOffChain(aval).subscribe(aval => {
-
-                feathersClient.getClient().service('avales').patch(
-                    aval.id,
-                    {
-                        solicitanteSignature: aval.solicitanteSignature,
-                        comercianteSignature: aval.comercianteSignature,
-                        avaladoSignature: aval.avaladoSignature,
-                        avaldaoSignature: aval.avaldaoSignature
-                    }).then(avalData => {
-
-                        console.log('[AvalService] Se almacenaron las firmas off chain.', aval);
-                        subscriber.next(aval);
-
-                        if (aval.areSignaturesComplete() === true) {
-                            // Todos los usuarios han firmado el aval.
-                            avaldaoContractApi.signAvalOnChain(aval).subscribe(
-                                aval => {
-                                    subscriber.next(aval);
-                                },
-                                error => {
-                                    console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
-                                    subscriber.error(error);
-                                });
-                        } else {
-                            // Faltan firmas para concretar la firma on chain.
-                        }
-
-                    }).catch(error => {
-                        console.error("[AvalService] Error almacenando las firmas off chain.", error);
-                        subscriber.error(error);
-                    });
-            });
-        });
-    }
+      return new Observable(subscriber => {
+          avaldaoContractApi.signAvalOffChain(aval).pipe(
+              catchError(error => {
+                  console.error('[AvaldaoContractApi] Error firmando aval off chain.', error);
+                  subscriber.error(error);
+                  return [];
+              })
+          ).subscribe(aval => {
+              feathersClient.getClient().service('avales').patch(
+                  aval.id,
+                  {
+                      solicitanteSignature: aval.solicitanteSignature,
+                      comercianteSignature: aval.comercianteSignature,
+                      avaladoSignature: aval.avaladoSignature,
+                      avaldaoSignature: aval.avaldaoSignature
+                  }).then(avalData => {
+                      console.log('[AvalService] Se almacenaron las firmas off chain.', aval);
+                      subscriber.next(aval);
+  
+                      if (aval.areSignaturesComplete()) {
+                          from(avaldaoContractApi.signAvalOnChain(aval)).pipe(
+                              catchError(error => {
+                                  console.error('[AvaldaoContractApi] Error firmando aval on chain.', error);
+                                  subscriber.error(error);
+                                  return [];
+                              })
+                          ).subscribe(aval => {
+                              subscriber.next(aval);
+                          });
+                      }
+                  }).catch(error => {
+                      console.error("[AvalService] Error almacenando las firmas off chain.", error);
+                      subscriber.error(error);
+                  });
+              });
+          });
+  }
 
     /**
      * Desbloquea los fondos de un aval.

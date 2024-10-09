@@ -26,17 +26,13 @@ export const avalesSlice = createSlice({
     },
     mergeAvales: (state, action) => {
       for (let i = 0; i < action.payload.length; i++) {
-        let avalStore = action.payload[i].toStore();
-        let index = state.avales.findIndex(a => a.id === avalStore.id);
+        const incomingAval = action.payload[i].toStore();
+        const index = state.avales.findIndex(a => a.id === incomingAval.id);
         if (index !== -1) {
-          const createdAt = state.avales[index].createdAt;
-    
-          if(avalStore.createdAt === undefined){
-            avalStore.createdAt = createdAt; //patch value //TODO: check if another values are overriden with undefined
-          }
-          state.avales[index] = avalStore; 
+          const actual = state.avales[index];
+          state.avales[index] = mergeAval(incomingAval, actual);
         } else {
-          state.avales.push(avalStore);
+          state.avales.push(incomingAval);
         }
       }
     },
@@ -82,7 +78,6 @@ export const avalesSlice = createSlice({
     },
     firmarAval: (state, action) => {
       const aval = action.payload.aval;
-      console.log(`Asking to sign aval. This aval has address?`,aval, aval?.address );
 
     },
     desbloquearAval: (state, action) => {
@@ -98,17 +93,13 @@ export const avalesSlice = createSlice({
       // Solo se obtiene el estado actual.
     },
     updateAvalById: (state, action) => {
-      let avalStore = action.payload.toStore();
-      let index = state.avales.findIndex(a => a.id === avalStore.id);
+      const incoming = action.payload.toStore();
+      let index = state.avales.findIndex(a => a.id === incoming.id);
       if (index !== -1) {
-        const createdAt = state.avales[index].createdAt;
-        if(avalStore.createdAt === undefined){
-          avalStore.createdAt = createdAt; //patch value //TODO: check if another values are overriden with undefined
-        }
-
-        state.avales[index] = avalStore;
+        const actual = state.avales[index];
+        state.avales[index] = mergeAval(incoming, actual);
       } else {
-        state.avales.push(avalStore);
+        state.avales.push(incoming);
       }
     },
     updateAvalByClientId: (state, action) => {
@@ -142,6 +133,30 @@ export const avalesSlice = createSlice({
   },
 });
 
+function mergeAval(incoming, actual){
+  const createdAt = actual.createdAt;
+  const fechaInicio = actual.fechaInicio;
+  const duracionCuotaSeconds = actual.duracionCuotaSeconds;
+  const desbloqueoSeconds = actual.desbloqueoSeconds;
+  
+  if (incoming.createdAt === undefined) {
+    incoming.createdAt = createdAt;
+  }
+  if(incoming.fechaInicio.trim() === ''){
+    incoming.fechaInicio = fechaInicio;
+  }
+
+  if(incoming.duracionCuotaSeconds !== ''){
+    incoming.duracionCuotaSeconds = duracionCuotaSeconds;
+  }
+
+  if(incoming.desbloqueoSeconds !== ''){
+    incoming.desbloqueoSeconds = desbloqueoSeconds;
+  }
+
+  return incoming;
+}
+
 export const {
   fetchAvalesOnChain,
   fetchAvalesOffChain,
@@ -169,32 +184,28 @@ export const selectUserAvales = (state, user) => {
   return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
-    }).
-    filter(aval => aval.isParticipant(user));
+    }).filter(aval => aval.isParticipant(user));
 }
 
 export const selectAvalesWithTask = (state, user) => {
   return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
-    }).
-    filter(aval => aval.getTaskCode(user) !== null);
+    }).filter(aval => aval.getTaskCode(user) !== null);
 }
 
 export const selectAvalesVigentes = (state) => {
   return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
-    }).
-    filter(aval => aval.isVigente() === true);
+    }).filter(aval => aval.isVigente() === true);
 }
 
 export const selectAvalesFinalizados = (state) => {
   return state.avales.avales
     .map(function (avalStore) {
       return new Aval(avalStore);
-    }).
-    filter(aval => aval.isFinalizado() === true);
+    }).filter(aval => aval.isFinalizado() === true);
 }
 
 export const selectAvalByClientId = (state, clientId) => {
