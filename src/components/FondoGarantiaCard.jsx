@@ -11,7 +11,7 @@ import FondoGarantiaChartPie from './FondoGarantiaChartPie';
 class FondoGarantiaCard extends Component {
 
   render() {
-    const { classes, t } = this.props;
+    const { classes } = this.props;
     return (
       <Card className={classes.root}>
         <CardContent>
@@ -46,6 +46,5 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)(
-  withTranslation()(FondoGarantiaCard)))
-);
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(styles)
+ (FondoGarantiaCard)));
