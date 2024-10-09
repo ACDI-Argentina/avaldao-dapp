@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 import { ofType } from 'redux-observable';
 import { of } from 'rxjs';
+import i18n from "i18n/i18n";
 import { map, mergeMap, catchError, exhaustMap, tap } from 'rxjs/operators'
 import avalService from 'services/AvalService';
 
@@ -111,10 +112,10 @@ export const firmarAvalEpic = action$ => action$.pipe(
   mergeMap(action => 
     avalService.firmarAval(action.payload.aval).pipe(
       tap(() => {
-        toast.success('Aval has been successfully signed!');
+        toast.success(i18n.t()); //Aval has been successfully signed!
       }),
       catchError(error => {
-        toast.error(`Error signing aval: ${error.message || 'Unknown error'}`);
+        toast.error(`${i18n.t()} ${error.message || 'Unknown error'}`); //Error signing aval:
         return of({ type: 'avales/firmarAvalFailed', error }); 
       })
     )

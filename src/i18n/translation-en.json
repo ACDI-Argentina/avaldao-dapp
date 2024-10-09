@@ -102,6 +102,10 @@
     "avalAceptado": "The guarantee has been accepted.",
     "avalRechazado": "The guarantee has been rejected.",
 
+    "avalFirmado": "Aval has been successfully signed!",
+    "avalFirmadoError": "Error signing aval:",
+    
+
     "avalFirmantesTitle": "Signers",
     "avalCuotaSection": "Dues",
     "avalCuota": "Due",

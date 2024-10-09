@@ -99,6 +99,9 @@
     "avalAceptado": "El aval ha sido aceptado.",
     "avalRechazado": "El aval ha sido rechazado.",
 
+    "avalFirmado": "Firma registrada exitosamente!",
+    "avalFirmadoError": "Error firmando el aval:",
+    
     "avalFirmantesTitle": "Firmantes",
     "avalCuotaSection": "Cuotas",
     "avalCuota": "Cuota",
