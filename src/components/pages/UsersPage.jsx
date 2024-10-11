@@ -8,25 +8,28 @@ import Background from 'components/views/Background';
 import Paper from '@material-ui/core/Paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from 'redux/reducers/usersSlice';
-import { selectUsers } from 'redux/reducers/usersSlice';
 import { selectLoading } from 'redux/reducers/usersSlice';
+import config from 'configuration';
+import { selectCurrentUser } from 'redux/reducers/currentUserSlice';
 
 /**
  * Pantalla de Usuarios.
  * 
  */
-const UsersPage = ({ classes }) => {
-  const {t} = useTranslation();
+const UsersPage = ({ }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const users = useSelector(selectUsers);
-  const loading = useSelector(selectLoading);
 
+  const loading = useSelector(selectLoading);
+  const currentUser = useSelector(selectCurrentUser);
+
+  const isUserAdmin = currentUser?.hasRole(config.ADMIN_ROLE) || false;
 
   useEffect(() => {
-    if(Array.isArray(users) && users.length === 0 && !loading){
+    if (!loading && isUserAdmin) {
       dispatch(fetchUsers()); //TODO: check who is the current user
     }
-  },[])
+  }, [isUserAdmin])
 
   return (
     <Page>
@@ -39,7 +42,10 @@ const UsersPage = ({ classes }) => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <UserTable />
+              {isUserAdmin ? (
+                <UserTable />
+              ) : (<p>You do not have the necessary permissions to view the users or are not authenticated.</p>
+              )}
             </Grid>
           </Grid>
         </Paper>
