@@ -49,6 +49,20 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
+    
+        <Grid item xs={12}>
+          <InputField
+            id="beneficiariosTextField"
+            value={aval.beneficiarios}
+            label={t('avalBeneficiarios')}
+            fullWidth
+            margin="normal"
+            multiline
+            InputLabelProps={{ shrink: true }}
+            readOnly
+          />
+        </Grid>
+
         <Grid item xs={12} sm={12} md={6}>
           <InputField
             id="adquisicionTextField"
@@ -60,17 +74,7 @@ const AvalGeneralSection = ({ aval }) => {
             readOnly
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
-          <InputField
-            id="beneficiariosTextField"
-            value={aval.beneficiarios}
-            label={t('avalBeneficiarios')}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            readOnly
-          />
-        </Grid>
+
         <Grid item xs={12} sm={6} md={3}>
           <InputField
             id="montoTextField"
