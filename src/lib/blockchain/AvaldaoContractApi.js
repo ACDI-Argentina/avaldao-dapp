@@ -11,6 +11,8 @@ import Cuota from 'models/Cuota'
 import Reclamo from 'models/Reclamo'
 import currentUserUtils from 'redux/utils/currentUserUtils'
 import utilsContractApi from './UtilsContractApi'
+import web3 from 'web3';
+import BigNumber from 'bignumber.js'
 
 /**
  * API encargada de la interacción con el Avaldao Smart Contract.
@@ -22,6 +24,19 @@ class AvaldaoContractApi {
             this.web3 = web3;
             this.updateContracts();
         });
+    }
+
+    // Some transactions were rejected due to incorrect gas estimations. 
+    // This led to a loss of fees in those cases, sometimes as much as 20 USD. 
+    // To mitigate this, we add a 20% buffer to the gas estimation.
+    _fixEstimatedGas(gasEstimatedByProvider/* BigNumber */) {
+        const factor = 1.2;
+        const fixedEstimatedGas = gasEstimatedByProvider.multipliedBy(factor).integerValue(BigNumber.ROUND_FLOOR);
+
+        console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
+        console.log(`gasEstimated: ${fixedEstimatedGas}`);
+
+        return fixedEstimatedGas;
     }
 
     /**
@@ -163,20 +178,23 @@ class AvaldaoContractApi {
                 aval.solicitanteAddress,
                 aval.comercianteAddress,
                 aval.avaladoAddress
-            ];
+            ].map(addr => web3.utils.toChecksumAddress(addr));
 
             const timestampCuotas = aval.getCuotasTimestamp().map(ts_seconds => utils.numberToHex(ts_seconds));
-           
 
-          
             const method = this.avaldao.methods.saveAval(
                 aval.id,
                 aval.infoCid,
                 users,
                 aval.montoFiat.toString(),
-                timestampCuotas);
+                timestampCuotas
+            );
 
-            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            // Some transactions were rejected due to incorrect gas estimations. 
+            // This led to a loss of fees in those cases, sometimes as much as 20 USD. 
+            // To mitigate this, we add a 20% buffer to the gas estimation.
+            const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -207,6 +225,7 @@ class AvaldaoContractApi {
 
             const promiEvent = method.send({
                 from: currentUser.address,
+                gasLimit: gasEstimated
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -352,7 +371,15 @@ class AvaldaoContractApi {
                 signatureR,
                 signatureS);
 
-            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            // Some transactions were rejected due to incorrect gas estimations. 
+            // This led to a loss of fees in those cases, sometimes as much as 20 USD. 
+            // To mitigate this, we add a 20% buffer to the gas estimation.
+            const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
+
+            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
+            console.log(`gasEstimated: ${gasEstimated}`);
+
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -382,7 +409,8 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: currentUser.address
+                from: currentUser.address,
+                gasLimit: gasEstimated
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -432,7 +460,14 @@ class AvaldaoContractApi {
 
             const method = avalContract.methods.unlockFundManual();
 
-            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            // Some transactions were rejected due to incorrect gas estimations. 
+            // This led to a loss of fees in those cases, sometimes as much as 20 USD. 
+            // To mitigate this, we add a 20% buffer to the gas estimation.
+            const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
+
+            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
+            console.log(`gasEstimated: ${gasEstimated}`);
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -462,7 +497,8 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: currentUser.address
+                from: currentUser.address,
+                gasLimit: gasEstimated
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -512,7 +548,15 @@ class AvaldaoContractApi {
 
             const method = avalContract.methods.openReclamo();
 
-            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            // Some transactions were rejected due to incorrect gas estimations. 
+            // This led to a loss of fees in those cases, sometimes as much as 20 USD. 
+            // To mitigate this, we add a 20% buffer to the gas estimation.
+            const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
+
+            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
+            console.log(`gasEstimated: ${gasEstimated}`);
+
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -542,7 +586,8 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: currentUser.address
+                from: currentUser.address,
+                gasLimit: gasEstimated
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
@@ -599,7 +644,7 @@ class AvaldaoContractApi {
                     "payable": false,
                     "stateMutability": "nonpayable",
                     "type": "function"
-                  },
+                },
             ];
 
             const avalContract = new this.web3.eth.Contract(abi, aval.address);
@@ -607,7 +652,15 @@ class AvaldaoContractApi {
 
             const method = avalContract.methods.ejecutarGarantia();
 
-            const gasEstimated = await utilsContractApi.estimateGas(method, currentUser.address);
+            // Some transactions were rejected due to incorrect gas estimations. 
+            // This led to a loss of fees in those cases, sometimes as much as 20 USD. 
+            // To mitigate this, we add a 20% buffer to the gas estimation.
+            const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
+            const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
+
+            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
+            console.log(`gasEstimated: ${gasEstimated}`);
+
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -637,7 +690,8 @@ class AvaldaoContractApi {
             });
 
             const promiEvent = method.send({
-                from: currentUser.address
+                from: currentUser.address,
+                gasLimit: gasEstimated
             });
 
             promiEvent.once('transactionHash', (hash) => { // La transacción ha sido creada.
