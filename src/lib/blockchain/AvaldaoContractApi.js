@@ -377,9 +377,6 @@ class AvaldaoContractApi {
             const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
             const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
 
-            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
-            console.log(`gasEstimated: ${gasEstimated}`);
-
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -466,8 +463,6 @@ class AvaldaoContractApi {
             const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
             const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
 
-            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
-            console.log(`gasEstimated: ${gasEstimated}`);
             const gasPrice = await utilsContractApi.getGasPrice();
 
             let transaction = transactionStoreUtils.addTransaction({
@@ -553,9 +548,6 @@ class AvaldaoContractApi {
             // To mitigate this, we add a 20% buffer to the gas estimation.
             const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
             const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
-
-            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
-            console.log(`gasEstimated: ${gasEstimated}`);
 
             const gasPrice = await utilsContractApi.getGasPrice();
 
@@ -657,9 +649,6 @@ class AvaldaoContractApi {
             // To mitigate this, we add a 20% buffer to the gas estimation.
             const gasEstimatedByProvider = await utilsContractApi.estimateGas(method, currentUser.address);
             const gasEstimated = this._fixEstimatedGas(gasEstimatedByProvider);
-
-            console.log(`gasEstimatedByProvider: ${gasEstimatedByProvider}`);
-            console.log(`gasEstimated: ${gasEstimated}`);
 
             const gasPrice = await utilsContractApi.getGasPrice();
 
