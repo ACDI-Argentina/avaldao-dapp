@@ -49,8 +49,6 @@ const ConnectButton = () => {
   const isUserAdmin = currentUser?.hasRole(config.ADMIN_ROLE) || false;
   const isCorrectNetwork = network?.isCorrect || false;
 
-  console.log(currentUser);
-
   return (
     <React.Fragment>
       {!isUserConnected && (

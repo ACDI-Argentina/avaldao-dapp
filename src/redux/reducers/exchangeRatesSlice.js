@@ -13,7 +13,7 @@ export const exchangeRatesSlice = createSlice({
       const exchangeRateStore = action.payload.toStore();
       const idx = state.findIndex(exr => web3Utils.addressEquals(exr.tokenAddress, exchangeRateStore.tokenAddress));
       if(idx > -1){
-        state[idx] = exchangeRateStore;
+        state[idx] = exchangeRateStore; //Tendria que comrpobar el ultimo valor contra el actual antes de agregarlo
       } else {
         state.push(exchangeRateStore);
       }

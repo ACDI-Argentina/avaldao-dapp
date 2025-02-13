@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { User } from '@acdi/efem-dapp';
 
 /**
@@ -15,17 +15,19 @@ export const currentUserSlice = createSlice({
   initialState: currentUserInitialState,
   reducers: {
     loadCurrentUser: (state, action) => {
-      // Cuando se carga el usuario, se obtiene un
-      // estado inicial para ir cargándolo desde el Epic.
       state.address = action.payload;
       return state;
     },
-    setAuthenticated:(state,action) => {
+    loadCurrentUserError: (state, action) => {
+      console.error("Load current user error");
+    },
+    setAuthenticated:(state,action) => { 
       const isAuthenticated = action.payload;
       state.authenticated = isAuthenticated;
     },
  
     updateCurrentUserBalance: (state, action) => {
+      console.log("updateCurrentUserBalance");
       const { balance, tokenBalances } = action.payload;
       state.balance = balance;
       state.tokenBalances = tokenBalances;
@@ -54,6 +56,9 @@ export const currentUserSlice = createSlice({
       }
       return action.payload.toStore();
     },
+    registerError:  (state, action) => {
+      console.log(`handle errors of register new user. Inform to component of error`);
+    },
     clearCurrentUser: (state, action) => {
       const initial = {};
       initial.status = User.UNREGISTERED.toStore();
@@ -73,7 +78,15 @@ export const {
   clearCurrentUser 
 } = currentUserSlice.actions;
 
-export const selectCurrentUser = state => new User(state.currentUser);
+//export const selectCurrentUser = state => new User(state.currentUser); //This returns a new instance on every select
+export const selectCurrentUserRaw = (state) => state.currentUser;
+
+export const selectCurrentUser = createSelector(
+  selectCurrentUserRaw,
+  (currentUser) => new User(currentUser)
+);
+ 
+
 export const selectRoles = state => state.currentUser.roles;
 
 export default currentUserSlice.reducer;

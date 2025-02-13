@@ -35,8 +35,7 @@ const UserProfilePage = ({  }) => {
   const [nameHelperText, setNameHelperText] = useState('');
   const [emailHelperText, setEmailHelperText] = useState('');
   const [urlHelperText, setUrlHelperText] = useState('');
-  const [formValid, setFormValid] = useState(false);
-
+  
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -59,7 +58,6 @@ const UserProfilePage = ({  }) => {
       setNameHelperText('');
       setNameError(false);
     }
-    validateForm();
   };
 
   const handleChangeEmail = (event) => {
@@ -72,7 +70,6 @@ const UserProfilePage = ({  }) => {
       setEmailHelperText('');
       setEmailError(false);
     }
-    validateForm();
   };
 
   const handleChangeUrl = (event) => {
@@ -85,13 +82,8 @@ const UserProfilePage = ({  }) => {
       setUrlHelperText('');
       setUrlError(false);
     }
-    validateForm();
   };
 
-  const validateForm = () => {
-    const isFormValid = name && email && url && !nameError && !emailError && !urlError;
-    setFormValid(isFormValid);
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -110,7 +102,9 @@ const UserProfilePage = ({  }) => {
   };
 
 
+  const isFormValid = name && email && url && !nameError && !emailError && !urlError;
   const isSaving = currentUser?.status?.name === "Registering" ?? false;
+
   return (
     <Page>
       <Background>
@@ -120,21 +114,20 @@ const UserProfilePage = ({  }) => {
               <Typography variant="h5">{t('userProfileTitle')}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <form onSubmit={handleSubmit} noValidate autoComplete="off">
+              <form onSubmit={handleSubmit} noValidate autoComplete="off" className='profile-form'>
                 <Grid container spacing={1} style={{ margin: '0px' }}>
                   <Grid item xs={12} md={5}>
                     <Avatar
                       imageSrc={avatarImg}
                       onCropped={(cropped) => {
                         setAvatarPreview(cropped);
-                        validateForm();
                       }}
                       labels={{ choose: t('userAvatarChoose') }}
                     />
                   </Grid>
 
                   <Grid container item spacing={1} xs={12} md={7}>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className='my-4'>
                       <InputField
                         id="addressTextField"
                         value={address}
@@ -166,6 +159,7 @@ const UserProfilePage = ({  }) => {
                         required
                         inputProps={{ maxLength: 50 }}
                       />
+                      {!nameError && <div className='placeholder-error'></div>}
                     </Grid>
                     <Grid item xs={12}>
                       <InputField
@@ -181,6 +175,7 @@ const UserProfilePage = ({  }) => {
                         required
                         inputProps={{ maxLength: 50 }}
                       />
+                      {!emailError && <div className='placeholder-error'></div>}
                     </Grid>
                     <Grid item xs={12}>
                       <InputField
@@ -196,6 +191,7 @@ const UserProfilePage = ({  }) => {
                         required
                         inputProps={{ maxLength: 50 }}
                       />
+                      {!urlError && <div className='placeholder-error'></div>}
                     </Grid>
                   </Grid>
 
@@ -204,7 +200,7 @@ const UserProfilePage = ({  }) => {
                       {t('cancel')}
                     </SecondaryButton>
 
-                    <PrimaryButton type="submit" disabled={!formValid || isSaving} isWorking={isSaving}>
+                    <PrimaryButton type="submit" disabled={!isFormValid || isSaving} isWorking={isSaving}>
                       {t('save')}
                     </PrimaryButton>
                   </Grid>

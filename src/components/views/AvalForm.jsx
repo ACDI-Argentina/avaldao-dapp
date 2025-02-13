@@ -13,9 +13,21 @@ import DatePicker from 'react-datepicker';
 import { CalendarToday } from '@material-ui/icons';
 
 import "react-datepicker/dist/react-datepicker.css";
+import { userService } from 'commons';
 
+const loadUserByAddress = (address) => {
+  return new Promise((resolve, reject) => {
+    userService.loadUserByAddress(address).subscribe({
+      next: (user) => resolve(user),
+      error: () => resolve(null), // Resolve with null on error
+    });
+  });
+}
 
-
+const isValidHexAddress = (address) => {
+  const hexAddressRegex = /^0x[a-fA-F0-9]{40}$/;
+  return hexAddressRegex.test(address);
+};
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -50,16 +62,35 @@ const FormikInput = ({ formik, id, ...props }) => {
   const touched = formik.touched[`${id}`];
   const error = formik.errors[`${id}`];
   const errorMessage = t(formik.errors[`${id}`]);
+  let helperText;
+
+  if(typeof props.helperText == "string"){  
+    helperText = props.helperText
+  } else if(touched && errorMessage){
+    helperText = errorMessage
+  } else {
+    helperText=" ";
+  }
+
 
   return (
     <Input
-      onChange={formik.handleChange}
       id={id}
       onBlur={() => formik.setFieldTouched(`${id}`)}
       value={formik.values[`${id}`]}
-      helperText={(touched && errorMessage) || " "} //https://github.com/mui-org/material-ui/issues/13646
       error={touched && error?.length > 0}
       {...props}
+      helperText={helperText} //https://github.com/mui-org/material-ui/issues/13646
+      onChange={(e) => {
+        formik.handleChange(e);
+        if (typeof props.onChange == "function") {
+          try{
+            props.onChange(e);
+          } catch(e){
+
+          }
+        }
+  }}
     />)
 }
 
@@ -67,6 +98,9 @@ const FormikInput = ({ formik, id, ...props }) => {
 const AvalForm = (props) => {
   const { aval, submitText, onSubmit: onSubmitHandler, onCancel, loading = false, solicitanteAddress, defaultAvaldaoAddress } = props;
   const [startDate, setStartDate] = useState(new Date());
+
+  const [comerciante,setComerciante] = useState();
+  const [avalado, setAvalado] = useState();
 
   const initialDate = aval?.fechaInicio ? DateUtils.formatDateYYYYMMDD(aval.fechaInicio) : DateUtils.formatDateYYYYMMDD(new Date());
 
@@ -189,7 +223,7 @@ const AvalForm = (props) => {
               const year = date.getFullYear();
               const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-indexed, so +1
               const day = ('0' + date.getDate()).slice(-2);
-              
+
               setStartDate(date);
               formik.setFieldValue('fechaInicio', `${year}-${month}-${day}`);
             }}
@@ -263,10 +297,24 @@ const AvalForm = (props) => {
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} className={comerciante?.name != undefined ?'address-user-found':''}>
           <FormikInput
             id="comercianteAddress"
             label={t('avalComercianteAddress')}
+            onChange={ async e => {
+              const value = e.target.value;
+              if (isValidHexAddress(value)) {  
+                try{
+                  const userData = await loadUserByAddress(value);
+                  setComerciante(userData); 
+
+                } catch(err){
+                  console.log(err);
+                }
+              } else {
+                setComerciante(null);
+              } //check valid address
+            }}
             placeholder="0x..."
             formik={formik}
             variant="filled"
@@ -278,12 +326,27 @@ const AvalForm = (props) => {
                 </InputAdornment>
               ),
             }}
+            helperText={comerciante != null ? comerciante.name ?? "No registrado" : null}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+         <Grid item xs={12} md={6} className={avalado?.name != undefined ?'address-user-found':''}>
           <FormikInput
             id="avaladoAddress"
             label={t('avalAvaladoAddress')}
+            onChange={ async e => {
+              const value = e.target.value;
+              if (isValidHexAddress(value)) {  
+                try{
+                  const userData = await loadUserByAddress(value);
+                  setAvalado(userData); 
+
+                } catch(err){
+                  console.log(err);
+                }
+              } else {
+                setAvalado(null);
+              } //check valid address
+            }}
             placeholder="0x..."
             formik={formik}
             variant="filled"
@@ -295,8 +358,9 @@ const AvalForm = (props) => {
                 </InputAdornment>
               ),
             }}
+            helperText={avalado != null ? avalado.name ?? "No registrado" : null}
           />
-        </Grid>
+        </Grid> 
 
         <Grid container item xs={12} justifyContent="flex-end">
           <SecondaryButton

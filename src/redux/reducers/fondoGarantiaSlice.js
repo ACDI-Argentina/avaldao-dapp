@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { TokenBalance } from '@acdi/efem-dapp'
 import BigNumber from 'bignumber.js';
 
@@ -37,11 +37,17 @@ export const {
   resetFondoGarantia,
   mergeFondoGarantia } = fondoGarantiaSlice.actions;
 
-export const selectTokenBalances = state => {
+/* export const selectTokenBalances = state => {
   return state.fondoGarantia.map(function (tokenBalanceStore) {
     return new TokenBalance(tokenBalanceStore);
   });
 }
+ */
+
+export const selectTokenBalances = createSelector(
+  (state) => state.fondoGarantia,
+  (fondoGarantia) => fondoGarantia.map((tokenBalanceStore) => new TokenBalance(tokenBalanceStore))
+);
 
 /**
  * Obtiene el total de balance en moneda fiat de todos los tokens.

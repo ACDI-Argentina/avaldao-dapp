@@ -240,3 +240,34 @@ span.nav-link:focus {
 }
 
 label#avaladoAddress-label {z-index: 0;}
+
+
+.placeholder-error{
+  height: 25.4px;
+}
+
+
+form.profile-form .MuiFormControl-root {
+  margin-top: 0px;
+}
+.profile-form .MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12 {
+  
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+
+div#WEB3_CONNECT_MODAL_ID {
+  z-index: 100000;
+  position: absolute;
+}
+
+.web3modal-modal-container .web3modal-provider-wrapper:nth-child(2){
+  display: none; //hide Wallet connect provider, because is a deprecated api
+}
+
+
+.address-user-found p.MuiFormHelperText-root {
+  color: #00A8A8;
+  font-weight: 500;
+}
